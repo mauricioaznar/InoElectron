@@ -178,3 +178,7 @@
 .x-overflow {
   overflow-x: auto;
 }
+
+.table td, .table th {
+  border-top: none !important;
+}
