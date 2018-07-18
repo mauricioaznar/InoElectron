@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <mau-crud-create
-      :entityApiName="entityApiName"
+      :entityType="entityType"
       :callback="callback"
     >
       <template slot-scope="params">
@@ -20,7 +20,7 @@
     name: 'CreateBag',
     data () {
       return {
-        entityApiName: EntityTypes.BAG.apiName
+        entityType: EntityTypes.BAG
       }
     },
     components: {

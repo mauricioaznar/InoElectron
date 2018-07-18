@@ -11,14 +11,15 @@
 </template>
 
 <script>
-  import {ApiRoutes} from 'renderer/api/ApiRoutes'
+  import ApiUrls from 'renderer/services/api/ApiUrls'
+  import EntityTypes from 'renderer/api/EntityTypes'
   import PersonaDataTable from 'renderer/api/components/generic/persona/PersonaDataTable.vue'
   import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
   export default {
     name: 'ListSupplier',
     data () {
       return {
-        apiUrl: ApiRoutes.supplier.list
+        apiUrl: ApiUrls.createListUrl(EntityTypes.SUPPLIER)
       }
     },
     components: {

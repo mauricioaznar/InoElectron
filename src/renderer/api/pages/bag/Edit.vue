@@ -2,7 +2,7 @@
   <div class="container">
     <mau-crud-edit
       :id="id"
-      :entityApiName="entityApiName"
+      :entityType="entityType"
       :callback="callback"
     >
       <template slot-scope="params">
@@ -25,8 +25,7 @@
     name: 'EditBag',
     data () {
       return {
-        relatedEntitiesRoutes: {},
-        entityApiName: EntityTypes.BAG.apiName,
+        entityType: EntityTypes.BAG,
         hostRelationshipIdName: PropertiesReference.ID.relationship_id_name
       }
     },

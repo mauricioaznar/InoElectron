@@ -77,7 +77,7 @@
   import {mapState} from 'vuex'
   import VueSelect from 'vue-select'
   import moment from 'moment'
-  import {getApiRoute, ApiRouteTypes} from 'renderer/api/ApiRoutes'
+  import {getApiRoute, ApiRouteTypes} from 'renderer/api/ApiUrls'
   import EntityTypes from 'renderer/api/EntityTypes'
   import EntityActions from 'renderer/api/store/entityActions'
   import cloneDeep from 'renderer/services/common/cloneDeep'

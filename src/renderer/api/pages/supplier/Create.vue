@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <mau-crud-create
-      :entityApiName="entityApiName"
-      :entityAction="EntityAction"
+      :entityType="entityType"
       :callback="callback"
     >
       <template slot-scope="params">
@@ -13,7 +12,6 @@
 </template>
 
 <script>
-  import EntityActions from 'renderer/api/store/entityActions'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import PersonaForm from 'renderer/api/components/generic/persona/PersonaForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -22,8 +20,7 @@
     name: 'CreateSupplier',
     data () {
       return {
-        EntityAction: EntityActions.GET_SUPPLIERS,
-        entityApiName: EntityTypes.SUPPLIER.apiName
+        entityType: EntityTypes.SUPPLIER
       }
     },
     props: {

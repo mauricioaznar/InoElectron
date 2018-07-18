@@ -30,7 +30,8 @@
       return {
         hostRelationshipIdName: TransactionPropertiesReference.ID.relationship_id_name,
         entityApiName: EntityTypes.EXPENSE.apiName,
-        relatedEntitiesRoutes: {}
+        relatedEntitiesRoutes: {},
+        entityType: EntityTypes.EXPENSE
       }
     },
     components: {

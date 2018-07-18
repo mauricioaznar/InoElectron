@@ -2,8 +2,7 @@
   <div class="container">
     <mau-crud-edit
       :id="id"
-      :entityApiName="entityApiName"
-      :entityAction="EntityActions.GET_USERS"
+      :entityType="entityType"
       :callback="callback">
       <template slot-scope="params">
         <user-form
@@ -17,7 +16,6 @@
 
 <script>
   import UserForm from './components/UserForm.vue'
-  import EntityActions from 'renderer/api/store/entityActions'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import ChildTypes from 'renderer/api/ChildTypes'
@@ -25,9 +23,7 @@
     name: 'EditUser',
     data () {
       return {
-        EntityActions: EntityActions,
-        entityApiName: EntityTypes.USER.apiName,
-        user: null
+        entityType: EntityTypes.USER
       }
     },
     props: {

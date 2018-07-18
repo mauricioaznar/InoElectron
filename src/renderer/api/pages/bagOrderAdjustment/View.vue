@@ -16,7 +16,7 @@
     data () {
       return {
         propertiesReference: [
-          OrderPropertiesReference.NAME,
+          OrderPropertiesReference.ORDER_CODE,
           OrderPropertiesReference.DATE,
           OrderPropertiesReference.BAGS,
           OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE

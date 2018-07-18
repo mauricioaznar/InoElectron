@@ -15,7 +15,7 @@
     data () {
       return {
         propertiesReference: [
-          PropertiesReference.NAME,
+          PropertiesReference.ORDER_CODE,
           PropertiesReference.DATE,
           PropertiesReference.BAGS
         ]

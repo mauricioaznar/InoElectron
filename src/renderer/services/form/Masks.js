@@ -14,10 +14,18 @@ const currencyNumber = createNumberMask({
   allowDecimal: true,
   requiresDecimal: false
 })
+const floatNumber = createNumberMask({
+  includeThousandsSeparator: true,
+  allowNegative: false,
+  prefix: '',
+  suffix: '',
+  allowDecimal: true
+})
 export default {
   email: email,
   housephone: housephone,
   cellphone: cellphone,
   regularNumber: regularNumber,
-  currencyNumber: currencyNumber
+  currencyNumber: currencyNumber,
+  floatNumber: floatNumber
 }

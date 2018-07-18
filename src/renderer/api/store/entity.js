@@ -1,4 +1,3 @@
-import { ApiRoutes, getApiRoute, ApiRouteTypes } from 'renderer/api/ApiRoutes'
 import EntityTypes from 'renderer/api/EntityTypes'
 import RolesTypes from 'renderer/api/RoleTypes'
 import EntityActions from './entityActions'
@@ -63,56 +62,56 @@ const actions = {
     commit('SET_REQUESTED_ENTITY', null)
   },
   [EntityActions.GET_BAG_TYPES]: function ({commit}) {
-    ApiFunctions.get(getApiRoute(EntityTypes.BAG_TYPE, ApiRouteTypes.LIST) + '?per_page=1000').then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.BAG_TYPE).then(data => {
       commit('SET_BAG_TYPES', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_BAG_PACKINGS]: function ({commit}) {
-    ApiFunctions.get(getApiRoute(EntityTypes.BAG_PACKING, ApiRouteTypes.LIST) + '?per_page=1000').then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.BAG_PACKING).then(data => {
       commit('SET_BAG_PACKINGS', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_BAGS]: function ({commit}) {
-    ApiFunctions.get(getApiRoute(EntityTypes.BAG, ApiRouteTypes.LIST) + '?per_page=1000').then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.BAG).then(data => {
       commit('SET_BAGS', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_EXPENSE_TYPES]: function ({commit}) {
-    ApiFunctions.get(getApiRoute(EntityTypes.EXPENSE_TYPE, ApiRouteTypes.LIST) + '?per_page=1000').then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.EXPENSE_TYPE).then(data => {
       commit('SET_EXPENSE_TYPES', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_ORDER_ADJUSTMENT_TYPES]: function ({commit}) {
-    ApiFunctions.get(getApiRoute(EntityTypes.BAG_ORDER_ADJUSTMENT_TYPE, ApiRouteTypes.LIST) + '?per_page=1000').then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.BAG_ORDER_ADJUSTMENT_TYPE).then(data => {
       commit('SET_BAG_ORDER_ADJUSTMENT_TYPES', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_SUPPLIERS]: function ({commit}) {
-    ApiFunctions.get(getApiRoute(EntityTypes.SUPPLIER, ApiRouteTypes.LIST) + '?per_page=1000').then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.SUPPLIER).then(data => {
       commit('SET_SUPPLIERS', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_CLIENTS]: function ({commit}) {
-    ApiFunctions.get(getApiRoute(EntityTypes.CLIENT, ApiRouteTypes.LIST) + '?per_page=1000').then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.CLIENT).then(data => {
       commit('SET_CLIENTS', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_USERS]: function ({commit}) {
-    ApiFunctions.get(ApiRoutes.user.list + '?per_page=1000').then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.USER).then(data => {
       commit('SET_USERS', data)
     }).catch(e => {
       console.log(e)

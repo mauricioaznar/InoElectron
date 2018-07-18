@@ -7,7 +7,6 @@ import EntityActions from 'renderer/api/store/entityActions'
 import AuthActions from 'renderer/api/store/authActions'
 import AppActions from 'renderer/app/store/AppActions'
 import ApiOperations from 'renderer/services/api/ApiOperations'
-import {ApiRouteTypes, getApiRoute} from 'renderer/api/ApiRoutes'
 import EntityTypes from 'renderer/api/EntityTypes'
 import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
 import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
@@ -59,10 +58,10 @@ router.beforeEach(async (to, from, next) => {
     next()
   }
   try {
-    let user = await ApiOperations.get(getApiRoute(EntityTypes.AUTH, ApiRouteTypes.USER))
+    let user = await ApiOperations.getMe()
     store.dispatch(AuthActions.SET_USER, user)
     let userRole = store.getters.getRoleByRoleId(user.role_id)
-    let toEntity = RouteObjectHelper.getRouteObjectMetaPropertyValue(to, 'entityType')
+    let toEntityType = RouteObjectHelper.getRouteObjectMetaPropertyValue(to, 'entityType')
     if (!RouteObjectHelper.validateRouteSecurity(userRole, to)) {
       store.dispatch(RouteObjectActions.SET_CURRENT_ROUTE_OBJECT_USER_AUTH, false)
     } else {
@@ -72,13 +71,14 @@ router.beforeEach(async (to, from, next) => {
     let idParam = to.params ? (to.params[GlobalEntityIdentifier] ? to.params[GlobalEntityIdentifier] : null) : null
     let requestedEntityObj = null
     if (idParam !== null) {
-      requestedEntityObj = await ApiOperations.getById(getApiRoute(toEntity, ApiRouteTypes.GET_BY_ID), idParam)
+      requestedEntityObj = await ApiOperations.getById(toEntityType, idParam)
     }
     store.dispatch(EntityActions.SET_REQUESTED_ENTITY, requestedEntityObj)
     let groupedRouteObjectsByEntity = RouteObjectHelper.validateRoutesSecurity(userRole, store.getters.getRouteObjectsByEntityType(to))
     let authWidgetRouteObjects = setAuthWidgetRouteObjects(groupedRouteObjectsByEntity, requestedEntityObj)
     store.dispatch(RouteObjectActions.SET_AUTH_WIDGET_ROUTE_OBJECTS, authWidgetRouteObjects)
   } catch (e) {
+    console.log(e)
     next({path: RouteObjectHelper.createPath(EntityTypes.AUTH, ChildTypes.TOKEN)})
   }
   next()

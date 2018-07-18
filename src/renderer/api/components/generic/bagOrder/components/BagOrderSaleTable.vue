@@ -8,7 +8,7 @@
                     <th class="mau-text-center">Cantidad en kilos</th>
                     <th class="mau-text-center">Precio unitario</th>
                     <th class="mau-text-center">Bultos</th>
-                    <th class="mau-text-center">Descuento</th>
+                    <!--<th class="mau-text-center">Descuento</th>-->
                     <th class="mau-text-center">Costo Total</th>
                 </tr>
             </thead>
@@ -25,27 +25,28 @@
                         </mau-form-input-regular-number>
                     </td>
                     <td class="mau-text-center">
-                        <mau-form-input-regular-number
+                        <mau-form-input-number
                                 :name="OrderProductSalePropertiesReference.UNIT_PRICE.name"
                                 v-model="currentStructuredObj.unit_price"
                                 :initialValue="getProductInitialUnitPrice(currentStructuredObj)"
+                                :type="'float'"
                                 @input="unitPriceHasChanged(currentStructuredObj)"
                         >
-                        </mau-form-input-regular-number>
+                        </mau-form-input-number>
                     </td>
                     <td class="mau-text-center">
                         <div>
                             {{currentStructuredObj.groups}}
                         </div>
                     </td>
-                    <td class="mau-text-center">
-                        <mau-form-input-regular-number
-                                :name="OrderProductSalePropertiesReference.DISCOUNT.name"
-                                v-model="currentStructuredObj.discount"
-                                @input="discountHasChanged(currentStructuredObj)"
-                        >
-                        </mau-form-input-regular-number>
-                    </td>
+                    <!--<td class="mau-text-center">-->
+                        <!--<mau-form-input-regular-number-->
+                                <!--:name="OrderProductSalePropertiesReference.DISCOUNT.name"-->
+                                <!--v-model="currentStructuredObj.discount"-->
+                                <!--@input="discountHasChanged(currentStructuredObj)"-->
+                        <!--&gt;-->
+                        <!--</mau-form-input-regular-number>-->
+                    <!--</td>-->
                     <td class="mau-text-center">
                         <!--<mau-form-input-regular-number-->
                                 <!--:name="OrderProductSalePropertiesReference.TOTAL_COST.name"-->
@@ -57,7 +58,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -77,6 +77,7 @@
     import OrderProductSalePropertiesReference from 'renderer/api/propertiesReference/BagOrderProductSalePropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
     import MauFormInputRegularNumber from 'renderer/components/mau-components/mau-form-inputs/MauFormInputRegularNumber.vue'
+    import MauFormInputNumber from 'renderer/components/mau-components/mau-form-inputs/MauFormInputNumber.vue'
     import {mapGetters} from 'vuex'
     import cloneDeep from 'renderer/services/common/cloneDeep'
     export default {
@@ -90,7 +91,8 @@
         }
       },
       components: {
-        MauFormInputRegularNumber
+        MauFormInputRegularNumber,
+        MauFormInputNumber
       },
       created () {
       },
@@ -156,14 +158,15 @@
           let groupWeight = this.getProductInitialGroupWeight(currentStructuredObj) ? this.getProductInitialGroupWeight(currentStructuredObj) : 0
           if (units && groupWeight) {
             currentStructuredObj.groups = (units / groupWeight).toFixed(2)
+            currentStructuredObj.group_weight = groupWeight || 'null'
           }
         },
         setCurrentStructuredObjectCost: function (currentStructuredObj) {
           let currentObjUnitCost = currentStructuredObj[OrderProductSalePropertiesReference.UNIT_PRICE.name] || 0
           let currentObjQuantity = currentStructuredObj[OrderProductPropertiesReference.UNITS.name] || 0
-          let currentObjDiscount = currentStructuredObj[OrderProductSalePropertiesReference.DISCOUNT.name] || 0
+          // let currentObjDiscount = currentStructuredObj[OrderProductSalePropertiesReference.DISCOUNT.name] || 0
           let currentObjTotalCost = (currentObjUnitCost * currentObjQuantity)
-          currentStructuredObj[OrderProductSalePropertiesReference.TOTAL_COST.name] = currentObjTotalCost - currentObjDiscount
+          currentStructuredObj[OrderProductSalePropertiesReference.TOTAL_COST.name] = currentObjTotalCost
           this.calculateTotal()
         },
         calculateTotal: function () {
@@ -172,7 +175,7 @@
             let cost = currentStructuredObjLoop[OrderProductSalePropertiesReference.TOTAL_COST.name] || 0
             total += cost
           })
-          this.total = total
+          this.total = total.toFixed(2)
         }
       },
       watch: {

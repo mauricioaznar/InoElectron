@@ -9,8 +9,6 @@
 
 <script>
   import PropertiesReference from 'renderer/api/pages/user/PropertiesReference'
-  import {ApiRouteTypes, getApiRoute} from 'renderer/api/ApiRoutes'
-  import EntityTypes from 'renderer/api/EntityTypes'
   import ApiOperations from 'renderer/services/api/ApiOperations'
   export default {
     name: 'MyProfileAuth',
@@ -23,7 +21,7 @@
     },
     created () {
       this.isUserLoading = true
-      ApiOperations.get(getApiRoute(EntityTypes.AUTH, ApiRouteTypes.USER)).then(result => {
+      ApiOperations.getMe().then(result => {
         this.entity = result
         this.isUserLoading = false
       })

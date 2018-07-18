@@ -12,7 +12,8 @@
 </template>
 
 <script>
-  import {ApiRoutes} from 'renderer/api/ApiRoutes'
+  import ApiUrls from 'renderer/services/api/ApiUrls'
+  import EntityTypes from 'renderer/api/EntityTypes'
   import TransactionPropertiesReference from 'renderer/api/propertiesReference/TransactionPropertiesReference'
   import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
@@ -20,7 +21,7 @@
     name: 'ListExpense',
     data () {
       return {
-        apiUrl: ApiRoutes.expense.list,
+        apiUrl: ApiUrls.createListUrl(EntityTypes.EXPENSE),
         canEdit: true,
         tableFields: [
           {

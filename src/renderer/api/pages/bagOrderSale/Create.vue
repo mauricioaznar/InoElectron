@@ -1,15 +1,15 @@
 <template>
   <div class="container">
     <mau-crud-create
-      :entityApiName="entityApiName"
-      :relatedEntitiesRoutes="relatedEntitiesRoutes"
       :relationshipIdName="hostRelationshipIdName"
       :callback="callback"
+      :entityType="entityType"
     >
       <template slot-scope="params">
         <bag-order-form
           :saveFunction="params.save"
           :salesMode="true"
+          :entityType="entityType"
         ></bag-order-form>
       </template>
     </mau-crud-create>
@@ -17,8 +17,6 @@
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
-  import {ApiRoutes} from 'renderer/api/ApiRoutes'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import ChildTypes from 'renderer/api/ChildTypes'
@@ -27,11 +25,8 @@
     name: 'CreateBagOrderSale',
     data () {
       return {
-        relatedEntitiesRoutes: {
-          [PropertiesReference.BAGS.entityName]: ApiRoutes[EntityTypes.BAG_ORDER_SALE_PRODUCT.apiName]
-        },
-        entityApiName: EntityTypes.BAG_ORDER_SALE.apiName,
-        hostRelationshipIdName: 'bag_order_sale_id'
+        hostRelationshipIdName: 'bag_order_sale_id',
+        entityType: EntityTypes.BAG_ORDER_SALE
       }
     },
     components: {

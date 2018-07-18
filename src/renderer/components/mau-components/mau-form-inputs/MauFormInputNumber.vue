@@ -46,6 +46,9 @@
       if (this.type === 'currency') {
         this.mask = Masks.currencyNumber
       }
+      if (this.type === 'float') {
+        this.mask = Masks.floatNumber
+      }
     },
     $_veeValidate: {
       name () {
@@ -74,7 +77,7 @@
         default: 'regular',
         validator: val => {
           return (
-            ['regular', 'currency'].indexOf(val) !== -1
+            ['regular', 'currency', 'float'].indexOf(val) !== -1
           )
         }
       }
@@ -87,10 +90,16 @@
           this.$emit('input', '')
         } else {
           if (isNaN(newValue)) {
-            newValue = numberString.replace(/[^\d.-]/g, '')
+            newValue = numberString.replace(/[^0-9.]+/g, '')
           }
-          this.$emit('input', parseInt(newValue))
+          this.$emit('input', parseFloat(newValue))
         }
+      }
+    },
+    watch: {
+      value: function (val) {
+        this.numberString = val.toString()
+        this.updateValue(this.numberString)
       }
     }
   }

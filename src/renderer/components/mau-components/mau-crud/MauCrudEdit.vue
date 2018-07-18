@@ -6,19 +6,15 @@
 
 <script>
   import ApiFunctions from 'renderer/services/api/ApiOperations'
-  import addHostId from 'renderer/services/api/addHostId'
   import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
   import Notifications from 'renderer/services/api/Notifications'
-  import convertFirstCharacterTo from 'renderer/services/common/ConvertFirstCharacterTo'
-  import {ApiRoutes} from 'renderer/api/ApiRoutes'
   import FormSubmitEventBus from 'renderer/services/form/FormSubmitEventBus'
+  import ManyToManyHelper from 'renderer/services/form/ManyToManyHelper'
   export default {
     name: 'MauCrudEdit',
     data () {
       return {
-        entity: null,
-        entityApiNameLC: convertFirstCharacterTo.lowercase(this.entityApiName),
-        entityApiNameUC: convertFirstCharacterTo.uppercase(this.entityApiName)
+        entity: null
       }
     },
     props: {
@@ -29,73 +25,42 @@
         type: Function,
         required: true
       },
-      entityApiName: {
-        type: String,
+      entityType: {
+        type: Object,
         required: true
-      },
-      entityAction: {
-        type: String
       },
       relationshipIdName: {
         type: String
-      },
-      relatedEntitiesRoutes: {
-        type: Object,
-        default: function () {
-          return {}
-        }
       }
     },
     created () {
-      if (this.entityAction) {
-        this.$store.dispatch(this.entityAction)
-      }
       this.entity = this.$store.getters.requestedEntity
     },
     components: {
 
     },
     methods: {
-      saveFunction: function (entityObject, relationshipObject) {
-        ApiFunctions.edit(ApiRoutes[this.entityApiNameLC].edit, this.id, entityObject)
+      saveFunction: function (entityObject, relayObjects) {
+        ApiFunctions.edit(this.entityType, this.id, entityObject)
           .then(
             result => {
-              if (this.callback) {
-                this.callback(entityObject)
-              }
-              if (this.entityAction) {
-                this.$store.dispatch(this.entityAction)
-              }
-              if (this.relatedEntitiesRoutes) {
-                for (let entityApiName in this.relatedEntitiesRoutes) {
-                  if (this.relatedEntitiesRoutes.hasOwnProperty(entityApiName)) {
-                    let relationshipRoute = this.relatedEntitiesRoutes[entityApiName]
-                    let entityApiCallsContainer = relationshipObject[entityApiName]
-                    if (entityApiCallsContainer.hasOwnProperty('create')) {
-                      if (relationshipRoute.hasOwnProperty('create')) {
-                        entityApiCallsContainer.create.forEach(structuredObject => {
-                          let modifiedStructuredObject = addHostId(structuredObject, this.relationshipIdName, this.id)
-                          ApiFunctions.create(relationshipRoute.create, modifiedStructuredObject)
-                        })
-                      }
-                    }
-                    if (entityApiCallsContainer.hasOwnProperty('del')) {
-                      if (relationshipRoute.hasOwnProperty('del')) {
-                        entityApiCallsContainer.del.forEach(structuredObject => {
-                          let modifiedStructuredObject = addHostId(structuredObject, this.relationshipIdName, this.id)
-                          ApiFunctions.del(relationshipRoute.del, modifiedStructuredObject[GlobalEntityIdentifier], modifiedStructuredObject)
-                        })
-                      }
-                    }
-                    if (entityApiCallsContainer.hasOwnProperty('edit')) {
-                      if (relationshipRoute.hasOwnProperty('edit')) {
-                        entityApiCallsContainer.edit.forEach(structuredObject => {
-                          let modifiedStructuredObject = addHostId(structuredObject, this.relationshipIdName, this.id)
-                          ApiFunctions.edit(relationshipRoute.edit, modifiedStructuredObject[GlobalEntityIdentifier], modifiedStructuredObject)
-                        })
-                      }
-                    }
-                  }
+              for (let relayObjectIndex = 0; relayObjectIndex < relayObjects.length; relayObjectIndex++) {
+                let filteredM2MObjects = ManyToManyHelper.getRelayObjectFilteredM2MObjects(relayObjects[relayObjectIndex])
+                let entityType = ManyToManyHelper.getRelayObjectEntityType(relayObjects[relayObjectIndex])
+                for (let createFilteredObjectsIndex = 0; createFilteredObjectsIndex < filteredM2MObjects.create.length; createFilteredObjectsIndex++) {
+                  let createRelatedEntityObject = filteredM2MObjects.create[createFilteredObjectsIndex]
+                  createRelatedEntityObject[this.relationshipIdName] = this.id
+                  ApiFunctions.create(entityType, createRelatedEntityObject)
+                }
+                for (let editFilteredObjectsIndex = 0; editFilteredObjectsIndex < filteredM2MObjects.edit.length; editFilteredObjectsIndex++) {
+                  let editRelatedEntityObject = filteredM2MObjects.edit[editFilteredObjectsIndex]
+                  editRelatedEntityObject[this.relationshipIdName] = this.id
+                  ApiFunctions.edit(entityType, editRelatedEntityObject[GlobalEntityIdentifier], editRelatedEntityObject)
+                }
+                for (let delFilteredObjectsIndex = 0; delFilteredObjectsIndex < filteredM2MObjects.edit.length; delFilteredObjectsIndex++) {
+                  let delRelatedEntityObject = filteredM2MObjects.edit[delFilteredObjectsIndex]
+                  delRelatedEntityObject[this.relationshipIdName] = this.id
+                  ApiFunctions.edit(entityType, delRelatedEntityObject[GlobalEntityIdentifier], delRelatedEntityObject)
                 }
               }
               Notifications.success(this)

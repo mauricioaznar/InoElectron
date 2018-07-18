@@ -4,20 +4,16 @@
                                :positiveName="'Eliminar'"
         >
         </mau-responsive-button>
-        <vuestic-modal :show.sync="show"
-                       :ref="'confirmAction'"
-                       v-on:ok="confirm"
-        >
-            <div slot="title">Desea realizar dicha accion</div>
-        </vuestic-modal>
+        <b-modal ref="confirmAction" centered title="Desea confirmar la accion" :cancel-title="'Cancelar'" @ok="confirm">
+        </b-modal>
     </div>
 </template>
 
 <script>
   import ApiFunctions from 'renderer/services/api/ApiOperations'
-  import {getApiRoute, ApiRouteTypes} from 'renderer/api/ApiRoutes'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import ChildTypes from 'renderer/api/ChildTypes'
+  import cloneDeep from 'renderer/services/common/cloneDeep'
   export default {
     name: 'MauCrudDel',
     data () {
@@ -45,11 +41,11 @@
     },
     methods: {
       del: function () {
-        this.$refs.confirmAction.open()
+        this.$refs.confirmAction.show()
       },
       confirm: function () {
         let _this = this
-        ApiFunctions.del(getApiRoute(this.entityType, ApiRouteTypes.DEL), this.id, this.entity)
+        ApiFunctions.del(this.entityType, this.id, cloneDeep(this.entity))
           .then(
             result => {
               this.$notify({

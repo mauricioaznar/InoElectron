@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import {getApiRoute, ApiRouteTypes} from 'renderer/api/ApiRoutes'
+    import {getApiRoute, ApiRouteTypes} from 'renderer/api/ApiUrls'
     import EntityTypes from 'renderer/api/EntityTypes'
     export default {
       name: 'OrderSalesDownloads',

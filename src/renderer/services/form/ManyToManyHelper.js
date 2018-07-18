@@ -67,9 +67,28 @@ function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, 
   }
 }
 
+function createRelayObject (filteredM2MObjectsByApiOperations, entityType) {
+  return {
+    filteredM2MObjects: filteredM2MObjectsByApiOperations,
+    entityType: entityType
+  }
+}
+
+function getRelayObjectEntityType (M2MRelayObject) {
+  return M2MRelayObject.entityType
+}
+
+function getRelayObjectFilteredM2MObjects (M2MRelayObject) {
+  return M2MRelayObject.filteredM2MObjects
+}
 
 export default {
   createSimpleM2MStructuredObject: createSimpleM2MStructuredObject,
   createM2MStructuredObjects: createM2MStructuredObjects,
-  filterM2MStructuredObjectsByApiOperations: filterM2MStructuredObjectsByApiOperations
+  filterM2MStructuredObjectsByApiOperations: filterM2MStructuredObjectsByApiOperations,
+  createRelayObject: createRelayObject,
+  getRelayObjectEntityType: getRelayObjectEntityType,
+  getRelayObjectFilteredM2MObjects: getRelayObjectFilteredM2MObjects
+
+
 }

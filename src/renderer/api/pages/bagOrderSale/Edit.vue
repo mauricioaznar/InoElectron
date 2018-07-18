@@ -2,15 +2,15 @@
   <div class="container">
     <mau-crud-edit
       :id="id"
-      :entityApiName="entityApiName"
-      :relatedEntitiesRoutes="relatedEntitiesRoutes"
       :relationshipIdName="hostRelationshipIdName"
+      :entityType="entityType"
       :callback="callback">
       <template slot-scope="params">
         <bag-order-form
           :initialObject="params.entity"
           :saveFunction="params.saveFunction"
           :salesMode="true"
+          :entityType="entityType"
         >
         </bag-order-form>
       </template>
@@ -19,20 +19,15 @@
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
   import BagOrderForm from 'renderer/api/components/generic/bagOrder/BagOrderForm.vue'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import {ApiRoutes} from 'renderer/api/ApiRoutes'
   import ChildTypes from 'renderer/api/ChildTypes'
   export default {
     name: 'EditOrderSale',
     data () {
       return {
-        relatedEntitiesRoutes: {
-          [PropertiesReference.BAGS.entityName]: ApiRoutes[EntityTypes.BAG_ORDER_SALE_PRODUCT.apiName]
-        },
-        entityApiName: EntityTypes.BAG_ORDER_SALE.apiName,
+        entityType: EntityTypes.BAG_ORDER_SALE,
         hostRelationshipIdName: 'bag_order_sale_id'
       }
     },

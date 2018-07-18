@@ -37,9 +37,46 @@ function createDefaultRoutes (entityType) {
   }
 }
 
+function createListUrl (entityType) {
+  return {[ApiRouteTypes.LIST]: ApiDomain + entityType.apiName + '/list'}
+}
+
+function createEditUrl (entityType) {
+  return {[ApiRouteTypes.EDIT]: ApiDomain + entityType.apiName}
+}
+
+function createCreateUrl (entityType) {
+  return {[ApiRouteTypes.CREATE]: ApiDomain + entityType.apiName}
+}
+
+function createDeleteUrl (entityType) {
+  return {[ApiRouteTypes.DEL]: ApiDomain + entityType.apiName}
+}
+
+function createGetById (entityType) {
+  return {[ApiRouteTypes.DEL]: ApiDomain + entityType.apiName}
+}
+
+function combineUrls (arrayOfUrls) {
+  let urlsObject = {}
+  for (let i = 0; i < arrayOfUrls.length; i++) {
+    let obj = arrayOfUrls[i]
+    for (let objKey in obj) {
+      if (obj.hasOwnProperty(objKey)) {
+        urlsObject[objKey] = obj[objKey]
+      }
+    }
+  }
+}
 
 export const ApiRoutes = {
-  [EntityTypes.BAG.apiName]: createDefaultRoutes(EntityTypes.BAG),
+  [EntityTypes.BAG.apiName]: combineUrls(
+    createListUrl(EntityTypes.BAG),
+    createEditUrl(EntityTypes.BAG),
+    createCreateUrl(EntityTypes.BAG),
+    createDeleteUrl(EntityTypes.BAG),
+    createGetById(EntityTypes.BAG)
+  ),
   [EntityTypes.CLIENT.apiName]: createDefaultRoutes(EntityTypes.CLIENT),
   [EntityTypes.USER.apiName]: createDefaultRoutes(EntityTypes.USER),
   [EntityTypes.BAG_TYPE.apiName]: createDefaultRoutes(EntityTypes.BAG_TYPE),

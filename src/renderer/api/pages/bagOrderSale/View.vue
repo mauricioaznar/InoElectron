@@ -9,15 +9,15 @@
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
   import OrderSalePropertiesReference from 'renderer/api/propertiesReference/BagOrderSalePropertiesReference'
   export default {
     name: 'ViewBagOrderSale',
     data () {
       return {
         propertiesReference: [
-          PropertiesReference.NAME,
-          PropertiesReference.BAGS,
+          OrderSalePropertiesReference.ORDER_CODE,
+          OrderSalePropertiesReference.BAGS,
+          OrderSalePropertiesReference.DATE,
           OrderSalePropertiesReference.CLIENT
         ]
       }

@@ -195,8 +195,10 @@
       getDateFromDateTime: DisplayFunctions.getDateFromDateTime,
       getDate: DisplayFunctions.getDate,
       getNameArray: DisplayFunctions.getNameArray,
-      getProductWithQuantity: DisplayFunctions.getProductWithQuantity,
-      getPersonaArray: DisplayFunctions.getPersonaArray
+      getBagWithUnits: DisplayFunctions.getBagWithUnits,
+      getPersonaArray: DisplayFunctions.getPersonaArray,
+      getPersonaInformation: DisplayFunctions.getPersonaInformation,
+      getBagOrderSaleTotal: DisplayFunctions.getBagOrderSaleTotal
     }
   }
 </script>

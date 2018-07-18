@@ -11,14 +11,15 @@
 </template>
 
 <script>
-  import {ApiRoutes} from 'renderer/api/ApiRoutes'
+  import ApiUrls from 'renderer/services/api/ApiUrls'
+  import EntityTypes from 'renderer/api/EntityTypes'
   import PropertiesReference from './PropertiesReference'
   import TableFields from './TableFields'
   export default {
     name: 'ListUser',
     data () {
       return {
-        apiUrl: ApiRoutes.user.list,
+        apiUrl: ApiUrls.createListUrl(EntityTypes.USER),
         canEdit: true,
         tableFields: TableFields
       }

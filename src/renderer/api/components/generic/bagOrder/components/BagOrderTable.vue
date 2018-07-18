@@ -6,8 +6,8 @@
                     <th class="mau-text-center">Producto</th>
                     <th class="mau-text-center">Descripcion</th>
                     <th class="mau-text-center">Cantidad en kilos</th>
-                    <th class="mau-text-center">Bultos</th>
                     <th class="mau-text-center">Peso del bulto</th>
+                    <th class="mau-text-center">Bultos</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,20 +23,14 @@
                         </mau-form-input-regular-number>
                     </td>
                     <td class="mau-text-center">
-                        <mau-form-input-regular-number
-                                :name="OrderProductPropertiesReference.GROUPS.name"
-                                v-model="currentStructuredObj.groups"
-                                @input="unitsHasChanged(currentStructuredObj)"
-                        >
-                        </mau-form-input-regular-number>
+                        <div>
+                            {{getProductInitialGroupWeight(currentStructuredObj)}}
+                        </div>
                     </td>
                     <td class="mau-text-center">
-                        <mau-form-input-regular-number
-                                :name="OrderProductPropertiesReference.GROUP_WEIGHT.name"
-                                v-model="currentStructuredObj.group_weight"
-                                @input="unitsHasChanged(currentStructuredObj)"
-                        >
-                        </mau-form-input-regular-number>
+                        <div>
+                            {{currentStructuredObj.groups}}
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -86,10 +80,23 @@
         getProductName: function (structuredObject) {
           return this.getBagById(structuredObject[this.hostEntityIdentifierName])[ProductPropertiesReference.NAME.name]
         },
+        getProductInitialGroupWeight: function (structuredObject) {
+          return this.getBagById(structuredObject[this.hostEntityIdentifierName])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
+        },
         getProductDescription: function (structuredObject) {
           return this.getBagById(structuredObject[this.hostEntityIdentifierName])[ProductPropertiesReference.DESCRIPTION.name]
         },
+        setGroups: function (currentStructuredObj) {
+          let units = currentStructuredObj[OrderProductPropertiesReference.UNITS.name]
+          let currentBagGroupWeight = this.getProductInitialGroupWeight(currentStructuredObj) || 0
+          if (units && currentBagGroupWeight) {
+            currentStructuredObj.groups = units / currentBagGroupWeight
+          } else {
+            currentStructuredObj.groups = ''
+          }
+        },
         unitsHasChanged: function (currentStructuredObj) {
+          this.setGroups(currentStructuredObj)
           this.emitStructureChangeEvent()
         }
       },

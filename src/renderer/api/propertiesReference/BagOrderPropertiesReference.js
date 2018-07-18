@@ -16,9 +16,9 @@ export default {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
-  NAME: {
+  ORDER_CODE: {
     title: 'Identificador de la orden',
-    name: 'name',
+    name: 'order_code',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
@@ -27,7 +27,7 @@ export default {
     name: 'bags',
     relationship_id_name: 'bag_order_production_id',
     entityName: EntityTypes.BAG_ORDER_PRODUCTION_PRODUCT.name,
-    display: DisplayFunctions.getProductWithQuantity,
+    display: DisplayFunctions.getBagWithUnits,
     defaultValue: MauInputDefaultValues.MULTISELECT
   }
 }

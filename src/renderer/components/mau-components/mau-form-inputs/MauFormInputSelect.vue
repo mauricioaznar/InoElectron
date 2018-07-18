@@ -8,9 +8,9 @@
                 :label="displayProperty"
                 :track-by="'id'"
                 class="form-control override-form-control"
-                :onSearch="onSearch"
+                :onSearch="search"
                 :clearSearchOnSelect="hasClear"
-                :options="availableObjects"
+                :options="options"
                 :class="getBootstrapValidationClass(error)"
         >
             <template slot="option" slot-scope="option">
@@ -35,7 +35,8 @@
     export default {
       data () {
         return {
-          selected: null
+          selected: null,
+          options: []
         }
       },
       $_veeValidate: {
@@ -57,8 +58,8 @@
           type: String,
           required: false
         },
-        availableObjects: {
-          type: Array,
+        entityType: {
+          type: Object,
           required: true
         },
         displayProperty: {
@@ -79,18 +80,17 @@
           default: function () {
             return false
           }
-        },
-        url: {
-          type: String,
-          default: function () {
-            return ''
-          }
         }
       },
       created () {
         if (typeof this.initialObject === 'object' && Object.keys(this.initialObject).length !== 0) {
           this.selected = cloneDeep(this.initialObject)
         }
+        ApiOperations.getWithoutPagination(this.entityType).then(data => {
+          this.options = data
+        }).catch(e => {
+          console.log(e)
+        })
       },
       components: {
         VueSelect
@@ -103,15 +103,18 @@
           }
           this.$emit('input', newValue)
         },
-        onSearch: function (string) {
-          if (this.url !== '') {
-            _.debounce(ApiOperations.get(this.url).then(data => {
-              this.options = data
-            }).catch(e => {
-              console.log(e)
-            }), 500)
-          }
-        }
+        search (search, loading) {
+          loading(true)
+          this.getOptions(search, loading, this)
+        },
+        getOptions: _.debounce((search, loading, vm) => {
+          ApiOperations.getWithoutPagination(vm.entityType, vm.displayProperty, search).then(res => {
+            vm.options = res
+            loading(false)
+          }).catch(e => {
+            console.log(e)
+          })
+        }, 250)
       },
       watch: {
         selected: function (newValue) {

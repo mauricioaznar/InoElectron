@@ -14,13 +14,13 @@
 <script>
   import TableFields from './BagTableFields'
   import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
-  import {getApiRoute, ApiRouteTypes} from 'renderer/api/ApiRoutes'
+  import ApiUrls from 'renderer/services/api/ApiUrls'
   import EntityTypes from 'renderer/api/EntityTypes'
   export default {
     name: 'ListBag',
     data () {
       return {
-        apiUrl: getApiRoute(EntityTypes.BAG, ApiRouteTypes.LIST),
+        apiUrl: ApiUrls.createListUrl(EntityTypes.BAG),
         canEdit: true,
         tableFields: TableFields
       }

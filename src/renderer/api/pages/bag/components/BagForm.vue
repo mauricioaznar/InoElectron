@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="form-group form-row">
-      <div class="col-sm-12 bag_name">
+      <div class="col-sm-12">
         <mau-form-input-text
           :initialValue="initialValues[PropertiesReference.DESCRIPTION.name]"
           v-model="bag.description"

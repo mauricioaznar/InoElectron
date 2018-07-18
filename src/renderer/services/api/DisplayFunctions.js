@@ -26,18 +26,18 @@ export default {
     return temp
   },
   getPersonaArray: function (array) {
-    let personaArrayHtmlString = '<ul>'
+    let htmlString = '<ul>'
     for (let i = 0; i < array.length; i++) {
-      personaArrayHtmlString += '<li>' + array[i].name + ' ' + (array[i].lastname || '') + '</li>'
+      htmlString += '<li>' + array[i].name + ' ' + (array[i].lastname || '') + '</li>'
     }
-    return personaArrayHtmlString + '</ul>'
+    return htmlString + '</ul>'
   },
   getNameArray: function (array) {
-    let personaArrayHtmlString = '<ul>'
+    let htmlString = '<ul>'
     for (let i = 0; i < array.length; i++) {
-      personaArrayHtmlString += '<li>' + array[i].name + '</li>'
+      htmlString += '<li>' + array[i].name + '</li>'
     }
-    return personaArrayHtmlString + '</ul>'
+    return htmlString + '</ul>'
   },
   getDate: function (date) {
     let momentDate = moment(date)
@@ -52,14 +52,21 @@ export default {
   getDateYear: function (date) {
     return moment(date).format('Y')
   },
-  calculateAttachmentCompletion: function (attachmentArray) {
-
+  getPersonaInformation: function (persona) {
+    return persona.companyname
   },
-  getProductWithQuantity: function (array) {
-    let personaArrayHtmlString = '<ul>'
+  getBagWithUnits: function (array) {
+    let htmlString = '<ul>'
     for (let i = 0; i < array.length; i++) {
-      personaArrayHtmlString += '<li class="mau-text-left">' + array[i].name + ' - ' + array[i].pivot.quantity + '</li>'
+      htmlString += '<li class="mau-text-left">' + array[i].name + ' - ' + array[i].pivot.units + '</li>'
     }
-    return personaArrayHtmlString + '</ul>'
+    return htmlString + '</ul>'
+  },
+  getBagOrderSaleTotal: function (array) {
+    let total = 0
+    for (let i = 0; i < array.length; i++) {
+      total += array[i].pivot.total_cost || 0
+    }
+    return '$' + total.toFixed(2)
   }
 }

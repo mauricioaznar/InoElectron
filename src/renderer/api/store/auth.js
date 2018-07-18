@@ -1,7 +1,7 @@
 import {getHeaders} from 'renderer/services/api/ApiHTPPHeaders'
 import Vue from 'vue'
 import authActions from './authActions'
-import {ApiRoutes} from 'renderer/api/ApiRoutes'
+import {ApiRoutes} from 'renderer/api/ApiUrls'
 
 const state = {
   user: null,

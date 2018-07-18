@@ -2,14 +2,14 @@
   <div class="container">
     <mau-crud-edit
       :id="id"
-      :entityApiName="entityApiName"
-      :relatedEntitiesRoutes="relatedEntitiesRoutes"
       :relationshipIdName="hostRelationshipIdName"
+      :entityType="entityType"
       :callback="callback">
       <template slot-scope="params">
         <bag-order-form
-          :adjustmentMode="true"
+          :adjustmentsMode="true"
           :initialObject="params.entity"
+          :entityType="entityType"
           :saveFunction="params.saveFunction">
         </bag-order-form>
       </template>
@@ -18,20 +18,15 @@
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
   import BagOrderForm from 'renderer/api/components/generic/bagOrder/BagOrderForm.vue'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import {ApiRoutes} from 'renderer/api/ApiRoutes'
   import ChildTypes from 'renderer/api/ChildTypes'
   export default {
     name: 'EditBagOrderAdjustment',
     data () {
       return {
-        relatedEntitiesRoutes: {
-          [PropertiesReference.BAGS.entityName]: ApiRoutes[EntityTypes.BAG_ORDER_ADJUSTMENT_PRODUCT.apiName]
-        },
-        entityApiName: EntityTypes.BAG_ORDER_ADJUSTMENT.apiName,
+        entityType: EntityTypes.BAG_ORDER_ADJUSTMENT,
         hostRelationshipIdName: 'bag_order_adjustment_id'
       }
     },

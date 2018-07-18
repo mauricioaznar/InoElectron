@@ -8,16 +8,12 @@
   import ApiFunctions from 'renderer/services/api/ApiOperations'
   import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
   import Notifications from 'renderer/services/api/Notifications'
-  import addHostId from 'renderer/services/api/addHostId'
-  import convertFirstCharacterTo from 'renderer/services/common/ConvertFirstCharacterTo'
-  import {ApiRoutes} from 'renderer/api/ApiRoutes'
   import FormSubmitEventBus from 'renderer/services/form/FormSubmitEventBus'
+  import ManyToManyHelper from 'renderer/services/form/ManyToManyHelper'
   export default {
     name: 'MauCrudCreate',
     data () {
       return {
-        entityApiNameLC: convertFirstCharacterTo.lowercase(this.entityApiName), // todo convert to mixin
-        entityApiNameUC: convertFirstCharacterTo.uppercase(this.entityApiName)
       }
     },
     created () {
@@ -26,57 +22,35 @@
       }
     },
     props: {
-      entityAction: {
-        type: String
+      entityType: {
+        type: Object,
+        required: true
       },
       callback: {
         required: true,
         type: Function
-      },
-      entityApiName: {
-        type: String,
-        required: true
-      },
-      relatedEntitiesRoutes: {
-        type: Object,
-        default: function () {
-          return {}
-        }
       },
       relationshipIdName: {
         type: String
       }
     },
     methods: {
-      saveEntity: function (entityObject, relationshipObject) {
-        ApiFunctions.create(ApiRoutes[this.entityApiNameLC].create, entityObject)
+      saveEntity: function (entityObject, relayObjects) {
+        ApiFunctions.create(this.entityType, entityObject)
           .then(
             result => {
-              let createdEntityId = result[GlobalEntityIdentifier]
-              if (this.callback) {
-                this.callback()
-              }
-              if (this.entityAction) {
-                this.$store.dispatch(this.entityAction)
-              }
-              if (this.relatedEntitiesRoutes) {
-                for (let entityApiName in this.relatedEntitiesRoutes) {
-                  if (this.relatedEntitiesRoutes.hasOwnProperty(entityApiName)) {
-                    let relationshipRoute = this.relatedEntitiesRoutes[entityApiName]
-                    let entityApiCallsContainer = relationshipObject[entityApiName]
-                    if (entityApiCallsContainer.hasOwnProperty('create')) {
-                      if (relationshipRoute.hasOwnProperty('create')) {
-                        entityApiCallsContainer.create.forEach(structuredObject => {
-                          let modifiedStructuredObject = addHostId(structuredObject, this.relationshipIdName, createdEntityId)
-                          ApiFunctions.create(relationshipRoute.create, modifiedStructuredObject)
-                        })
-                      }
-                    }
-                  }
-                }
-              }
+              let hostCreatedIdentifier = result[GlobalEntityIdentifier]
               Notifications.success(this)
               FormSubmitEventBus.emitEvent(true)
+              for (let i = 0; i < relayObjects.length; i++) {
+                let filteredM2MObjects = ManyToManyHelper.getRelayObjectFilteredM2MObjects(relayObjects[i])
+                let entityType = ManyToManyHelper.getRelayObjectEntityType(relayObjects[i])
+                for (let j = 0; j < filteredM2MObjects.create.length; j++) {
+                  let createRelatedEntityObject = filteredM2MObjects.create[j]
+                  createRelatedEntityObject[this.relationshipIdName] = hostCreatedIdentifier
+                  ApiFunctions.create(entityType, createRelatedEntityObject)
+                }
+              }
               this.callback()
             })
           .catch(
