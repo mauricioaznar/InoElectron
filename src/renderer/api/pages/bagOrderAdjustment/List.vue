@@ -3,8 +3,8 @@
     <mau-crud-list>
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
-                      :editFunction="canEdit ? editFunction : null"
-                      :viewFunction="viewFunction"
+                      :actions="actions"
+                      @actionClicked="actionHandler"
       ></mau-data-table>
     </mau-crud-list>
   </div>
@@ -47,9 +47,16 @@
             callback: DisplayFunctions.getBagWithUnits
           },
           {
-            name: OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.name,
-            title: OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.title,
-            callback: OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.display
+            name: OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name,
+            title: OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.title,
+            callback: OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.display
+          }
+        ],
+        actions: [
+          {
+            name: 'view',
+            title: 'Ver',
+            icon: 'fa fa-eye'
           }
         ]
       }
@@ -57,15 +64,13 @@
     components: {
     },
     methods: {
-      viewFunction: function (expenseType) {
-        this.$router.push({
-          name: 'ViewBagOrderAdjustment',
-          params: { id: expenseType[GlobalEntityIdentifier] }})
-      },
-      editFunction: function (expenseType) {
-        this.$router.push(
-          {name: 'EditBagOrderAdjustment',
-            params: { id: expenseType[GlobalEntityIdentifier] }})
+      actionHandler: function (action, entityObj) {
+        if (action.name === 'view') {
+          this.$router.push({
+            name: 'ViewBagOrderAdjustment',
+            params: { id: entityObj[GlobalEntityIdentifier] }
+          })
+        }
       }
     }
   }

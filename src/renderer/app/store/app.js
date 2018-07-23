@@ -25,9 +25,9 @@ const state = {
     }
   },
   years: ['2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
-  isLoading: false,
+  isLoading: true,
   isAppLoading: true,
-  isRouteObjectLoading: true
+  isRouteObjectLoading: false
 }
 
 const mutations = {
@@ -45,10 +45,10 @@ const mutations = {
   setIsLoading (state, data) {
     state.isLoading = data
   },
-  setIsRouteObjectLoading (state, data) {
+  [AppActions.SET_IS_ROUTE_OBJECT_LOADING] (state, data) {
     state.isRouteObjectLoading = data
   },
-  setIsAppLoading (state, data) {
+  [AppActions.SET_IS_APP_LOADING] (state, data) {
     state.isAppLoading = data
   }
 }

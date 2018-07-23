@@ -90,7 +90,7 @@ const actions = {
     })
   },
   [EntityActions.GET_ORDER_ADJUSTMENT_TYPES]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.BAG_ORDER_ADJUSTMENT_TYPE).then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.BAG_ORDER_ADJUSTMENT_ORDER_TYPE).then(data => {
       commit('SET_BAG_ORDER_ADJUSTMENT_TYPES', data)
     }).catch(e => {
       console.log(e)

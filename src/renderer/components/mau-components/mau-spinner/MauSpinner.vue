@@ -1,73 +1,62 @@
 <template>
     <div
-            class="mau-spinner"
+            class="mau-spinner-container"
             :class="{
-                'small': small,
-                'medium': medium,
-                'tall': tall
+                'appSize': appSize,
+                'dataTableSize': dataTableSize,
+                'routerSize': routerSize
             }"
     >
-        <!--<hollow-dots-spinner-->
-                <!--:animation-duration="750"-->
-                <!--:dot-size="10"-->
-                <!--:dots-num="5"-->
-                <!--color="#263E66"-->
-                <!--ref="preLoader"-->
-                <!--class="pre-loader">-->
-        <!--</hollow-dots-spinner>-->
+      <ring-loader :color="'#000000'" class="spinner-position"></ring-loader>
     </div>
 </template>
 
 <script>
-  //  import {HollowDotsSpinner} from 'epic-spinners'
+  import RingLoader from 'vue-spinner/src/RingLoader.vue'
   export default {
     name: 'MauSpinner',
     data () {
-      return {}
+      return {
+        appSize: this.sizeType === 'app',
+        dataTableSize: this.sizeType === 'dataTable',
+        routerSize: this.sizeType === 'router'
+      }
     },
     props: {
-      small: {
-        type: Boolean,
-        default: function () {
-          return false
-        }
-      },
-      medium: {
-        type: Boolean,
-        default: function () {
-          return false
-        }
-      },
-      tall: {
-        type: Boolean,
-        default: function () {
-          return false
+      sizeType: {
+        type: String,
+        required: true,
+        validator: function (value) {
+          return ['app', 'dataTable', 'router'].indexOf(value) !== -1
         }
       }
     },
     components: {
-      //      HollowDotsSpinner
+      RingLoader
     }
   }
 </script>
 
 <style lang="scss">
     @import "../../../sass/variables";
-    .mau-spinner {
+    .mau-spinner-container {
         position: relative;
-        &.tall {
-            height: 90vh;
+        &.appSize {
+            height: 100vh;
         }
-        &.medium {
-            height: 70vh;
+        &.dataTableSize {
+            height: 74vh;
         }
-        &.small {
-            height: 40vh;
+        &.routerSize {
+            height: 75vh;
         }
     }
-    .pre-loader {
+    .spinner-position {
+        text-align: center;
+        display: flex;
         position: absolute;
-        left: $vuestic-preloader-left;
-        top: $vuestic-preloader-top;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%)
     }
 </style>

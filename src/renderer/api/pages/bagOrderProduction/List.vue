@@ -3,8 +3,8 @@
     <mau-crud-list>
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
-                      :editFunction="canEdit ? editFunction : null"
-                      :viewFunction="viewFunction"
+                      :actions="actions"
+                      @actionClicked="actionHandler"
       ></mau-data-table>
     </mau-crud-list>
   </div>
@@ -43,21 +43,26 @@
             hidden: true,
             callback: DisplayFunctions.getBagWithUnits
           }
+        ],
+        actions: [
+          {
+            name: 'view',
+            title: 'Ver',
+            icon: 'fa fa-eye'
+          }
         ]
       }
     },
     components: {
     },
     methods: {
-      viewFunction: function (expenseType) {
-        this.$router.push({
-          name: 'ViewBagOrderProduction',
-          params: { id: expenseType[GlobalEntityIdentifier] }})
-      },
-      editFunction: function (expenseType) {
-        this.$router.push(
-          {name: 'EditBagOrderProduction',
-            params: { id: expenseType[GlobalEntityIdentifier] }})
+      actionHandler: function (action, entityObj) {
+        if (action.name === 'view') {
+          this.$router.push({
+            name: 'ViewBagOrderProduction',
+            params: { id: entityObj[GlobalEntityIdentifier] }
+          })
+        }
       }
     }
   }

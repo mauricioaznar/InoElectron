@@ -18,7 +18,7 @@
     </div>
     <mau-spinner
             v-show="isTableLoading"
-            :medium="true"
+            :sizeType="'dataTable'"
     >
     </mau-spinner>
     <div v-show="!isTableLoading" :class="{'is-loaded': !isTableLoading}" class="vue-table mau-fade-component table-responsive">
@@ -30,7 +30,7 @@
                 :css="css.table"
                 v-bind:paginationPath="paginationPath"
                 :http-options="httpOptions"
-                :appendParams="moreParams"
+                :appendParams="appendParams"
                 :perPage="perPage"
                 :row-class="newRowClassFunction"
                 :query-params="{sort: 'sort', page: 'page', perPage: 'per_page'}"
@@ -40,13 +40,9 @@
       >
         <template slot="actions" slot-scope="props">
           <div class="custom-actions d-flex justify-content-around">
-            <div v-if="viewFunction" class="icon-button view-button custom-action"
-                    @click="viewFunction(props.rowData)">
-              <span class="fa fa-fw fa-eye"></span>
-            </div>
-            <div v-if="editFunction" class="ml-2 icon-button edit-button custom-action"
-                    @click="editFunction(props.rowData)">
-              <span class="fa fa-fw fa-edit"></span>
+            <div v-for="action in actions" class="icon-button view-button custom-action"
+                    @click="onAction(action, props.rowData)">
+              <span :class="action.icon"></span>
             </div>
           </div>
         </template>
@@ -87,14 +83,31 @@
       VuetablePaginationInfo,
       ItemsPerPage
     },
+    data () {
+      return {
+        isTableLoading: true,
+        perPage: 50,
+        colorClasses: {},
+        httpOptions: {
+          headers: getHeaders()
+        },
+        apiMode: true,
+        appendParams: {},
+        filterBarParams: {},
+        paginationPath: 'links.pagination',
+        itemsPerPage: ItemsPerPageDefinition,
+        css: DataTableStyles
+      }
+    },
     created () {
-      if (!this.tableFields.find(tableField => { return tableField.name === '__slot:actions' })) {
+      if (this.actions.length > 0) {
         this.tableFields.push({
           name: '__slot:actions',
           title: 'Acciones',
           hidden: true
         })
       }
+      this.setAppendParams()
     },
     props: {
       apiUrl: {
@@ -128,28 +141,47 @@
           return true
         }
       },
-      editFunction: {
-        type: Function
+      actions: {
+        type: Array,
+        validator: function (array) {
+          let isValid = true
+          for (let index = 0; index < array.length; index++) {
+            let obj = array[index]
+            if (obj === null || typeof obj !== 'object') {
+              console.error('Element at position ' + index + ' in array is not an object or is null')
+              isValid = false
+            }
+            if (!obj.title) {
+              console.error('Object at position ' + index + ' does not have \'title\' property defined')
+              isValid = false
+            }
+            if (!obj.name) {
+              console.error('Object at position ' + index + ' does not have \'name\' property defined')
+              isValid = false
+            }
+            if (!obj.icon) {
+              console.error('Object at position ' + index + ' does not have \'icon\' property defined')
+              isValid = false
+            }
+          }
+          return isValid
+        },
+        default: function () {
+          return []
+        }
       },
-      viewFunction: {
-        type: Function
-      }
-    },
-    data () {
-      return {
-        isTableLoading: true,
-        perPage: 50,
-        colorClasses: {},
-        httpOptions: {
-          headers: getHeaders()
-        },
-        apiMode: true,
-        moreParams: {
-
-        },
-        paginationPath: 'links.pagination',
-        itemsPerPage: ItemsPerPageDefinition,
-        css: DataTableStyles
+      filterExact: {
+        type: Object,
+        validator: function (value) {
+          let size = 0
+          for (let key in value) {
+            if (value.hasOwnProperty(key)) {
+              size++
+            }
+          }
+          if (size !== 1) console.error('Filter Exact lenght is bigger than 1')
+          return (size === 1)
+        }
       }
     },
     methods: {
@@ -161,16 +193,21 @@
         return rowClass
       },
       onAction (action, data, index) {
-        console.log('action: ' + action, data, index)
+        this.$emit('actionClicked', action, data)
       },
-      onFilterSet (filterParams) {
-        if (this.apiMode) {
-          this.moreParams = filterParams
+      onFilterSet (filterBarParams) {
+        this.filterBarParams = filterBarParams
+        this.setAppendParams()
+      },
+      setAppendParams: function () {
+        let appendParams = this.filterBarParams
+        for (let filterExactKey in this.filterExact) {
+          if (this.filterExact.hasOwnProperty(filterExactKey)) {
+            appendParams['filter_exact'] = filterExactKey
+            appendParams['filter_exact_value'] = this.filterExact[filterExactKey]
+          }
         }
-        Vue.nextTick(() => this.$refs.vuetable.refresh())
-      },
-      onItemsPerPage (itemsPerPageValue) {
-        this.perPage = itemsPerPageValue
+        this.appendParams = appendParams
         Vue.nextTick(() => this.$refs.vuetable.refresh())
       },
       onPaginationData (paginationData) {
@@ -196,9 +233,12 @@
       getDate: DisplayFunctions.getDate,
       getNameArray: DisplayFunctions.getNameArray,
       getBagWithUnits: DisplayFunctions.getBagWithUnits,
+      getBagWithUnitsRequested: DisplayFunctions.getBagWithUnitsRequested,
+      getBagWithUnitsGiven: DisplayFunctions.getBagWithUnitsGiven,
       getPersonaArray: DisplayFunctions.getPersonaArray,
       getPersonaInformation: DisplayFunctions.getPersonaInformation,
-      getBagOrderSaleTotal: DisplayFunctions.getBagOrderSaleTotal
+      getBagOrderSaleTotalCostRequested: DisplayFunctions.getBagOrderSaleTotalCostRequested,
+      getBagOrderSaleTotalCostGiven: DisplayFunctions.getBagOrderSaleTotalCostGiven
     }
   }
 </script>

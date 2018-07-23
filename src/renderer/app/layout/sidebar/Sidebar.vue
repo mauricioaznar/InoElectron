@@ -3,7 +3,7 @@
       <ul class="sidebar-menu">
         <li v-for="(category, index) in categories">
           <a
-              @click="goToDefaultCategoryRouteObject(category)"
+              @click="getDefaultCategoryRouteObjectPath(category)"
              class="sidebar-link"
              :class="{'router-link-active': category.name === currentCategoryName}">
             <div class="d-flex flex-column">
@@ -21,15 +21,14 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters } from 'vuex'
   import Categories from 'renderer/api/Categories'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
-
+  import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   export default {
     name: 'sidebar',
     data () {
       return {
-        routeObjects: [],
         categories: Categories
       }
     },
@@ -39,19 +38,36 @@
     },
     computed: {
       ...mapGetters([
-        'getDefaultRouteObjectByCategory'
+        'routeObjects',
+        'getRouteObjectParent'
       ]),
       currentCategoryName: function () {
-        let category = RouteObjectHelper.getRouteObjectMetaPropertyValue(this.$route, 'category')
+        let routeObjectParent = this.getRouteObjectParent(this.$route)
+        let category
+        if (!isObjectEmpty(routeObjectParent)) {
+          category = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObjectParent, 'category')
+        }
         return category ? category.name : ''
       }
     },
     methods: {
-      ...mapActions({
-        toggleSidebar: 'toggleSidebar'
-      }),
-      goToDefaultCategoryRouteObject: function (category) {
-        this.$router.push({path: this.getDefaultRouteObjectByCategory(category).path})
+      getDefaultCategoryRouteObjectPath: function (category) {
+        this.$router.push({path: this.getDefaultCategoryRouteObject(category).path})
+      },
+      getDefaultCategoryRouteObject: function (category) {
+        let foundRouteObj = {}
+        this.routeObjects.forEach(routeObj => {
+          let routeObjCategory = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObj, 'category')
+          if (category.name === routeObjCategory.name) {
+            let isFoundRouteObj = routeObj.children.find(routeObjChild => {
+              return RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObjChild, 'categoryDefault')
+            })
+            if (isFoundRouteObj) {
+              foundRouteObj = isFoundRouteObj
+            }
+          }
+        })
+        return foundRouteObj
       }
     },
     watch: {
@@ -77,9 +93,6 @@
 
     position: absolute;
     width: $sidebar-width;
-    .sidebar-hidden_without-animation & {
-      transition: none;
-    }
 
     .sidebar-hidden & {
       top: $sidebar-hidden-top;

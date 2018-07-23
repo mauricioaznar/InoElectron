@@ -18,7 +18,6 @@
     name: 'MauCrudDel',
     data () {
       return {
-        entity: '',
         show: true
       }
     },
@@ -32,10 +31,11 @@
       },
       callback: {
         type: Function
+      },
+      entity: {
+        type: Object,
+        required: true
       }
-    },
-    created () {
-      this.entity = this.$store.getters.requestedEntity
     },
     components: {
     },

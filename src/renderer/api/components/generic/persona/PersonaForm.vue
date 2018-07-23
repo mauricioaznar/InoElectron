@@ -20,7 +20,7 @@
                         v-model="client.firstname"
                         :label="PropertiesReference.FIRSTNAME.title"
                         :name="PropertiesReference.FIRSTNAME.name"
-                        :type="'email'"
+                        :type="'text'"
                         :error="errors.first(PropertiesReference.FIRSTNAME.name)"
                         v-validate="'required'"
                 >

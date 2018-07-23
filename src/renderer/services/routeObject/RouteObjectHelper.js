@@ -10,30 +10,28 @@ function createRouteObjectPath (entityType, childType) {
   return '/' + convertFirstCharacterTo.lowercase(entityType.name) + '/' + convertFirstCharacterTo.lowercase(childType.name)
 }
 
-function createRouteObject (entityType, childType, config) {
+function createRouteObjectParentPath (entityType, childType) {
+  return '/' + convertFirstCharacterTo.lowercase(entityType.name)
+}
+
+function createRouteObject (entityType, childType, config, children = []) {
   let routeObject = {
     name: createRouteObjectName(entityType, childType),
-    path: createRouteObjectPath(entityType, childType),
+    path: children.length > 0 ? createRouteObjectParentPath(entityType) : createRouteObjectPath(entityType, childType),
     component: apiComponentLoader(convertFirstCharacterTo.lowercase(entityType.name) + '/' + convertFirstCharacterTo.uppercase(childType.name)),
+    children: children,
     meta: {
-      default: false,
       requiresAuth: true,
-      entityType: entityType,
-      childType: childType
+      entityType: entityType
     }
   }
-  routeObject.meta['default'] = config.hasOwnProperty('default') ? config['default'] : false
+  routeObject.meta['appDefault'] = config.hasOwnProperty('appDefault') ? config['appDefault'] : false
   routeObject.meta['category'] = config.hasOwnProperty('category') ? config['category'] : false
   routeObject.meta['categoryDefault'] = config.hasOwnProperty('categoryDefault') ? config['categoryDefault'] : false
+  routeObject.meta['entityDefault'] = config.hasOwnProperty('entityDefault') ? config['entityDefault'] : false
   routeObject.meta['title'] = config.hasOwnProperty('title') ? config['title'] : entityType.title
   routeObject.meta['iconClass'] = config.hasOwnProperty('iconClass') ? config['iconClass'] : ''
   routeObject.meta['requiresAuth'] = config.hasOwnProperty('requiresAuth') ? config['requiresAuth'] : true
-  routeObject.meta['sidebar'] = config.hasOwnProperty('sidebar') ? config['sidebar'] : false
-  routeObject.meta['showNavbar'] = config.hasOwnProperty('showNavbar') ? config['showNavbar'] : false
-  routeObject.meta['sidebarTitle'] = config.hasOwnProperty('sidebarTitle') ? config['sidebarTitle'] : convertFirstCharacterTo.uppercase(entityType.title)
-  routeObject.meta['sidebarIcon'] = config.hasOwnProperty('sidebarIcon') ? config['sidebarIcon'] : config.hasOwnProperty('entityTypeIcon')
-  routeObject.meta['childTypeIcon'] = config.hasOwnProperty('childTypeIcon') ? config['childTypeIcon'] : (childType.icon ? childType.icon : '')
-  routeObject.meta['entityTypeIcon'] = config.hasOwnProperty('entityTypeIcon') ? config['entityTypeIcon'] : (entityType.icon ? entityType.icon : '')
   if (config.hasOwnProperty('params')) {
     routeObject['props'] = true
     routeObject.meta['params'] = config['params']
@@ -75,7 +73,6 @@ function validateRoutesSecurity (userRole, routeObjects) {
   }
   return validatedRouteObjects
 }
-
 
 function validateRouteSecurity (userRole, routeObj) {
   let security = getRouteObjectMetaPropertyValue(routeObj, 'security')

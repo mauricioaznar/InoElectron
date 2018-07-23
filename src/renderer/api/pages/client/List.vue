@@ -2,8 +2,8 @@
   <div>
     <mau-crud-list>
       <persona-data-table :apiUrl="apiUrl"
-                      :editFunction="editFunction"
-                      :viewFunction="viewFunction"
+                      :actionClicked="actionHandler"
+                      :actions="actions"
       >
       </persona-data-table>
     </mau-crud-list>
@@ -19,22 +19,27 @@
     name: 'ListClient',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.CLIENT)
+        apiUrl: ApiUrls.createListUrl(EntityTypes.CLIENT),
+        actions: [
+          {
+            name: 'view',
+            title: 'Ver',
+            icon: 'fa fa-eye'
+          }
+        ]
       }
     },
     components: {
       PersonaDataTable
     },
     methods: {
-      viewFunction: function (client) {
-        this.$router.push({
-          name: 'ViewClient',
-          params: { id: client[GlobalEntityIdentifier] }})
-      },
-      editFunction: function (client) {
-        this.$router.push({
-          name: 'EditClient',
-          params: { id: client[GlobalEntityIdentifier] }})
+      actionHandler: function (action, entityObj) {
+        if (action.name === 'view') {
+          this.$router.push({
+            name: 'ViewClient',
+            params: { id: entityObj[GlobalEntityIdentifier] }
+          })
+        }
       }
     }
   }

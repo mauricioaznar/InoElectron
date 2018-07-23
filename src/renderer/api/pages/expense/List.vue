@@ -3,8 +3,8 @@
     <mau-crud-list :entityName="'Expense'">
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
-                      :editFunction="canEdit ? editFunction : null"
-                      :viewFunction="viewFunction"
+                      :actions="actions"
+                      @actionClicked="actionHandler"
       >
       </mau-data-table>
     </mau-crud-list>
@@ -48,21 +48,26 @@
             title: TransactionPropertiesReference.EXPENSE_TYPE.title,
             callback: DisplayFunctions.getNameFromObject
           }
+        ],
+        actions: [
+          {
+            name: 'view',
+            title: 'Ver',
+            icon: 'fa fa-eye'
+          }
         ]
       }
     },
     components: {
     },
     methods: {
-      viewFunction: function (entity) {
-        this.$router.push({
-          name: 'ViewExpense',
-          params: { id: entity[GlobalEntityIdentifier] }})
-      },
-      editFunction: function (entity) {
-        this.$router.push(
-          {name: 'EditExpense',
-            params: { id: entity[GlobalEntityIdentifier] }})
+      actionHandler: function (action, entityObj) {
+        if (action.name === 'view') {
+          this.$router.push({
+            name: 'ViewExpense',
+            params: { id: entityObj[GlobalEntityIdentifier] }
+          })
+        }
       }
     }
   }

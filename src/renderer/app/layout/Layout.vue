@@ -1,16 +1,15 @@
 <template>
   <div class="layout">
-    <sidebar class="layout-sidebar" v-show="!isLoading"></sidebar>
+    <sidebar class="layout-sidebar"></sidebar>
     <div class="right">
-      <navbar class="layout-navbar" v-show="!isLoading"></navbar>
-      <auth-widget class="layout-auth-widget" v-show="!isLoading"></auth-widget>
+      <navbar class="layout-navbar"></navbar>
+      <action-widget></action-widget>
       <div class="layout-content-wrap" id="content-wrap">
         <main id="content" class="content" role="main">
-          <mau-spinner :tall="true" v-show="isRouteObjectLoading"></mau-spinner>
-          <mau-widget v-show="!isRouteObjectLoading && currentRouteObjectUserAuth">
+          <mau-widget v-if="currentRouteObjectUserAuth">
             <router-view></router-view>
           </mau-widget>
-          <mau-widget v-show="!isLoading && !currentRouteObjectUserAuth">
+          <mau-widget v-if="!currentRouteObjectUserAuth">
             <h2 class="text-center">Ruta no autorizada</h2>
             <p class="text-center">La ruta que usted desea ingresar se encuntra restringida.</p>
           </mau-widget>
@@ -23,9 +22,10 @@
 <script>
   import {mapGetters, mapState, mapActions} from 'vuex'
   import Navbar from './navbar/Navbar'
+  import ActionWidget from 'renderer/app/layout/action-widget/ActionWidget.vue'
   import Sidebar from './sidebar/Sidebar'
-  import AuthWidget from './auth-widget/AuthWidget.vue'
   import EntityActions from 'renderer/api/store/entityActions'
+  import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   export default {
     name: 'layout',
     data () {
@@ -33,9 +33,10 @@
       }
     },
     components: {
+      ActionWidget,
+      MauSpinner,
       Navbar,
-      Sidebar,
-      AuthWidget
+      Sidebar
     },
     beforeMount () {
       this.getInitialData()
@@ -63,9 +64,7 @@
         'currentRouteObjectUserAuth',
         'sidebarOpened',
         'toggleWithoutAnimation',
-        'isLoading',
-        'isRouteObjectLoading',
-        'getRouteObjectsByEntity'
+        'isRouteObjectLoading'
       ]),
       sidebarHiddenClass: function () {
         return {
@@ -85,19 +84,5 @@
   .layout-navbar, .layout-auth-widget, .layout-content-wrap{
     width: $containers-width;
     margin-left: $sidebar-width;
-    transition: margin-left 0.6s ease;
-    &.sidebar-hidden {
-      width: 100%;
-      margin-left: 0;
-    }
-  }
-  .layout-sidebar {
-    opacity: 1;
-    transform: translate(0,0);
-    transition: all 0.6s ease;
-    &.sidebar-hidden {
-      opacity: 0;
-      transform: translate(-100%,0);
-    }
   }
 </style>

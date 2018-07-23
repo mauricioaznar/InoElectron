@@ -6,11 +6,11 @@
       :entityType="entityType"
     >
       <template slot-scope="params">
-        <bag-order-form
+        <bag-order-sale-form
           :saveFunction="params.save"
-          :salesMode="true"
+          :requestMode="true"
           :entityType="entityType"
-        ></bag-order-form>
+        ></bag-order-sale-form>
       </template>
     </mau-crud-create>
   </div>
@@ -20,21 +20,23 @@
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import ChildTypes from 'renderer/api/ChildTypes'
-  import BagOrderForm from 'renderer/api/components/generic/bagOrder/BagOrderForm.vue'
+  import BagOrderSaleForm from 'renderer/api/components/generic/bagOrderSale/BagOrderSaleForm.vue'
+  import MauFormInputSelect from 'renderer/components/mau-components/mau-form-inputs/MauFormInputSelect.vue'
   export default {
-    name: 'CreateBagOrderSale',
+    name: 'CreateBagOrderSaleRequest',
     data () {
       return {
         hostRelationshipIdName: 'bag_order_sale_id',
-        entityType: EntityTypes.BAG_ORDER_SALE
+        entityType: EntityTypes.BAG_ORDER_SALE_REQUEST
       }
     },
     components: {
-      BagOrderForm
+      BagOrderSaleForm,
+      MauFormInputSelect
     },
     methods: {
       callback: function () {
-        this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE, ChildTypes.LIST)})
+        this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_REQUEST, ChildTypes.LIST)})
       }
     }
   }

@@ -24,6 +24,11 @@ export default {
     title: 'Lista',
     icon: 'fa fa-list-ul'
   },
+  MAIN: {
+    name: 'main',
+    title: 'Menu principal',
+    icon: 'fa fa-history'
+  },
   DASHBOARD: {
     name: 'dashboard',
     title: 'Dashboard',

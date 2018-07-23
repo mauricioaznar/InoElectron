@@ -18,25 +18,46 @@
                     <td class="mau-text-center">{{getProductDescription(currentStructuredObj)}}</td>
                     <td class="mau-text-center">
                         <mau-form-input-regular-number
-                                :name="OrderProductPropertiesReference.UNITS.name"
-                                v-model="currentStructuredObj.units"
-                                @input="unitsHasChanged(currentStructuredObj)"
+                                v-if="requestMode"
+                                :name="OrderProductSalePropertiesReference.UNITS_REQUESTED.name"
+                                v-model="currentStructuredObj.units_requested"
+                                @input="unitsRequestedHasChanged(currentStructuredObj)"
+                        >
+                        </mau-form-input-regular-number>
+                        <mau-form-input-regular-number
+                                v-if="receiptMode"
+                                :name="OrderProductSalePropertiesReference.UNITS_REQUESTED.name"
+                                v-model="currentStructuredObj.units_given"
+                                @input="unitsGivenHasChanged(currentStructuredObj)"
                         >
                         </mau-form-input-regular-number>
                     </td>
                     <td class="mau-text-center">
                         <mau-form-input-number
-                                :name="OrderProductSalePropertiesReference.UNIT_PRICE.name"
-                                v-model="currentStructuredObj.unit_price"
-                                :initialValue="getProductInitialUnitPrice(currentStructuredObj)"
+                                v-if="requestMode"
+                                :name="OrderProductSalePropertiesReference.UNIT_PRICE_REQUESTED.name"
+                                v-model="currentStructuredObj.unit_price_requested"
+                                :initialValue="getProductInitialUnitPriceRequested(currentStructuredObj)"
                                 :type="'float'"
-                                @input="unitPriceHasChanged(currentStructuredObj)"
+                                @input="unitsRequestedHasChanged(currentStructuredObj)"
+                        >
+                        </mau-form-input-number>
+                        <mau-form-input-number
+                                v-if="receiptMode"
+                                :name="OrderProductSalePropertiesReference.UNIT_PRICE_GIVEN.name"
+                                v-model="currentStructuredObj.unit_price_given"
+                                :initialValue="getProductInitialUnitPriceGiven(currentStructuredObj)"
+                                :type="'float'"
+                                @input="unitsGivenHasChanged(currentStructuredObj)"
                         >
                         </mau-form-input-number>
                     </td>
                     <td class="mau-text-center">
-                        <div>
-                            {{currentStructuredObj.groups}}
+                        <div v-if="requestMode">
+                            {{currentStructuredObj.groups_requested}}
+                        </div>
+                        <div v-if="receiptMode">
+                            {{currentStructuredObj.groups_given}}
                         </div>
                     </td>
                     <!--<td class="mau-text-center">-->
@@ -48,13 +69,12 @@
                         <!--</mau-form-input-regular-number>-->
                     <!--</td>-->
                     <td class="mau-text-center">
-                        <!--<mau-form-input-regular-number-->
-                                <!--:name="OrderProductSalePropertiesReference.TOTAL_COST.name"-->
-                                <!--v-model="currentStructuredObj.total_cost"-->
-                                <!--@input="unitsHasChanged(currentStructuredObj)"-->
-                        <!--&gt;-->
-                        <!--</mau-form-input-regular-number>-->
-                        {{currentStructuredObj.total_cost}}
+                        <div v-if="requestMode">
+                            {{currentStructuredObj.total_cost_requested}}
+                        </div>
+                        <div v-if="receiptMode">
+                            {{currentStructuredObj.total_cost_given}}
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -73,7 +93,6 @@
 </template>
 
 <script>
-    import OrderProductPropertiesReference from 'renderer/api/propertiesReference/BagOrderProductPropertiesReference'
     import OrderProductSalePropertiesReference from 'renderer/api/propertiesReference/BagOrderProductSalePropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
     import MauFormInputRegularNumber from 'renderer/components/mau-components/mau-form-inputs/MauFormInputRegularNumber.vue'
@@ -85,7 +104,6 @@
       data () {
         return {
           currentStructuredObjects: [],
-          OrderProductPropertiesReference: OrderProductPropertiesReference,
           OrderProductSalePropertiesReference: OrderProductSalePropertiesReference,
           total: 0
         }
@@ -109,6 +127,12 @@
         hostEntityIdentifierName: {
           type: String,
           required: true
+        },
+        requestMode: {
+          type: Boolean
+        },
+        receiptMode: {
+          type: Boolean
         }
       },
       methods: {
@@ -125,54 +149,78 @@
         getProductDescription: function (structuredObject) {
           return this.getBagById(structuredObject[this.hostEntityIdentifierName])[ProductPropertiesReference.DESCRIPTION.name]
         },
-        getProductInitialUnitPrice: function (structuredObject) {
+        getProductInitialUnitPriceRequested: function (structuredObject) {
           let currentUnitPrice = this.getBagById(structuredObject[this.hostEntityIdentifierName])[ProductPropertiesReference.CURRENT_UNIT_PRICE.name]
-          if (structuredObject[OrderProductSalePropertiesReference.UNIT_PRICE.name]) {
-            currentUnitPrice = structuredObject[OrderProductSalePropertiesReference.UNIT_PRICE.name]
+          if (structuredObject[OrderProductSalePropertiesReference.UNIT_PRICE_REQUESTED.name]) {
+            currentUnitPrice = structuredObject[OrderProductSalePropertiesReference.UNIT_PRICE_REQUESTED.name]
           }
           return currentUnitPrice
         },
-        getProductInitialGroupWeight: function (structuredObject) {
+        getProductInitialUnitPriceGiven: function (structuredObject) {
+          let currentUnitPrice = this.getBagById(structuredObject[this.hostEntityIdentifierName])[ProductPropertiesReference.CURRENT_UNIT_PRICE.name]
+          if (structuredObject[OrderProductSalePropertiesReference.UNIT_PRICE_GIVEN.name]) {
+            currentUnitPrice = structuredObject[OrderProductSalePropertiesReference.UNIT_PRICE_GIVEN.name]
+          }
+          return currentUnitPrice
+        },
+        getProductInitialGroupWeightRequested: function (structuredObject) {
           let currentGroupWeight = this.getBagById(structuredObject[this.hostEntityIdentifierName])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
-          if (structuredObject[OrderProductSalePropertiesReference.GROUP_WEIGHT.name]) {
-            currentGroupWeight = structuredObject[OrderProductSalePropertiesReference.GROUP_WEIGHT.name]
+          if (structuredObject[OrderProductSalePropertiesReference.GROUP_WEIGHT_REQUESTED.name]) {
+            currentGroupWeight = structuredObject[OrderProductSalePropertiesReference.GROUP_WEIGHT_REQUESTED.name]
           }
           return currentGroupWeight
         },
-        unitsHasChanged: function (currentStructuredObj) {
-          this.setCurrentStructuredObjectGroup(currentStructuredObj)
-          this.setCurrentStructuredObjectCost(currentStructuredObj)
-          this.emitStructureChangeEvent()
-        },
-        unitPriceHasChanged: function (currentStructuredObj) {
-          this.setCurrentStructuredObjectGroup(currentStructuredObj)
-          this.setCurrentStructuredObjectCost(currentStructuredObj)
-          this.emitStructureChangeEvent()
-        },
-        discountHasChanged: function (currentStructuredObj) {
-          this.setCurrentStructuredObjectCost(currentStructuredObj)
-          this.emitStructureChangeEvent()
-        },
-        setCurrentStructuredObjectGroup: function (currentStructuredObj) {
-          let units = currentStructuredObj[OrderProductSalePropertiesReference.UNITS.name] ? currentStructuredObj[OrderProductSalePropertiesReference.UNITS.name] : 0
-          let groupWeight = this.getProductInitialGroupWeight(currentStructuredObj) ? this.getProductInitialGroupWeight(currentStructuredObj) : 0
-          if (units && groupWeight) {
-            currentStructuredObj.groups = (units / groupWeight).toFixed(2)
-            currentStructuredObj.group_weight = groupWeight || 'null'
+        getProductInitialGroupWeightGiven: function (structuredObject) {
+          let currentGroupWeight = this.getBagById(structuredObject[this.hostEntityIdentifierName])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
+          if (structuredObject[OrderProductSalePropertiesReference.GROUP_WEIGHT_GIVEN.name]) {
+            currentGroupWeight = structuredObject[OrderProductSalePropertiesReference.GROUP_WEIGHT_GIVEN.name]
           }
+          return currentGroupWeight
         },
-        setCurrentStructuredObjectCost: function (currentStructuredObj) {
-          let currentObjUnitCost = currentStructuredObj[OrderProductSalePropertiesReference.UNIT_PRICE.name] || 0
-          let currentObjQuantity = currentStructuredObj[OrderProductPropertiesReference.UNITS.name] || 0
-          // let currentObjDiscount = currentStructuredObj[OrderProductSalePropertiesReference.DISCOUNT.name] || 0
-          let currentObjTotalCost = (currentObjUnitCost * currentObjQuantity)
-          currentStructuredObj[OrderProductSalePropertiesReference.TOTAL_COST.name] = currentObjTotalCost
-          this.calculateTotal()
+        unitsRequestedHasChanged: function (currentStructuredObj) {
+          this.setCurrentStructuredObjectsRequested(currentStructuredObj)
+          this.emitStructureChangeEvent()
         },
-        calculateTotal: function () {
+        unitsGivenHasChanged: function (currentStructuredObj) {
+          this.setCurrentStructuredObjectsGiven(currentStructuredObj)
+          this.emitStructureChangeEvent()
+        },
+        setCurrentStructuredObjectsRequested: function (currentStructuredObj) {
+          let currentObjUnitCost = currentStructuredObj[OrderProductSalePropertiesReference.UNIT_PRICE_REQUESTED.name] || 0
+          let currentObjQuantity = currentStructuredObj[OrderProductSalePropertiesReference.UNITS_REQUESTED.name] || 0
+          currentStructuredObj[OrderProductSalePropertiesReference.TOTAL_COST_REQUESTED.name] = (currentObjUnitCost * currentObjQuantity)
+          let units = currentStructuredObj[OrderProductSalePropertiesReference.UNITS_REQUESTED.name] ? currentStructuredObj[OrderProductSalePropertiesReference.UNITS_REQUESTED.name] : 0
+          let groupWeight = this.getProductInitialGroupWeightRequested(currentStructuredObj) ? this.getProductInitialGroupWeightRequested(currentStructuredObj) : 0
+          if (units && groupWeight) {
+            currentStructuredObj.groups_requested = (units / groupWeight).toFixed(2)
+            currentStructuredObj.group_weight_requested = groupWeight || 'null'
+          }
+          this.calculateTotalRequest()
+        },
+        setCurrentStructuredObjectsGiven: function (currentStructuredObj) {
+          let currentObjUnitCost = currentStructuredObj[OrderProductSalePropertiesReference.UNIT_PRICE_GIVEN.name] || 0
+          let currentObjQuantity = currentStructuredObj[OrderProductSalePropertiesReference.UNITS_GIVEN.name] || 0
+          currentStructuredObj[OrderProductSalePropertiesReference.TOTAL_COST_GIVEN.name] = (currentObjUnitCost * currentObjQuantity)
+          let units = currentStructuredObj[OrderProductSalePropertiesReference.UNITS_GIVEN.name] ? currentStructuredObj[OrderProductSalePropertiesReference.UNITS_GIVEN.name] : 0
+          let groupWeight = this.getProductInitialGroupWeightGiven(currentStructuredObj) ? this.getProductInitialGroupWeightGiven(currentStructuredObj) : 0
+          if (units && groupWeight) {
+            currentStructuredObj.groups_given = (units / groupWeight).toFixed(2)
+            currentStructuredObj.group_weight_given = groupWeight || 'null'
+          }
+          this.calculateTotalGiven()
+        },
+        calculateTotalRequest: function () {
           let total = 0
           this.currentStructuredObjects.forEach((currentStructuredObjLoop, index) => {
-            let cost = currentStructuredObjLoop[OrderProductSalePropertiesReference.TOTAL_COST.name] || 0
+            let cost = currentStructuredObjLoop[OrderProductSalePropertiesReference.TOTAL_COST_REQUESTED.name] || 0
+            total += cost
+          })
+          this.total = total.toFixed(2)
+        },
+        calculateTotalGiven: function () {
+          let total = 0
+          this.currentStructuredObjects.forEach((currentStructuredObjLoop, index) => {
+            let cost = currentStructuredObjLoop[OrderProductSalePropertiesReference.TOTAL_COST_GIVEN.name] || 0
             total += cost
           })
           this.total = total.toFixed(2)
@@ -193,7 +241,12 @@
             }
           }
           this.currentStructuredObjects = tempCurrentStructuredObjects
-          this.calculateTotal()
+          if (this.requestMode) {
+            this.calculateTotalRequest()
+          }
+          if (this.receiptMode) {
+            this.calculateTotalGiven()
+          }
         }
       }
     }

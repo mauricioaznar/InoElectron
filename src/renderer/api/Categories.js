@@ -9,11 +9,6 @@ export default {
     title: 'Produccion',
     iconClass: 'fa fa-product-hunt'
   },
-  ACCOUNTING: {
-    name: 'accounting',
-    title: 'Contabilidad',
-    iconClass: 'fa fa-credit-card'
-  },
   AUTH: {
     name: 'auth',
     title: 'Otros',

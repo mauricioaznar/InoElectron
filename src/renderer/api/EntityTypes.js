@@ -43,14 +43,19 @@ export default {
     name: 'bagOrderAdjustmentProduct',
     apiName: 'bagOrderAdjustmentProduct'
   },
-  BAG_ORDER_ADJUSTMENT_TYPE: {
-    name: 'bagOrderAdjustmentType',
-    apiName: 'bagOrderAdjustmentType'
+  BAG_ORDER_ADJUSTMENT_ORDER_TYPE: {
+    name: 'bagOrderAdjustmentOrderType',
+    apiName: 'bagOrderAdjustmentOrderType'
   },
-  BAG_ORDER_SALE: {
-    name: 'bagOrderSale',
+  BAG_ORDER_SALE_RECEIPT: {
+    name: 'bagOrderSaleReceipt',
     apiName: 'bagOrderSale',
     title: 'Ordenes de venta'
+  },
+  BAG_ORDER_SALE_REQUEST: {
+    name: 'bagOrderSaleRequest',
+    apiName: 'bagOrderSale',
+    title: 'Pedidos'
   },
   BAG_ORDER_SALE_PRODUCT: {
     name: 'bagOrderSaleProduct',
@@ -74,8 +79,8 @@ export default {
     icon: 'fa fa-bell'
   },
   DOWNLOADS: {
-    name: 'download',
-    apiName: 'download',
+    name: 'downloads',
+    apiName: 'downloads',
     title: 'Descargas',
     icon: 'fa fa-download'
   },

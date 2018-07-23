@@ -1,0 +1,39 @@
+<template>
+    <div>
+        <mau-spinner v-if="!entity" :sizeType="'router'"></mau-spinner>
+        <mau-entity-petitioner :id="id" :entityType="entityType" @entityResult="entityResultHandler"></mau-entity-petitioner>
+        <mau-crud-del
+                v-if="entity"
+                :entity="entity"
+                :id="id"
+                :entityType="entityType">
+        </mau-crud-del>
+    </div>
+</template>
+
+<script>
+  import Entities from 'renderer/api/EntityTypes'
+  import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
+  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  export default {
+    name: 'DelBagOrderReceipt',
+    data () {
+      return {
+        entityType: Entities.BAG_ORDER_SALE_RECEIPT,
+        entity: null
+      }
+    },
+    components: {
+      MauEntityPetitioner,
+      MauSpinner
+    },
+    props: {
+      id: null
+    },
+    methods: {
+      entityResultHandler: function (entityObj) {
+        this.entity = entityObj
+      }
+    }
+  }
+</script>

@@ -132,6 +132,11 @@
         updateValue: function (newValue) {
           this.$emit('input', newValue)
         }
+      },
+      watch: {
+        initialValue: function (initialVal) {
+          this.stringValue = initialVal
+        }
       }
     }
 </script>

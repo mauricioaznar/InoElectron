@@ -3,7 +3,7 @@ import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
 import MauInputDefaultValues from 'renderer/components/mau-components/mau-form-inputs/MauInputDefaultValues'
 import Masks from 'renderer/services/form/Masks'
 
-export default {
+let propertiesReference = {
   ID: {
     title: 'id',
     name: GlobalEntityIdentifier,
@@ -74,3 +74,5 @@ export default {
     defaultValue: MauInputDefaultValues.SELECT
   }
 }
+
+export default Object.freeze(propertiesReference)

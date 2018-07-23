@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="app">
-    <mau-spinner :tall="true" v-show="isAppLoading"></mau-spinner>
+    <mau-spinner :sizeType="'app'" v-show="isAppLoading"></mau-spinner>
     <notifications classes="mau-notification" :duration="5000" :group="'right-corner'"></notifications>
-    <auth-layout v-if="isAuth" v-show="!isAppLoading">
+    <auth-layout v-if="!requiresAuth" v-show="!isAppLoading">
     </auth-layout>
     <layout v-else v-show="!isAppLoading"></layout>
   </div>
@@ -27,8 +27,8 @@
       ...mapGetters([
         'isAppLoading'
       ]),
-      isAuth () {
-        return this.$route.meta.requiresAuth === false
+      requiresAuth () {
+        return this.$route.meta.requiresAuth === true
       }
     }
   }

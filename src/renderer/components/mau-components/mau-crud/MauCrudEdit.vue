@@ -1,6 +1,6 @@
 <template>
-  <div v-if="entity">
-    <slot :entity="entity" :saveFunction="saveFunction"></slot>
+  <div>
+    <slot :saveFunction="saveFunction"></slot>
   </div>
 </template>
 
@@ -14,7 +14,6 @@
     name: 'MauCrudEdit',
     data () {
       return {
-        entity: null
       }
     },
     props: {
@@ -34,7 +33,6 @@
       }
     },
     created () {
-      this.entity = this.$store.getters.requestedEntity
     },
     components: {
 
@@ -57,10 +55,10 @@
                   editRelatedEntityObject[this.relationshipIdName] = this.id
                   ApiFunctions.edit(entityType, editRelatedEntityObject[GlobalEntityIdentifier], editRelatedEntityObject)
                 }
-                for (let delFilteredObjectsIndex = 0; delFilteredObjectsIndex < filteredM2MObjects.edit.length; delFilteredObjectsIndex++) {
-                  let delRelatedEntityObject = filteredM2MObjects.edit[delFilteredObjectsIndex]
+                for (let delFilteredObjectsIndex = 0; delFilteredObjectsIndex < filteredM2MObjects.del.length; delFilteredObjectsIndex++) {
+                  let delRelatedEntityObject = filteredM2MObjects.del[delFilteredObjectsIndex]
                   delRelatedEntityObject[this.relationshipIdName] = this.id
-                  ApiFunctions.edit(entityType, delRelatedEntityObject[GlobalEntityIdentifier], delRelatedEntityObject)
+                  ApiFunctions.del(entityType, delRelatedEntityObject[GlobalEntityIdentifier], delRelatedEntityObject)
                 }
               }
               Notifications.success(this)
@@ -69,6 +67,7 @@
             })
           .catch(
             error => {
+              console.log(error)
               FormSubmitEventBus.emitEvent(false)
               Notifications.error(this, error)
             }

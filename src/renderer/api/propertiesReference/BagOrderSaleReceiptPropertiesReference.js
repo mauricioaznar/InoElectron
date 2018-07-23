@@ -25,7 +25,7 @@ let OrderSalePropertiesReference = {
     title: 'Bolsas',
     name: 'bags',
     relationship_id_name: 'bag_order_production_id',
-    display: DisplayFunctions.getBagWithUnits,
+    display: DisplayFunctions.getBagWithUnitsGiven,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },
   CLIENT: {
@@ -33,6 +33,14 @@ let OrderSalePropertiesReference = {
     title: 'Cliente',
     relationship_id_name: 'client_id',
     display: DisplayFunctions.getPersonaInformation,
+    required: false,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  ORDER_STATUS_TYPE: {
+    name: 'bagOrderSaleStatusType',
+    title: 'Estado',
+    relationship_id_name: 'bag_order_sale_status_type_id',
+    display: DisplayFunctions.getNameFromObject,
     required: false,
     defaultValue: MauInputDefaultValues.SELECT
   }

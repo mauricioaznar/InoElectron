@@ -55,8 +55,7 @@
           type: String
         },
         error: {
-          type: String,
-          required: false
+          type: String
         },
         entityType: {
           type: Object,
@@ -64,7 +63,13 @@
         },
         displayProperty: {
           type: String,
-          default: 'name'
+          required: true
+        },
+        searchedProperty: {
+          type: String,
+          default: function () {
+            return this.displayProperty
+          }
         },
         label: {
           type: String
@@ -80,13 +85,19 @@
           default: function () {
             return false
           }
+        },
+        filterExact: {
+          type: Object,
+          default: function () {
+            return {}
+          }
         }
       },
       created () {
         if (typeof this.initialObject === 'object' && Object.keys(this.initialObject).length !== 0) {
           this.selected = cloneDeep(this.initialObject)
         }
-        ApiOperations.getWithoutPagination(this.entityType).then(data => {
+        ApiOperations.getWithFilterExactWithoutPagination(this.entityType, this.filterExact).then(data => {
           this.options = data
         }).catch(e => {
           console.log(e)
@@ -108,7 +119,8 @@
           this.getOptions(search, loading, this)
         },
         getOptions: _.debounce((search, loading, vm) => {
-          ApiOperations.getWithoutPagination(vm.entityType, vm.displayProperty, search).then(res => {
+          let filterLikeObject = {[vm.searchedProperty]: search}
+          ApiOperations.getWithFilterLikeWithFilterExactWithoutPagination(vm.entityType, filterLikeObject, vm.filterExact).then(res => {
             vm.options = res
             loading(false)
           }).catch(e => {

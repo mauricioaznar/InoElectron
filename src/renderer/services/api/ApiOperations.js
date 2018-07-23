@@ -2,19 +2,27 @@ import Vue from 'vue'
 import {getHeaders} from 'renderer/services/api/ApiHTPPHeaders'
 import ApiUrls from 'renderer/services/api/ApiUrls'
 import ApiDomain from 'renderer/services/api/ApiDomain'
+import FilterHelper from 'renderer/services/api/FilterHelper'
 
-export function get (entityType) {
+export function getWithFilterLike (entityType) {
   return Vue.http.get(ApiUrls.createListUrl(entityType), {headers: getHeaders()}).then(getServerResponseData)
 }
 
-export function getWithoutPagination (entityType, filterName, filterValue) {
-  let filterNameQueryString = filterName ? '&' + filterName : ''
-  let filterValueQueryString = filterValue ? '&' + filterValue : ''
-  return Vue.http.get(ApiUrls.createListUrl(entityType) + '?paginate=false' + filterNameQueryString + filterValueQueryString, {headers: getHeaders()}).then(getServerResponseData)
+export function getWithFilterLikeWithoutPagination (entityType, filterLikeObject) {
+  let filterLikeQuery = FilterHelper.filterLikeQueryCreator(filterLikeObject)
+  return Vue.http.get(ApiUrls.createListUrl(entityType) + '?paginate=false' + filterLikeQuery, {headers: getHeaders()}).then(getServerResponseData)
 }
 
-export function getWithFilterExact (entityType, filterName, filterValue) {
-  return Vue.http.get(ApiUrls.createListUrl(entityType) + '?paginate=false' + '&filter_exact=' + filterName + '&filter_exact_value=' + filterValue, {headers: getHeaders()}).then(getServerResponseData)
+export function getWithFilterExactWithoutPagination (entityType, filterExactObject) {
+  let filterExactQuery = FilterHelper.filterExactQueryCreator(filterExactObject)
+  return Vue.http.get(ApiUrls.createListUrl(entityType) + '?paginate=false' + filterExactQuery, {headers: getHeaders()}).then(getServerResponseData)
+}
+
+export function getWithFilterLikeWithFilterExactWithoutPagination (entityType, filterLikeObject, filterExactObject) {
+  let extraQuery = '?paginate=false'
+  let filterExactQuery = FilterHelper.filterExactQueryCreator(filterExactObject)
+  let filterLikeQuery = FilterHelper.filterLikeQueryCreator(filterLikeObject)
+  return Vue.http.get(ApiUrls.createListUrl(entityType) + extraQuery + filterExactQuery + filterLikeQuery, {headers: getHeaders()}).then(getServerResponseData)
 }
 
 export function getById (entityType, id) {
@@ -60,12 +68,13 @@ export function catchError (e) {
 }
 export default {
   getById: getById,
-  get: get,
-  getWithoutPagination: getWithoutPagination,
   edit: edit,
   create: create,
   del: del,
-  getWithFilterExact: getWithFilterExact,
+  getWithFilterLike: getWithFilterLike,
+  getWithoutPagination: getWithFilterLikeWithoutPagination,
+  getWithFilterExactWithoutPagination: getWithFilterExactWithoutPagination,
+  getWithFilterLikeWithFilterExactWithoutPagination: getWithFilterLikeWithFilterExactWithoutPagination,
   getMe: getMe,
   generateToken: generateToken,
   getMax: getMax

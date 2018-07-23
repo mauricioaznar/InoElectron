@@ -3,8 +3,8 @@
     <mau-crud-list>
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
-                      :editFunction="canEdit ? editFunction : null"
-                      :viewFunction="viewFunction"
+                      :actions="actions"
+                      @actionClicked="actionHandler"
       >
       </mau-data-table>
     </mau-crud-list>
@@ -12,31 +12,69 @@
 </template>
 
 <script>
-  import TableFields from './BagTableFields'
   import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
   import ApiUrls from 'renderer/services/api/ApiUrls'
   import EntityTypes from 'renderer/api/EntityTypes'
+  import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
+  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
   export default {
     name: 'ListBag',
     data () {
       return {
         apiUrl: ApiUrls.createListUrl(EntityTypes.BAG),
-        canEdit: true,
-        tableFields: TableFields
+        tableFields: [
+          {
+            name: PropertiesReference.NAME.name,
+            title: PropertiesReference.NAME.title,
+            dataClass: 'text-center'
+          },
+          {
+            name: PropertiesReference.DESCRIPTION.name,
+            title: PropertiesReference.DESCRIPTION.title,
+            dataClass: 'text-center'
+          },
+          {
+            name: PropertiesReference.WIDTH.name,
+            title: PropertiesReference.WIDTH.title
+          },
+          {
+            name: PropertiesReference.LENGTH.name,
+            title: PropertiesReference.LENGTH.title
+          },
+          {
+            name: PropertiesReference.CURRENT_GROUP_WEIGHT.name,
+            title: PropertiesReference.CURRENT_GROUP_WEIGHT.title
+          },
+          {
+            name: PropertiesReference.BAG_TYPE.name,
+            title: PropertiesReference.BAG_TYPE.title,
+            callback: DisplayFunctions.getNameFromObject
+          },
+          {
+            name: PropertiesReference.BAG_PACKING.name,
+            title: PropertiesReference.BAG_PACKING.title,
+            callback: DisplayFunctions.getNameFromObject
+          }
+        ],
+        actions: [
+          {
+            name: 'view',
+            title: 'Ver',
+            icon: 'fa fa-eye'
+          }
+        ]
       }
     },
     components: {
     },
     methods: {
-      viewFunction: function (entity) {
-        this.$router.push({
-          name: 'ViewBag',
-          params: { id: entity[PropertiesReference.ID.name] }})
-      },
-      editFunction: function (entity) {
-        this.$router.push(
-          {name: 'EditBag',
-            params: { id: entity[PropertiesReference.ID.name] }})
+      actionHandler: function (action, entityObj) {
+        if (action.name === 'view') {
+          this.$router.push({
+            name: 'ViewBag',
+            params: { id: entityObj[GlobalEntityIdentifier] }
+          })
+        }
       }
     }
   }

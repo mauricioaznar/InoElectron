@@ -21,7 +21,8 @@ let remoteUnique = {
           valid: true
         })
       } else {
-        ApiOperations.getWithFilterExact(params[0].entityType, params[0].columnName, value).then(result => {
+        let filterExactObject = {[params[0].columnName]: value}
+        ApiOperations.getWithFilterExactWithoutPagination(params[0].entityType, filterExactObject).then(result => {
           let isValueUsed = result.length > 0
           resolve({
             valid: !isValueUsed,

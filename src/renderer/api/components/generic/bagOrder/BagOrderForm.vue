@@ -35,29 +35,14 @@
           <div class="form-group" v-if="adjustmentsMode">
               <div class="expenseType">
                   <mau-form-input-select
-                          :initialObject="initialValues[OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.name]"
-                          :label="OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.title"
+                          :initialObject="initialValues[OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name]"
+                          :label="OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.title"
                           :displayProperty="'name'"
                           v-model="productionOrder.adjustmentType"
-                          :name="OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.name"
-                          :data-vv-as="OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.title"
-                          :error="errors.first(OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.name)"
+                          :name="OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name"
+                          :data-vv-as="OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.title"
+                          :error="errors.first(OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name)"
                           :entityType="adjustmentTypeEntityType"
-                          v-validate="'object_required'"
-                  >
-                  </mau-form-input-select>
-              </div>
-          </div>
-          <div class="form-group" v-if="salesMode">
-              <div class="expenseType">
-                  <mau-form-input-select
-                          :initialObject="initialValues[OrderSalePropertiesReference.CLIENT.name]"
-                          :label="OrderSalePropertiesReference.CLIENT.title"
-                          :displayProperty="'companyname'"
-                          :entityType="clientEntityType"
-                          v-model="productionOrder.client"
-                          :name="OrderSalePropertiesReference.CLIENT.name"
-                          :error="errors.first(OrderSalePropertiesReference.CLIENT.name)"
                           v-validate="'object_required'"
                   >
                   </mau-form-input-select>
@@ -74,15 +59,7 @@
                             :name="OrderPropertiesReference.BAGS.name"
                     >
                         <template slot-scope="params">
-                            <order-sale-table
-                                    v-if="salesMode"
-                                    :structuredObjects="params.structuredObjects"
-                                    @structuredObjectsChange="params.onTableChange"
-                                    :hostEntityIdentifierName="'bag_id'"
-                            >
-                            </order-sale-table>
                             <order-table
-                                v-else
                                 :structuredObjects="params.structuredObjects"
                                 @structuredObjectsChange="params.onTableChange"
                                 :hostEntityIdentifierName="'bag_id'"
@@ -102,7 +79,6 @@
 <script>
   import OrderPropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
   import OrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/BagOrderAdjustmentPropertiesReference'
-  import OrderSalePropertiesReference from 'renderer/api/propertiesReference/BagOrderSalePropertiesReference'
   import ValidatorHelper from 'renderer/services/form/ValidatorHelper'
   import MauFormInputText from 'renderer/components/mau-components/mau-form-inputs/MauFormInputText.vue'
   import MauFormInputNumber from 'renderer/components/mau-components/mau-form-inputs/MauFormInputNumber.vue'
@@ -123,7 +99,6 @@
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         OrderPropertiesReference: OrderPropertiesReference,
         OrderAdjustmentPropertiesReference: OrderAdjustmentPropertiesReference,
-        OrderSalePropertiesReference: OrderSalePropertiesReference,
         productionOrder: {
           orderCode: '',
           bags: [],
@@ -134,7 +109,7 @@
         initialValues: {},
         buttonDisabled: false,
         clientEntityType: EntityTypes.CLIENT,
-        adjustmentTypeEntityType: EntityTypes.BAG_ORDER_ADJUSTMENT_TYPE
+        adjustmentTypeEntityType: EntityTypes.BAG_ORDER_ADJUSTMENT_ORDER_TYPE
       }
     },
     components: {
@@ -162,12 +137,6 @@
         default: function () {
           return false
         }
-      },
-      salesMode: {
-        type: Boolean,
-        default: function () {
-          return false
-        }
       }
     },
     mounted () {
@@ -189,12 +158,6 @@
     },
     computed: {
       ...mapState({
-        availableBagOrderAdjustmentTypes: state => {
-          return state.api.entity.bagOrderAdjustmentTypes
-        },
-        availableClients: state => {
-          return state.api.entity.clients
-        },
         availableBags: state => {
           return state.api.entity.bags
         }
@@ -214,24 +177,13 @@
             }
           }
         }
-        if (this.salesMode) {
-          for (let propertyReference in OrderSalePropertiesReference) {
-            if (OrderSalePropertiesReference.hasOwnProperty(propertyReference)) {
-              this.initialValues[OrderSalePropertiesReference[propertyReference].name] = OrderSalePropertiesReference[propertyReference].defaultValue
-            }
-          }
-        }
       },
       setInitialValues: function () {
         this.initialValues[OrderPropertiesReference.ORDER_CODE.name] = this.initialObject[OrderPropertiesReference.ORDER_CODE.name]
         this.initialValues[OrderPropertiesReference.BAGS.name] = this.initialObject[OrderPropertiesReference.BAGS.name]
         this.initialValues[OrderPropertiesReference.DATE.name] = this.initialObject[OrderPropertiesReference.DATE.name]
         if (this.adjustmentsMode) {
-          console.log('asdfasdf')
-          this.initialValues[OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.name] = this.initialObject[OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.name]
-        }
-        if (this.salesMode) {
-          this.initialValues[OrderSalePropertiesReference.CLIENT.name] = this.initialObject[OrderSalePropertiesReference.CLIENT.name]
+          this.initialValues[OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name] = this.initialObject[OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name]
         }
       },
       save: function () {
@@ -241,12 +193,8 @@
         }
         let bagOrderEntityType = EntityTypes.BAG_ORDER_PRODUCTION_PRODUCT
         if (this.adjustmentsMode) {
-          directParams[OrderAdjustmentPropertiesReference.ADJUSTMENT_TYPE.relationship_id_name] = this.productionOrder.adjustmentType ? this.productionOrder.adjustmentType[GlobalEntityIdentifier] : 'null'
+          directParams[OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.relationship_id_name] = this.productionOrder.adjustmentType ? this.productionOrder.adjustmentType[GlobalEntityIdentifier] : 'null'
           bagOrderEntityType = EntityTypes.BAG_ORDER_ADJUSTMENT_PRODUCT
-        }
-        if (this.salesMode) {
-          directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.productionOrder.client ? this.productionOrder.client[GlobalEntityIdentifier] : 'null'
-          bagOrderEntityType = EntityTypes.BAG_ORDER_SALE_PRODUCT
         }
         let relayObjects = [
           ManyToManyHelper.createRelayObject(this.productionOrder.bags, bagOrderEntityType)

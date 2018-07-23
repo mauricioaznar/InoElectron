@@ -1,8 +1,5 @@
 <template>
   <b-navbar toggleable="md" type="dark" variant="info">
-    <button class="navbar-toggler navbar-link" type="button" aria-label="Toggle navigation" aria-controls="nav_collapse" aria-expanded="false">
-      <span @click="toggle" class="fa fa-angle-left"></span>
-    </button>
     <b-navbar-toggle class="navbar-link" target="nav_collapse"><span class="fa fa-bars"></span></b-navbar-toggle>
     <b-collapse is-nav id="nav_collapse">
 
@@ -42,6 +39,7 @@
   import AppActions from 'renderer/app/store/AppActions'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import ChildTypes from 'renderer/api/ChildTypes'
+  import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   export default {
     name: 'navbar',
     data () {
@@ -59,6 +57,7 @@
     computed: mapGetters([
       'user',
       'routeObjects',
+      'getRouteObjectParent',
       'sidebarOpened',
       'toggleWithoutAnimation'
     ]),
@@ -73,15 +72,28 @@
     },
     methods: {
       mapRouteObjectsToNavbar: function (currentRouteObject) {
-        this.navbarTitle = RouteObjectHelper.getRouteObjectMetaPropertyValue(currentRouteObject, 'title')
-        let currentRouteObjectCategory = RouteObjectHelper.getRouteObjectMetaPropertyValue(currentRouteObject, 'category')
-        let currentRouteObjectCategoryName = currentRouteObjectCategory !== null ? currentRouteObjectCategory.name : ''
-        this.navbarRouteObjects = this.routeObjects.filter(routeObj => {
-          let routeObjCategory = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObj, 'category')
-          let routeObjCategoryName = routeObjCategory !== null ? routeObjCategory.name : ''
-          let showNavbar = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObj, 'showNavbar')
-          return currentRouteObjectCategoryName === routeObjCategoryName && showNavbar
-        })
+        let navbarRouteObjects = []
+        let navbarTitle = ''
+        if (!isObjectEmpty(currentRouteObject)) {
+          navbarTitle = RouteObjectHelper.getRouteObjectMetaPropertyValue(currentRouteObject, 'title') || ''
+          let parentRouteObject = this.getRouteObjectParent(currentRouteObject)
+          if (!isObjectEmpty(parentRouteObject)) {
+            let currentRouteObjectCategory = RouteObjectHelper.getRouteObjectMetaPropertyValue(parentRouteObject, 'category')
+            this.routeObjects.forEach(routeObj => {
+              let routeObjCategory = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObj, 'category')
+              if (routeObjCategory.name === currentRouteObjectCategory.name && routeObj.children) {
+                routeObj.children.forEach(routeObjChild => {
+                  let isEntityDefault = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObjChild, 'entityDefault')
+                  if (isEntityDefault) {
+                    navbarRouteObjects.push(routeObjChild)
+                  }
+                })
+              }
+            })
+          }
+        }
+        this.navbarTitle = navbarTitle
+        this.navbarRouteObjects = navbarRouteObjects
       },
       ...mapActions([
         AppActions.TOGGLE_SIDEBAR
@@ -90,9 +102,6 @@
         this.$store.dispatch(authActions.UNSET_USER).then(result => {
           this.$router.push({name: 'LoginAuth'})
         })
-      },
-      toggle: function () {
-        this[AppActions.TOGGLE_SIDEBAR]()
       }
     }
   }

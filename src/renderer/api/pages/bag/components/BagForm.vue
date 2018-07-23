@@ -187,7 +187,10 @@
     },
     props: {
       initialObject: {
-        type: Object
+        type: Object,
+        validator: function (obj) {
+          return obj !== null
+        }
       },
       saveFunction: {
         type: Function,
@@ -257,10 +260,13 @@
           [PropertiesReference.BAG_TYPE.relationship_id_name]: this.bag.bagType ? this.bag.bagType[GlobalEntityIdentifier] : null,
           [PropertiesReference.BAG_PACKING.relationship_id_name]: this.bag.bagPacking ? this.bag.bagPacking[GlobalEntityIdentifier] : null
         }
+        let indirectParams = {
+
+        }
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true
-            this.saveFunction(directParams)
+            this.saveFunction(directParams, indirectParams)
           }
         })
       },

@@ -17,9 +17,6 @@
       }
     },
     created () {
-      if (this.entityAction) {
-        this.$store.dispatch(this.entityAction)
-      }
     },
     props: {
       entityType: {

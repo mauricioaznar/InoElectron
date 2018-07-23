@@ -62,10 +62,31 @@ export default {
     }
     return htmlString + '</ul>'
   },
-  getBagOrderSaleTotal: function (array) {
+  getBagWithUnitsRequested: function (array) {
+    let htmlString = '<ul>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<li cass="mau-text-left">' + array[i].name + ' - ' + array[i].pivot.units_requested + '</li>'
+    }
+    return htmlString + '</ul>'
+  },
+  getBagWithUnitsGiven: function (array) {
+    let htmlString = '<ul>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<li cass="mau-text-left">' + array[i].name + ' - ' + array[i].pivot.units_given + '</li>'
+    }
+    return htmlString + '</ul>'
+  },
+  getBagOrderSaleTotalCostGiven: function (array) {
     let total = 0
     for (let i = 0; i < array.length; i++) {
-      total += array[i].pivot.total_cost || 0
+      total += array[i].pivot.total_cost_given || 0
+    }
+    return '$' + total.toFixed(2)
+  },
+  getBagOrderSaleTotalCostRequested: function (array) {
+    let total = 0
+    for (let i = 0; i < array.length; i++) {
+      total += array[i].pivot.total_cost_requested || 0
     }
     return '$' + total.toFixed(2)
   }

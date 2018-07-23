@@ -1,13 +1,21 @@
 <template>
   <div class="container">
+    <mau-spinner v-if="!entity" :sizeType="'router'"></mau-spinner>
+    <mau-entity-petitioner
+            :id="id"
+            :entityType="entityType"
+            @entityResult="entityResultHandler"
+    >
+    </mau-entity-petitioner>
     <mau-crud-edit
+      v-if="entity"
       :id="id"
       :entityType="entityType"
       :callback="callback"
     >
       <template slot-scope="params">
         <bag-form
-          :initialObject="params.entity"
+          :initialObject="entity"
           :saveFunction="params.saveFunction">
         </bag-form>
       </template>
@@ -21,11 +29,14 @@
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import ChildTypes from 'renderer/api/ChildTypes'
+  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   export default {
     name: 'EditBag',
     data () {
       return {
         entityType: EntityTypes.BAG,
+        entity: null,
         hostRelationshipIdName: PropertiesReference.ID.relationship_id_name
       }
     },
@@ -33,11 +44,16 @@
       id: null
     },
     components: {
-      BagForm
+      BagForm,
+      MauEntityPetitioner,
+      MauSpinner
     },
     methods: {
       callback: function () {
         this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.BAG, ChildTypes.LIST)})
+      },
+      entityResultHandler: function (entityObj) {
+        this.entity = entityObj
       }
     }
   }
