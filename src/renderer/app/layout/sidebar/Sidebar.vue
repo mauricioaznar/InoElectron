@@ -39,10 +39,10 @@
     computed: {
       ...mapGetters([
         'routeObjects',
-        'getRouteObjectParent'
+        'routeObjectParent'
       ]),
       currentCategoryName: function () {
-        let routeObjectParent = this.getRouteObjectParent(this.$route)
+        let routeObjectParent = this.routeObjectParent(this.$route)
         let category
         if (!isObjectEmpty(routeObjectParent)) {
           category = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObjectParent, 'category')

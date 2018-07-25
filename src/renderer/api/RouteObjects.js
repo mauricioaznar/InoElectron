@@ -1,129 +1,136 @@
 import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
 import EntityTypes from 'renderer/api/EntityTypes'
-import ChildTypes from 'renderer/api/ChildTypes'
 import Categories from 'renderer/api/Categories'
 import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
 
 let routeObjects = []
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.AUTH, ChildTypes.MAIN,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.AUTH,
   {
-    category: Categories.AUTH
+    category: Categories.AUTH,
+    componentName: 'Main'
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, ChildTypes.MY_PROFILE, {
-      categoryDefault: true,
-      entityDefault: true,
+    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
+      componentName: 'MyProfile',
+      categoryDefault: 'true',
+      groupDefault: true,
+      navbar: true,
       title: 'Mi perfil'
     }),
-    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, ChildTypes.TOKEN, {
+    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
+      componentName: 'Downloads',
+      navbar: true,
+      title: 'Descargas'
+    }),
+    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
+      componentName: 'Login',
       requiresAuth: false,
-      title: 'Ingreso'
+      title: 'Ingreso',
+      appDefaultNotAuth: true
     })
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG, ChildTypes.MAIN,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG,
   {
+    componentName: 'Main',
     category: Categories.PRODUCTION
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG, ChildTypes.LIST,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG,
       {
-        categoryDefault: true,
         appDefault: true,
-        entityDefault: true,
-        iconClass: 'fa fa-list'
+        componentName: 'List',
+        categoryDefault: true,
+        groupDefault: true,
+        navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG, ChildTypes.CREATE,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG,
       {
-        iconClass: 'fa fa-plus'
+        componentName: 'Create'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG, ChildTypes.EDIT,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG,
       {
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-edit'
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG, ChildTypes.VIEW,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG,
       {
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-eye'
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG, ChildTypes.DEL,
-      {
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-trash-o'
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
       }
     )
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT, ChildTypes.MAIN,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
   {
+    componentName: 'Main',
     category: Categories.PRODUCTION
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT, ChildTypes.LIST,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
       {
-        entityDefault: true,
-        iconClass: 'fa fa-list'
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT, ChildTypes.CREATE,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
       {
-        iconClass: 'fa fa-plus'
+        componentName: 'Create'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT, ChildTypes.VIEW,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
       {
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-eye'
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT, ChildTypes.DEL,
-      {
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-trash-o'
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
       }
     )
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST, ChildTypes.MAIN,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
   {
+    componentName: 'Main',
     category: Categories.SALES
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST, ChildTypes.LIST,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
-        categoryDefault: true,
-        entityDefault: true,
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true,
         iconClass: 'fa fa-list'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST, ChildTypes.CREATE,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
+        componentName: 'Create',
         iconClass: 'fa fa-plus'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST, ChildTypes.EDIT,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
+        componentName: 'Edit',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-edit'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST, ChildTypes.VIEW,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
+        componentName: 'View',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-eye'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST, ChildTypes.DEL,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
+        componentName: 'Del',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-trash-o'
       }
@@ -131,37 +138,43 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT, ChildTypes.MAIN,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
   {
+    componentName: 'Main',
     category: Categories.SALES
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT, ChildTypes.LIST,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
-        categoryDefault: true,
-        entityDefault: true,
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true,
         iconClass: 'fa fa-list'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT, ChildTypes.CREATE,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
+        componentName: 'Create',
         iconClass: 'fa fa-plus'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT, ChildTypes.EDIT,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
+        componentName: 'Edit',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-edit'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT, ChildTypes.VIEW,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
+        componentName: 'View',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-eye'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT, ChildTypes.DEL,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
+        componentName: 'Del',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-trash-o'
       }
@@ -169,30 +182,36 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION, ChildTypes.MAIN,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
   {
+    componentName: 'Main',
     category: Categories.PRODUCTION
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION, ChildTypes.LIST,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
       {
-        entityDefault: true,
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true,
         iconClass: 'fa fa-list'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION, ChildTypes.CREATE,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
       {
+        componentName: 'Create',
         iconClass: 'fa fa-plus'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION, ChildTypes.VIEW,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
       {
+        componentName: 'View',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-eye'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION, ChildTypes.DEL,
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
       {
+        componentName: 'Del',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-trash-o'
       }
@@ -200,37 +219,44 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PROD
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT, ChildTypes.MAIN,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
   {
+    componentName: 'Main',
     category: Categories.SALES
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT, ChildTypes.LIST,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
+        componentName: 'List',
+        groupDefault: true,
         categoryDefault: true,
-        entityDefault: true,
+        navbar: true,
         iconClass: 'fa fa-list'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT, ChildTypes.CREATE,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
+        componentName: 'Create',
         iconClass: 'fa fa-plus'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT, ChildTypes.EDIT,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
+        componentName: 'Edit',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-edit'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT, ChildTypes.VIEW,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
+        componentName: 'View',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-eye'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT, ChildTypes.DEL,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
+        componentName: 'Del',
         params: [GlobalEntityIdentifier],
         iconClass: 'fa fa-trash-o'
       }

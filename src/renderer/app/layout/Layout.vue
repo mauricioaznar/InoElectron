@@ -3,15 +3,10 @@
     <sidebar class="layout-sidebar"></sidebar>
     <div class="right">
       <navbar class="layout-navbar"></navbar>
-      <action-widget></action-widget>
       <div class="layout-content-wrap" id="content-wrap">
         <main id="content" class="content" role="main">
-          <mau-widget v-if="currentRouteObjectUserAuth">
+          <mau-widget>
             <router-view></router-view>
-          </mau-widget>
-          <mau-widget v-if="!currentRouteObjectUserAuth">
-            <h2 class="text-center">Ruta no autorizada</h2>
-            <p class="text-center">La ruta que usted desea ingresar se encuntra restringida.</p>
           </mau-widget>
         </main>
       </div>
@@ -22,7 +17,6 @@
 <script>
   import {mapGetters, mapState, mapActions} from 'vuex'
   import Navbar from './navbar/Navbar'
-  import ActionWidget from 'renderer/app/layout/action-widget/ActionWidget.vue'
   import Sidebar from './sidebar/Sidebar'
   import EntityActions from 'renderer/api/store/entityActions'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
@@ -33,7 +27,6 @@
       }
     },
     components: {
-      ActionWidget,
       MauSpinner,
       Navbar,
       Sidebar

@@ -22,7 +22,6 @@
           <template slot="button-content">
             <span>{{user.email}}</span>
           </template>
-          <b-dropdown-item class="dropdown-item text-right" :to="notificationsPathObject">Notificaciones</b-dropdown-item>
           <b-dropdown-item class="dropdown-item text-right" :to="myProfilePathObject">Mi Perfil</b-dropdown-item>
           <b-dropdown-item class="dropdown-item text-right" v-on:click.prevent="logout">Cerrar sesion</b-dropdown-item>
         </b-nav-item-dropdown>
@@ -38,14 +37,12 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import AppActions from 'renderer/app/store/AppActions'
   import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
-  import ChildTypes from 'renderer/api/ChildTypes'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   export default {
     name: 'navbar',
     data () {
       return {
-        notificationsPathObject: {path: RouteObjectHelper.createPath(EntityTypes.NOTIFICATION, ChildTypes.NOTIFICATIONS)},
-        myProfilePathObject: {path: RouteObjectHelper.createPath(EntityTypes.AUTH, ChildTypes.MY_PROFILE)},
+        myProfilePathObject: {path: RouteObjectHelper.createPath(EntityTypes.AUTH, 'MyProfile')},
         navbarRouteObjects: [],
         navbarTitle: '',
         navbarIcon: '',
@@ -57,7 +54,7 @@
     computed: mapGetters([
       'user',
       'routeObjects',
-      'getRouteObjectParent',
+      'routeObjectParent',
       'sidebarOpened',
       'toggleWithoutAnimation'
     ]),
@@ -76,15 +73,15 @@
         let navbarTitle = ''
         if (!isObjectEmpty(currentRouteObject)) {
           navbarTitle = RouteObjectHelper.getRouteObjectMetaPropertyValue(currentRouteObject, 'title') || ''
-          let parentRouteObject = this.getRouteObjectParent(currentRouteObject)
+          let parentRouteObject = this.routeObjectParent(currentRouteObject)
           if (!isObjectEmpty(parentRouteObject)) {
             let currentRouteObjectCategory = RouteObjectHelper.getRouteObjectMetaPropertyValue(parentRouteObject, 'category')
             this.routeObjects.forEach(routeObj => {
               let routeObjCategory = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObj, 'category')
               if (routeObjCategory.name === currentRouteObjectCategory.name && routeObj.children) {
                 routeObj.children.forEach(routeObjChild => {
-                  let isEntityDefault = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObjChild, 'entityDefault')
-                  if (isEntityDefault) {
+                  let isInNavbar = RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObjChild, 'navbar')
+                  if (isInNavbar) {
                     navbarRouteObjects.push(routeObjChild)
                   }
                 })

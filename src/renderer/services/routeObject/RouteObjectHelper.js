@@ -2,23 +2,27 @@ import apiComponentLoader from 'renderer/services/api/apiComponentLoader'
 import convertFirstCharacterTo from 'renderer/services/common/ConvertFirstCharacterTo'
 import entityStore from 'renderer/api/store/entity'
 
-function createRouteObjectName (entityType, childType) {
-  return convertFirstCharacterTo.uppercase(childType.name) + convertFirstCharacterTo.uppercase(entityType.name)
+function createRouteObjectName (entityType, componentName) {
+  return convertFirstCharacterTo.uppercase(componentName) + convertFirstCharacterTo.uppercase(entityType.name)
 }
 
-function createRouteObjectPath (entityType, childType) {
-  return '/' + convertFirstCharacterTo.lowercase(entityType.name) + '/' + convertFirstCharacterTo.lowercase(childType.name)
+function createRouteObjectPath (entityType, componentName) {
+  return '/' + convertFirstCharacterTo.lowercase(entityType.name) + '/' + convertFirstCharacterTo.lowercase(componentName)
 }
 
-function createRouteObjectParentPath (entityType, childType) {
+function createRouteObjectParentPath (entityType) {
   return '/' + convertFirstCharacterTo.lowercase(entityType.name)
 }
 
-function createRouteObject (entityType, childType, config, children = []) {
+function createRouteObject (entityType, config, children = []) {
+  if (config.componentName === 'undefined' && typeof config.componentName !== 'string') {
+    console.error('Route object requiers componentName to be a string')
+  }
+  let componentName = config.componentName
   let routeObject = {
-    name: createRouteObjectName(entityType, childType),
-    path: children.length > 0 ? createRouteObjectParentPath(entityType) : createRouteObjectPath(entityType, childType),
-    component: apiComponentLoader(convertFirstCharacterTo.lowercase(entityType.name) + '/' + convertFirstCharacterTo.uppercase(childType.name)),
+    name: createRouteObjectName(entityType, componentName),
+    path: children.length > 0 ? createRouteObjectParentPath(entityType) : createRouteObjectPath(entityType, componentName),
+    component: apiComponentLoader(convertFirstCharacterTo.lowercase(entityType.name) + '/' + convertFirstCharacterTo.uppercase(componentName)),
     children: children,
     meta: {
       requiresAuth: true,
@@ -26,9 +30,11 @@ function createRouteObject (entityType, childType, config, children = []) {
     }
   }
   routeObject.meta['appDefault'] = config.hasOwnProperty('appDefault') ? config['appDefault'] : false
+  routeObject.meta['appDefaultNotAuth'] = config.hasOwnProperty('appDefaultNotAuth') ? config['appDefaultNotAuth'] : false
   routeObject.meta['category'] = config.hasOwnProperty('category') ? config['category'] : false
   routeObject.meta['categoryDefault'] = config.hasOwnProperty('categoryDefault') ? config['categoryDefault'] : false
-  routeObject.meta['entityDefault'] = config.hasOwnProperty('entityDefault') ? config['entityDefault'] : false
+  routeObject.meta['groupDefault'] = config.hasOwnProperty('groupDefault') ? config['groupDefault'] : false
+  routeObject.meta['navbar'] = config.hasOwnProperty('navbar') ? config['navbar'] : false
   routeObject.meta['title'] = config.hasOwnProperty('title') ? config['title'] : entityType.title
   routeObject.meta['iconClass'] = config.hasOwnProperty('iconClass') ? config['iconClass'] : ''
   routeObject.meta['requiresAuth'] = config.hasOwnProperty('requiresAuth') ? config['requiresAuth'] : true

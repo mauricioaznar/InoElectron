@@ -37,11 +37,11 @@ export function getMe () {
   return Vue.http.get(ApiDomain + 'auth/user', {headers: getHeaders()}).then(getServerResponseData)
 }
 
-export function edit (entityType, id, object) { // TODO mauedit
+export function edit (entityType, id, object) {
   return Vue.http.put(ApiUrls.createBaseUrl(entityType) + '/' + id, object, {headers: getHeaders()}).then(getServerResponseData)
 }
 
-export function create (entityType, object) { // TODO maucreate
+export function create (entityType, object) {
   return Vue.http.post(ApiUrls.createBaseUrl(entityType), object, {headers: getHeaders()}).then(getServerResponseData)
 }
 
@@ -49,8 +49,14 @@ export function generateToken (credentials) {
   return Vue.http.post(ApiDomain + 'auth/login', credentials, {headers: getHeaders()}).then(getServerResponseData)
 }
 
-export function del (entityType, id, object) {
-  object.active = -1
+export function donwnloadExcel () {
+  return Vue.http.get(ApiDomain + 'downloads/excel').then(getServerResponseData)
+}
+
+export function del (entityType, id) {
+  let object = {
+    active: -1
+  }
   return Vue.http.put(ApiUrls.createBaseUrl(entityType) + '/' + id, object, {headers: getHeaders()}).then(getServerResponseData)
 }
 
@@ -77,5 +83,6 @@ export default {
   getWithFilterLikeWithFilterExactWithoutPagination: getWithFilterLikeWithFilterExactWithoutPagination,
   getMe: getMe,
   generateToken: generateToken,
-  getMax: getMax
+  getMax: getMax,
+  downloadExcel: donwnloadExcel
 }

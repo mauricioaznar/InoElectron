@@ -4,15 +4,11 @@
                                :positiveName="'Eliminar'"
         >
         </mau-responsive-button>
-        <b-modal ref="confirmAction" centered title="Desea confirmar la accion" :cancel-title="'Cancelar'" @ok="confirm">
-        </b-modal>
     </div>
 </template>
 
 <script>
   import ApiFunctions from 'renderer/services/api/ApiOperations'
-  import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
-  import ChildTypes from 'renderer/api/ChildTypes'
   import cloneDeep from 'renderer/services/common/cloneDeep'
   export default {
     name: 'MauCrudDel',
@@ -44,7 +40,6 @@
         this.$refs.confirmAction.show()
       },
       confirm: function () {
-        let _this = this
         ApiFunctions.del(this.entityType, this.id, cloneDeep(this.entity))
           .then(
             result => {
@@ -57,9 +52,6 @@
               if (this.callback) {
                 this.callback()
               }
-              setTimeout(function () {
-                _this.$router.push(RouteObjectHelper.createPath(_this.entityType, ChildTypes.LIST))
-              }, 2000)
             })
           .catch(
             error => {
