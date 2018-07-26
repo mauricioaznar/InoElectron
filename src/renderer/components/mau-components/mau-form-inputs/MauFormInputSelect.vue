@@ -94,7 +94,7 @@
         }
       },
       created () {
-        if (typeof this.initialObject === 'object' && Object.keys(this.initialObject).length !== 0) {
+        if (this.initialObject !== null && this.initialObject !== 'null' && typeof this.initialObject === 'object' && Object.keys(this.initialObject).length !== 0) {
           this.selected = cloneDeep(this.initialObject)
         }
         ApiOperations.getWithFilterExactWithoutPagination(this.entityType, this.filterExact).then(data => {

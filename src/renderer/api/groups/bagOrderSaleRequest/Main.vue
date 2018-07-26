@@ -3,7 +3,6 @@
         <action-widget
                 :actions="actions"
                 @actionClicked="actionClicked"
-                :urlActions="urlActions"
         ></action-widget>
         <b-modal
                 ref="confirmDelete"

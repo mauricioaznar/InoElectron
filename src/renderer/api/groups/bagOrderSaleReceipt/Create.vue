@@ -38,7 +38,7 @@
   import BagOrderSaleForm from 'renderer/api/components/generic/bagOrderSale/BagOrderSaleForm.vue'
   import MauFormInputSelect from 'renderer/components/mau-components/mau-form-inputs/MauFormInputSelect.vue'
   import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
-  import BagOrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleReceiptPropertiesReference'
+  import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
   import {mapGetters} from 'vuex'
   export default {
     name: 'CreateBagOrderSaleReceipt',
@@ -49,7 +49,7 @@
         bagOrderSaleRequestEntityType: EntityTypes.BAG_ORDER_SALE_REQUEST,
         orderSaleRequestEntity: null,
         orderSaleRequestEntityId: null,
-        filterExact: {[BagOrderSaleReceiptPropertiesReference.ORDER_STATUS_TYPE.relationship_id_name]: 1}
+        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS_TYPE.relationship_id_name]: 1}
       }
     },
     components: {

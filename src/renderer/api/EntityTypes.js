@@ -52,6 +52,11 @@ export default {
     apiName: 'bagOrderSale',
     title: 'Ordenes de venta'
   },
+  BAG_ORDER_SALE_RECEIPT_TYPE: {
+    name: 'bagOrderSaleReceiptType',
+    apiName: 'bagOrderSaleReceiptType',
+    title: 'Tipo de comprobante'
+  },
   BAG_ORDER_SALE_REQUEST: {
     name: 'bagOrderSaleRequest',
     apiName: 'bagOrderSale',

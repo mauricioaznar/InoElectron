@@ -53,6 +53,10 @@ export function donwnloadExcel () {
   return Vue.http.get(ApiDomain + 'downloads/excel').then(getServerResponseData)
 }
 
+export function getStats (searchedStatsString) {
+  return Vue.http.get(ApiDomain + 'stats/' + searchedStatsString, {headers: getHeaders()}).then(getServerResponseData)
+}
+
 export function del (entityType, id) {
   let object = {
     active: -1
@@ -84,5 +88,6 @@ export default {
   getMe: getMe,
   generateToken: generateToken,
   getMax: getMax,
+  getStats: getStats,
   downloadExcel: donwnloadExcel
 }

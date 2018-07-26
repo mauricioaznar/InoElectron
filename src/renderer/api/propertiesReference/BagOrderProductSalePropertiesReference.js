@@ -62,6 +62,12 @@ let OrderProductSalePropertiesReference = {
     name: 'total_cost_given',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.NUMBER
+  },
+  TAX: {
+    title: 'IVA',
+    name: 'tax',
+    display: DisplayFunctions.getValue,
+    defaultVal: MauInputDefaultValues.NUMBER
   }
 }
 

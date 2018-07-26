@@ -20,7 +20,8 @@
       return {
         propertiesReference: [
           PropertiesReference.ORDER_CODE,
-          PropertiesReference.DATE,
+          PropertiesReference.DATE_REQUESTED,
+          PropertiesReference.CLIENT,
           PropertiesReference.BAGS
         ],
         entityType: EntityTypes.BAG_ORDER_SALE_REQUEST,

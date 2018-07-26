@@ -17,9 +17,9 @@
       </flat-pickr>
     </div>
     <div class="invalid-feedback">
-                  <span v-show="error" class="help is-danger">
-                    {{error}}
-                  </span>
+      <span v-show="error" class="help is-danger">
+        {{error}}
+      </span>
     </div>
   </div>
 </template>
@@ -28,7 +28,9 @@
   import flatPickr from 'vue-flatpickr-component'
   import {Spanish} from '../../../../../node_modules/flatpickr/dist/l10n/es'
   import 'flatpickr/dist/flatpickr.css'
+  import moment from 'moment'
   import ValidatorHelper from 'renderer/services/form/ValidatorHelper'
+  import ConvertDateTime from 'renderer/services/common/ConvertDateTimeTo'
   const rangeSeparator = ' al '
   Spanish.rangeSeparator = rangeSeparator
   export default {
@@ -47,6 +49,7 @@
         dateConfig: {
           wrap: true,
           altInput: true,
+          altFormat: 'Y-m-d',
           dateFormat: 'Y-m-d',
           locale: Spanish
         },
@@ -85,6 +88,9 @@
         type: String,
         default: function () {
           return 'date'
+        },
+        validator: function (date) {
+          return ['date', 'time', 'range'].indexOf(date) !== -1
         }
       }
     },
@@ -100,7 +106,10 @@
     created () {
       this.date = this.value
       if (this.initialValue) {
-        this.date = this.initialValue
+        let momentDate = moment(this.initialValue)
+        if (momentDate.isValid()) {
+          this.date = ConvertDateTime.date(this.initialValue)
+        }
       }
       if (this.inputType === 'date') {
         this.config = this.dateConfig

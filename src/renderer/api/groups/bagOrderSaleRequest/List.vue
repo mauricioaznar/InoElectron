@@ -4,6 +4,7 @@
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
                       :actions="actions"
+                      :filterExact="filterExact"
                       @actionClicked="actionHandler"
       ></mau-data-table>
     </mau-crud-list>
@@ -21,7 +22,7 @@
     data () {
       return {
         apiUrl: ApiUrls.createListUrl(EntityTypes.BAG_ORDER_SALE_RECEIPT),
-        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS_TYPE.relationship_id_name]: 2},
+        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS_TYPE.relationship_id_name]: 1},
         canEdit: true,
         tableFields: [
           {
@@ -31,9 +32,9 @@
             filter: true
           },
           {
-            name: BagOrderSaleRequestPropertiesReference.DATE.name,
-            title: BagOrderSaleRequestPropertiesReference.DATE.title,
-            sortField: BagOrderSaleRequestPropertiesReference.DATE.name,
+            name: BagOrderSaleRequestPropertiesReference.DATE_REQUESTED.name,
+            title: BagOrderSaleRequestPropertiesReference.DATE_REQUESTED.title,
+            sortField: BagOrderSaleRequestPropertiesReference.DATE_REQUESTED.name,
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true

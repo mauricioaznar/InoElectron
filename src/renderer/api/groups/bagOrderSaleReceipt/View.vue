@@ -8,6 +8,7 @@
 
 <script>
   import BagOrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleReceiptPropertiesReference'
+  import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -19,8 +20,11 @@
     data () {
       return {
         propertiesReference: [
-          BagOrderSaleReceiptPropertiesReference.ORDER_CODE,
-          BagOrderSaleReceiptPropertiesReference.DATE,
+          BagOrderSaleRequestPropertiesReference.ORDER_CODE,
+          BagOrderSaleRequestPropertiesReference.DATE_REQUESTED,
+          BagOrderSaleReceiptPropertiesReference.DATE_GIVEN,
+          BagOrderSaleRequestPropertiesReference.CLIENT,
+          BagOrderSaleReceiptPropertiesReference.RECEIPT_TYPE,
           BagOrderSaleReceiptPropertiesReference.BAGS
         ],
         entityType: EntityTypes.BAG_ORDER_SALE_RECEIPT,

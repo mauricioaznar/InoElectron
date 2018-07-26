@@ -63,6 +63,13 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG,
         componentName: 'View',
         params: [GlobalEntityIdentifier]
       }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG,
+      {
+        componentName: 'GetInventory',
+        navbar: true,
+        title: 'Inventario'
+      }
     )
   ]
 ))

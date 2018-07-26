@@ -8,7 +8,7 @@
                     <th class="mau-text-center">Cantidad en kilos</th>
                     <th class="mau-text-center">Precio unitario</th>
                     <th class="mau-text-center">Bultos</th>
-                    <!--<th class="mau-text-center">Descuento</th>-->
+                    <th v-if="hasTax" class="mau-text-center">IVA</th>
                     <th class="mau-text-center">Costo Total</th>
                 </tr>
             </thead>
@@ -60,14 +60,9 @@
                             {{currentStructuredObj.groups_given}}
                         </div>
                     </td>
-                    <!--<td class="mau-text-center">-->
-                        <!--<mau-form-input-regular-number-->
-                                <!--:name="OrderProductSalePropertiesReference.DISCOUNT.name"-->
-                                <!--v-model="currentStructuredObj.discount"-->
-                                <!--@input="discountHasChanged(currentStructuredObj)"-->
-                        <!--&gt;-->
-                        <!--</mau-form-input-regular-number>-->
-                    <!--</td>-->
+                    <td v-if="hasTax" class="mau-text-center">
+                        {{currentStructuredObj.tax}}
+                    </td>
                     <td class="mau-text-center">
                         <div v-if="requestMode">
                             {{currentStructuredObj.total_cost_requested}}
@@ -81,6 +76,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td v-if="hasTax"></td>
                     <td></td>
                     <td class="text-right"><b>TOTAL:</b></td>
                     <td>
@@ -132,6 +128,9 @@
           type: Boolean
         },
         receiptMode: {
+          type: Boolean
+        },
+        hasTax: {
           type: Boolean
         }
       },
@@ -200,7 +199,14 @@
         setCurrentStructuredObjectsGiven: function (currentStructuredObj) {
           let currentObjUnitCost = currentStructuredObj[OrderProductSalePropertiesReference.UNIT_PRICE_GIVEN.name] || 0
           let currentObjQuantity = currentStructuredObj[OrderProductSalePropertiesReference.UNITS_GIVEN.name] || 0
-          currentStructuredObj[OrderProductSalePropertiesReference.TOTAL_COST_GIVEN.name] = (currentObjUnitCost * currentObjQuantity)
+          let totalCostWithoutTax = (currentObjUnitCost * currentObjQuantity)
+          let totalCost = totalCostWithoutTax
+          if (this.hasTax) {
+            let tax = totalCostWithoutTax * 0.16
+            currentStructuredObj[OrderProductSalePropertiesReference.TAX.name] = tax
+            totalCost = totalCostWithoutTax + tax
+          }
+          currentStructuredObj[OrderProductSalePropertiesReference.TOTAL_COST_GIVEN.name] = totalCost
           let units = currentStructuredObj[OrderProductSalePropertiesReference.UNITS_GIVEN.name] ? currentStructuredObj[OrderProductSalePropertiesReference.UNITS_GIVEN.name] : 0
           let groupWeight = this.getProductInitialGroupWeightGiven(currentStructuredObj) ? this.getProductInitialGroupWeightGiven(currentStructuredObj) : 0
           if (units && groupWeight) {
@@ -246,6 +252,15 @@
           }
           if (this.receiptMode) {
             this.calculateTotalGiven()
+          }
+        },
+        hasTax: function () {
+          if (this.receiptMode) {
+            this.currentStructuredObjects.forEach(currentStructuredObject => {
+              this.setCurrentStructuredObjectsGiven(currentStructuredObject)
+            })
+            this.calculateTotalGiven()
+            this.emitStructureChangeEvent()
           }
         }
       }
