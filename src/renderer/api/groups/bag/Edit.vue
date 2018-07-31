@@ -24,10 +24,10 @@
 </template>
 
 <script>
-  import BagForm from './components/BagForm.vue'
+  import BagForm from '../../components/forms/BagForm.vue'
   import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import {mapGetters} from 'vuex'
   export default {

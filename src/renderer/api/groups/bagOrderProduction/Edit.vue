@@ -9,20 +9,20 @@
       :relationshipIdName="hostRelationshipIdName"
       :callback="callback">
       <template slot-scope="params">
-        <bag-order-form
+        <bag-order-production-form
           :initialObject="entity"
           :saveFunction="params.saveFunction"
           :entityType="entityType">
-        </bag-order-form>
+        </bag-order-production-form>
       </template>
     </mau-crud-edit>
   </div>
 </template>
 
 <script>
-  import BagOrderForm from 'renderer/api/components/generic/bagOrder/BagOrderForm.vue'
+  import BagOrderProductionForm from 'renderer/api/components/forms/BagOrderProductionForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import {mapGetters} from 'vuex'
   export default {
@@ -38,7 +38,7 @@
       id: null
     },
     components: {
-      BagOrderForm,
+      BagOrderProductionForm,
       MauEntityPetitioner,
       MauSpinner
     },

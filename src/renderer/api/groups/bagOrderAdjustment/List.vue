@@ -12,11 +12,10 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/services/api/ApiUrls'
-  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
-  import OrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/BagOrderAdjustmentPropertiesReference'
-  import SimpleOrderPropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
-  import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
+  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import BagOrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/BagOrderAdjustmentPropertiesReference'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
     name: 'ListBagOrderAdjustment',
     created () {
@@ -27,29 +26,23 @@
         canEdit: true,
         tableFields: [
           {
-            name: SimpleOrderPropertiesReference.ORDER_CODE.name,
-            title: SimpleOrderPropertiesReference.ORDER_CODE.title,
-            filter: true,
-            default: true
-          },
-          {
-            name: SimpleOrderPropertiesReference.DATE.name,
-            title: SimpleOrderPropertiesReference.DATE.title,
-            sortField: SimpleOrderPropertiesReference.DATE.name,
+            name: BagOrderAdjustmentPropertiesReference.DATE.name,
+            title: BagOrderAdjustmentPropertiesReference.DATE.title,
+            sortField: BagOrderAdjustmentPropertiesReference.DATE.name,
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true
           },
           {
-            name: SimpleOrderPropertiesReference.BAGS.name,
-            title: SimpleOrderPropertiesReference.BAGS.title,
+            name: BagOrderAdjustmentPropertiesReference.BAGS.name,
+            title: BagOrderAdjustmentPropertiesReference.BAGS.title,
             hidden: true,
             callback: DisplayFunctions.getBagWithUnits
           },
           {
-            name: OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name,
-            title: OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.title,
-            callback: OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.display
+            name: BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name,
+            title: BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.title,
+            callback: BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.display
           }
         ],
         actions: [

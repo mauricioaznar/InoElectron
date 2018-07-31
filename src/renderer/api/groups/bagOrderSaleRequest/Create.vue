@@ -18,8 +18,8 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import BagOrderSaleForm from 'renderer/api/components/generic/bagOrderSale/BagOrderSaleForm.vue'
-  import MauFormInputSelect from 'renderer/components/mau-components/mau-form-inputs/MauFormInputSelect.vue'
+  import BagOrderSaleForm from 'renderer/api/components/forms/BagOrderSaleForm.vue'
+  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import {mapGetters} from 'vuex'
   export default {
     name: 'CreateBagOrderSaleRequest',

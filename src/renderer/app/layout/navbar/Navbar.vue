@@ -36,7 +36,7 @@
   import authActions from 'renderer/api/store/authActions'
   import EntityTypes from 'renderer/api/EntityTypes'
   import AppActions from 'renderer/app/store/AppActions'
-  import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
+  import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   export default {
     name: 'navbar',

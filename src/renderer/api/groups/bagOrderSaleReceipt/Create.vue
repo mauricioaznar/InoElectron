@@ -35,9 +35,9 @@
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
   import Vue from 'vue'
-  import BagOrderSaleForm from 'renderer/api/components/generic/bagOrderSale/BagOrderSaleForm.vue'
-  import MauFormInputSelect from 'renderer/components/mau-components/mau-form-inputs/MauFormInputSelect.vue'
-  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
+  import BagOrderSaleForm from 'renderer/api/components/forms/BagOrderSaleForm.vue'
+  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
   import {mapGetters} from 'vuex'
   export default {
@@ -49,7 +49,7 @@
         bagOrderSaleRequestEntityType: EntityTypes.BAG_ORDER_SALE_REQUEST,
         orderSaleRequestEntity: null,
         orderSaleRequestEntityId: null,
-        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS_TYPE.relationship_id_name]: 1}
+        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 1}
       }
     },
     components: {

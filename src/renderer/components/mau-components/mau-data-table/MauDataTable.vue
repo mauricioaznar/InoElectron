@@ -70,9 +70,9 @@
   import ItemsPerPageDefinition from './data/items-per-page-definition'
   import Vue from 'vue'
   import DataTableStyles from './data/data-table-styles'
-  import {getHeaders} from 'renderer/services/api/ApiHTPPHeaders'
-  import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
-  import isEntityEditable from 'renderer/services/api/isEntityEditable'
+  import {getHeaders} from 'renderer/api/functions/ApiHTPPHeaders'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import isEntityEditable from 'renderer/api/functions/isEntityEditable'
 
   export default {
     name: 'MauDataTable',

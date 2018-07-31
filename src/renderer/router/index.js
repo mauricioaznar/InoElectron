@@ -3,8 +3,8 @@ import Router from 'vue-router'
 import store from 'renderer/store/index'
 import AuthActions from 'renderer/api/store/authActions'
 import AppActions from 'renderer/app/store/AppActions'
-import ApiOperations from 'renderer/services/api/ApiOperations'
-import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
+import ApiOperations from 'renderer/api/functions/ApiOperations'
+import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
 import routeObjectStore from 'renderer/api/store/routeObject'
 
 Vue.use(Router)

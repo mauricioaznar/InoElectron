@@ -1,9 +1,9 @@
-import Masks from 'renderer/services/form/Masks'
-import MauInputDefaultValues from 'renderer/components/mau-components/mau-form-inputs/MauInputDefaultValues'
+import Masks from 'renderer/api/functions/Masks'
+import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
 export default {
-  UNITS: {
+  KILOS: {
     title: 'Cantidad en kilos',
-    name: 'units',
+    name: 'kilos',
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },

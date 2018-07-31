@@ -10,7 +10,7 @@
   import BagOrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleReceiptPropertiesReference'
   import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   export default {
     name: 'ViewBagOrderSaleReceipt',

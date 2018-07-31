@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import ApiUrls from 'renderer/services/api/ApiUrls'
+    import ApiUrls from 'renderer/api/functions/ApiUrls'
     export default {
       name: 'OrderSalesDownloads',
       data () {

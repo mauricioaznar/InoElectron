@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import PersonaForm from 'renderer/api/components/generic/persona/PersonaForm.vue'
+  import PersonaForm from 'renderer/api/components/forms/PersonaForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {

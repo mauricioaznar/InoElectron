@@ -19,11 +19,11 @@
 <script>
   import ActionWidget from 'renderer/components/mau-components/action-widget/ActionWidget.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
-  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
-  import ApiUrls from 'renderer/services/api/ApiUrls'
-  import Notifications from 'renderer/services/api/Notifications'
-  import ApiOperations from 'renderer/services/api/ApiOperations'
+  import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import Notifications from 'renderer/api/functions/Notifications'
+  import ApiOperations from 'renderer/api/functions/ApiOperations'
   import {mapGetters} from 'vuex'
   export default {
     components: {ActionWidget},
@@ -38,11 +38,6 @@
         ],
         urlActions: [],
         alwaysUrlActions: [
-          {
-            name: 'Excel',
-            icon: 'fa fa-file-excel-o',
-            url: ApiUrls.createExcelDownloadsUrl()
-          }
         ]
       }
     },

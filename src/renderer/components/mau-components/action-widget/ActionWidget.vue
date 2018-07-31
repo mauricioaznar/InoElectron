@@ -6,7 +6,10 @@
                 v-for="(action, index) in actions"
                 :active-class="'active'"
                 class="icon-button ml-2"
+                href="#"
+                v-on:keyup.enter="actionClickedHandler(action)"
                 @click="actionClickedHandler(action)"
+                :tabindex="index"
                 :key="index">
           <span :class="action.icon"></span>
         </a>

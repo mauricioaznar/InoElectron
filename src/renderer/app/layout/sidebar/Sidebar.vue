@@ -23,7 +23,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import Categories from 'renderer/api/Categories'
-  import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
+  import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   export default {
     name: 'sidebar',

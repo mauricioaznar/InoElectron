@@ -13,16 +13,17 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/services/api/ApiUrls'
+  import ApiUrls from 'renderer/api/functions/ApiUrls'
   import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
-  import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
-  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
+  import BagOrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleReceiptPropertiesReference'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'ListBagOrderSaleRequest',
     data () {
       return {
         apiUrl: ApiUrls.createListUrl(EntityTypes.BAG_ORDER_SALE_RECEIPT),
-        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS_TYPE.relationship_id_name]: 1},
+        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 1},
         canEdit: true,
         tableFields: [
           {
@@ -38,6 +39,11 @@
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true
+          },
+          {
+            name: BagOrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name,
+            title: BagOrderSaleReceiptPropertiesReference.RECEIPT_TYPE.title,
+            callback: DisplayFunctions.getNameFromObject
           },
           {
             name: BagOrderSaleRequestPropertiesReference.BAGS.name,

@@ -18,7 +18,7 @@
 <script>
   import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import AppActions from 'renderer/app/store/AppActions'
   export default {
@@ -28,7 +28,7 @@
         propertiesReference: [
           PropertiesReference.NAME,
           PropertiesReference.DESCRIPTION,
-          PropertiesReference.CURRENT_UNIT_PRICE,
+          PropertiesReference.CURRENT_KILO_PRICE,
           PropertiesReference.CURRENT_GROUP_WEIGHT,
           PropertiesReference.WIDTH,
           PropertiesReference.LENGTH,

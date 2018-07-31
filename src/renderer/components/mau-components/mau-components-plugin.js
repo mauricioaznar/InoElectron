@@ -3,17 +3,16 @@ import MauWidget from 'renderer/components/mau-components/mau-widget/MauWidget.v
 import MauTable from 'renderer/components/mau-components/mau-table/MauTable.vue'
 import MauEntityView from 'renderer/components/mau-components/mau-entity-view/MauEntityView.vue'
 import MauResponsiveButton from 'renderer/components/mau-components/mau-responsive-button/MauResponsiveButton.vue'
-import MauCrudView from 'renderer/components/mau-components/mau-crud/MauCrudView.vue'
-import MauCrudCreate from 'renderer/components/mau-components/mau-crud/MauCrudCreate.vue'
-import MauCrudList from 'renderer/components/mau-components/mau-crud/MauCrudList.vue'
-import MauCrudEdit from 'renderer/components/mau-components/mau-crud/MauCrudEdit.vue'
-import MauCrudDel from 'renderer/components/mau-components/mau-crud/MauCrudDel.vue'
+import MauCrudView from 'renderer/api/components/crud/MauCrudView.vue'
+import MauCrudCreate from 'renderer/api/components/crud/MauCrudCreate.vue'
+import MauCrudList from 'renderer/api/components/crud/MauCrudList.vue'
+import MauCrudEdit from 'renderer/api/components/crud/MauCrudEdit.vue'
+import MauCrudDel from 'renderer/api/components/crud/MauCrudDel.vue'
 import MauDataTable from 'renderer/components/mau-components/mau-data-table/MauDataTable.vue'
 import MauEditor from 'renderer/components/mau-components/mau-editor/MauEditor.vue'
 import MauSchedule from 'renderer/components/mau-components/mau-schedule/MauSchedule.vue'
 import MauCard from 'renderer/components/mau-components/mau-card/MauCard.vue'
 import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
 import MaskedInput from 'vue-text-mask'
 const MauComponentsPlugin = {
   install (Vue, options) {
@@ -32,7 +31,6 @@ const MauComponentsPlugin = {
     Vue.component(MauCard.name, MauCard)
     Vue.component(MauSchedule.name, MauSchedule)
     Vue.component(MauSpinner.name, MauSpinner)
-    Vue.component(MauManyToManySelector.name, MauManyToManySelector)
     Vue.component('MaskedInput', MaskedInput)
   }
 }

@@ -14,7 +14,7 @@
 <script>
   import Entities from 'renderer/api/EntityTypes'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   export default {
     name: 'DelBagOrderAdjustment',
     data () {

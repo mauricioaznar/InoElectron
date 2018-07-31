@@ -46,9 +46,7 @@
         this.$store.dispatch(EntityActions.GET_BAGS)
         this.$store.dispatch(EntityActions.GET_BAG_TYPES)
         this.$store.dispatch(EntityActions.GET_BAG_PACKINGS)
-        this.$store.dispatch(EntityActions.GET_EXPENSE_TYPES)
         this.$store.dispatch(EntityActions.GET_ORDER_ADJUSTMENT_TYPES)
-        this.$store.dispatch(EntityActions.GET_SUPPLIERS)
         this.$store.dispatch(EntityActions.GET_CLIENTS)
       }
     },

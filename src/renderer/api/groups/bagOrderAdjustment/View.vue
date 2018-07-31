@@ -7,10 +7,9 @@
 </template>
 
 <script>
-  import OrderPropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
-  import OrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/BagOrderAdjustmentPropertiesReference'
+  import BagOrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/BagOrderAdjustmentPropertiesReference'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   export default {
     components: {
@@ -20,10 +19,9 @@
     data () {
       return {
         propertiesReference: [
-          OrderPropertiesReference.ORDER_CODE,
-          OrderPropertiesReference.DATE,
-          OrderPropertiesReference.BAGS,
-          OrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE
+          BagOrderAdjustmentPropertiesReference.DATE,
+          BagOrderAdjustmentPropertiesReference.BAGS,
+          BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE
         ],
         entityType: EntityTypes.BAG_ORDER_ADJUSTMENT,
         entity: null

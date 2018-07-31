@@ -27,10 +27,10 @@
 </template>
 
 <script>
-  import BagOrderSaleForm from 'renderer/api/components/generic/bagOrderSale/BagOrderSaleForm.vue'
+  import BagOrderSaleForm from 'renderer/api/components/forms/BagOrderSaleForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import {mapGetters} from 'vuex'
   export default {
     name: 'EditOrderSaleReceipt',

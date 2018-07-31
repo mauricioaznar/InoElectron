@@ -1,4 +1,4 @@
-import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
+import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
 const user = state => {
   let user = state.auth.user
   return user !== null ? user : ''

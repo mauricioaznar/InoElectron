@@ -9,8 +9,8 @@ import VueResource from 'vue-resource'
 import moment from 'moment'
 import Notifications from 'vue-notification'
 import VeeValidate, { Validator } from 'vee-validate'
-import VeeValidateDictionary from 'renderer/services/form/VeeValidateDictionary'
-import VeeValidateCustomRules from 'renderer/services/form/VeeValidateCustomRules'
+import VeeValidateDictionary from 'renderer/api/functions/VeeValidateDictionary'
+import VeeValidateCustomRules from 'renderer/api/functions/VeeValidateCustomRules'
 import esLocale from 'vee-validate/dist/locale/es'
 Vue.use(Notifications)
 moment.locale('es', {
@@ -30,6 +30,7 @@ Validator.localize(esLocale)
 Validator.extend('object_required', VeeValidateCustomRules.objectRequired)
 Validator.extend('array_required', VeeValidateCustomRules.arrayRequired)
 Validator.extend('remote_unique', VeeValidateCustomRules.remoteUnique, {immediate: false})
+Validator.extend('kilo_to_group', VeeValidateCustomRules.kiloToGroup)
 Vue.use(VeeValidate, {
   fieldsBagName: 'formFields',
   locale: 'es',

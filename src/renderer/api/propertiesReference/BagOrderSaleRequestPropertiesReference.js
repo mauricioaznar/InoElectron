@@ -1,5 +1,5 @@
-import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
-import MauInputDefaultValues from 'renderer/components/mau-components/mau-form-inputs/MauInputDefaultValues'
+import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
 
 let OrderSalePropertiesReference = {
   ORDER_CODE: {
@@ -29,10 +29,10 @@ let OrderSalePropertiesReference = {
     required: false,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  ORDER_STATUS_TYPE: {
-    name: 'bagOrderSaleStatusType',
+  ORDER_STATUS: {
+    name: 'bagOrderSaleStatus',
     title: 'Estado',
-    relationship_id_name: 'bag_order_sale_status_type_id',
+    relationship_id_name: 'bag_order_sale_status_id',
     display: DisplayFunctions.getNameFromObject,
     required: false,
     defaultValue: MauInputDefaultValues.SELECT

@@ -13,10 +13,10 @@
 
 <script>
   import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
-  import ApiUrls from 'renderer/services/api/ApiUrls'
+  import ApiUrls from 'renderer/api/functions/ApiUrls'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
-  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'ListBag',
     data () {
@@ -34,6 +34,16 @@
             dataClass: 'text-center'
           },
           {
+            name: PropertiesReference.BAG_TYPE.name,
+            title: PropertiesReference.BAG_TYPE.title,
+            callback: DisplayFunctions.getNameFromObject
+          },
+          {
+            name: PropertiesReference.BAG_PACKING.name,
+            title: PropertiesReference.BAG_PACKING.title,
+            callback: DisplayFunctions.getNameFromObject
+          },
+          {
             name: PropertiesReference.WIDTH.name,
             title: PropertiesReference.WIDTH.title
           },
@@ -46,14 +56,8 @@
             title: PropertiesReference.CURRENT_GROUP_WEIGHT.title
           },
           {
-            name: PropertiesReference.BAG_TYPE.name,
-            title: PropertiesReference.BAG_TYPE.title,
-            callback: DisplayFunctions.getNameFromObject
-          },
-          {
-            name: PropertiesReference.BAG_PACKING.name,
-            title: PropertiesReference.BAG_PACKING.title,
-            callback: DisplayFunctions.getNameFromObject
+            name: PropertiesReference.CURRENT_KILO_PRICE.name,
+            title: PropertiesReference.CURRENT_KILO_PRICE.title
           }
         ],
         actions: [

@@ -18,12 +18,6 @@ export default {
     title: 'Usuarios',
     icon: 'fa fa-user'
   },
-  SUPPLIER: {
-    name: 'supplier',
-    apiName: 'supplier',
-    title: 'Proveedores',
-    icon: 'fa fa-user'
-  },
   BAG_ORDER_PRODUCTION: {
     name: 'bagOrderProduction',
     apiName: 'bagOrderProduction',
@@ -66,16 +60,15 @@ export default {
     name: 'bagOrderSaleProduct',
     apiName: 'bagOrderSaleProduct'
   },
-  EXPENSE: {
-    name: 'expense',
-    apiName: 'expense',
-    title: 'Gastos',
-    icon: 'fa fa-calendar'
+  CUTTING_MACHINE: {
+    name: 'cuttingMachine',
+    apiName: 'cuttingMachine',
+    title: 'Maquinas cortadoras'
   },
-  EXPENSE_TYPE: {
-    name: 'expenseType',
-    apiName: 'expenseType',
-    title: 'Tipo de Gasto'
+  EMPLOYEE: {
+    name: 'employee',
+    apiName: 'employee',
+    title: 'Empleados'
   },
   NOTIFICATION: {
     name: 'notification',

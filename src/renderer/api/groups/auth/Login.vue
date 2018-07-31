@@ -31,8 +31,8 @@
 </template>
 
 <script>
-  import ApiOperations from 'renderer/services/api/ApiOperations'
-  import Notifications from 'renderer/services/api/Notifications'
+  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import Notifications from 'renderer/api/functions/Notifications'
   export default {
     data () {
       return {

@@ -1,5 +1,5 @@
-import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
-import MauInputDefaultValues from 'renderer/components/mau-components/mau-form-inputs/MauInputDefaultValues'
+import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
 
 let OrderSalePropertiesReference = {
   DATE_GIVEN: {

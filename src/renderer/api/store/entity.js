@@ -1,7 +1,7 @@
 import EntityTypes from 'renderer/api/EntityTypes'
 import RolesTypes from 'renderer/api/RoleTypes'
 import EntityActions from './entityActions'
-import ApiFunctions from 'renderer/services/api/ApiOperations'
+import ApiFunctions from 'renderer/api/functions/ApiOperations'
 
 let roles = []
 Object.keys(RolesTypes).forEach(key => {
@@ -17,8 +17,6 @@ const state = {
   bagPackings: [],
   bags: [],
   bagOrderAdjustmentTypes: [],
-  expenseTypes: [],
-  suppliers: [],
   clients: [],
   users: [],
   roles: roles
@@ -37,14 +35,8 @@ const mutations = {
   SET_BAG_PACKINGS (state, data) {
     state.bagPackings = data
   },
-  SET_EXPENSE_TYPES (state, data) {
-    state.expenseTypes = data
-  },
   SET_BAG_ORDER_ADJUSTMENT_TYPES (state, data) {
     state.bagOrderAdjustmentTypes = data
-  },
-  SET_SUPPLIERS (state, data) {
-    state.suppliers = data
   },
   SET_CLIENTS (state, data) {
     state.clients = data
@@ -82,23 +74,9 @@ const actions = {
       console.log(e)
     })
   },
-  [EntityActions.GET_EXPENSE_TYPES]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.EXPENSE_TYPE).then(data => {
-      commit('SET_EXPENSE_TYPES', data)
-    }).catch(e => {
-      console.log(e)
-    })
-  },
   [EntityActions.GET_ORDER_ADJUSTMENT_TYPES]: function ({commit}) {
     ApiFunctions.getWithoutPagination(EntityTypes.BAG_ORDER_ADJUSTMENT_ORDER_TYPE).then(data => {
       commit('SET_BAG_ORDER_ADJUSTMENT_TYPES', data)
-    }).catch(e => {
-      console.log(e)
-    })
-  },
-  [EntityActions.GET_SUPPLIERS]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.SUPPLIER).then(data => {
-      commit('SET_SUPPLIERS', data)
     }).catch(e => {
       console.log(e)
     })

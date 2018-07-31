@@ -14,11 +14,11 @@
 
 <script>
     import ActionWidget from 'renderer/components/mau-components/action-widget/ActionWidget.vue'
-    import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
+    import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
     import EntityTypes from 'renderer/api/EntityTypes'
-    import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
-    import ApiOperations from 'renderer/services/api/ApiOperations'
-    import Notifications from 'renderer/services/api/Notifications'
+    import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+    import ApiOperations from 'renderer/api/functions/ApiOperations'
+    import Notifications from 'renderer/api/functions/Notifications'
     import {mapGetters} from 'vuex'
     export default {
       components: {ActionWidget},
@@ -51,6 +51,14 @@
                 [GlobalEntityIdentifier]: id
               }})
           }
+          if (action.name === 'Edit') {
+            let id = this.$route.params[GlobalEntityIdentifier]
+            this.$router.push({
+              name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_ADJUSTMENT, 'edit'),
+              params: {
+                [GlobalEntityIdentifier]: id
+              }})
+          }
           if (action.name === 'Del') {
             this.$refs.confirmDelete.show()
           }
@@ -72,6 +80,10 @@
               {
                 name: 'View',
                 icon: 'fa fa-eye'
+              },
+              {
+                name: 'Edit',
+                icon: 'fa fa-edit'
               }
             ])
           } else {

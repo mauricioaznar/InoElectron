@@ -12,10 +12,10 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/services/api/ApiUrls'
-  import SimpleOrderPropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
-  import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
-  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
+  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import BagOrderProductionPropertiesReference from 'renderer/api/propertiesReference/BagOrderProductionPropertiesReference'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'ListBagOrderProduction',
     data () {
@@ -24,24 +24,28 @@
         canEdit: true,
         tableFields: [
           {
-            name: SimpleOrderPropertiesReference.ORDER_CODE.name,
-            title: SimpleOrderPropertiesReference.ORDER_CODE.title,
-            filter: true,
-            default: true
-          },
-          {
-            name: SimpleOrderPropertiesReference.DATE.name,
-            title: SimpleOrderPropertiesReference.DATE.title,
-            sortField: SimpleOrderPropertiesReference.DATE.name,
+            name: BagOrderProductionPropertiesReference.DATE.name,
+            title: BagOrderProductionPropertiesReference.DATE.title,
+            sortField: BagOrderProductionPropertiesReference.DATE.name,
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true
           },
           {
-            name: SimpleOrderPropertiesReference.BAGS.name,
-            title: SimpleOrderPropertiesReference.BAGS.title,
+            name: BagOrderProductionPropertiesReference.BAGS.name,
+            title: BagOrderProductionPropertiesReference.BAGS.title,
             hidden: true,
             callback: DisplayFunctions.getBagWithUnits
+          },
+          {
+            name: BagOrderProductionPropertiesReference.CUTTING_MACHINE.name,
+            title: BagOrderProductionPropertiesReference.CUTTING_MACHINE.title,
+            callback: DisplayFunctions.getNameFromObject
+          },
+          {
+            name: BagOrderProductionPropertiesReference.EMPLOYEE.name,
+            title: BagOrderProductionPropertiesReference.EMPLOYEE.title,
+            callback: DisplayFunctions.getPersona
           }
         ],
         actions: [

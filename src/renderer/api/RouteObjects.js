@@ -1,7 +1,7 @@
-import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
+import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
 import EntityTypes from 'renderer/api/EntityTypes'
 import Categories from 'renderer/api/Categories'
-import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
+import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
 
 let routeObjects = []
 
@@ -95,6 +95,12 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJU
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
       {
         componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
+      {
+        componentName: 'Edit',
         params: [GlobalEntityIdentifier]
       }
     )
@@ -199,28 +205,30 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PROD
       {
         componentName: 'List',
         groupDefault: true,
-        navbar: true,
-        iconClass: 'fa fa-list'
+        navbar: true
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
       {
-        componentName: 'Create',
-        iconClass: 'fa fa-plus'
+        componentName: 'Create'
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
       {
         componentName: 'View',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-eye'
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
       {
         componentName: 'Del',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-trash-o'
+        params: [GlobalEntityIdentifier]
       }
     )
   ]

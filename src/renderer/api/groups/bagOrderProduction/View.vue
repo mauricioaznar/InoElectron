@@ -7,9 +7,9 @@
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/BagOrderPropertiesReference'
+  import BagOrderProductionPropertiesReference from 'renderer/api/propertiesReference/BagOrderProductionPropertiesReference'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-  import MauEntityPetitioner from 'renderer/components/mau-components/mau-entity-petitioner/MauEntityPetitioner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   export default {
     name: 'ViewBagOrderProduction',
@@ -19,9 +19,10 @@
     data () {
       return {
         propertiesReference: [
-          PropertiesReference.ORDER_CODE,
-          PropertiesReference.DATE,
-          PropertiesReference.BAGS
+          BagOrderProductionPropertiesReference.DATE,
+          BagOrderProductionPropertiesReference.BAGS,
+          BagOrderProductionPropertiesReference.EMPLOYEE,
+          BagOrderProductionPropertiesReference.CUTTING_MACHINE
         ],
         entityType: EntityTypes.BAG_ORDER_PRODUCTION,
         entity: null

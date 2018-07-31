@@ -1,7 +1,7 @@
-import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
-import DisplayFunctions from 'renderer/services/api/DisplayFunctions'
-import MauInputDefaultValues from 'renderer/components/mau-components/mau-form-inputs/MauInputDefaultValues'
-import Masks from 'renderer/services/form/Masks'
+import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
+import Masks from 'renderer/api/functions/Masks'
 
 let propertiesReference = {
   ID: {
@@ -25,16 +25,16 @@ let propertiesReference = {
     required: true,
     defaultValue: MauInputDefaultValues.TEXT
   },
-  CURRENT_UNIT_PRICE: {
+  CURRENT_KILO_PRICE: {
     title: 'Precio por kilo',
-    name: 'current_unit_price',
+    name: 'current_kilo_price',
     display: DisplayFunctions.getValue,
     required: true,
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
   CURRENT_GROUP_WEIGHT: {
-    title: 'Peso por bulto',
+    title: 'Peso en kilos por bulto',
     name: 'current_group_weight',
     display: DisplayFunctions.getValue,
     required: true,

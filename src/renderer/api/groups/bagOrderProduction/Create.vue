@@ -6,17 +6,17 @@
       :entityType="entityType"
     >
       <template slot-scope="params">
-        <bag-order-form
+        <bag-order-production-form
                 :saveFunction="params.save"
                 :entityType="entityType"
-        ></bag-order-form>
+        ></bag-order-production-form>
       </template>
     </mau-crud-create>
   </div>
 </template>
 
 <script>
-  import BagOrderForm from 'renderer/api/components/generic/bagOrder/BagOrderForm.vue'
+  import BagOrderProductionForm from 'renderer/api/components/forms/BagOrderProductionForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {
@@ -28,7 +28,7 @@
       }
     },
     components: {
-      BagOrderForm
+      BagOrderProductionForm
     },
     computed: {
       ...mapGetters(['groupDefaultRouteObject'])

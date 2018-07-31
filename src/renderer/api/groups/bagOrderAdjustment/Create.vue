@@ -6,19 +6,18 @@
       :callback="callback"
     >
       <template slot-scope="params">
-        <bag-order-form
+        <bag-order-adjustment-form
                 :saveFunction="params.save"
-                :adjustmentsMode="true"
                 :entityType="entityType"
         >
-        </bag-order-form>
+        </bag-order-adjustment-form>
       </template>
     </mau-crud-create>
   </div>
 </template>
 
 <script>
-  import BagOrderForm from 'renderer/api/components/generic/bagOrder/BagOrderForm.vue'
+  import BagOrderAdjustmentForm from 'renderer/api/components/forms/BagOrderAdjustmentForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {
@@ -30,7 +29,7 @@
       }
     },
     components: {
-      BagOrderForm
+      BagOrderAdjustmentForm
     },
     computed: {
       ...mapGetters(['groupDefaultRouteObject'])

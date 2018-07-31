@@ -12,9 +12,9 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/services/api/ApiUrls'
-  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
-  import PersonaDataTable from 'renderer/api/components/generic/persona/PersonaDataTable.vue'
+  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import PersonaDataTable from 'renderer/api/components/dataTables/PersonaDataTable.vue'
   export default {
     name: 'ListClient',
     data () {

@@ -18,10 +18,10 @@
 <script>
   import ActionWidget from 'renderer/components/mau-components/action-widget/ActionWidget.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import RouteObjectHelper from 'renderer/services/routeObject/RouteObjectHelper'
-  import GlobalEntityIdentifier from 'renderer/services/api/GlobalEntityIdentifier'
-  import Notifications from 'renderer/services/api/Notifications'
-  import ApiOperations from 'renderer/services/api/ApiOperations'
+  import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import Notifications from 'renderer/api/functions/Notifications'
+  import ApiOperations from 'renderer/api/functions/ApiOperations'
   import {mapGetters} from 'vuex'
   export default {
     components: {ActionWidget},
@@ -42,12 +42,21 @@
     methods: {
       actionClicked: function (action) {
         if (action.name === 'Create') {
-          this.$router.push({name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_PRODUCTION, 'create')})
+          let createName = RouteObjectHelper.createName(EntityTypes.BAG_ORDER_PRODUCTION, 'create')
+          this.$router.push({name: createName})
         }
         if (action.name === 'View') {
           let id = this.$route.params[GlobalEntityIdentifier]
           this.$router.push({
             name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_PRODUCTION, 'view'),
+            params: {
+              [GlobalEntityIdentifier]: id
+            }})
+        }
+        if (action.name === 'Edit') {
+          let id = this.$route.params[GlobalEntityIdentifier]
+          this.$router.push({
+            name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_PRODUCTION, 'edit'),
             params: {
               [GlobalEntityIdentifier]: id
             }})
@@ -66,6 +75,10 @@
             {
               name: 'View',
               icon: 'fa fa-eye'
+            },
+            {
+              name: 'Edit',
+              icon: 'fa fa-edit'
             }
           ])
         } else {

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import BagForm from './components/BagForm.vue'
+  import BagForm from '../../components/forms/BagForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {

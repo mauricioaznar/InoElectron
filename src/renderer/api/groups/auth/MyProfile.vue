@@ -7,7 +7,7 @@
 
 <script>
   import PropertiesReference from 'renderer/api/propertiesReference/UserPropertiesReference'
-  import ApiOperations from 'renderer/services/api/ApiOperations'
+  import ApiOperations from 'renderer/api/functions/ApiOperations'
   export default {
     name: 'MyProfileAuth',
     data () {
