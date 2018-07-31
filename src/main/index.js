@@ -29,7 +29,7 @@ function createWindow () {
     }
   })
   mainWindow.loadURL(winURL)
-  mainWindow.toggleDevTools()
+  mainWindow.webContents.openDevTools()
   mainWindow.on('closed', () => {
     mainWindow = null
   })
