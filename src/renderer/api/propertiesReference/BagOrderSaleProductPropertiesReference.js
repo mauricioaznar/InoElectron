@@ -27,6 +27,12 @@ let OrderProductSalePropertiesReference = {
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
+  GROUP_WEIGHT: {
+    title: 'Peso del bulto en kilos',
+    name: 'group_weight',
+    mask: Masks.regularNumber,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
   KILO_PRICE: {
     title: 'Precio unitario',
     name: 'kilo_price',

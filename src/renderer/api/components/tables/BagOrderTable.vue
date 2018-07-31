@@ -27,7 +27,8 @@
                                 v-validate="{
                                     required: true,
                                     kilo_to_group: {
-                                        groupWeight: getCurrentObjGroupWeight(currentStructuredObj)
+                                        groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
+                                        isGroupWeightStrict: getBagGroupWeightStrict(currentStructuredObj)
                                     }
                                 }"
                                 :error="errors.first('_quantity_kilo' + currentStructuredObj['bag_id'])"
@@ -39,8 +40,8 @@
                                 :name="'_quantity_group' + currentStructuredObj['bag_id']"
                                 :initialValue="getCurrentObjInitialQuantity(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
-                                :type="'regular'"
-                                v-validate="'required'"
+                                :type="'float'"
+                                v-validate="getBagGroupWeightStrict(currentStructuredObj) ? 'required|integer' : 'required'"
                                 :key="'_quantity_group' + currentStructuredObj['bag_id']"
                                 :error="errors.first('_quantity_group' + currentStructuredObj['bag_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
@@ -147,6 +148,9 @@
         },
         getBagCurrentGroupWeight: function (structuredObject) {
           return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
+        },
+        getBagGroupWeightStrict: function (structuredObject) {
+          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name]
         },
         getInitialSaleBag: function (bagId) {
           let initialBag = this.initialBags.find(bag => {

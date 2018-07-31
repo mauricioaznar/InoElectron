@@ -30,7 +30,8 @@
                                 v-validate="{
                                     required: true,
                                     kilo_to_group: {
-                                        groupWeight: getCurrentObjGroupWeight(currentStructuredObj)
+                                        groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
+                                        isGroupWeightStrict: getBagGroupWeightStrict(currentStructuredObj)
                                     }
                                 }"
                                 :error="errors.first('_quantity_kilo' + currentStructuredObj['bag_id'])"
@@ -42,8 +43,8 @@
                                 :name="'_quantity_group' + currentStructuredObj['bag_id']"
                                 :initialValue="getCurrentObjInitialQuantity(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
-                                :type="'regular'"
-                                v-validate="'required'"
+                                :type="'float'"
+                                v-validate="getBagGroupWeightStrict(currentStructuredObj) ? 'required|integer' : 'required'"
                                 :key="'_quantity_group' + currentStructuredObj['bag_id']"
                                 :error="errors.first('_quantity_group' + currentStructuredObj['bag_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
@@ -191,15 +192,14 @@
           let filteredStructuredObjects = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialSaleBags, this.currentStructuredObjects, 'bag_id')
           this.$emit('input', filteredStructuredObjects)
         },
-        quantityVeeValidation: function (currentStructuredObj) {
-          let calculationType = currentStructuredObj['_calculation_type']
-          return calculationType === 0 ? 'required' : ''
-        },
         getBagName: function (structuredObject) {
           return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.NAME.name]
         },
         getBagDescription: function (structuredObject) {
           return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.DESCRIPTION.name]
+        },
+        getBagGroupWeightStrict: function (structuredObject) {
+          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name]
         },
         getBagCurrentGroupWeight: function (structuredObject) {
           return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
@@ -257,11 +257,7 @@
           let bagSaleGroupWeight = null
           let initialSaleBag = this.getInitialSaleBag(currentStructuredObj['bag_id'])
           if (initialSaleBag) {
-            let groups = initialSaleBag[BagOrderProductSalePropertiesReference.GROUPS_REQUESTED.name]
-            let kilos = initialSaleBag[BagOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
-            if (!isNaN(groups) && groups > 0 && !isNaN(kilos) && kilos > 0) {
-              bagSaleGroupWeight = kilos / groups
-            }
+            bagSaleGroupWeight = initialSaleBag[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name]
           } else {
             bagSaleGroupWeight = this.getBagCurrentGroupWeight(currentStructuredObj)
           }
@@ -288,6 +284,9 @@
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
           let bagGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
+          if (!currentStructuredObj[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && bagGroupWeight) {
+            currentStructuredObj[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = bagGroupWeight
+          }
           if (currentStructuredObj['_calculation_type'] === 0) {
             if (this.requestMode) {
               currentStructuredObj[BagOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity

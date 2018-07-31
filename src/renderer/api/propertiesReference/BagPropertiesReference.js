@@ -72,6 +72,11 @@ let propertiesReference = {
     display: DisplayFunctions.getNameFromObject,
     required: true,
     defaultValue: MauInputDefaultValues.SELECT
+  },
+  GROUP_WEIGHT_STRICT: {
+    title: 'Requiere bultos exactos',
+    name: 'group_weight_strict',
+    defaultValue: MauInputDefaultValues.BOOLEAN
   }
 }
 
