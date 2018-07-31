@@ -6,12 +6,14 @@
             <tr>
                 <th scope="col">Nombre</th>
                 <th scope="col">Kilos Actuales</th>
+                <th scope="col">Bultos Actuales</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="(item, index) in inventory">
                 <td>{{item.name}}</td>
                 <td>{{item.current_kilos}}</td>
+                <td>{{item.current_groups}}</td>
             </tr>
             </tbody>
         </table>
@@ -35,11 +37,16 @@
             let kilosGiven = item.kilos_given || 0
             let kilosAdjusted = item.kilos_adjusted || 0
             let kilosProduced = item.kilos_produced || 0
-            let balance =  -(kilosGiven) + kilosAdjusted + kilosProduced
-            if (balance !== 0) {
+            let currentKilos = - (kilosGiven) + kilosAdjusted + kilosProduced
+            let groupsGiven = item.groups_given || 0
+            let groupsAdjusted = item.groups_adjusted || 0
+            let groupsProduced = item.groups_produced || 0
+            let currentGroups = - (groupsGiven) + groupsAdjusted + groupsProduced
+            if (currentKilos !== 0) {
               inventoryItems.push({
                 name: item.name,
-                current_kilos: balance
+                current_kilos: currentKilos,
+                current_groups: currentGroups
               })
             }
           })

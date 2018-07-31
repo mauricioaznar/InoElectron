@@ -25,6 +25,23 @@
   }
 }
 
+//forms
+.form-control {
+  font-size: 13px !important;
+  border-radius: 0 !important;
+  border-radius: 0 !important;
+}
+label {
+  font-weight: 600;
+}
+.form-control[readonly] {
+  background-color: #ffffff !important;
+}
+.flatpickr-input, .custom-select {
+  border: none !important;
+  border-bottom: 1px solid rgb(221, 221, 221) !important;
+}
+
 //general
 body {
   background-color: rgb(235, 237, 248) !important;
@@ -258,22 +275,6 @@ tbody tr {
 //  left: 15px;
 //  content: "\f0b0";
 //}
-
-//forms
-.form-control {
-  font-size: 13px !important;
-  border-radius: 0 !important;
-  border-radius: 0 !important;
-}
-label {
-  font-weight: 600;
-}
-.form-control[readonly] {
-  background-color: #ffffff !important;
-}
-.flatpickr-input, .custom-select {
-  border: none !important;
-}
 
 //buttons
 .btn {
