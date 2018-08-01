@@ -2,17 +2,14 @@
   <div class="action-widget widget">
     <div class="widget-header w-100 d-flex justify-content-end align-content-center align-items-center">
       <div class="widget-buttons">
-        <a
-                v-for="(action, index) in actions"
+        <router-link
                 :active-class="'active'"
                 class="icon-button ml-2"
-                href="#"
-                v-on:keyup.enter="actionClickedHandler(action)"
-                @click="actionClickedHandler(action)"
-                :tabindex="index"
+                v-for="(action, index) in actions"
+                :to="action.path"
                 :key="index">
           <span :class="action.icon"></span>
-        </a>
+        </router-link>
         <a
                 v-for="(urlAction, index) in urlActions"
                 :active-class="'active'"

@@ -2,7 +2,6 @@
     <div>
         <action-widget
                 :actions="actions"
-                @actionClicked="actionClicked"
                 :urlActions="urlActions"
         ></action-widget>
         <b-modal
@@ -33,7 +32,8 @@
         alwaysActions: [
           {
             name: 'Create',
-            icon: 'fa fa-plus'
+            icon: 'fa fa-plus',
+            path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_RECEIPT, 'create')
           }
         ],
         urlActions: [],
@@ -45,44 +45,19 @@
       ...mapGetters(['groupDefaultRouteObject'])
     },
     methods: {
-      actionClicked: function (action) {
-        if (action.name === 'Create') {
-          this.$router.push({name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_SALE_RECEIPT, 'create')})
-        }
-        if (action.name === 'Edit') {
-          let id = this.$route.params[GlobalEntityIdentifier]
-          this.$router.push({
-            name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_SALE_RECEIPT, 'edit'),
-            params: {
-              [GlobalEntityIdentifier]: id
-            }})
-        }
-        if (action.name === 'View') {
-          let id = this.$route.params[GlobalEntityIdentifier]
-          this.$router.push({
-            name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_SALE_RECEIPT, 'view'),
-            params: {
-              [GlobalEntityIdentifier]: id
-            }})
-        }
-        if (action.name === 'Del') {
-          this.$refs.confirmDelete.show()
-        }
-      },
       setActions: function () {
         if (this.$route.params[GlobalEntityIdentifier]) {
+          let id = this.$route.params[GlobalEntityIdentifier]
           this.actions = this.alwaysActions.concat([
             {
               name: 'Edit',
-              icon: 'fa fa-edit'
-            },
-            {
-              name: 'Del',
-              icon: 'fa fa-trash-o'
+              icon: 'fa fa-edit',
+              path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_RECEIPT, 'edit') + '/' + id
             },
             {
               name: 'View',
-              icon: 'fa fa-eye'
+              icon: 'fa fa-eye',
+              path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_RECEIPT, 'view') + '/' + id
             }
           ])
         } else {

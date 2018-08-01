@@ -1,6 +1,9 @@
 <template>
     <div>
-        <action-widget :actions=actions @actionClicked="actionClicked"></action-widget>
+        <action-widget
+                :actions=actions
+        >
+        </action-widget>
         <b-modal
                 ref="confirmDelete"
                 centered
@@ -28,7 +31,8 @@
           alwaysActions: [
             {
               name: 'Create',
-              icon: 'fa fa-plus'
+              icon: 'fa fa-plus',
+              path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_ADJUSTMENT, 'create')
             }
           ]
         }
@@ -39,30 +43,6 @@
         ])
       },
       methods: {
-        actionClicked: function (action) {
-          if (action.name === 'Create') {
-            this.$router.push({name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_ADJUSTMENT, 'create')})
-          }
-          if (action.name === 'View') {
-            let id = this.$route.params[GlobalEntityIdentifier]
-            this.$router.push({
-              name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_ADJUSTMENT, 'view'),
-              params: {
-                [GlobalEntityIdentifier]: id
-              }})
-          }
-          if (action.name === 'Edit') {
-            let id = this.$route.params[GlobalEntityIdentifier]
-            this.$router.push({
-              name: RouteObjectHelper.createName(EntityTypes.BAG_ORDER_ADJUSTMENT, 'edit'),
-              params: {
-                [GlobalEntityIdentifier]: id
-              }})
-          }
-          if (action.name === 'Del') {
-            this.$refs.confirmDelete.show()
-          }
-        },
         confirmDelete: function () {
           let id = this.$route.params[GlobalEntityIdentifier]
           ApiOperations.del(EntityTypes.BAG_ORDER_ADJUSTMENT, id).then(result => {
@@ -72,18 +52,17 @@
         },
         setActions: function () {
           if (this.$route.params[GlobalEntityIdentifier]) {
+            let id = this.$route.params[GlobalEntityIdentifier]
             this.actions = this.alwaysActions.concat([
               {
-                name: 'Del',
-                icon: 'fa fa-trash-o'
+                name: 'Edit',
+                icon: 'fa fa-edit',
+                path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_ADJUSTMENT, 'edit') + '/' + id
               },
               {
                 name: 'View',
-                icon: 'fa fa-eye'
-              },
-              {
-                name: 'Edit',
-                icon: 'fa fa-edit'
+                icon: 'fa fa-eye',
+                path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_ADJUSTMENT, 'view') + '/' + id
               }
             ])
           } else {
