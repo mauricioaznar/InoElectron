@@ -117,35 +117,37 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE
       {
         componentName: 'List',
         groupDefault: true,
-        navbar: true,
-        iconClass: 'fa fa-list'
+        navbar: true
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
-        componentName: 'Create',
-        iconClass: 'fa fa-plus'
+        componentName: 'Calendar',
+        title: 'Calendario',
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
+      {
+        componentName: 'Create'
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
         componentName: 'Edit',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-edit'
+        params: [GlobalEntityIdentifier]
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
         componentName: 'View',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-eye'
+        params: [GlobalEntityIdentifier]
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_REQUEST,
       {
         componentName: 'Del',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-trash-o'
+        params: [GlobalEntityIdentifier]
       }
     )
   ]
@@ -161,35 +163,30 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE
       {
         componentName: 'List',
         groupDefault: true,
-        navbar: true,
-        iconClass: 'fa fa-list'
+        navbar: true
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
-        componentName: 'Create',
-        iconClass: 'fa fa-plus'
+        componentName: 'Create'
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
         componentName: 'Edit',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-edit'
+        params: [GlobalEntityIdentifier]
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
         componentName: 'View',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-eye'
+        params: [GlobalEntityIdentifier]
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
         componentName: 'Del',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-trash-o'
+        params: [GlobalEntityIdentifier]
       }
     )
   ]
@@ -245,35 +242,30 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
         componentName: 'List',
         groupDefault: true,
         categoryDefault: true,
-        navbar: true,
-        iconClass: 'fa fa-list'
+        navbar: true
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
-        componentName: 'Create',
-        iconClass: 'fa fa-plus'
+        componentName: 'Create'
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
         componentName: 'Edit',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-edit'
+        params: [GlobalEntityIdentifier]
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
         componentName: 'View',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-eye'
+        params: [GlobalEntityIdentifier]
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
         componentName: 'Del',
-        params: [GlobalEntityIdentifier],
-        iconClass: 'fa fa-trash-o'
+        params: [GlobalEntityIdentifier]
       }
     )
   ]
