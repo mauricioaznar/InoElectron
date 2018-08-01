@@ -65,7 +65,9 @@
           onSiteGroupsData: '',
           soldOutKilosData: '',
           soldOutGroupsData: '',
-          isLoading: true
+          isLoading: true,
+          timeout: '',
+          interval: ''
         }
       },
       components: {
@@ -74,7 +76,7 @@
       created () {
         this.setInventory()
         let vm = this
-        setInterval(function () {
+        this.interval = setInterval(function () {
           vm.setInventory()
         }, 30000)
       },
@@ -103,11 +105,15 @@
             })
             this.inventory = inventoryItems
             let vm = this
-            setTimeout(function () {
+            this.timeout = setTimeout(function () {
               vm.isLoading = false
             }, 2000)
           })
         }
+      },
+      beforeDestroy: function () {
+        clearTimeout(this.timeout)
+        clearInterval(this.interval)
       },
       watch: {
         inventory: function (inventory) {

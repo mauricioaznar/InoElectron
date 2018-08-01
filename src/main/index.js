@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, dialog } from 'electron'
 import { autoUpdater } from 'electron-updater'
 
 /**
@@ -29,7 +29,11 @@ function createWindow () {
     }
   })
   mainWindow.loadURL(winURL)
-  mainWindow.webContents.openDevTools()
+  mainWindow.webContents.on('did-finish-load', () => {
+    let version = app.getVersion()
+    let title = app.getName()
+    mainWindow.setTitle(title + ' v' + version)
+  })
   mainWindow.on('closed', () => {
     mainWindow = null
   })
@@ -57,11 +61,25 @@ app.on('activate', () => {
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
 
+autoUpdater.on('update-available', () => {
+  dialog.showMessageBox({
+    type: 'info',
+    message: 'Se esta descargando la nueva actualizacion'
+  })
+})
+
 autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
+  dialog.showMessageBox({
+    type: 'info',
+    message: 'Hay una nueva actualizacion disponible, desea descargarla?',
+    buttons: ['Yes', 'No']
+  }, (response) => {
+    if (response === 0) {
+      autoUpdater.quitAndInstall()
+    }
+  })
 })
 
 app.on('ready', () => {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdatesAndNotify()
 })
-

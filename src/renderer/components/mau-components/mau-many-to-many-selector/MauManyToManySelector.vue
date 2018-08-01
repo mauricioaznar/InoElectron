@@ -20,7 +20,6 @@
 
 <script>
   import {mapState} from 'vuex'
-  import RelationshipObjectHelper from 'renderer/api/functions/ManyToManyHelper'
 //  import cloneDeep from 'renderer/services/common/cloneDeep'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import MauFormInputMultiSelect from 'renderer/api/components/inputs/MauFormInputMultiSelect.vue'
@@ -71,18 +70,10 @@
     },
     watch: {
       selectedObjects: function () {
-        this.setStructuredObjects()
         this.$emit('input', this.selectedObjects)
       }
     },
     methods: {
-      setStructuredObjects: function () {
-        let structuredObjects = []
-        this.selectedObjects.forEach(selectedObj => {
-          structuredObjects.push(RelationshipObjectHelper.createSimpleM2MStructuredObject(selectedObj, this.selectedPropertyName))
-        })
-        this.structuredObjects = structuredObjects
-      }
     }
   }
 </script>

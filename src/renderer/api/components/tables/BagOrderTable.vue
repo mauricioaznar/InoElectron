@@ -138,6 +138,10 @@
         emitStructureChangeEvent: function () {
           let initialSaleBags = ManyToManyHelper.createM2MStructuredObjects(this.initialBags, 'bag_id')
           let filteredStructuredObjects = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialSaleBags, this.currentStructuredObjects, 'bag_id')
+          console.log('-----')
+          console.log(this.currentStructuredObjects)
+          console.log(initialSaleBags)
+          console.log(filteredStructuredObjects)
           this.$emit('input', filteredStructuredObjects)
         },
         getProductName: function (structuredObject) {
@@ -237,6 +241,7 @@
             }
           }
           this.currentStructuredObjects = tempCurrentStructuredObjects
+          this.emitStructureChangeEvent()
         }
       }
     }

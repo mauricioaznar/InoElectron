@@ -288,7 +288,6 @@
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
           let bagGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
-          console.log(quantity)
           if (!currentStructuredObj[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && bagGroupWeight) {
             currentStructuredObj[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = bagGroupWeight
           }
@@ -341,6 +340,7 @@
             }
           }
           this.currentStructuredObjects = tempCurrentStructuredObjects
+          this.emitStructureChangeEvent()
         }
       }
     }
