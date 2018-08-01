@@ -24,13 +24,13 @@
                 <h6>En piso</h6>
                 <mau-bar-chart
                         :chartData="onSiteKilosData"
-                        :options="{responsive: true, maintainAspectRatio: false, legend: { display: false }, tooltips: { displayColors: false }}"
+                        :options="chartOptions"
                         :width="400"
                         :height="200"
                 ></mau-bar-chart>
                 <mau-bar-chart
                         :chartData="onSiteGroupsData"
-                        :options="{responsive: true, maintainAspectRatio: false, legend: { display: false }, tooltips: { displayColors: false }}"
+                        :options="chartOptions"
                         :width="400"
                         :height="200"
                 ></mau-bar-chart>
@@ -39,13 +39,13 @@
                 <h6>Sobrevendidas</h6>
                 <mau-bar-chart
                         :chartData="soldOutKilosData"
-                        :options="{responsive: true, maintainAspectRatio: false, legend: { display: false }, tooltips: { displayColors: false }}"
+                        :options="chartOptions"
                         :width="400"
                         :height="200"
                 ></mau-bar-chart>
                 <mau-bar-chart
                         :chartData="soldOutGroupsData"
-                        :options="{responsive: true, maintainAspectRatio: false, legend: { display: false }, tooltips: { displayColors: false }}"
+                        :options="chartOptions"
                         :width="400"
                         :height="200"
                 ></mau-bar-chart>
@@ -67,7 +67,20 @@
           soldOutGroupsData: '',
           isLoading: true,
           timeout: '',
-          interval: ''
+          interval: '',
+          chartOptions: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: { display: false },
+            tooltips: { displayColors: false },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
         }
       },
       components: {
