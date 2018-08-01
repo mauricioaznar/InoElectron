@@ -6,7 +6,7 @@
                 class="custom-calendar"
                 :events="calendarEvents"
                 :monthNames="['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']"
-                :weekNames="['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']"
+                :weekNames="['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']"
                 @eventClick="eventClicked"
         >
         </full-calendar>
@@ -18,6 +18,7 @@
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
+  import moment from 'moment'
   export default {
     data () {
       return {
@@ -43,7 +44,7 @@
           result.forEach(item => {
             calendarItems.push({
               title: item.companyname + ' ' + item.total_cost,
-              start: item.date_requested,
+              start: moment(item.date_requested),
               YOUR_DATA: {
                 id: item.id
               }
