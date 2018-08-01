@@ -188,11 +188,7 @@
           let bagSaleGroupWeight = null
           let initialSaleBag = this.getInitialSaleBag(currentStructuredObj['bag_id'])
           if (initialSaleBag) {
-            let groups = initialSaleBag[OrderProductPropertiesReference.GROUPS.name]
-            let kilos = initialSaleBag[OrderProductPropertiesReference.KILOS.name]
-            if (!isNaN(groups) && groups > 0 && !isNaN(kilos) && kilos > 0) {
-              bagSaleGroupWeight = kilos / groups
-            }
+            bagSaleGroupWeight = initialSaleBag[OrderProductPropertiesReference.GROUP_WEIGHT.name]
           } else {
             bagSaleGroupWeight = this.getBagCurrentGroupWeight(currentStructuredObj)
           }
@@ -201,6 +197,9 @@
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
           let bagGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
+          if (!currentStructuredObj[OrderProductPropertiesReference.GROUP_WEIGHT.name] && bagGroupWeight) {
+            currentStructuredObj[OrderProductPropertiesReference.GROUP_WEIGHT.name] = bagGroupWeight
+          }
           if (currentStructuredObj['_calculation_type'] === 0) {
             currentStructuredObj[OrderProductPropertiesReference.KILOS.name] = quantity
             if (bagGroupWeight) {

@@ -198,11 +198,11 @@
         getBagDescription: function (structuredObject) {
           return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.DESCRIPTION.name]
         },
-        getBagGroupWeightStrict: function (structuredObject) {
-          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name]
-        },
         getBagCurrentGroupWeight: function (structuredObject) {
           return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
+        },
+        getBagGroupWeightStrict: function (structuredObject) {
+          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name]
         },
         getInitialSaleBag: function (bagId) {
           let initialBag = this.initialBags.find(bag => {
@@ -222,21 +222,25 @@
           let initialSaleBag = this.getInitialSaleBag(currentStructuredObj['bag_id'])
           let initialCalculationType = this.getCurrentObjInitialCalculationType(currentStructuredObj)
           if (initialSaleBag) {
+            let initialSaleQuantityValue
             if (initialCalculationType === 0) {
               if (this.requestMode) {
-                quantity = initialSaleBag[BagOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
+                initialSaleQuantityValue = initialSaleBag[BagOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
               }
               if (this.receiptMode) {
-                quantity = initialSaleBag[BagOrderProductSalePropertiesReference.KILOS_GIVEN.name]
+                initialSaleQuantityValue = initialSaleBag[BagOrderProductSalePropertiesReference.KILOS_GIVEN.name]
               }
             }
             if (initialCalculationType === 1) {
               if (this.requestMode) {
-                quantity = initialSaleBag[BagOrderProductSalePropertiesReference.GROUPS_REQUESTED.name]
+                initialSaleQuantityValue = initialSaleBag[BagOrderProductSalePropertiesReference.GROUPS_REQUESTED.name]
               }
               if (this.receiptMode) {
-                quantity = initialSaleBag[BagOrderProductSalePropertiesReference.GROUPS_GIVEN.name]
+                initialSaleQuantityValue = initialSaleBag[BagOrderProductSalePropertiesReference.GROUPS_GIVEN.name]
               }
+            }
+            if (initialSaleQuantityValue && initialSaleQuantityValue > 0) {
+              quantity = initialSaleQuantityValue
             }
           }
           return quantity
@@ -284,6 +288,7 @@
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
           let bagGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
+          console.log(quantity)
           if (!currentStructuredObj[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && bagGroupWeight) {
             currentStructuredObj[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = bagGroupWeight
           }
