@@ -168,6 +168,13 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
       {
+        componentName: 'Dashboard',
+        title: 'Reportes',
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_SALE_RECEIPT,
+      {
         componentName: 'Create'
       }
     ),

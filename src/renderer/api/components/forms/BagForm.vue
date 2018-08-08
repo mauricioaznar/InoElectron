@@ -153,7 +153,6 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import NormalizeObjects from 'renderer/api/functions/NormalizeObjects'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import MaskedInput from 'vue-text-mask'
   import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
@@ -181,7 +180,6 @@
     },
     components: {
       MauFormInputNumber,
-      MauFormInputSelect,
       MauFormInputText,
       MaskedInput
     },

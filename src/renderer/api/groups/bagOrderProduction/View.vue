@@ -19,7 +19,6 @@
     data () {
       return {
         propertiesReference: [
-          BagOrderProductionPropertiesReference.DATE,
           BagOrderProductionPropertiesReference.BAGS,
           BagOrderProductionPropertiesReference.EMPLOYEE,
           BagOrderProductionPropertiesReference.CUTTING_MACHINE

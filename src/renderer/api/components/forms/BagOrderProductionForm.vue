@@ -1,17 +1,80 @@
 1<template>
   <div>
       <div>
-          <div class="form-group">
-              <div class="date">
+          <div class="form-row">
+              <div class="form-group col-md-6">
                   <mau-form-input-date-time
-                          :name="BagOrderProductionPropertiesReference.DATE.name"
-                          :label="BagOrderProductionPropertiesReference.DATE.title"
-                          v-model="productionOrder.date"
-                          :initialValue="initialValues[BagOrderProductionPropertiesReference.DATE.name]"
-                          :error="errors.first(BagOrderProductionPropertiesReference.DATE.name)"
+                          :name="'startDate'"
+                          :label="'Fecha de inicio'"
+                          v-model="productionOrder.startDate"
+                          :initialValue="initialValues['startDate']"
+                          :inputType="'date'"
+                          :error="errors.first('startDate')"
                           v-validate="'required'"
                   >
                   </mau-form-input-date-time>
+              </div>
+              <div class="form-group col-md-3">
+              <mau-form-input-bootstrap-select
+                      :label="'Hora de inicio'"
+                      :name="'startHour'"
+                      :availableOptions="['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23']"
+                      :error="errors.first('startHour')"
+                      v-model="productionOrder.startHour"
+                      :initialValue="initialValues['startHour']"
+                      v-validate="'required'"
+              >
+              </mau-form-input-bootstrap-select>
+          </div>
+              <div class="form-group col-md-3   ">
+                  <mau-form-input-bootstrap-select
+                          :label="'Minuto de inicio'"
+                          :name="'startMinute'"
+                          :availableOptions="['00','05','10','15','20','25','30','35','40','45','50','55']"
+                          :error="errors.first('startMinute')"
+                          v-model="productionOrder.startMinute"
+                          :initialValue="initialValues['startMinute']"
+                          v-validate="'required'"
+                  >
+                  </mau-form-input-bootstrap-select>
+              </div>
+          </div>
+          <div class="form-row">
+              <div class="form-group col-md-6">
+                  <mau-form-input-date-time
+                          :name="'endDate'"
+                          :label="'Fecha fin'"
+                          v-model="productionOrder.endDate"
+                          :initialValue="initialValues['endDate']"
+                          :inputType="'date'"
+                          :error="errors.first('endDate')"
+                          v-validate="'required'"
+                  >
+                  </mau-form-input-date-time>
+              </div>
+              <div class="form-group col-md-3">
+                  <mau-form-input-bootstrap-select
+                          :label="'Hora de final'"
+                          :name="'endHour'"
+                          :availableOptions="['00','01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23']"
+                          :error="errors.first('endHour')"
+                          v-model="productionOrder.endHour"
+                          :initialValue="initialValues['endHour']"
+                          v-validate="'required'"
+                  >
+                  </mau-form-input-bootstrap-select>
+              </div>
+              <div class="form-group col-md-3">
+                  <mau-form-input-bootstrap-select
+                          :label="'Minuto de final'"
+                          :name="'endMinute'"
+                          :availableOptions="['00','05','10','15','20','25','30','35','40','45','50','55']"
+                          :error="errors.first('endMinute')"
+                          v-model="productionOrder.endMinute"
+                          :initialValue="initialValues['endMinute']"
+                          v-validate="'required'"
+                  >
+                  </mau-form-input-bootstrap-select>
               </div>
           </div>
           <div class="form-group">
@@ -77,6 +140,7 @@
   import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputBootstrapSelect from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
@@ -85,6 +149,7 @@
   import OrderTable from 'renderer/api/components/tables/BagOrderTable.vue'
   import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import {mapState} from 'vuex'
+  import moment from 'moment'
   export default {
     name: 'MauSimpleOrderForm',
     data () {
@@ -94,9 +159,15 @@
         productionOrder: {
           bags: [],
           productionBags: [],
-          date: '',
+          startDate: '',
+          endDate: '',
+          startHour: '',
+          startMinute: '',
+          endHour: '',
+          endMinute: '',
           cuttingMachine: {},
-          employee: {}
+          employee: {},
+          date: ''
         },
         initialValues: {},
         buttonDisabled: false,
@@ -106,6 +177,7 @@
     },
     components: {
       MauFormInputSelect,
+      MauFormInputBootstrapSelect,
       MauFormInputDateTime,
       MauFormInputText,
       MauFormInputNumber,
@@ -153,16 +225,30 @@
             this.initialValues[BagOrderProductionPropertiesReference[propertyReference].name] = BagOrderProductionPropertiesReference[propertyReference].defaultValue
           }
         }
+        this.initialValues['startHour'] = ''
+        this.initialValues['startMinute'] = ''
+        this.initialValues['startDate'] = ''
+        this.initialValues['endHour'] = ''
+        this.initialValues['endMinute'] = ''
+        this.initialValues['endDate'] = ''
       },
       setInitialValues: function () {
         this.initialValues[BagOrderProductionPropertiesReference.BAGS.name] = this.initialObject[BagOrderProductionPropertiesReference.BAGS.name]
-        this.initialValues[BagOrderProductionPropertiesReference.DATE.name] = this.initialObject[BagOrderProductionPropertiesReference.DATE.name]
+        this.initialValues['startDate'] = moment(this.initialObject[BagOrderProductionPropertiesReference.START_DATE_TIME.name]).format('YYYY-MM-DD')
+        this.initialValues['startHour'] = moment(this.initialObject[BagOrderProductionPropertiesReference.START_DATE_TIME.name]).format('HH')
+        this.initialValues['startMinute'] = moment(this.initialObject[BagOrderProductionPropertiesReference.START_DATE_TIME.name]).format('mm')
+        this.initialValues['endDate'] = moment(this.initialObject[BagOrderProductionPropertiesReference.END_DATE_TIME.name]).format('YYYY-MM-DD')
+        this.initialValues['endHour'] = moment(this.initialObject[BagOrderProductionPropertiesReference.END_DATE_TIME.name]).format('HH')
+        this.initialValues['endMinute'] = moment(this.initialObject[BagOrderProductionPropertiesReference.END_DATE_TIME.name]).format('mm')
         this.initialValues[BagOrderProductionPropertiesReference.EMPLOYEE.name] = this.initialObject[BagOrderProductionPropertiesReference.EMPLOYEE.name]
         this.initialValues[BagOrderProductionPropertiesReference.CUTTING_MACHINE.name] = this.initialObject[BagOrderProductionPropertiesReference.CUTTING_MACHINE.name]
       },
       save: function () {
+        let startDateTime = this.productionOrder.startDate + ' ' + this.productionOrder.startHour + ':' + this.productionOrder.startMinute + ':00'
+        console.log(startDateTime)
         let directParams = {
-          [BagOrderProductionPropertiesReference.DATE.name]: this.productionOrder.date
+          [BagOrderProductionPropertiesReference.START_DATE_TIME.name]: this.productionOrder.startDate + ' ' + this.productionOrder.startHour + ':' + this.productionOrder.startMinute + ':00',
+          [BagOrderProductionPropertiesReference.END_DATE_TIME.name]: this.productionOrder.endDate + ' ' + this.productionOrder.endHour + ':' + this.productionOrder.endMinute + ':00'
         }
         directParams[BagOrderProductionPropertiesReference.CUTTING_MACHINE.relationship_id_name] = this.productionOrder.cuttingMachine ? this.productionOrder.cuttingMachine[GlobalEntityIdentifier] : 'null'
         directParams[BagOrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : 'null'

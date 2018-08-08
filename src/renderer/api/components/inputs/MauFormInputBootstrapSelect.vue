@@ -1,16 +1,27 @@
 <template>
     <div>
+        <label v-if="label">
+            {{label}}
+        </label>
         <b-form-select
                 v-model="selectedValue"
                 class="form-control custom-select"
+                :class="getBootstrapValidationClass(error)"
+                :options="availableOptions"
                 @input="valueUpdated"
         >
             <slot></slot>
         </b-form-select>
+        <div class="invalid-feedback">
+            <span v-show="error" class="help is-danger">
+            {{error}}
+            </span>
+        </div>
     </div>
 </template>
 
 <script>
+    import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
     export default {
       data () {
         return {
@@ -23,12 +34,18 @@
         this.valueUpdated()
       },
       props: {
-
-        initialValue: {
-          type: Number
-        }
+        initialValue: [Number, String],
+        availableOptions: {
+          type: Array,
+          default: function () {
+            return []
+          }
+        },
+        label: String,
+        error: String
       },
       methods: {
+        getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         valueUpdated: function () {
           this.$emit('input', this.selectedValue)
         }

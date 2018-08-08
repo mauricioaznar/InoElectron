@@ -18,6 +18,9 @@
   height: 33px !important;
   min-width: 80px;
   border: 1px solid rgb(221, 221, 221) !important;
+  &.is-invalid {
+    border-color: #dc3545 !important;
+  }
   &:focus {
     border-color: #80bdff !important;
     outline: 0;
@@ -28,7 +31,6 @@
 //forms
 .form-control {
   font-size: 13px !important;
-  border-radius: 0 !important;
   border-radius: 0 !important;
 }
 label {

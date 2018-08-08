@@ -30,7 +30,6 @@
   import 'flatpickr/dist/flatpickr.css'
   import moment from 'moment'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  import ConvertDateTime from 'renderer/services/common/ConvertDateTimeTo'
   const rangeSeparator = ' al '
   Spanish.rangeSeparator = rangeSeparator
   export default {
@@ -54,14 +53,22 @@
           locale: Spanish
         },
         timeConfig: {
+          wrap: true,
           enableTime: true,
-          noCalendar: true,
           dateFormat: 'H:i',
           locale: Spanish,
           time_24hr: true,
           minDate: '7:00',
           maxDate: '19:00',
           minuteIncrement: 10
+        },
+        dateTimeConfig: {
+          enableTime: true,
+          wrap: true,
+          altInput: true,
+          altFormat: 'Y-m-d h:i K',
+          dateFormat: 'Y-m-d H:i:S',
+          locale: Spanish
         }
       }
     },
@@ -90,7 +97,7 @@
           return 'date'
         },
         validator: function (date) {
-          return ['date', 'time', 'range'].indexOf(date) !== -1
+          return ['date', 'time', 'range', 'dateTime'].indexOf(date) !== -1
         }
       }
     },
@@ -108,7 +115,7 @@
       if (this.initialValue) {
         let momentDate = moment(this.initialValue)
         if (momentDate.isValid()) {
-          this.date = ConvertDateTime.date(this.initialValue)
+          this.date = this.initialValue
         }
       }
       if (this.inputType === 'date') {
@@ -117,8 +124,10 @@
         this.config = this.timeConfig
       } else if (this.inputType === 'range') {
         this.config = this.rangeConfig
+      } else if (this.inputType === 'dateTime') {
+        this.config = this.dateTimeConfig
       } else {
-        console.log('please specify a valid dateTime input type')
+        console.error('please specify a valid dateTime input type')
       }
       this.updateValue(this.date)
     }

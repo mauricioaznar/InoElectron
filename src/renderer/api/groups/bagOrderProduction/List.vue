@@ -24,14 +24,6 @@
         canEdit: true,
         tableFields: [
           {
-            name: BagOrderProductionPropertiesReference.DATE.name,
-            title: BagOrderProductionPropertiesReference.DATE.title,
-            sortField: BagOrderProductionPropertiesReference.DATE.name,
-            callback: DisplayFunctions.getDateFromDateTime,
-            filter: true,
-            default: true
-          },
-          {
             name: BagOrderProductionPropertiesReference.BAGS.name,
             title: BagOrderProductionPropertiesReference.BAGS.title,
             hidden: true,

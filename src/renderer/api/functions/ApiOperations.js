@@ -57,6 +57,10 @@ export function getStats (searchedStatsString) {
   return Vue.http.get(ApiDomain + 'stats/' + searchedStatsString, {headers: getHeaders()}).then(getServerResponseData)
 }
 
+export function getStatsWithParameters (searchedStatsString, parameters) {
+  return Vue.http.post(ApiDomain + 'stats/' + searchedStatsString, parameters, {headers: getHeaders()}).then(getServerResponseData)
+}
+
 export function del (entityType, id) {
   let object = {
     active: -1
@@ -89,5 +93,6 @@ export default {
   generateToken: generateToken,
   getMax: getMax,
   getStats: getStats,
+  getStatsWithParameters: getStatsWithParameters,
   downloadExcel: donwnloadExcel
 }
