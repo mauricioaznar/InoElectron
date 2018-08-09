@@ -43,12 +43,26 @@
           let calendarItems = []
           result.forEach(item => {
             calendarItems.push({
-              title: item.companyname + ' ' + item.total_cost,
+              title: item.abbreviation + ' ' + item.total_cost_requested,
               start: moment(item.date_requested),
+              cssClass: 'request',
               YOUR_DATA: {
-                id: item.id
+                id: item.id,
+                request: true
               }
             })
+            let dateGiven = moment(item.date_given)
+            if (dateGiven.isValid()) {
+              calendarItems.push({
+                title: item.abbreviation + ' ' + item.total_cost_given,
+                start: moment(item.date_given),
+                cssClass: 'receipt',
+                YOUR_DATA: {
+                  id: item.id,
+                  receipt: true
+                }
+              })
+            }
           })
           this.calendarEvents = calendarItems
           let vm = this
@@ -59,7 +73,12 @@
       },
       eventClicked: function (obj) {
         let id = obj.YOUR_DATA.id
-        this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_REQUEST, 'edit') + '/' + id})
+        if (obj.YOUR_DATA.request) {
+          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_REQUEST, 'view') + '/' + id})
+        }
+        if (obj.YOUR_DATA.receipt) {
+          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_RECEIPT, 'view') + '/' + id})
+        }
       }
     },
     beforeDestroy: function () {
@@ -77,5 +96,12 @@
         * {
             box-sizing: content-box;
         }
+    }
+    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.receipt {
+        background-color: #cb7832;
+
+    }
+    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.request {
+        background-color: #0b97c4;
     }
 </style>
