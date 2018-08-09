@@ -39,7 +39,6 @@ let kiloToGroup = {
     let isValid = true
     let groupWeight = params[0].groupWeight
     let isGroupWeightStrict = params[0].isGroupWeightStrict
-    console.log(isGroupWeightStrict)
     if (groupWeight && groupWeight > 0 && isGroupWeightStrict) {
       let remainder = quantity % groupWeight
       if (remainder > 0) {

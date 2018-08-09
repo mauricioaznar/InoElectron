@@ -29,12 +29,25 @@
                         :width="400"
                         :height="200"
                 ></mau-line-chart>
-                <h6>Kilos</h6>
+                <div>
+                    <h6>Kilos</h6>
+                    <mau-line-chart
+                            :chartData="salesByMonthByClientKilosData"
+                            :options="chartOptions"
+                            :width="400"
+                            :height="200"
+                    ></mau-line-chart>
+                </div>
+            </div>
+        </div>
+        <div class="row" v-if="!isLoading">
+            <div class="col-sm">
+                <h6>Balance</h6>
                 <mau-line-chart
-                :chartData="salesByMonthByClientKilosData"
-                :options="chartOptions"
-                :width="400"
-                :height="200"
+                        :chartData="salesByMonthByClientBalanceData"
+                        :options="chartNegativeOptions"
+                        :width="400"
+                        :height="400"
                 ></mau-line-chart>
             </div>
         </div>
@@ -54,6 +67,7 @@
         salesByMonthKilosData: '',
         salesByMonthByClientKilosData: '',
         salesByMonthByClientCostData: '',
+        salesByMonthByClientBalanceData: '',
         isLoading: true,
         timeout: '',
         yearSelected: '2018',
@@ -72,13 +86,45 @@
         chartOptions: {
           responsive: true,
           maintainAspectRatio: false,
-          legend: { display: false },
+          legend: { display: true },
           tooltips: { displayColors: false },
           scales: {
             yAxes: [{
               ticks: {
                 beginAtZero: true
               }
+            }]
+          }
+        },
+        chartNegativeOptions: {
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            position: 'right'
+          },
+          tooltips: { displayColors: false },
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: false
+              }
+            }]
+          }
+        },
+        stackedChartOptions: {
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: { display: false },
+          tooltips: { displayColors: false },
+          scales: {
+            yAxes: [{
+              stacked: true,
+              ticks: {
+                beginAtZero: true
+              }
+            }],
+            xAxes: [{
+              stacked: true
             }]
           }
         }
@@ -104,12 +150,14 @@
           this.sales = {}
           let salesNormal = []
           for (let i = 0; i < this.monthNames.length; i++) {
-            let saleObjFound = result.sales.find(saleObj => {
+            let saleObjFound = result.sales_normal.find(saleObj => {
               return saleObj.month - 1 === i
             })
             salesNormal.push({
-              totalCost: saleObjFound ? saleObjFound.total_cost : 0,
-              totalKilos: saleObjFound ? saleObjFound.kilos_given : 0
+              total_cost_given: saleObjFound ? saleObjFound.total_cost_given : 0,
+              total_kilos_given: saleObjFound ? saleObjFound.kilos_given : 0,
+              total_cost_requested: saleObjFound ? saleObjFound.total_cost_requested : 0,
+              total_kilos_requested: saleObjFound ? saleObjFound.kilos_requested : 0
             })
           }
           let salesByClient = []
@@ -126,8 +174,9 @@
                 return saleObj.month - 1 === j && saleObj.client_id === clients[i].id
               })
               salesByClientByYear.push({
-                total_cost: saleObjFound ? saleObjFound.total_cost : 0,
-                total_kilos: saleObjFound ? saleObjFound.kilos_given : 0
+                total_cost: saleObjFound ? saleObjFound.total_cost_given : 0,
+                total_kilos: saleObjFound ? saleObjFound.kilos_given : 0,
+                total_balance: saleObjFound ? saleObjFound.total_balance : 0
               })
             }
             salesByClient.push({id: clients[i].id, name: clients[i].name, data: salesByClientByYear})
@@ -147,19 +196,30 @@
     },
     watch: {
       sales: function (sales) {
-        let kilos = sales.normal.map(saleNormalObj => {
-          return saleNormalObj.totalKilos
+        let kilosGiven = sales.normal.map(saleNormalObj => {
+          return saleNormalObj.total_kilos_given
         })
-        let totalCost = sales.normal.map(saleNormalObj => {
-          return saleNormalObj.totalCost
+        let totalCostGiven = sales.normal.map(saleNormalObj => {
+          return saleNormalObj.total_cost_given
+        })
+        let kilosRequested = sales.normal.map(saleNormalObj => {
+          return saleNormalObj.total_kilos_requested
+        })
+        let totalCostRequested = sales.normal.map(saleNormalObj => {
+          return saleNormalObj.total_cost_requested
         })
         this.salesByMonthKilosData = {
           labels: this.monthNames,
           datasets: [
             {
-              label: 'Kilos',
+              label: 'Kilos vendidos',
               backgroundColor: '#BF112E',
-              data: kilos
+              data: kilosGiven
+            },
+            {
+              label: 'Kilos solicitados',
+              backgroundColor: '#E42',
+              data: kilosRequested
             }
           ]
         }
@@ -167,9 +227,14 @@
           labels: this.monthNames,
           datasets: [
             {
-              label: 'Costo',
+              label: 'Costo vendido',
               backgroundColor: '#13A399',
-              data: totalCost
+              data: totalCostGiven
+            },
+            {
+              label: 'Costo solicitado',
+              backgroundColor: '#506',
+              data: totalCostRequested
             }
           ]
         }
@@ -202,6 +267,21 @@
         this.salesByMonthByClientCostData = {
           labels: this.monthNames,
           datasets: salesByMonthByClientCostDataSets
+        }
+        let salesByMonthByClientBalanceDataSets = []
+        sales.byClient.forEach((clientData, index) => {
+          let balanceData = clientData.data.map(kilosCostData => {
+            return kilosCostData.total_balance
+          })
+          salesByMonthByClientBalanceDataSets.push({
+            label: clientData.name,
+            borderColor: this.colors[index],
+            data: balanceData
+          })
+        })
+        this.salesByMonthByClientBalanceData = {
+          labels: this.monthNames,
+          datasets: salesByMonthByClientBalanceDataSets
         }
       }
     }
