@@ -14,10 +14,10 @@ export default {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
-  CUTTING_MACHINE: {
+  MACHINE: {
     title: 'Maquina',
-    name: 'cutting_machine',
-    relationship_id_name: 'cutting_machine_id',
+    name: 'machine',
+    relationship_id_name: 'machine_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },

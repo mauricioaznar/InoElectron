@@ -17,15 +17,15 @@
 </template>
 
 <script>
-  import BagOrderAdjustmentForm from 'renderer/api/components/forms/BagOrderAdjustmentForm.vue'
+  import BagOrderAdjustmentForm from 'renderer/api/components/forms/OrderAdjustmentForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateBagOrderAdjustment',
+    name: 'CreateOrderAdjustment',
     data () {
       return {
-        hostRelationshipIdName: 'bag_order_adjustment_id',
-        entityType: EntityTypes.BAG_ORDER_ADJUSTMENT
+        hostRelationshipIdName: 'order_adjustment_id',
+        entityType: EntityTypes.ORDER_ADJUSTMENT
       }
     },
     components: {

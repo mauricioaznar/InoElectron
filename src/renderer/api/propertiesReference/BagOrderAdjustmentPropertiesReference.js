@@ -15,10 +15,10 @@ let OrderAdjustmentPropertiesReference = {
     display: DisplayFunctions.getBagWithUnits,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },
-  ADJUSTMENT_ORDER_TYPE: {
-    name: 'bag_order_adjustment_order_type',
+  ORDER_TYPE: {
+    name: 'order_adjustment_order_type',
     title: 'Tipo de orden',
-    relationship_id_name: 'bag_order_adjustment_order_type_id',
+    relationship_id_name: 'order_adjustment_order_type_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   }

@@ -32,7 +32,7 @@
             {
               name: 'Create',
               icon: 'fa fa-plus',
-              path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_ADJUSTMENT, 'create')
+              path: RouteObjectHelper.createPath(EntityTypes.ORDER_ADJUSTMENT, 'create')
             }
           ]
         }
@@ -45,7 +45,7 @@
       methods: {
         confirmDelete: function () {
           let id = this.$route.params[GlobalEntityIdentifier]
-          ApiOperations.del(EntityTypes.BAG_ORDER_ADJUSTMENT, id).then(result => {
+          ApiOperations.del(EntityTypes.ORDER_ADJUSTMENT, id).then(result => {
             Notifications.success(this)
             this.$router.push({name: this.groupDefaultRouteObject(this.$route).name})
           })
@@ -57,12 +57,12 @@
               {
                 name: 'Edit',
                 icon: 'fa fa-edit',
-                path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_ADJUSTMENT, 'edit') + '/' + id
+                path: RouteObjectHelper.createPath(EntityTypes.ORDER_ADJUSTMENT, 'edit') + '/' + id
               },
               {
                 name: 'View',
                 icon: 'fa fa-eye',
-                path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_ADJUSTMENT, 'view') + '/' + id
+                path: RouteObjectHelper.createPath(EntityTypes.ORDER_ADJUSTMENT, 'view') + '/' + id
               }
             ])
           } else {

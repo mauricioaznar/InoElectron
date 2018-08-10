@@ -93,14 +93,14 @@
           </div>
           <div class="form-group">
               <mau-form-input-select
-                      :initialObject="initialValues[BagOrderProductionPropertiesReference.CUTTING_MACHINE.name]"
-                      :label="BagOrderProductionPropertiesReference.CUTTING_MACHINE.title"
+                      :initialObject="initialValues[BagOrderProductionPropertiesReference.MACHINE.name]"
+                      :label="BagOrderProductionPropertiesReference.MACHINE.title"
                       :displayProperty="'name'"
-                      v-model="productionOrder.cuttingMachine"
-                      :name="BagOrderProductionPropertiesReference.CUTTING_MACHINE.name"
-                      :data-vv-as="BagOrderProductionPropertiesReference.CUTTING_MACHINE.title"
-                      :error="errors.first(BagOrderProductionPropertiesReference.CUTTING_MACHINE.name)"
-                      :entityType="cuttingMachineEntityType"
+                      v-model="productionOrder.machine"
+                      :name="BagOrderProductionPropertiesReference.MACHINE.name"
+                      :data-vv-as="BagOrderProductionPropertiesReference.MACHINE.title"
+                      :error="errors.first(BagOrderProductionPropertiesReference.MACHINE.name)"
+                      :entityType="machineEntityType"
                       v-validate="'object_required'"
               >
               </mau-form-input-select>
@@ -112,6 +112,7 @@
                             :initialObjects="initialValues[BagOrderProductionPropertiesReference.BAGS.name]"
                             v-model="productionOrder.bags"
                             :selectedPropertyName="'bag_id'"
+                            :displayProperty="'code'"
                             :availableObjects="availableBags"
                             :name="BagOrderProductionPropertiesReference.BAGS.name"
                     >
@@ -137,7 +138,6 @@
   import BagOrderProductionPropertiesReference from 'renderer/api/propertiesReference/BagOrderProductionPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
-  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import MauFormInputBootstrapSelect from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
@@ -165,13 +165,13 @@
           startMinute: '',
           endHour: '',
           endMinute: '',
-          cuttingMachine: {},
+          machine: {},
           employee: {},
           date: ''
         },
         initialValues: {},
         buttonDisabled: false,
-        cuttingMachineEntityType: EntityTypes.CUTTING_MACHINE,
+        machineEntityType: EntityTypes.MACHINE,
         employeeEntityType: EntityTypes.EMPLOYEE
       }
     },
@@ -180,7 +180,6 @@
       MauFormInputBootstrapSelect,
       MauFormInputDateTime,
       MauFormInputText,
-      MauFormInputNumber,
       MauManyToManySelector,
       OrderSaleTable,
       OrderTable
@@ -241,7 +240,7 @@
         this.initialValues['endHour'] = moment(this.initialObject[BagOrderProductionPropertiesReference.END_DATE_TIME.name]).format('HH')
         this.initialValues['endMinute'] = moment(this.initialObject[BagOrderProductionPropertiesReference.END_DATE_TIME.name]).format('mm')
         this.initialValues[BagOrderProductionPropertiesReference.EMPLOYEE.name] = this.initialObject[BagOrderProductionPropertiesReference.EMPLOYEE.name]
-        this.initialValues[BagOrderProductionPropertiesReference.CUTTING_MACHINE.name] = this.initialObject[BagOrderProductionPropertiesReference.CUTTING_MACHINE.name]
+        this.initialValues[BagOrderProductionPropertiesReference.MACHINE.name] = this.initialObject[BagOrderProductionPropertiesReference.MACHINE.name]
       },
       save: function () {
         let startDateTime = this.productionOrder.startDate + ' ' + this.productionOrder.startHour + ':' + this.productionOrder.startMinute + ':00'
@@ -250,7 +249,7 @@
           [BagOrderProductionPropertiesReference.START_DATE_TIME.name]: this.productionOrder.startDate + ' ' + this.productionOrder.startHour + ':' + this.productionOrder.startMinute + ':00',
           [BagOrderProductionPropertiesReference.END_DATE_TIME.name]: this.productionOrder.endDate + ' ' + this.productionOrder.endHour + ':' + this.productionOrder.endMinute + ':00'
         }
-        directParams[BagOrderProductionPropertiesReference.CUTTING_MACHINE.relationship_id_name] = this.productionOrder.cuttingMachine ? this.productionOrder.cuttingMachine[GlobalEntityIdentifier] : 'null'
+        directParams[BagOrderProductionPropertiesReference.MACHINE.relationship_id_name] = this.productionOrder.machine ? this.productionOrder.machine[GlobalEntityIdentifier] : 'null'
         directParams[BagOrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : 'null'
         let relayObjects = [
           ManyToManyHelper.createRelayObject(this.productionOrder.productionBags, EntityTypes.BAG_ORDER_PRODUCTION_PRODUCT)

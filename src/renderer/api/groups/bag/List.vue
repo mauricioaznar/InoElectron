@@ -24,8 +24,8 @@
         apiUrl: ApiUrls.createListUrl(EntityTypes.BAG),
         tableFields: [
           {
-            name: PropertiesReference.NAME.name,
-            title: PropertiesReference.NAME.title,
+            name: PropertiesReference.CODE.name,
+            title: PropertiesReference.CODE.title,
             dataClass: 'text-center'
           },
           {
@@ -34,8 +34,8 @@
             dataClass: 'text-center'
           },
           {
-            name: PropertiesReference.BAG_TYPE.name,
-            title: PropertiesReference.BAG_TYPE.title,
+            name: PropertiesReference.MATERIAL.name,
+            title: PropertiesReference.MATERIAL.title,
             callback: DisplayFunctions.getNameFromObject
           },
           {

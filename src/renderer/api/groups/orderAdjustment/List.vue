@@ -22,7 +22,7 @@
     },
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.BAG_ORDER_ADJUSTMENT),
+        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_ADJUSTMENT),
         canEdit: true,
         tableFields: [
           {
@@ -40,9 +40,9 @@
             callback: DisplayFunctions.getBagWithUnits
           },
           {
-            name: BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name,
-            title: BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.title,
-            callback: BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.display
+            name: BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name,
+            title: BagOrderAdjustmentPropertiesReference.ORDER_TYPE.title,
+            callback: BagOrderAdjustmentPropertiesReference.ORDER_TYPE.display
           }
         ],
         actions: [
@@ -60,7 +60,7 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewBagOrderAdjustment',
+            name: 'ViewOrderAdjustment',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }

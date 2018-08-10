@@ -21,7 +21,7 @@
         propertiesReference: [
           BagOrderProductionPropertiesReference.BAGS,
           BagOrderProductionPropertiesReference.EMPLOYEE,
-          BagOrderProductionPropertiesReference.CUTTING_MACHINE
+          BagOrderProductionPropertiesReference.MACHINE
         ],
         entityType: EntityTypes.BAG_ORDER_PRODUCTION,
         entity: null

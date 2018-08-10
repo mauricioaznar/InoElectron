@@ -13,7 +13,7 @@
             </thead>
             <tbody>
             <tr v-for="(item, index) in inventory">
-                <td>{{item.name}}</td>
+                <td>{{item.code}}</td>
                 <td>{{item.current_kilos}}</td>
                 <td>{{item.current_groups}}</td>
             </tr>
@@ -110,7 +110,7 @@
               let currentGroups = -(groupsGiven) + groupsAdjusted + groupsProduced
               if (currentKilos !== 0) {
                 inventoryItems.push({
-                  name: item.name,
+                  code: item.code,
                   current_kilos: currentKilos,
                   current_groups: currentGroups
                 })
@@ -130,7 +130,7 @@
       },
       watch: {
         inventory: function (inventory) {
-          let onSiteLabels = inventory.filter(inventoryObj => { return inventoryObj.current_kilos > 0 }).map(inventoryObj => { return inventoryObj.name })
+          let onSiteLabels = inventory.filter(inventoryObj => { return inventoryObj.current_kilos > 0 }).map(inventoryObj => { return inventoryObj.code })
           let onSiteKilos = inventory.filter(inventoryObj => { return inventoryObj.current_kilos > 0 }).map(inventoryObj => { return inventoryObj.current_kilos })
           let onSiteGroups = inventory.filter(inventoryObj => { return inventoryObj.current_groups > 0 }).map(inventoryObj => { return inventoryObj.current_groups })
           this.onSiteKilosData = {
@@ -153,7 +153,7 @@
               }
             ]
           }
-          let soldOutLabels = inventory.filter(inventoryObj => { return inventoryObj.current_kilos < 0 }).map(inventoryObj => { return inventoryObj.name })
+          let soldOutLabels = inventory.filter(inventoryObj => { return inventoryObj.current_kilos < 0 }).map(inventoryObj => { return inventoryObj.code })
           let soldOutKilos = inventory.filter(inventoryObj => { return inventoryObj.current_kilos < 0 }).map(inventoryObj => { return (-1 * inventoryObj.current_kilos) })
           let soldOutGroups = inventory.filter(inventoryObj => { return inventoryObj.current_groups < 0 }).map(inventoryObj => { return (-1 * inventoryObj.current_groups) })
           this.soldOutKilosData = {

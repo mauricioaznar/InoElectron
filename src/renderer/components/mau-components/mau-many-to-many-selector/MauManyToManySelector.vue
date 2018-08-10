@@ -5,6 +5,7 @@
                 :initialObjects="initialObjects"
                 :name="name"
                 :label="label"
+                :displayProperty="displayProperty"
                 v-validate="'array_required'"
                 :error="errors.first(name)"
                 v-model="selectedObjects"
@@ -57,6 +58,12 @@
         type: Array,
         default: function () {
           return []
+        }
+      },
+      displayProperty: {
+        type: String,
+        default: function () {
+          return 'name'
         }
       },
       selectedPropertyName: {

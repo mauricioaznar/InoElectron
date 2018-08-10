@@ -11,9 +11,9 @@ let propertiesReference = {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.NUMBER
   },
-  NAME: {
+  CODE: {
     title: 'Codigo',
-    name: 'name',
+    name: 'code',
     display: DisplayFunctions.getValue,
     required: true,
     defaultValue: MauInputDefaultValues.TEXT
@@ -57,10 +57,10 @@ let propertiesReference = {
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
-  BAG_TYPE: {
-    title: 'Tipo de producto',
-    name: 'bag_type',
-    relationship_id_name: 'bag_type_id',
+  MATERIAL: {
+    title: 'Material',
+    name: 'material',
+    relationship_id_name: 'material_id',
     display: DisplayFunctions.getNameFromObject,
     required: true,
     defaultValue: MauInputDefaultValues.SELECT

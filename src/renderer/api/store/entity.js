@@ -54,7 +54,7 @@ const actions = {
     commit('SET_REQUESTED_ENTITY', null)
   },
   [EntityActions.GET_BAG_TYPES]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.BAG_TYPE).then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.MATERIAL).then(data => {
       commit('SET_BAG_TYPES', data)
     }).catch(e => {
       console.log(e)
@@ -75,7 +75,7 @@ const actions = {
     })
   },
   [EntityActions.GET_ORDER_ADJUSTMENT_TYPES]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.BAG_ORDER_ADJUSTMENT_ORDER_TYPE).then(data => {
+    ApiFunctions.getWithoutPagination(EntityTypes.ORDER_ADJUSTMENT_ORDER_TYPE).then(data => {
       commit('SET_BAG_ORDER_ADJUSTMENT_TYPES', data)
     }).catch(e => {
       console.log(e)

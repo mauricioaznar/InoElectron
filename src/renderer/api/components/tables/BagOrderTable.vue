@@ -14,7 +14,7 @@
             </thead>
             <tbody>
                 <tr v-for="(currentStructuredObj, index) in currentStructuredObjects" :key="index">
-                    <td class="mau-text-center">{{getProductName(currentStructuredObj)}}</td>
+                    <td class="mau-text-center">{{getProductCode(currentStructuredObj)}}</td>
                     <td class="mau-text-center">{{getProductDescription(currentStructuredObj)}}</td>
                     <td class="mau-text-center">
                         <mau-form-input-number
@@ -23,9 +23,11 @@
                                 :initialValue="getCurrentObjInitialQuantity(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
                                 :type="'float'"
+                                :negative="allowNegative"
                                 :key="'_quantity_kilo' + currentStructuredObj['bag_id']"
                                 v-validate="{
                                     required: true,
+                                    not_in: ['0','-0'],
                                     kilo_to_group: {
                                         groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
                                         isGroupWeightStrict: getBagGroupWeightStrict(currentStructuredObj)
@@ -40,8 +42,9 @@
                                 :name="'_quantity_group' + currentStructuredObj['bag_id']"
                                 :initialValue="getCurrentObjInitialQuantity(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
-                                :type="'float'"
-                                v-validate="getBagGroupWeightStrict(currentStructuredObj) ? 'required|integer' : 'required'"
+                                :type="'regular'"
+                                :negative="allowNegative"
+                                v-validate="getBagGroupWeightStrict(currentStructuredObj) ? 'required|integer|not_in:0,-0' : 'required|not_in:0,-0'"
                                 :key="'_quantity_group' + currentStructuredObj['bag_id']"
                                 :error="errors.first('_quantity_group' + currentStructuredObj['bag_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
@@ -121,13 +124,7 @@
             return []
           }
         },
-        productionMode: {
-          type: Boolean,
-          default: function () {
-            return false
-          }
-        },
-        adjustmentMode: {
+        allowNegative: {
           type: Boolean,
           default: function () {
             return false
@@ -140,8 +137,8 @@
           let filteredStructuredObjects = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialSaleBags, this.currentStructuredObjects, 'bag_id')
           this.$emit('input', filteredStructuredObjects)
         },
-        getProductName: function (structuredObject) {
-          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.NAME.name]
+        getProductCode: function (structuredObject) {
+          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.CODE.name]
         },
         getProductDescription: function (structuredObject) {
           return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.DESCRIPTION.name]

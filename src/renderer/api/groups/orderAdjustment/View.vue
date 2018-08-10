@@ -21,9 +21,9 @@
         propertiesReference: [
           BagOrderAdjustmentPropertiesReference.DATE,
           BagOrderAdjustmentPropertiesReference.BAGS,
-          BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE
+          BagOrderAdjustmentPropertiesReference.ORDER_TYPE
         ],
-        entityType: EntityTypes.BAG_ORDER_ADJUSTMENT,
+        entityType: EntityTypes.ORDER_ADJUSTMENT,
         entity: null
       }
     },

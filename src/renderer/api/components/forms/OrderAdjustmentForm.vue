@@ -17,14 +17,14 @@
           <div class="form-group">
               <div class="expenseType">
                   <mau-form-input-select
-                          :initialObject="initialValues[BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name]"
-                          :label="BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.title"
+                          :initialObject="initialValues[BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name]"
+                          :label="BagOrderAdjustmentPropertiesReference.ORDER_TYPE.title"
                           :displayProperty="'name'"
-                          v-model="productionOrder.adjustmentType"
-                          :name="BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name"
-                          :data-vv-as="BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.title"
-                          :error="errors.first(BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name)"
-                          :entityType="adjustmentTypeEntityType"
+                          v-model="productionOrder.orderType"
+                          :name="BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name"
+                          :data-vv-as="BagOrderAdjustmentPropertiesReference.ORDER_TYPE.title"
+                          :error="errors.first(BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name)"
+                          :entityType="orderTypeEntityType"
                           v-validate="'object_required'"
                   >
                   </mau-form-input-select>
@@ -37,11 +37,13 @@
                             :initialObjects="initialValues[BagOrderAdjustmentPropertiesReference.BAGS.name]"
                             v-model="productionOrder.bags"
                             :selectedPropertyName="'bag_id'"
+                            :displayProperty="'code'"
                             :availableObjects="availableBags"
                             :name="BagOrderAdjustmentPropertiesReference.BAGS.name"
                     >
                         <template slot-scope="params">
                             <order-table
+                                :allowNegative="true"
                                 :selectedBags="params.selectedObjects"
                                 :initialBags="initialValues[BagOrderAdjustmentPropertiesReference.BAGS.name]"
                                 v-model="productionOrder.adjustmentBags"
@@ -62,7 +64,6 @@
   import BagOrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/BagOrderAdjustmentPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
-  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
@@ -74,7 +75,7 @@
   import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import {mapState} from 'vuex'
   export default {
-    name: 'MauSimpleOrderForm',
+    name: 'OrderAdjustmentForm',
     data () {
       return {
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
@@ -83,18 +84,17 @@
           bags: [],
           adjustmentBags: [],
           date: '',
-          adjustmentType: {}
+          orderType: {}
         },
         initialValues: {},
         buttonDisabled: false,
-        adjustmentTypeEntityType: EntityTypes.BAG_ORDER_ADJUSTMENT_ORDER_TYPE
+        orderTypeEntityType: EntityTypes.ORDER_ADJUSTMENT_ORDER_TYPE
       }
     },
     components: {
       MauFormInputSelect,
       MauFormInputDateTime,
       MauFormInputText,
-      MauFormInputNumber,
       MauManyToManySelector,
       OrderSaleTable,
       OrderTable
@@ -143,15 +143,15 @@
       setInitialValues: function () {
         this.initialValues[BagOrderAdjustmentPropertiesReference.BAGS.name] = this.initialObject[BagOrderAdjustmentPropertiesReference.BAGS.name]
         this.initialValues[BagOrderAdjustmentPropertiesReference.DATE.name] = this.initialObject[BagOrderAdjustmentPropertiesReference.DATE.name]
-        this.initialValues[BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name] = this.initialObject[BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.name]
+        this.initialValues[BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name] = this.initialObject[BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name]
       },
       save: function () {
         let directParams = {
           [BagOrderAdjustmentPropertiesReference.DATE.name]: this.productionOrder.date
         }
-        directParams[BagOrderAdjustmentPropertiesReference.ADJUSTMENT_ORDER_TYPE.relationship_id_name] = this.productionOrder.adjustmentType ? this.productionOrder.adjustmentType[GlobalEntityIdentifier] : 'null'
+        directParams[BagOrderAdjustmentPropertiesReference.ORDER_TYPE.relationship_id_name] = this.productionOrder.orderType ? this.productionOrder.orderType[GlobalEntityIdentifier] : 'null'
         let relayObjects = [
-          ManyToManyHelper.createRelayObject(this.productionOrder.adjustmentBags, EntityTypes.BAG_ORDER_ADJUSTMENT_PRODUCT)
+          ManyToManyHelper.createRelayObject(this.productionOrder.adjustmentBags, EntityTypes.ORDER_ADJUSTMENT_PRODUCT)
         ]
         this.$validator.validateAll().then((result) => {
           if (result) {

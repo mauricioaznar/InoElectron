@@ -30,8 +30,8 @@
             callback: DisplayFunctions.getBagWithUnits
           },
           {
-            name: BagOrderProductionPropertiesReference.CUTTING_MACHINE.name,
-            title: BagOrderProductionPropertiesReference.CUTTING_MACHINE.title,
+            name: BagOrderProductionPropertiesReference.MACHINE.name,
+            title: BagOrderProductionPropertiesReference.MACHINE.title,
             callback: DisplayFunctions.getNameFromObject
           },
           {

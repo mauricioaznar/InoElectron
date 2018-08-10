@@ -17,7 +17,7 @@
             </thead>
             <tbody>
                 <tr v-for="(currentStructuredObj, index) in currentStructuredObjects" :key="currentStructuredObj['bag_id']">
-                    <td class="mau-text-center">{{getBagName(currentStructuredObj)}}</td>
+                    <td class="mau-text-center">{{getBagCode(currentStructuredObj)}}</td>
                     <td class="mau-text-center">{{getBagDescription(currentStructuredObj)}}</td>
                     <td class="mau-text-center">
                         <mau-form-input-number
@@ -29,6 +29,7 @@
                                 :key="'_quantity_kilo' + currentStructuredObj['bag_id']"
                                 v-validate="{
                                     required: true,
+                                    not_in: '0',
                                     kilo_to_group: {
                                         groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
                                         isGroupWeightStrict: getBagGroupWeightStrict(currentStructuredObj)
@@ -43,8 +44,8 @@
                                 :name="'_quantity_group' + currentStructuredObj['bag_id']"
                                 :initialValue="getCurrentObjInitialQuantity(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
-                                :type="'float'"
-                                v-validate="getBagGroupWeightStrict(currentStructuredObj) ? 'required|integer' : 'required'"
+                                :type="getBagGroupWeightStrict(currentStructuredObj) ? 'regular' : 'float'"
+                                v-validate="'required|not_in:0'"
                                 :key="'_quantity_group' + currentStructuredObj['bag_id']"
                                 :error="errors.first('_quantity_group' + currentStructuredObj['bag_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
@@ -192,8 +193,8 @@
           let filteredStructuredObjects = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialSaleBags, this.currentStructuredObjects, 'bag_id')
           this.$emit('input', filteredStructuredObjects)
         },
-        getBagName: function (structuredObject) {
-          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.NAME.name]
+        getBagCode: function (structuredObject) {
+          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.CODE.name]
         },
         getBagDescription: function (structuredObject) {
           return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.DESCRIPTION.name]

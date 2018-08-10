@@ -41,13 +41,10 @@
         this.updateValue(initialNumberString)
       }
       if (this.type === 'regular') {
-        this.mask = Masks.regularNumber
-      }
-      if (this.type === 'currency') {
-        this.mask = Masks.currencyNumber
+        this.mask = this.negative ? Masks.regularNumberNegative : Masks.regularNumber
       }
       if (this.type === 'float') {
-        this.mask = Masks.floatNumber
+        this.mask = this.negative ? Masks.floatNumberNegative : Masks.floatNumber
       }
     },
     $_veeValidate: {
@@ -72,6 +69,12 @@
       error: {
         type: String
       },
+      negative: {
+        type: Boolean,
+        default: function () {
+          return false
+        }
+      },
       type: {
         type: String,
         default: 'regular',
@@ -85,15 +88,7 @@
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       updateValue (numberString) {
-        let newValue = numberString
-        if (newValue === '') {
-          this.$emit('input', '')
-        } else {
-          if (isNaN(newValue)) {
-            newValue = numberString.replace(/[^0-9.]+/g, '')
-          }
-          this.$emit('input', parseFloat(newValue))
-        }
+        this.$emit('input', numberString)
       }
     },
     watch: {

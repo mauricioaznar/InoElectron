@@ -15,31 +15,29 @@ export default {
   USER: {
     name: 'user',
     apiName: 'user',
-    title: 'Usuarios',
-    icon: 'fa fa-user'
+    title: 'Usuarios'
   },
   BAG_ORDER_PRODUCTION: {
     name: 'bagOrderProduction',
     apiName: 'bagOrderProduction',
-    title: 'Ordenes de produccion',
-    icon: 'fa fa-users'
+    title: 'Ordenes de produccion'
   },
   BAG_ORDER_PRODUCTION_PRODUCT: {
     name: 'bagOrderProductionProduct',
     apiName: 'bagOrderProductionProduct'
   },
-  BAG_ORDER_ADJUSTMENT: {
-    name: 'bagOrderAdjustment',
-    apiName: 'bagOrderAdjustment',
+  ORDER_ADJUSTMENT: {
+    name: 'orderAdjustment',
+    apiName: 'orderAdjustment',
     title: 'Ordenes de ajuste'
   },
-  BAG_ORDER_ADJUSTMENT_PRODUCT: {
-    name: 'bagOrderAdjustmentProduct',
-    apiName: 'bagOrderAdjustmentProduct'
+  ORDER_ADJUSTMENT_PRODUCT: {
+    name: 'orderAdjustmentProduct',
+    apiName: 'orderAdjustmentProduct'
   },
-  BAG_ORDER_ADJUSTMENT_ORDER_TYPE: {
-    name: 'bagOrderAdjustmentOrderType',
-    apiName: 'bagOrderAdjustmentOrderType'
+  ORDER_ADJUSTMENT_ORDER_TYPE: {
+    name: 'orderAdjustmentOrderType',
+    apiName: 'orderAdjustmentOrderType'
   },
   BAG_ORDER_SALE_RECEIPT: {
     name: 'bagOrderSaleReceipt',
@@ -60,10 +58,10 @@ export default {
     name: 'bagOrderSaleProduct',
     apiName: 'bagOrderSaleProduct'
   },
-  CUTTING_MACHINE: {
-    name: 'cuttingMachine',
-    apiName: 'cuttingMachine',
-    title: 'Maquinas cortadoras'
+  MACHINE: {
+    name: 'machine',
+    apiName: 'machine',
+    title: 'Maquinas'
   },
   EMPLOYEE: {
     name: 'employee',
@@ -87,10 +85,10 @@ export default {
     apiName: 'auth',
     title: 'Auth'
   },
-  BAG_TYPE: {
-    name: 'bagType',
-    apiName: 'bagType',
-    title: 'Tipo de bolsa'
+  MATERIAL: {
+    name: 'material',
+    apiName: 'material',
+    title: 'Material'
   },
   BAG_PACKING: {
     name: 'bagPacking',

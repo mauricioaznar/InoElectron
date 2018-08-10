@@ -5,20 +5,31 @@ const housephone = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
 const regularNumber = createNumberMask({
   prefix: '',
   suffix: '',
+  integerLimit: 6,
   includeThousandsSeparator: false,
   allowNegative: false
 })
-const currencyNumber = createNumberMask({
-  includeThousandsSeparator: true,
-  allowNegative: false,
-  allowDecimal: true,
-  requiresDecimal: false
+const regularNumberNegative = createNumberMask({
+  prefix: '',
+  suffix: '',
+  integerLimit: 6,
+  includeThousandsSeparator: false,
+  allowNegative: true
 })
 const floatNumber = createNumberMask({
-  includeThousandsSeparator: true,
+  includeThousandsSeparator: false,
   allowNegative: false,
   prefix: '',
   suffix: '',
+  integerLimit: 6,
+  allowDecimal: true
+})
+const floatNumberNegative = createNumberMask({
+  includeThousandsSeparator: true,
+  allowNegative: true,
+  prefix: '',
+  suffix: '',
+  integerLimit: 6,
   allowDecimal: true
 })
 export default {
@@ -26,6 +37,7 @@ export default {
   housephone: housephone,
   cellphone: cellphone,
   regularNumber: regularNumber,
-  currencyNumber: currencyNumber,
-  floatNumber: floatNumber
+  regularNumberNegative: regularNumberNegative,
+  floatNumber: floatNumber,
+  floatNumberNegative: floatNumberNegative
 }

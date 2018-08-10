@@ -2,8 +2,22 @@
   <div>
     <div class="form-group form-row">
       <div class="col-sm-12">
-        <label><b>{{PropertiesReference.NAME.title}}</b></label>
-        <div>{{bag.name}}</div>
+        <mau-form-input-text
+                :initialValue="initialValues[PropertiesReference.CODE.name]"
+                v-model="bag.code"
+                :label="PropertiesReference.CODE.title"
+                :name="PropertiesReference.CODE.name"
+                :error="errors.first(PropertiesReference.CODE.name)"
+                v-validate="{
+                            required: true,
+                            remote_unique: {
+                              entityType: bagEntityType,
+                              columnName: PropertiesReference.CODE.name,
+                              initialValue: initialValues[PropertiesReference.CODE.name]
+                            }
+                           }"
+        >
+        </mau-form-input-text>
       </div>
     </div>
     <div class="form-group form-row">
@@ -15,7 +29,6 @@
           :name="PropertiesReference.DESCRIPTION.name"
           :error="errors.first(PropertiesReference.DESCRIPTION.name)"
           v-validate="'required'"
-          @input="updateCode"
         >
         </mau-form-input-text>
       </div>
@@ -36,7 +49,6 @@
                 v-model="bag.currentGroupWeight"
                 v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name)"
-                @input="updateCode"
         >
         </mau-form-input-number>
 
@@ -51,7 +63,7 @@
                 :initialValue="initialValues[PropertiesReference.CURRENT_KILO_PRICE.name]"
                 v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.CURRENT_KILO_PRICE.name)"
-                :type="'currency'"
+                :type="'float'"
 
         >
         </mau-form-input-number>
@@ -66,7 +78,6 @@
                 :initialValue="initialValues[PropertiesReference.WIDTH.name]"
                 v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.WIDTH.name)"
-                @input="updateCode"
         >
         </mau-form-input-number>
       </div>
@@ -78,38 +89,23 @@
                 :initialValue="initialValues[PropertiesReference.LENGTH.name]"
                 v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.LENGTH.name)"
-                @input="updateCode"
         >
         </mau-form-input-number>
       </div>
     </div>
     <div class="form-group form-row">
-      <div class="col-sm-12 bag_type">
-        <label>{{PropertiesReference.BAG_TYPE.title}}</label>
-        <b-form-radio-group
-                stacked
-                :id="PropertiesReference.BAG_TYPE.name"
-                v-model="bag.bagType"
-                v-validate="'required'"
-                class="form-control override-outline"
-                :name="PropertiesReference.BAG_TYPE.name"
-                :data-vv-name="PropertiesReference.BAG_TYPE.name"
-                :class="getBootstrapValidationClass(errors.has(PropertiesReference.BAG_TYPE.name))"
-                @input="updateCode"
+      <div class="col-sm-12">
+        <mau-form-input-select
+                :initialObject="initialValues[PropertiesReference.MATERIAL.name]"
+                :label="PropertiesReference.MATERIAL.title"
+                :displayProperty="'name'"
+                :entityType="materialEntityType"
+                v-model="bag.material"
+                :name="PropertiesReference.MATERIAL.name"
+                :error="errors.first(PropertiesReference.MATERIAL.name)"
+                v-validate="'object_required'"
         >
-          <b-form-radio
-                  v-for="bagType in availableBagTypes"
-                  :value="bagType"
-                  :key="bagType.id"
-          >
-            {{bagType.name}}
-          </b-form-radio>
-        </b-form-radio-group>
-        <div class="invalid-feedback">
-                      <span v-show="errors.has(PropertiesReference.BAG_TYPE.name)" class="help is-danger">
-                        {{ errors.first(PropertiesReference.BAG_TYPE.name) }}
-                      </span>
-        </div>
+        </mau-form-input-select>
       </div>
     </div>
     <div class="form-group form-row">
@@ -124,7 +120,6 @@
                 :name="PropertiesReference.BAG_PACKING.name"
                 :data-vv-name="PropertiesReference.BAG_PACKING.name"
                 :class="getBootstrapValidationClass(errors.has(PropertiesReference.BAG_PACKING.name))"
-                @input="updateCode"
         >
           <b-form-radio
                   v-for="bagPacking in availableBagPackings"
@@ -153,19 +148,20 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import NormalizeObjects from 'renderer/api/functions/NormalizeObjects'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
+  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import MaskedInput from 'vue-text-mask'
   import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  import getFirstCharactersFromWords from 'renderer/services/common/getFirstCharactersFromWords'
+  import EntityTypes from 'renderer/api/EntityTypes'
   export default {
     name: 'BagForm',
     data () {
       return {
         bag: {
-          bagType: '',
+          material: {},
           bagPacking: '',
-          name: '',
+          code: '',
           description: '',
           currentKiloPrice: '',
           currentGroupWeight: '',
@@ -175,11 +171,14 @@
         hasGroupWeight: true,
         buttonDisabled: false,
         initialValues: {},
+        materialEntityType: EntityTypes.MATERIAL,
+        bagEntityType: EntityTypes.BAG,
         PropertiesReference: PropertiesReference
       }
     },
     components: {
       MauFormInputNumber,
+      MauFormInputSelect,
       MauFormInputText,
       MaskedInput
     },
@@ -204,17 +203,12 @@
     },
     created () {
       this.createDefaultInitialValues()
-      this.updateCode()
       if (this.initialObject) {
         this.setInitialValues()
       }
     },
     computed: {
       ...mapState({
-        availableBagTypes: state => {
-          let availableBagTypes = state.api.entity.bagTypes
-          return NormalizeObjects.normalizeObjects(availableBagTypes, ['name'])
-        },
         availableBagPackings: state => {
           let availableBagPackings = state.api.entity.bagPackings
           return NormalizeObjects.normalizeObjects(availableBagPackings, ['name'])
@@ -232,10 +226,11 @@
       },
       setInitialValues: function () {
         this.initialValues[PropertiesReference.DESCRIPTION.name] = this.initialObject[PropertiesReference.DESCRIPTION.name]
-        this.initialValues[PropertiesReference.NAME.name] = this.initialObject[PropertiesReference.NAME.name]
+        this.initialValues[PropertiesReference.CODE.name] = this.initialObject[PropertiesReference.CODE.name]
         this.initialValues[PropertiesReference.LENGTH.name] = this.initialObject[PropertiesReference.WIDTH.name]
         this.initialValues[PropertiesReference.WIDTH.name] = this.initialObject[PropertiesReference.WIDTH.name]
         this.initialValues[PropertiesReference.CURRENT_KILO_PRICE.name] = this.initialObject[PropertiesReference.CURRENT_KILO_PRICE.name] + ''
+        this.initialValues[PropertiesReference.MATERIAL.name] = this.initialObject[PropertiesReference.MATERIAL.name]
         if (this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name]) {
           this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name]
           this.hasGroupWeight = true
@@ -243,19 +238,18 @@
           this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = 0
           this.hasGroupWeight = false
         }
-        this.bag.bagType = NormalizeObjects.normalizeObject(this.initialObject[PropertiesReference.BAG_TYPE.name], ['name'])
         this.bag.bagPacking = NormalizeObjects.normalizeObject(this.initialObject[PropertiesReference.BAG_PACKING.name], ['name'])
       },
       save: function () {
         let directParams = {
-          [PropertiesReference.NAME.name]: this.bag.name,
+          [PropertiesReference.CODE.name]: this.bag.code,
           [PropertiesReference.DESCRIPTION.name]: this.bag.description,
           [PropertiesReference.WIDTH.name]: this.bag.width,
           [PropertiesReference.LENGTH.name]: this.bag.length,
           [PropertiesReference.CURRENT_KILO_PRICE.name]: this.bag.currentKiloPrice,
           [PropertiesReference.CURRENT_GROUP_WEIGHT.name]: this.hasGroupWeight ? this.bag.currentGroupWeight : 'null',
           // one to many
-          [PropertiesReference.BAG_TYPE.relationship_id_name]: this.bag.bagType ? this.bag.bagType[GlobalEntityIdentifier] : null,
+          [PropertiesReference.MATERIAL.relationship_id_name]: this.bag.material ? this.bag.material[GlobalEntityIdentifier] : null,
           [PropertiesReference.BAG_PACKING.relationship_id_name]: this.bag.bagPacking ? this.bag.bagPacking[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
@@ -267,11 +261,6 @@
             this.saveFunction(directParams, indirectParams)
           }
         })
-      },
-      updateCode: function () {
-        let bagTypeChars = (this.bag.bagType ? getFirstCharactersFromWords(this.bag.bagType.name) : '')
-        let bagPackingChars = (this.bag.bagPacking ? getFirstCharactersFromWords(this.bag.bagPacking.name) : '')
-        this.bag.name = 'B' + bagTypeChars + this.bag.width + 'X' + this.bag.length + bagPackingChars
       }
     },
     watch: {

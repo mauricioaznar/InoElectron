@@ -74,31 +74,31 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG,
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_ADJUSTMENT,
   {
     componentName: 'Main',
     category: Categories.PRODUCTION
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_ADJUSTMENT,
       {
         componentName: 'List',
         groupDefault: true,
         navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_ADJUSTMENT,
       {
         componentName: 'Create'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_ADJUSTMENT,
       {
         componentName: 'View',
         params: [GlobalEntityIdentifier]
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_ADJUSTMENT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_ADJUSTMENT,
       {
         componentName: 'Edit',
         params: [GlobalEntityIdentifier]

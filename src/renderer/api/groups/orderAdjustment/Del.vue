@@ -16,10 +16,10 @@
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   export default {
-    name: 'DelBagOrderAdjustment',
+    name: 'DelOrderAdjustment',
     data () {
       return {
-        entityType: Entities.BAG_ORDER_ADJUSTMENT,
+        entityType: Entities.ORDER_ADJUSTMENT,
         entity: null
       }
     },

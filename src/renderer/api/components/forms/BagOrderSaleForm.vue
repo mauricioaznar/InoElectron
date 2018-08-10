@@ -14,7 +14,7 @@
                             remote_unique: {
                               entityType: entityType,
                               columnName: OrderSaleRequestPropertiesReference.ORDER_CODE.name,
-                              initialValue: initialValues[OrderSaleRequestPropertiesReference.ORDER_CODE.name]
+                              initialValue: String(initialValues[OrderSaleRequestPropertiesReference.ORDER_CODE.name])
                             }
                            }"
                   >
@@ -116,6 +116,7 @@
                             :initialObjects="initialValues[OrderSaleRequestPropertiesReference.BAGS.name]"
                             v-model="salesOrder.bags"
                             :availableObjects="availableBags"
+                            :displayProperty="'code'"
                             :name="OrderSaleRequestPropertiesReference.BAGS.name"
                             :selectedPropertyName="'bag_id'"
                     >

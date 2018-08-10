@@ -26,13 +26,13 @@
     data () {
       return {
         propertiesReference: [
-          PropertiesReference.NAME,
+          PropertiesReference.CODE,
           PropertiesReference.DESCRIPTION,
           PropertiesReference.CURRENT_KILO_PRICE,
           PropertiesReference.CURRENT_GROUP_WEIGHT,
           PropertiesReference.WIDTH,
           PropertiesReference.LENGTH,
-          PropertiesReference.BAG_TYPE,
+          PropertiesReference.MATERIAL,
           PropertiesReference.BAG_PACKING
         ],
         entityType: EntityTypes.BAG,

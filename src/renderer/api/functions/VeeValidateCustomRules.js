@@ -15,6 +15,8 @@ let arrayRequired = {
 let remoteUnique = {
   validate: (value, params) => {
     let initialValue = params[0].initialValue
+    console.log(initialValue)
+    console.log(value)
     return new Promise(resolve => {
       if (initialValue === value) {
         resolve({
@@ -40,7 +42,8 @@ let kiloToGroup = {
     let groupWeight = params[0].groupWeight
     let isGroupWeightStrict = params[0].isGroupWeightStrict
     if (groupWeight && groupWeight > 0 && isGroupWeightStrict) {
-      let remainder = quantity % groupWeight
+      let quantityAbsolute = Math.abs(quantity)
+      let remainder = quantityAbsolute % groupWeight
       if (remainder > 0) {
         isValid = false
       }

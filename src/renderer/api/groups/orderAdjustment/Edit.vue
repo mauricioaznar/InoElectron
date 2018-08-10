@@ -9,18 +9,18 @@
       :entityType="entityType"
       :callback="callback">
       <template slot-scope="params">
-        <bag-order-adjustment-form
+        <order-adjustment-form
           :initialObject="entity"
           :entityType="entityType"
           :saveFunction="params.saveFunction">
-        </bag-order-adjustment-form>
+        </order-adjustment-form>
       </template>
     </mau-crud-edit>
   </div>
 </template>
 
 <script>
-  import BagOrderAdjustmentForm from 'renderer/api/components/forms/BagOrderAdjustmentForm.vue'
+  import OrderAdjustmentForm from 'renderer/api/components/forms/OrderAdjustmentForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
@@ -29,9 +29,9 @@
     name: 'EditBagOrderAdjustment',
     data () {
       return {
-        entityType: EntityTypes.BAG_ORDER_ADJUSTMENT,
+        entityType: EntityTypes.ORDER_ADJUSTMENT,
         entity: null,
-        hostRelationshipIdName: 'bag_order_adjustment_id'
+        hostRelationshipIdName: 'order_adjustment_id'
       }
     },
     props: {
@@ -40,7 +40,7 @@
     components: {
       MauSpinner,
       MauEntityPetitioner,
-      BagOrderAdjustmentForm
+      OrderAdjustmentForm
     },
     computed: {
       ...mapGetters(['groupDefaultRouteObject'])
