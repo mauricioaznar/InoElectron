@@ -1,16 +1,8 @@
-import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
 import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
 import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
 import Masks from 'renderer/api/functions/Masks'
 
 let propertiesReference = {
-  ID: {
-    title: 'id',
-    name: GlobalEntityIdentifier,
-    relationship_id_name: 'document_id',
-    display: DisplayFunctions.getValue,
-    defaultValue: MauInputDefaultValues.NUMBER
-  },
   CODE: {
     title: 'Codigo',
     name: 'code',
@@ -65,10 +57,10 @@ let propertiesReference = {
     required: true,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  BAG_PACKING: {
+  PACKING: {
     title: 'Tipo de empaque',
-    name: 'bag_packing',
-    relationship_id_name: 'bag_packing_id',
+    name: 'packing',
+    relationship_id_name: 'packing_id',
     display: DisplayFunctions.getNameFromObject,
     required: true,
     defaultValue: MauInputDefaultValues.SELECT

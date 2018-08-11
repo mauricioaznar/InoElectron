@@ -74,10 +74,10 @@
       eventClicked: function (obj) {
         let id = obj.YOUR_DATA.id
         if (obj.YOUR_DATA.request) {
-          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_REQUEST, 'view') + '/' + id})
+          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE_REQUEST, 'view') + '/' + id})
         }
         if (obj.YOUR_DATA.receipt) {
-          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_SALE_RECEIPT, 'view') + '/' + id})
+          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE_RECEIPT, 'view') + '/' + id})
         }
       }
     },

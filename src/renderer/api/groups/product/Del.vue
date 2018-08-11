@@ -26,7 +26,7 @@
     name: 'DelBag',
     data () {
       return {
-        entityType: Entities.BAG,
+        entityType: Entities.PRODUCT,
         entity: null
       }
     },

@@ -10,15 +10,14 @@ let OrderSalePropertiesReference = {
   },
   RECEIPT_TYPE: {
     title: 'Titulo de comprobante',
-    name: 'bag_order_sale_receipt_type',
-    relationship_id_name: 'bag_order_sale_receipt_type_id',
+    name: 'order_sale_receipt_type',
+    relationship_id_name: 'order_sale_receipt_type_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  BAGS: {
-    title: 'Bolsas',
-    name: 'bags',
-    relationship_id_name: 'bag_order_production_id',
+  PRODUCTS: {
+    title: 'Productos',
+    name: 'products',
     display: DisplayFunctions.getBagWithUnitsGiven,
     defaultValue: MauInputDefaultValues.MULTISELECT
   }

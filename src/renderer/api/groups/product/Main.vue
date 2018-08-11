@@ -31,7 +31,7 @@
             {
               name: 'Create',
               icon: 'fa fa-plus',
-              path: RouteObjectHelper.createPath(EntityTypes.BAG, 'create')
+              path: RouteObjectHelper.createPath(EntityTypes.PRODUCT, 'create')
             }
           ]
         }
@@ -49,12 +49,12 @@
               {
                 name: 'Edit',
                 icon: 'fa fa-edit',
-                path: RouteObjectHelper.createPath(EntityTypes.BAG, 'edit') + '/' + id
+                path: RouteObjectHelper.createPath(EntityTypes.PRODUCT, 'edit') + '/' + id
               },
               {
                 name: 'View',
                 icon: 'fa fa-eye',
-                path: RouteObjectHelper.createPath(EntityTypes.BAG, 'view') + '/' + id
+                path: RouteObjectHelper.createPath(EntityTypes.PRODUCT, 'view') + '/' + id
               }
             ])
           } else {
@@ -63,7 +63,7 @@
         },
         confirmDelete: function () {
           let id = this.$route.params[GlobalEntityIdentifier]
-          ApiOperations.del(EntityTypes.BAG, id).then(result => {
+          ApiOperations.del(EntityTypes.PRODUCT, id).then(result => {
             Notifications.success(this)
             this.$router.push({name: this.groupDefaultRouteObject(this.$route).name})
           })

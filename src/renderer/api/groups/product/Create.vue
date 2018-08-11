@@ -5,25 +5,25 @@
       :callback="callback"
     >
       <template slot-scope="params">
-        <bag-form :saveFunction="params.save"></bag-form>
+        <product-form :saveFunction="params.save"></product-form>
       </template>
     </mau-crud-create>
   </div>
 </template>
 
 <script>
-  import BagForm from '../../components/forms/BagForm.vue'
+  import ProductForm from '../../components/forms/ProductForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateBag',
+    name: 'CreateProduct',
     data () {
       return {
-        entityType: EntityTypes.BAG
+        entityType: EntityTypes.PRODUCT
       }
     },
     components: {
-      BagForm
+      ProductForm
     },
     computed: {
       ...mapGetters([

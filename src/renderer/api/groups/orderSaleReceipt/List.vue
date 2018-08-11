@@ -14,47 +14,47 @@
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
   import ApiUrls from 'renderer/api/functions/ApiUrls'
-  import BagOrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleReceiptPropertiesReference'
-  import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
+  import OrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/OrderSaleReceiptPropertiesReference'
+  import OrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/OrderSaleRequestPropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'ListBagOrderSaleReceipt',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.BAG_ORDER_SALE_RECEIPT),
-        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 2},
+        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_SALE_RECEIPT),
+        filterExact: {[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 2},
         tableFields: [
           {
-            name: BagOrderSaleRequestPropertiesReference.ORDER_CODE.name,
-            title: BagOrderSaleRequestPropertiesReference.ORDER_CODE.title,
-            sortField: BagOrderSaleRequestPropertiesReference.ORDER_CODE.name,
+            name: OrderSaleRequestPropertiesReference.ORDER_CODE.name,
+            title: OrderSaleRequestPropertiesReference.ORDER_CODE.title,
+            sortField: OrderSaleRequestPropertiesReference.ORDER_CODE.name,
             filter: true
           },
           {
-            name: BagOrderSaleReceiptPropertiesReference.DATE_GIVEN.name,
-            title: BagOrderSaleReceiptPropertiesReference.DATE_GIVEN.title,
-            sortField: BagOrderSaleReceiptPropertiesReference.DATE_GIVEN.name,
+            name: OrderSaleReceiptPropertiesReference.DATE_GIVEN.name,
+            title: OrderSaleReceiptPropertiesReference.DATE_GIVEN.title,
+            sortField: OrderSaleReceiptPropertiesReference.DATE_GIVEN.name,
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true
           },
           {
-            name: BagOrderSaleReceiptPropertiesReference.BAGS.name,
+            name: OrderSaleReceiptPropertiesReference.PRODUCTS.name,
             title: 'Kilos por bolsa',
             hidden: true,
             callback: DisplayFunctions.getBagWithUnitsGiven
           },
           {
-            name: BagOrderSaleReceiptPropertiesReference.BAGS.name,
+            name: OrderSaleReceiptPropertiesReference.PRODUCTS.name,
             title: 'Total',
             hidden: true,
             callback: DisplayFunctions.getBagOrderSaleTotalCostGiven
           },
           {
-            name: BagOrderSaleRequestPropertiesReference.CLIENT.name,
-            title: BagOrderSaleRequestPropertiesReference.CLIENT.title,
-            callback: BagOrderSaleRequestPropertiesReference.CLIENT.display
+            name: OrderSaleRequestPropertiesReference.CLIENT.name,
+            title: OrderSaleRequestPropertiesReference.CLIENT.title,
+            callback: OrderSaleRequestPropertiesReference.CLIENT.display
           }
         ],
         actions: [
@@ -72,7 +72,7 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewBagOrderSaleReceipt',
+            name: 'ViewOrderSaleReceipt',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }

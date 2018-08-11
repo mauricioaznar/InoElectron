@@ -24,8 +24,8 @@
         canEdit: true,
         tableFields: [
           {
-            name: BagOrderProductionPropertiesReference.BAGS.name,
-            title: BagOrderProductionPropertiesReference.BAGS.title,
+            name: BagOrderProductionPropertiesReference.PRODUCTS.name,
+            title: BagOrderProductionPropertiesReference.PRODUCTS.title,
             hidden: true,
             callback: DisplayFunctions.getBagWithUnits
           },

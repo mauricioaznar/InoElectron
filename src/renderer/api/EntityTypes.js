@@ -1,10 +1,9 @@
 export default {
   // EDITABLE
-  BAG: {
-    name: 'bag',
-    apiName: 'bag',
-    title: 'Bolsas',
-    icon: 'fa fa-file'
+  PRODUCT: {
+    name: 'product',
+    apiName: 'product',
+    title: 'Productos'
   },
   CLIENT: {
     name: 'client',
@@ -39,24 +38,24 @@ export default {
     name: 'orderAdjustmentOrderType',
     apiName: 'orderAdjustmentOrderType'
   },
-  BAG_ORDER_SALE_RECEIPT: {
-    name: 'bagOrderSaleReceipt',
-    apiName: 'bagOrderSale',
+  ORDER_SALE_RECEIPT: {
+    name: 'orderSaleReceipt',
+    apiName: 'orderSale',
     title: 'Ordenes de venta'
   },
-  BAG_ORDER_SALE_RECEIPT_TYPE: {
-    name: 'bagOrderSaleReceiptType',
-    apiName: 'bagOrderSaleReceiptType',
+  ORDER_SALE_RECEIPT_TYPE: {
+    name: 'orderSaleReceiptType',
+    apiName: 'orderSaleReceiptType',
     title: 'Tipo de comprobante'
   },
-  BAG_ORDER_SALE_REQUEST: {
-    name: 'bagOrderSaleRequest',
-    apiName: 'bagOrderSale',
+  ORDER_SALE_REQUEST: {
+    name: 'orderSaleRequest',
+    apiName: 'orderSale',
     title: 'Pedidos'
   },
-  BAG_ORDER_SALE_PRODUCT: {
-    name: 'bagOrderSaleProduct',
-    apiName: 'bagOrderSaleProduct'
+  ORDER_SALE_PRODUCT: {
+    name: 'orderSaleProduct',
+    apiName: 'orderSaleProduct'
   },
   MACHINE: {
     name: 'machine',
@@ -90,9 +89,9 @@ export default {
     apiName: 'material',
     title: 'Material'
   },
-  BAG_PACKING: {
-    name: 'bagPacking',
-    apiName: 'bagPacking',
+  PACKING: {
+    name: 'packing',
+    apiName: 'packing',
     title: 'Tipo de empaque'
   },
   EXCEL: {

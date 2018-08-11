@@ -14,7 +14,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import ApiUrls from 'renderer/api/functions/ApiUrls'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import BagOrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/BagOrderAdjustmentPropertiesReference'
+  import BagOrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/OrderAdjustmentPropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
     name: 'ListBagOrderAdjustment',
@@ -34,8 +34,8 @@
             default: true
           },
           {
-            name: BagOrderAdjustmentPropertiesReference.BAGS.name,
-            title: BagOrderAdjustmentPropertiesReference.BAGS.title,
+            name: BagOrderAdjustmentPropertiesReference.PRODUCTS.name,
+            title: BagOrderAdjustmentPropertiesReference.PRODUCTS.title,
             hidden: true,
             callback: DisplayFunctions.getBagWithUnits
           },

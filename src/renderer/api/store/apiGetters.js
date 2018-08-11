@@ -7,8 +7,8 @@ const routeObjects = state => state.routeObject.routeObjects
 const getUsers = state => {
   return state.entity.users
 }
-const getBagById = state => (productId) => {
-  return state.entity.bags.find(productObj => { return productObj[GlobalEntityIdentifier] === productId })
+const getProductById = state => (productId) => {
+  return state.entity.products.find(productObj => { return productObj[GlobalEntityIdentifier] === productId })
 }
 const appDefaultRouteObject = state => {
   let obj = null
@@ -83,7 +83,7 @@ const groupDefaultRouteObject = state => (childRouteObject) => {
 export {
   user,
   getUsers,
-  getBagById,
+  getProductById,
   routeObjects,
   appDefaultRouteObject,
   appDefaultNotAuthRouteObject,

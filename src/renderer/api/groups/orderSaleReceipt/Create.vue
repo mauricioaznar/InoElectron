@@ -5,7 +5,7 @@
               :label="'Pedidos pendientes'"
               displayProperty="order_code_string"
               v-model="orderSaleRequestEntity"
-              :entityType="bagOrderSaleRequestEntityType"
+              :entityType="orderSaleRequestEntityType"
               :searchedProperty="'order_code'"
               :filterExact="filterExact"
               :name="'name'"
@@ -35,21 +35,21 @@
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
   import Vue from 'vue'
-  import BagOrderSaleForm from 'renderer/api/components/forms/BagOrderSaleForm.vue'
+  import BagOrderSaleForm from 'renderer/api/components/forms/OrderSaleForm.vue'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
+  import OrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/OrderSaleRequestPropertiesReference'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateBagOrderSaleReceipt',
+    name: 'CreateOrderSaleReceipt',
     data () {
       return {
-        hostRelationshipIdName: 'bag_order_sale_id',
-        entityType: EntityTypes.BAG_ORDER_SALE_RECEIPT,
-        bagOrderSaleRequestEntityType: EntityTypes.BAG_ORDER_SALE_REQUEST,
+        hostRelationshipIdName: 'order_sale_id',
+        entityType: EntityTypes.ORDER_SALE_RECEIPT,
+        orderSaleRequestEntityType: EntityTypes.ORDER_SALE_REQUEST,
         orderSaleRequestEntity: null,
         orderSaleRequestEntityId: null,
-        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 1}
+        filterExact: {[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 1}
       }
     },
     components: {

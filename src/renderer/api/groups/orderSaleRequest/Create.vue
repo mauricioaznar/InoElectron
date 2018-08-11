@@ -6,11 +6,11 @@
       :entityType="entityType"
     >
       <template slot-scope="params">
-        <bag-order-sale-form
+        <order-sale-form
           :saveFunction="params.save"
           :requestMode="true"
           :entityType="entityType"
-        ></bag-order-sale-form>
+        ></order-sale-form>
       </template>
     </mau-crud-create>
   </div>
@@ -18,19 +18,19 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import BagOrderSaleForm from 'renderer/api/components/forms/BagOrderSaleForm.vue'
+  import OrderSaleForm from 'renderer/api/components/forms/OrderSaleForm.vue'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateBagOrderSaleRequest',
+    name: 'CreateOrderSaleRequest',
     data () {
       return {
-        hostRelationshipIdName: 'bag_order_sale_id',
-        entityType: EntityTypes.BAG_ORDER_SALE_REQUEST
+        hostRelationshipIdName: 'order_sale_id',
+        entityType: EntityTypes.ORDER_SALE_REQUEST
       }
     },
     components: {
-      BagOrderSaleForm,
+      OrderSaleForm,
       MauFormInputSelect
     },
     computed: {

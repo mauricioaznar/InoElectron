@@ -4,11 +4,11 @@
           <div class="form-group">
               <div class="date">
                   <mau-form-input-date-time
-                          :name="BagOrderAdjustmentPropertiesReference.DATE.name"
-                          :label="BagOrderAdjustmentPropertiesReference.DATE.title"
+                          :name="OrderAdjustmentPropertiesReference.DATE.name"
+                          :label="OrderAdjustmentPropertiesReference.DATE.title"
                           v-model="productionOrder.date"
-                          :initialValue="initialValues[BagOrderAdjustmentPropertiesReference.DATE.name]"
-                          :error="errors.first(BagOrderAdjustmentPropertiesReference.DATE.name)"
+                          :initialValue="initialValues[OrderAdjustmentPropertiesReference.DATE.name]"
+                          :error="errors.first(OrderAdjustmentPropertiesReference.DATE.name)"
                           v-validate="'required'"
                   >
                   </mau-form-input-date-time>
@@ -17,13 +17,13 @@
           <div class="form-group">
               <div class="expenseType">
                   <mau-form-input-select
-                          :initialObject="initialValues[BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name]"
-                          :label="BagOrderAdjustmentPropertiesReference.ORDER_TYPE.title"
+                          :initialObject="initialValues[OrderAdjustmentPropertiesReference.ORDER_TYPE.name]"
+                          :label="OrderAdjustmentPropertiesReference.ORDER_TYPE.title"
                           :displayProperty="'name'"
                           v-model="productionOrder.orderType"
-                          :name="BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name"
-                          :data-vv-as="BagOrderAdjustmentPropertiesReference.ORDER_TYPE.title"
-                          :error="errors.first(BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name)"
+                          :name="OrderAdjustmentPropertiesReference.ORDER_TYPE.name"
+                          :data-vv-as="OrderAdjustmentPropertiesReference.ORDER_TYPE.title"
+                          :error="errors.first(OrderAdjustmentPropertiesReference.ORDER_TYPE.name)"
                           :entityType="orderTypeEntityType"
                           v-validate="'object_required'"
                   >
@@ -31,27 +31,25 @@
               </div>
           </div>
           <div class="form-group">
-              <div class="bags">
                     <mau-many-to-many-selector
-                            :label="BagOrderAdjustmentPropertiesReference.BAGS.title"
-                            :initialObjects="initialValues[BagOrderAdjustmentPropertiesReference.BAGS.name]"
-                            v-model="productionOrder.bags"
-                            :selectedPropertyName="'bag_id'"
+                            :label="OrderAdjustmentPropertiesReference.PRODUCTS.title"
+                            :initialObjects="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
+                            v-model="productionOrder.products"
+                            :selectedPropertyName="'product_id'"
                             :displayProperty="'code'"
-                            :availableObjects="availableBags"
-                            :name="BagOrderAdjustmentPropertiesReference.BAGS.name"
+                            :availableObjects="availableProducts"
+                            :name="OrderAdjustmentPropertiesReference.PRODUCTS.name"
                     >
                         <template slot-scope="params">
                             <order-table
                                 :allowNegative="true"
-                                :selectedBags="params.selectedObjects"
-                                :initialBags="initialValues[BagOrderAdjustmentPropertiesReference.BAGS.name]"
-                                v-model="productionOrder.adjustmentBags"
+                                :selectedProducts="params.selectedObjects"
+                                :initialProducts="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
+                                v-model="productionOrder.adjustmentProducts"
                             >
                             </order-table>
                         </template>
                     </mau-many-to-many-selector>
-              </div>
           </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled" @click="save" type="button" variant="primary">Guardar</b-button>
@@ -61,7 +59,7 @@
 </template>
 
 <script>
-  import BagOrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/BagOrderAdjustmentPropertiesReference'
+  import OrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/OrderAdjustmentPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
@@ -70,8 +68,8 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import OrderSaleTable from 'renderer/api/components/tables/BagOrderSaleTable.vue'
-  import OrderTable from 'renderer/api/components/tables/BagOrderTable.vue'
+  import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
+  import OrderTable from 'renderer/api/components/tables/OrderTable.vue'
   import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import {mapState} from 'vuex'
   export default {
@@ -79,10 +77,10 @@
     data () {
       return {
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
-        BagOrderAdjustmentPropertiesReference: BagOrderAdjustmentPropertiesReference,
+        OrderAdjustmentPropertiesReference: OrderAdjustmentPropertiesReference,
         productionOrder: {
-          bags: [],
-          adjustmentBags: [],
+          products: [],
+          adjustmentProducts: [],
           date: '',
           orderType: {}
         },
@@ -127,31 +125,31 @@
     },
     computed: {
       ...mapState({
-        availableBags: state => {
-          return state.api.entity.bags
+        availableProducts: state => {
+          return state.api.entity.products
         }
       })
     },
     methods: {
       createDefaultInitialValues: function () {
-        for (let propertyReference in BagOrderAdjustmentPropertiesReference) {
-          if (BagOrderAdjustmentPropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[BagOrderAdjustmentPropertiesReference[propertyReference].name] = BagOrderAdjustmentPropertiesReference[propertyReference].defaultValue
+        for (let propertyReference in OrderAdjustmentPropertiesReference) {
+          if (OrderAdjustmentPropertiesReference.hasOwnProperty(propertyReference)) {
+            this.initialValues[OrderAdjustmentPropertiesReference[propertyReference].name] = OrderAdjustmentPropertiesReference[propertyReference].defaultValue
           }
         }
       },
       setInitialValues: function () {
-        this.initialValues[BagOrderAdjustmentPropertiesReference.BAGS.name] = this.initialObject[BagOrderAdjustmentPropertiesReference.BAGS.name]
-        this.initialValues[BagOrderAdjustmentPropertiesReference.DATE.name] = this.initialObject[BagOrderAdjustmentPropertiesReference.DATE.name]
-        this.initialValues[BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name] = this.initialObject[BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name]
+        this.initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name] = this.initialObject[OrderAdjustmentPropertiesReference.PRODUCTS.name]
+        this.initialValues[OrderAdjustmentPropertiesReference.DATE.name] = this.initialObject[OrderAdjustmentPropertiesReference.DATE.name]
+        this.initialValues[OrderAdjustmentPropertiesReference.ORDER_TYPE.name] = this.initialObject[OrderAdjustmentPropertiesReference.ORDER_TYPE.name]
       },
       save: function () {
         let directParams = {
-          [BagOrderAdjustmentPropertiesReference.DATE.name]: this.productionOrder.date
+          [OrderAdjustmentPropertiesReference.DATE.name]: this.productionOrder.date
         }
-        directParams[BagOrderAdjustmentPropertiesReference.ORDER_TYPE.relationship_id_name] = this.productionOrder.orderType ? this.productionOrder.orderType[GlobalEntityIdentifier] : 'null'
+        directParams[OrderAdjustmentPropertiesReference.ORDER_TYPE.relationship_id_name] = this.productionOrder.orderType ? this.productionOrder.orderType[GlobalEntityIdentifier] : 'null'
         let relayObjects = [
-          ManyToManyHelper.createRelayObject(this.productionOrder.adjustmentBags, EntityTypes.ORDER_ADJUSTMENT_PRODUCT)
+          ManyToManyHelper.createRelayObject(this.productionOrder.adjustmentProducts, EntityTypes.ORDER_ADJUSTMENT_PRODUCT)
         ]
         this.$validator.validateAll().then((result) => {
           if (result) {

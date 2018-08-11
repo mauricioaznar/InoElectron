@@ -8,10 +8,9 @@ let OrderAdjustmentPropertiesReference = {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
-  BAGS: {
-    title: 'Bolsas',
-    name: 'bags',
-    relationship_id_name: 'bag_order_production_id',
+  PRODUCTS: {
+    title: 'Products',
+    name: 'products',
     display: DisplayFunctions.getBagWithUnits,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },

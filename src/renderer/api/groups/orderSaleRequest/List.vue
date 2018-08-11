@@ -14,53 +14,53 @@
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
   import ApiUrls from 'renderer/api/functions/ApiUrls'
-  import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
-  import BagOrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleReceiptPropertiesReference'
+  import OrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/OrderSaleRequestPropertiesReference'
+  import OrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/OrderSaleReceiptPropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'ListBagOrderSaleRequest',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.BAG_ORDER_SALE_RECEIPT),
-        filterExact: {[BagOrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 1},
+        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_SALE_RECEIPT),
+        filterExact: {[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 1},
         canEdit: true,
         tableFields: [
           {
-            name: BagOrderSaleRequestPropertiesReference.ORDER_CODE.name,
-            title: BagOrderSaleRequestPropertiesReference.ORDER_CODE.title,
-            sortField: BagOrderSaleRequestPropertiesReference.ORDER_CODE.name,
+            name: OrderSaleRequestPropertiesReference.ORDER_CODE.name,
+            title: OrderSaleRequestPropertiesReference.ORDER_CODE.title,
+            sortField: OrderSaleRequestPropertiesReference.ORDER_CODE.name,
             filter: true
           },
           {
-            name: BagOrderSaleRequestPropertiesReference.DATE_REQUESTED.name,
-            title: BagOrderSaleRequestPropertiesReference.DATE_REQUESTED.title,
-            sortField: BagOrderSaleRequestPropertiesReference.DATE_REQUESTED.name,
+            name: OrderSaleRequestPropertiesReference.DATE_REQUESTED.name,
+            title: OrderSaleRequestPropertiesReference.DATE_REQUESTED.title,
+            sortField: OrderSaleRequestPropertiesReference.DATE_REQUESTED.name,
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true
           },
           {
-            name: BagOrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name,
-            title: BagOrderSaleReceiptPropertiesReference.RECEIPT_TYPE.title,
+            name: OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name,
+            title: OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.title,
             callback: DisplayFunctions.getNameFromObject
           },
           {
-            name: BagOrderSaleRequestPropertiesReference.BAGS.name,
+            name: OrderSaleRequestPropertiesReference.PRODUCTS.name,
             title: 'Kilos por bolsa',
             hidden: true,
             callback: DisplayFunctions.getBagWithUnitsRequested
           },
           {
-            name: BagOrderSaleRequestPropertiesReference.BAGS.name,
+            name: OrderSaleRequestPropertiesReference.PRODUCTS.name,
             title: 'Total',
             hidden: true,
             callback: DisplayFunctions.getBagOrderSaleTotalCostRequested
           },
           {
-            name: BagOrderSaleRequestPropertiesReference.CLIENT.name,
-            title: BagOrderSaleRequestPropertiesReference.CLIENT.title,
-            callback: BagOrderSaleRequestPropertiesReference.CLIENT.display
+            name: OrderSaleRequestPropertiesReference.CLIENT.name,
+            title: OrderSaleRequestPropertiesReference.CLIENT.title,
+            callback: OrderSaleRequestPropertiesReference.CLIENT.display
           }
         ],
         actions: [
@@ -78,7 +78,7 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewBagOrderSaleRequest',
+            name: 'ViewOrderSaleRequest',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }

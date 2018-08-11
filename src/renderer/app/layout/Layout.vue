@@ -43,11 +43,8 @@
         toggleSidebar: 'toggleSidebar'
       }),
       getInitialData: function () {
-        this.$store.dispatch(EntityActions.GET_BAGS)
-        this.$store.dispatch(EntityActions.GET_BAG_TYPES)
-        this.$store.dispatch(EntityActions.GET_BAG_PACKINGS)
-        this.$store.dispatch(EntityActions.GET_ORDER_ADJUSTMENT_TYPES)
-        this.$store.dispatch(EntityActions.GET_CLIENTS)
+        this.$store.dispatch(EntityActions.GET_PRODUCTS)
+        this.$store.dispatch(EntityActions.GET_PACKINGS)
       }
     },
     computed: {

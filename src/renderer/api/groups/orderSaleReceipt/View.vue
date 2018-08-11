@@ -7,24 +7,27 @@
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
+  import BagOrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/OrderSaleReceiptPropertiesReference'
+  import BagOrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/OrderSaleRequestPropertiesReference'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   export default {
-    name: 'ViewBagOrderSaleRequest',
+    name: 'ViewBagOrderSaleReceipt',
     components: {
       MauEntityPetitioner,
       MauSpinner},
     data () {
       return {
         propertiesReference: [
-          PropertiesReference.ORDER_CODE,
-          PropertiesReference.DATE_REQUESTED,
-          PropertiesReference.CLIENT,
-          PropertiesReference.BAGS
+          BagOrderSaleRequestPropertiesReference.ORDER_CODE,
+          BagOrderSaleRequestPropertiesReference.DATE_REQUESTED,
+          BagOrderSaleReceiptPropertiesReference.DATE_GIVEN,
+          BagOrderSaleRequestPropertiesReference.CLIENT,
+          BagOrderSaleReceiptPropertiesReference.RECEIPT_TYPE,
+          BagOrderSaleReceiptPropertiesReference.PRODUCTS
         ],
-        entityType: EntityTypes.BAG_ORDER_SALE_REQUEST,
+        entityType: EntityTypes.ORDER_SALE_RECEIPT,
         entity: null
       }
     },

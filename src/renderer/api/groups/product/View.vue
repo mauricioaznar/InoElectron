@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
+  import PropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
@@ -33,9 +33,9 @@
           PropertiesReference.WIDTH,
           PropertiesReference.LENGTH,
           PropertiesReference.MATERIAL,
-          PropertiesReference.BAG_PACKING
+          PropertiesReference.PACKING
         ],
-        entityType: EntityTypes.BAG,
+        entityType: EntityTypes.PRODUCT,
         isRequestedEntityLoading: true,
         entity: null
       }

@@ -110,24 +110,24 @@
               </div>
           </div>
           <div class="form-group">
-              <div class="bags">
+              <div class="products">
                     <mau-many-to-many-selector
-                            :label="OrderSaleRequestPropertiesReference.BAGS.title"
-                            :initialObjects="initialValues[OrderSaleRequestPropertiesReference.BAGS.name]"
-                            v-model="salesOrder.bags"
-                            :availableObjects="availableBags"
+                            :label="OrderSaleRequestPropertiesReference.PRODUCTS.title"
+                            :initialObjects="initialValues[OrderSaleRequestPropertiesReference.PRODUCTS.name]"
+                            v-model="salesOrder.products"
+                            :availableObjects="availableProducts"
                             :displayProperty="'code'"
-                            :name="OrderSaleRequestPropertiesReference.BAGS.name"
-                            :selectedPropertyName="'bag_id'"
+                            :name="OrderSaleRequestPropertiesReference.PRODUCTS.name"
+                            :selectedPropertyName="'product_id'"
                     >
                         <template slot-scope="params">
                             <order-sale-table
                                     :requestMode="requestMode"
                                     :receiptMode="receiptMode"
                                     :hasTax="isInvoiceSelected"
-                                    :selectedBags="params.selectedObjects"
-                                    v-model="salesOrder.saleBags"
-                                    :initialBags="initialValues[OrderSaleRequestPropertiesReference.BAGS.name]"
+                                    :selectedProducts="params.selectedObjects"
+                                    v-model="salesOrder.saleProducts"
+                                    :initialProducts="initialValues[OrderSaleRequestPropertiesReference.PRODUCTS.name]"
                             >
                             </order-sale-table>
                         </template>
@@ -142,8 +142,8 @@
 </template>
 
 <script>
-  import OrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleRequestPropertiesReference'
-  import OrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleReceiptPropertiesReference'
+  import OrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/OrderSaleRequestPropertiesReference'
+  import OrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/OrderSaleReceiptPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
@@ -152,8 +152,8 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import OrderSaleTable from 'renderer/api/components/tables/BagOrderSaleTable.vue'
-  import OrderTable from 'renderer/api/components/tables/BagOrderTable.vue'
+  import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
+  import OrderTable from 'renderer/api/components/tables/OrderTable.vue'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
@@ -167,9 +167,8 @@
         OrderSaleReceiptPropertiesReference: OrderSaleReceiptPropertiesReference,
         salesOrder: {
           orderCode: '',
-          selectedBags: [],
-          bags: [],
-          saleBags: [],
+          products: [],
+          saleProducts: [],
           date_requested: '',
           date_given: '',
           client: {},
@@ -178,7 +177,7 @@
         initialValues: {},
         buttonDisabled: false,
         clientEntityType: EntityTypes.CLIENT,
-        orderSaleReceiptTypeEntityType: EntityTypes.BAG_ORDER_SALE_RECEIPT_TYPE
+        orderSaleReceiptTypeEntityType: EntityTypes.ORDER_SALE_RECEIPT_TYPE
       }
     },
     components: {
@@ -234,8 +233,8 @@
     },
     computed: {
       ...mapState({
-        availableBags: state => {
-          return state.api.entity.bags
+        availableProducts: state => {
+          return state.api.entity.products
         }
       }),
       isInvoiceSelected: function () {
@@ -264,7 +263,7 @@
       },
       setInitialValues: function () {
         this.initialValues[OrderSaleRequestPropertiesReference.ORDER_CODE.name] = this.initialObject[OrderSaleRequestPropertiesReference.ORDER_CODE.name]
-        this.initialValues[OrderSaleRequestPropertiesReference.BAGS.name] = this.initialObject[OrderSaleRequestPropertiesReference.BAGS.name]
+        this.initialValues[OrderSaleRequestPropertiesReference.PRODUCTS.name] = this.initialObject[OrderSaleRequestPropertiesReference.PRODUCTS.name]
         this.initialValues[OrderSaleRequestPropertiesReference.DATE_REQUESTED.name] = this.initialObject[OrderSaleRequestPropertiesReference.DATE_REQUESTED.name]
         this.initialValues[OrderSaleRequestPropertiesReference.CLIENT.name] = this.initialObject[OrderSaleRequestPropertiesReference.CLIENT.name]
         this.initialValues[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name] = this.initialObject[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name]
@@ -286,7 +285,7 @@
           directParams[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name] = 2
         }
         let relayObjects = [
-          ManyToManyHelper.createRelayObject(this.salesOrder.saleBags, EntityTypes.BAG_ORDER_SALE_PRODUCT)
+          ManyToManyHelper.createRelayObject(this.salesOrder.saleProducts, EntityTypes.ORDER_SALE_PRODUCT)
         ]
         this.$validator.validateAll().then((result) => {
           if (result) {

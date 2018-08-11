@@ -14,10 +14,9 @@ let OrderSalePropertiesReference = {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
-  BAGS: {
-    title: 'Bolsas',
-    name: 'bags',
-    relationship_id_name: 'bag_order_production_id',
+  PRODUCTS: {
+    title: 'Productos',
+    name: 'products',
     display: DisplayFunctions.getBagWithUnitsRequested,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },
@@ -30,9 +29,9 @@ let OrderSalePropertiesReference = {
     defaultValue: MauInputDefaultValues.SELECT
   },
   ORDER_STATUS: {
-    name: 'bagOrderSaleStatus',
+    name: 'orderSaleStatus',
     title: 'Estado',
-    relationship_id_name: 'bag_order_sale_status_id',
+    relationship_id_name: 'order_sale_status_id',
     display: DisplayFunctions.getNameFromObject,
     required: false,
     defaultValue: MauInputDefaultValues.SELECT

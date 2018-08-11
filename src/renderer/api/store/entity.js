@@ -10,36 +10,18 @@ Object.keys(RolesTypes).forEach(key => {
 })
 
 const state = {
-  // General
-  requestedEntity: null,
-  // Dependencies
-  bagTypes: [],
-  bagPackings: [],
-  bags: [],
-  bagOrderAdjustmentTypes: [],
-  clients: [],
+  packings: [],
+  products: [],
   users: [],
   roles: roles
 }
 
 const mutations = {
-  SET_REQUESTED_ENTITY (state, data) {
-    state.requestedEntity = data
+  SET_PRODUCTS (state, data) {
+    state.products = data
   },
-  SET_BAGS (state, data) {
-    state.bags = data
-  },
-  SET_BAG_TYPES (state, data) {
-    state.bagTypes = data
-  },
-  SET_BAG_PACKINGS (state, data) {
-    state.bagPackings = data
-  },
-  SET_BAG_ORDER_ADJUSTMENT_TYPES (state, data) {
-    state.bagOrderAdjustmentTypes = data
-  },
-  SET_CLIENTS (state, data) {
-    state.clients = data
+  SET_PACKINGS (state, data) {
+    state.packings = data
   },
   SET_USERS (state, data) {
     state.users = data
@@ -47,43 +29,16 @@ const mutations = {
 }
 
 const actions = {
-  [EntityActions.SET_REQUESTED_ENTITY]: function ({commit}, entityObj) {
-    commit('SET_REQUESTED_ENTITY', entityObj)
-  },
-  [EntityActions.UNSET_REQUESTED_ENTITY]: function ({commit}) {
-    commit('SET_REQUESTED_ENTITY', null)
-  },
-  [EntityActions.GET_BAG_TYPES]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.MATERIAL).then(data => {
-      commit('SET_BAG_TYPES', data)
+  [EntityActions.GET_PACKINGS]: function ({commit}) {
+    ApiFunctions.getWithoutPagination(EntityTypes.PACKING).then(data => {
+      commit('SET_PACKINGS', data)
     }).catch(e => {
       console.log(e)
     })
   },
-  [EntityActions.GET_BAG_PACKINGS]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.BAG_PACKING).then(data => {
-      commit('SET_BAG_PACKINGS', data)
-    }).catch(e => {
-      console.log(e)
-    })
-  },
-  [EntityActions.GET_BAGS]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.BAG).then(data => {
-      commit('SET_BAGS', data)
-    }).catch(e => {
-      console.log(e)
-    })
-  },
-  [EntityActions.GET_ORDER_ADJUSTMENT_TYPES]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.ORDER_ADJUSTMENT_ORDER_TYPE).then(data => {
-      commit('SET_BAG_ORDER_ADJUSTMENT_TYPES', data)
-    }).catch(e => {
-      console.log(e)
-    })
-  },
-  [EntityActions.GET_CLIENTS]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.CLIENT).then(data => {
-      commit('SET_CLIENTS', data)
+  [EntityActions.GET_PRODUCTS]: function ({commit}) {
+    ApiFunctions.getWithoutPagination(EntityTypes.PRODUCT).then(data => {
+      commit('SET_PRODUCTS', data)
     }).catch(e => {
       console.log(e)
     })

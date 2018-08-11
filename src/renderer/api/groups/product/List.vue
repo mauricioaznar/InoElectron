@@ -12,16 +12,16 @@
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
+  import PropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
   import ApiUrls from 'renderer/api/functions/ApiUrls'
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
-    name: 'ListBag',
+    name: 'ListProduct',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.BAG),
+        apiUrl: ApiUrls.createListUrl(EntityTypes.PRODUCT),
         tableFields: [
           {
             name: PropertiesReference.CODE.name,
@@ -39,8 +39,8 @@
             callback: DisplayFunctions.getNameFromObject
           },
           {
-            name: PropertiesReference.BAG_PACKING.name,
-            title: PropertiesReference.BAG_PACKING.title,
+            name: PropertiesReference.PACKING.name,
+            title: PropertiesReference.PACKING.title,
             callback: DisplayFunctions.getNameFromObject
           },
           {
@@ -75,7 +75,7 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewBag',
+            name: 'ViewProduct',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }

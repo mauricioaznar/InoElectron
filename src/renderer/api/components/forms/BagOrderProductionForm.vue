@@ -106,26 +106,24 @@
               </mau-form-input-select>
           </div>
           <div class="form-group">
-              <div class="bags">
                     <mau-many-to-many-selector
-                            :label="BagOrderProductionPropertiesReference.BAGS.title"
-                            :initialObjects="initialValues[BagOrderProductionPropertiesReference.BAGS.name]"
-                            v-model="productionOrder.bags"
-                            :selectedPropertyName="'bag_id'"
+                            :label="BagOrderProductionPropertiesReference.PRODUCTS.title"
+                            :initialObjects="initialValues[BagOrderProductionPropertiesReference.PRODUCTS.name]"
+                            v-model="productionOrder.products"
+                            :selectedPropertyName="'product_id'"
                             :displayProperty="'code'"
-                            :availableObjects="availableBags"
-                            :name="BagOrderProductionPropertiesReference.BAGS.name"
+                            :availableObjects="availableProducts"
+                            :name="BagOrderProductionPropertiesReference.PRODUCTS.name"
                     >
                         <template slot-scope="params">
                             <order-table
-                                :selectedBags="params.selectedObjects"
-                                :initialBags="initialValues[BagOrderProductionPropertiesReference.BAGS.name]"
-                                v-model="productionOrder.productionBags"
+                                :selectedProducts="params.selectedObjects"
+                                :initialProducts="initialValues[BagOrderProductionPropertiesReference.PRODUCTS.name]"
+                                v-model="productionOrder.productionProducts"
                             >
                             </order-table>
                         </template>
                     </mau-many-to-many-selector>
-              </div>
           </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled" @click="save" type="button" variant="primary">Guardar</b-button>
@@ -145,8 +143,8 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import OrderSaleTable from 'renderer/api/components/tables/BagOrderSaleTable.vue'
-  import OrderTable from 'renderer/api/components/tables/BagOrderTable.vue'
+  import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
+  import OrderTable from 'renderer/api/components/tables/OrderTable.vue'
   import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import {mapState} from 'vuex'
   import moment from 'moment'
@@ -157,8 +155,8 @@
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         BagOrderProductionPropertiesReference: BagOrderProductionPropertiesReference,
         productionOrder: {
-          bags: [],
-          productionBags: [],
+          products: [],
+          productionProducts: [],
           startDate: '',
           endDate: '',
           startHour: '',
@@ -212,8 +210,8 @@
     },
     computed: {
       ...mapState({
-        availableBags: state => {
-          return state.api.entity.bags
+        availableProducts: state => {
+          return state.api.entity.products
         }
       })
     },
@@ -232,7 +230,7 @@
         this.initialValues['endDate'] = ''
       },
       setInitialValues: function () {
-        this.initialValues[BagOrderProductionPropertiesReference.BAGS.name] = this.initialObject[BagOrderProductionPropertiesReference.BAGS.name]
+        this.initialValues[BagOrderProductionPropertiesReference.PRODUCTS.name] = this.initialObject[BagOrderProductionPropertiesReference.PRODUCTS.name]
         this.initialValues['startDate'] = moment(this.initialObject[BagOrderProductionPropertiesReference.START_DATE_TIME.name]).format('YYYY-MM-DD')
         this.initialValues['startHour'] = moment(this.initialObject[BagOrderProductionPropertiesReference.START_DATE_TIME.name]).format('HH')
         this.initialValues['startMinute'] = moment(this.initialObject[BagOrderProductionPropertiesReference.START_DATE_TIME.name]).format('mm')
@@ -243,8 +241,6 @@
         this.initialValues[BagOrderProductionPropertiesReference.MACHINE.name] = this.initialObject[BagOrderProductionPropertiesReference.MACHINE.name]
       },
       save: function () {
-        let startDateTime = this.productionOrder.startDate + ' ' + this.productionOrder.startHour + ':' + this.productionOrder.startMinute + ':00'
-        console.log(startDateTime)
         let directParams = {
           [BagOrderProductionPropertiesReference.START_DATE_TIME.name]: this.productionOrder.startDate + ' ' + this.productionOrder.startHour + ':' + this.productionOrder.startMinute + ':00',
           [BagOrderProductionPropertiesReference.END_DATE_TIME.name]: this.productionOrder.endDate + ' ' + this.productionOrder.endHour + ':' + this.productionOrder.endMinute + ':00'
@@ -252,7 +248,7 @@
         directParams[BagOrderProductionPropertiesReference.MACHINE.relationship_id_name] = this.productionOrder.machine ? this.productionOrder.machine[GlobalEntityIdentifier] : 'null'
         directParams[BagOrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : 'null'
         let relayObjects = [
-          ManyToManyHelper.createRelayObject(this.productionOrder.productionBags, EntityTypes.BAG_ORDER_PRODUCTION_PRODUCT)
+          ManyToManyHelper.createRelayObject(this.productionOrder.productionProducts, EntityTypes.BAG_ORDER_PRODUCTION_PRODUCT)
         ]
         this.$validator.validateAll().then((result) => {
           if (result) {

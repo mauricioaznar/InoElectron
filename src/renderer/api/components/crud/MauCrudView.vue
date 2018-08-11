@@ -1,6 +1,6 @@
 <template>
-  <div v-if="entity">
-    <slot :entity="entity"></slot>
+  <div>
+
   </div>
 </template>
 
@@ -18,7 +18,6 @@
       }
     },
     created () {
-      this.entity = this.$store.getters.requestedEntity
     },
     components: {
     },

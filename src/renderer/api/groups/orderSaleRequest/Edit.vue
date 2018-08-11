@@ -8,47 +8,46 @@
     >
     </mau-entity-petitioner>
     <mau-crud-edit
-      v-if="entity"
-      :id="id"
-      :entityType="entityType"
-      :callback="callback"
-    >
+            v-if="entity"
+            :id="id"
+            :relationshipIdName="hostRelationshipIdName"
+            :entityType="entityType"
+            :callback="callback">
       <template slot-scope="params">
-        <bag-form
+        <order-sale-form
           :initialObject="entity"
-          :saveFunction="params.saveFunction">
-        </bag-form>
+          :saveFunction="params.saveFunction"
+          :requestMode="true"
+          :entityType="entityType"
+        >
+        </order-sale-form>
       </template>
     </mau-crud-edit>
   </div>
 </template>
 
 <script>
-  import BagForm from '../../components/forms/BagForm.vue'
-  import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
+  import OrderSaleForm from 'renderer/api/components/forms/OrderSaleForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
+  import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'EditBag',
+    name: 'EditOrderSaleRequest',
     data () {
       return {
-        entityType: EntityTypes.BAG,
-        entity: null,
-        hostRelationshipIdName: PropertiesReference.ID.relationship_id_name
+        entityType: EntityTypes.ORDER_SALE_REQUEST,
+        hostRelationshipIdName: 'order_sale_id',
+        entity: null
       }
     },
     props: {
       id: null
     },
     components: {
-      BagForm,
-      MauEntityPetitioner,
-      MauSpinner
-    },
-    computed: {
-      ...mapGetters(['groupDefaultRouteObject'])
+      OrderSaleForm,
+      MauSpinner,
+      MauEntityPetitioner
     },
     methods: {
       callback: function () {
@@ -57,6 +56,9 @@
       entityResultHandler: function (entityObj) {
         this.entity = entityObj
       }
+    },
+    computed: {
+      ...mapGetters(['groupDefaultRouteObject'])
     }
   }
 </script>

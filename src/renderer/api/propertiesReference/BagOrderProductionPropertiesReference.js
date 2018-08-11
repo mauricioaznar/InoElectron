@@ -28,10 +28,9 @@ export default {
     display: DisplayFunctions.getPersona,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  BAGS: {
-    title: 'Bolsas',
-    name: 'bags',
-    relationship_id_name: 'bag_order_production_id',
+  PRODUCTS: {
+    title: 'Productos',
+    name: 'products',
     display: DisplayFunctions.getBagWithUnits,
     defaultValue: MauInputDefaultValues.MULTISELECT
   }

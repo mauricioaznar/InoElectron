@@ -16,38 +16,38 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(currentStructuredObj, index) in currentStructuredObjects" :key="currentStructuredObj['bag_id']">
-                    <td class="mau-text-center">{{getBagCode(currentStructuredObj)}}</td>
-                    <td class="mau-text-center">{{getBagDescription(currentStructuredObj)}}</td>
+                <tr v-for="(currentStructuredObj, index) in currentStructuredObjects" :key="currentStructuredObj['product_id']">
+                    <td class="mau-text-center">{{getProductCode(currentStructuredObj)}}</td>
+                    <td class="mau-text-center">{{getProductDescription(currentStructuredObj)}}</td>
                     <td class="mau-text-center">
                         <mau-form-input-number
                                 v-if="currentStructuredObj['_calculation_type'] === 0"
-                                :name="'_quantity_kilo' + currentStructuredObj['bag_id']"
+                                :name="'_quantity_kilo' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialQuantity(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
                                 :type="'float'"
-                                :key="'_quantity_kilo' + currentStructuredObj['bag_id']"
+                                :key="'_quantity_kilo' + currentStructuredObj['product_id']"
                                 v-validate="{
                                     required: true,
                                     not_in: '0',
                                     kilo_to_group: {
                                         groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
-                                        isGroupWeightStrict: getBagGroupWeightStrict(currentStructuredObj)
+                                        isGroupWeightStrict: getProductGroupWeightStrict(currentStructuredObj)
                                     }
                                 }"
-                                :error="errors.first('_quantity_kilo' + currentStructuredObj['bag_id'])"
+                                :error="errors.first('_quantity_kilo' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                         >
                         </mau-form-input-number>
                         <mau-form-input-number
                                 v-if="currentStructuredObj['_calculation_type'] === 1"
-                                :name="'_quantity_group' + currentStructuredObj['bag_id']"
+                                :name="'_quantity_group' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialQuantity(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
-                                :type="getBagGroupWeightStrict(currentStructuredObj) ? 'regular' : 'float'"
+                                :type="getProductGroupWeightStrict(currentStructuredObj) ? 'regular' : 'float'"
                                 v-validate="'required|not_in:0'"
-                                :key="'_quantity_group' + currentStructuredObj['bag_id']"
-                                :error="errors.first('_quantity_group' + currentStructuredObj['bag_id'])"
+                                :key="'_quantity_group' + currentStructuredObj['product_id']"
+                                :error="errors.first('_quantity_group' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                         >
                         </mau-form-input-number>
@@ -65,8 +65,8 @@
                     <td class="mau-text-center">
                         <mau-form-input-number
                                 v-if="requestMode"
-                                :name="BagOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['bag_id']"
-                                :error="errors.first(BagOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['bag_id'])"
+                                :name="ProductOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['product_id']"
+                                :error="errors.first(ProductOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['product_id'])"
                                 v-model="currentStructuredObj.kilo_price"
                                 :initialValue="getCurrentObjKiloPrice(currentStructuredObj)"
                                 :type="'float'"
@@ -129,8 +129,8 @@
 </template>
 
 <script>
-    import BagOrderProductSalePropertiesReference from 'renderer/api/propertiesReference/BagOrderSaleProductPropertiesReference'
-    import ProductPropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
+    import ProductOrderProductSalePropertiesReference from 'renderer/api/propertiesReference/OrderSaleProductPropertiesReference'
+    import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
     import MauFormInputRegularNumber from 'renderer/api/components/inputs/MauFormInputRegularNumber.vue'
     import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
     import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
@@ -149,7 +149,7 @@
             {value: 1, text: 'Bulto', name: 'GroupCalculationType'}
           ],
           currentStructuredObjects: [],
-          BagOrderProductSalePropertiesReference: BagOrderProductSalePropertiesReference,
+          ProductOrderProductSalePropertiesReference: ProductOrderProductSalePropertiesReference,
           total: 0
         }
       },
@@ -163,15 +163,15 @@
       },
       computed: {
         ...mapGetters([
-          'getBagById'
+          'getProductById'
         ])
       },
       props: {
-        selectedBags: {
+        selectedProducts: {
           type: Array,
           required: true
         },
-        initialBags: {
+        initialProducts: {
           type: Array,
           default: function () {
             return []
@@ -189,55 +189,55 @@
       },
       methods: {
         emitStructureChangeEvent: function () {
-          let initialSaleBags = ManyToManyHelper.createM2MStructuredObjects(this.initialBags, 'bag_id')
-          let filteredStructuredObjects = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialSaleBags, this.currentStructuredObjects, 'bag_id')
+          let initialSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialProducts, 'product_id')
+          let filteredStructuredObjects = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialSaleProducts, this.currentStructuredObjects, 'product_id')
           this.$emit('input', filteredStructuredObjects)
         },
-        getBagCode: function (structuredObject) {
-          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.CODE.name]
+        getProductCode: function (structuredObject) {
+          return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CODE.name]
         },
-        getBagDescription: function (structuredObject) {
-          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.DESCRIPTION.name]
+        getProductDescription: function (structuredObject) {
+          return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.DESCRIPTION.name]
         },
-        getBagCurrentGroupWeight: function (structuredObject) {
-          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
+        getProductCurrentGroupWeight: function (structuredObject) {
+          return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
         },
-        getBagGroupWeightStrict: function (structuredObject) {
-          return this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name]
+        getProductGroupWeightStrict: function (structuredObject) {
+          return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name]
         },
-        getInitialSaleBag: function (bagId) {
-          let initialBag = this.initialBags.find(bag => {
-            return bag[GlobalEntityIdentifier] === bagId
+        getInitialSaleProduct: function (productId) {
+          let initialProduct = this.initialProducts.find(product => {
+            return product[GlobalEntityIdentifier] === productId
           })
-          return initialBag ? initialBag.pivot : null
+          return initialProduct ? initialProduct.pivot : null
         },
         getCurrentObjKiloPrice: function (structuredObject) {
-          let currentKiloPrice = this.getBagById(structuredObject['bag_id'])[ProductPropertiesReference.CURRENT_KILO_PRICE.name]
-          if (structuredObject[BagOrderProductSalePropertiesReference.KILO_PRICE.name]) {
-            currentKiloPrice = structuredObject[BagOrderProductSalePropertiesReference.KILO_PRICE.name]
+          let currentKiloPrice = this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CURRENT_KILO_PRICE.name]
+          if (structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE.name]) {
+            currentKiloPrice = structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE.name]
           }
           return currentKiloPrice
         },
         getCurrentObjInitialQuantity: function (currentStructuredObj) {
           let quantity = 0
-          let initialSaleBag = this.getInitialSaleBag(currentStructuredObj['bag_id'])
+          let initialSaleProduct = this.getInitialSaleProduct(currentStructuredObj['product_id'])
           let initialCalculationType = this.getCurrentObjInitialCalculationType(currentStructuredObj)
-          if (initialSaleBag) {
+          if (initialSaleProduct) {
             let initialSaleQuantityValue
             if (initialCalculationType === 0) {
               if (this.requestMode) {
-                initialSaleQuantityValue = initialSaleBag[BagOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
+                initialSaleQuantityValue = initialSaleProduct[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
               }
               if (this.receiptMode) {
-                initialSaleQuantityValue = initialSaleBag[BagOrderProductSalePropertiesReference.KILOS_GIVEN.name]
+                initialSaleQuantityValue = initialSaleProduct[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name]
               }
             }
             if (initialCalculationType === 1) {
               if (this.requestMode) {
-                initialSaleQuantityValue = initialSaleBag[BagOrderProductSalePropertiesReference.GROUPS_REQUESTED.name]
+                initialSaleQuantityValue = initialSaleProduct[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name]
               }
               if (this.receiptMode) {
-                initialSaleQuantityValue = initialSaleBag[BagOrderProductSalePropertiesReference.GROUPS_GIVEN.name]
+                initialSaleQuantityValue = initialSaleProduct[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name]
               }
             }
             if (initialSaleQuantityValue && initialSaleQuantityValue > 0) {
@@ -259,14 +259,14 @@
           return calculationType
         },
         getCurrentObjGroupWeight: function (currentStructuredObj) {
-          let bagSaleGroupWeight = null
-          let initialSaleBag = this.getInitialSaleBag(currentStructuredObj['bag_id'])
-          if (initialSaleBag) {
-            bagSaleGroupWeight = initialSaleBag[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name]
+          let productSaleGroupWeight = null
+          let initialSaleProduct = this.getInitialSaleProduct(currentStructuredObj['product_id'])
+          if (initialSaleProduct) {
+            productSaleGroupWeight = initialSaleProduct[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name]
           } else {
-            bagSaleGroupWeight = this.getBagCurrentGroupWeight(currentStructuredObj)
+            productSaleGroupWeight = this.getProductCurrentGroupWeight(currentStructuredObj)
           }
-          return bagSaleGroupWeight
+          return productSaleGroupWeight
         },
         getCurrentObjTax: function (currentStructuredObj) {
           let totalCostWithoutTax = this.getCurrentObjTotalCostWithoutTax(currentStructuredObj)
@@ -276,10 +276,10 @@
           let kilos = 0
           let kiloPrice = this.getCurrentObjKiloPrice(currentStructuredObj)
           if (this.requestMode) {
-            kilos = currentStructuredObj[BagOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
+            kilos = currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
           }
           if (this.receiptMode) {
-            kilos = currentStructuredObj[BagOrderProductSalePropertiesReference.KILOS_GIVEN.name]
+            kilos = currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name]
           }
           return kilos * kiloPrice
         },
@@ -288,56 +288,56 @@
         },
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
-          let bagGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
-          if (!currentStructuredObj[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && bagGroupWeight) {
-            currentStructuredObj[BagOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = bagGroupWeight
+          let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
+          if (!currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
+            currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
           if (currentStructuredObj['_calculation_type'] === 0) {
             if (this.requestMode) {
-              currentStructuredObj[BagOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity
-              if (bagGroupWeight) {
-                currentStructuredObj[BagOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = quantity / bagGroupWeight
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity
+              if (productGroupWeight) {
+                currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = quantity / productGroupWeight
               }
             }
             if (this.receiptMode) {
-              currentStructuredObj[BagOrderProductSalePropertiesReference.KILOS_GIVEN.name] = quantity
-              if (bagGroupWeight) {
-                currentStructuredObj[BagOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = quantity / bagGroupWeight
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name] = quantity
+              if (productGroupWeight) {
+                currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = quantity / productGroupWeight
               }
             }
           }
           if (currentStructuredObj['_calculation_type'] === 1) {
-            if (this.requestMode && bagGroupWeight) {
-              currentStructuredObj[BagOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = quantity
-              currentStructuredObj[BagOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity * bagGroupWeight
+            if (this.requestMode && productGroupWeight) {
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = quantity
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity * productGroupWeight
             }
-            if (this.receiptMode && bagGroupWeight) {
-              currentStructuredObj[BagOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = quantity
-              currentStructuredObj[BagOrderProductSalePropertiesReference.KILOS_GIVEN.name] = quantity * bagGroupWeight
+            if (this.receiptMode && productGroupWeight) {
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = quantity
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name] = quantity * productGroupWeight
             }
           }
           this.emitStructureChangeEvent()
         }
       },
       watch: {
-        selectedBags: function () {
+        selectedProducts: function () {
           let tempCurrentStructuredObjects = []
-          for (let i = 0; i < this.selectedBags.length; i++) {
-            let selectedBag = this.selectedBags[i]
+          for (let i = 0; i < this.selectedProducts.length; i++) {
+            let selectedProduct = this.selectedProducts[i]
             let currentStructuredObjFound = this.currentStructuredObjects.find(currentStructuredObj => {
-              return currentStructuredObj['bag_id'] === selectedBag[GlobalEntityIdentifier]
+              return currentStructuredObj['product_id'] === selectedProduct[GlobalEntityIdentifier]
             })
             if (currentStructuredObjFound) {
               tempCurrentStructuredObjects.push(currentStructuredObjFound)
             } else {
-              let saleBag = this.getInitialSaleBag(selectedBag[GlobalEntityIdentifier])
-              if (saleBag) {
-                saleBag = cloneDeep(saleBag)
+              let saleProduct = this.getInitialSaleProduct(selectedProduct[GlobalEntityIdentifier])
+              if (saleProduct) {
+                saleProduct = cloneDeep(saleProduct)
               } else {
-                saleBag = {}
-                saleBag['bag_id'] = selectedBag[GlobalEntityIdentifier]
+                saleProduct = {}
+                saleProduct['product_id'] = selectedProduct[GlobalEntityIdentifier]
               }
-              tempCurrentStructuredObjects.push(saleBag)
+              tempCurrentStructuredObjects.push(saleProduct)
             }
           }
           this.currentStructuredObjects = tempCurrentStructuredObjects

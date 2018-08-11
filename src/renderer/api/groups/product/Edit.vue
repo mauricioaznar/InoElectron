@@ -10,42 +10,39 @@
     <mau-crud-edit
       v-if="entity"
       :id="id"
-      :relationshipIdName="hostRelationshipIdName"
       :entityType="entityType"
-      :callback="callback">
+      :callback="callback"
+    >
       <template slot-scope="params">
-        <bag-order-sale-form
+        <product-form
           :initialObject="entity"
-          :saveFunction="params.saveFunction"
-          :receiptMode="true"
-          :entityType="entityType"
-        >
-        </bag-order-sale-form>
+          :saveFunction="params.saveFunction">
+        </product-form>
       </template>
     </mau-crud-edit>
   </div>
 </template>
 
 <script>
-  import BagOrderSaleForm from 'renderer/api/components/forms/BagOrderSaleForm.vue'
+  import ProductForm from '../../components/forms/ProductForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
+  import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'EditOrderSaleReceipt',
+    name: 'EditBag',
     data () {
       return {
-        entityType: EntityTypes.BAG_ORDER_SALE_RECEIPT,
-        hostRelationshipIdName: 'bag_order_sale_id',
-        entity: null
+        entityType: EntityTypes.PRODUCT,
+        entity: null,
+        hostRelationshipIdName: 'product_id'
       }
     },
     props: {
       id: null
     },
     components: {
-      BagOrderSaleForm,
+      ProductForm,
       MauEntityPetitioner,
       MauSpinner
     },

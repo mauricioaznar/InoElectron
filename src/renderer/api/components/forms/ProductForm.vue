@@ -4,14 +4,14 @@
       <div class="col-sm-12">
         <mau-form-input-text
                 :initialValue="initialValues[PropertiesReference.CODE.name]"
-                v-model="bag.code"
+                v-model="product.code"
                 :label="PropertiesReference.CODE.title"
                 :name="PropertiesReference.CODE.name"
                 :error="errors.first(PropertiesReference.CODE.name)"
                 v-validate="{
                             required: true,
                             remote_unique: {
-                              entityType: bagEntityType,
+                              entityType: productEntityType,
                               columnName: PropertiesReference.CODE.name,
                               initialValue: initialValues[PropertiesReference.CODE.name]
                             }
@@ -24,7 +24,7 @@
       <div class="col-sm-12">
         <mau-form-input-text
           :initialValue="initialValues[PropertiesReference.DESCRIPTION.name]"
-          v-model="bag.description"
+          v-model="product.description"
           :label="PropertiesReference.DESCRIPTION.title"
           :name="PropertiesReference.DESCRIPTION.name"
           :error="errors.first(PropertiesReference.DESCRIPTION.name)"
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="form-group form-row">
-      <div class="col-sm-12 bag_currentGroupWeight">
+      <div class="col-sm-12">
         <div class="mb-1">
           <b-form-checkbox
                   v-model="hasGroupWeight">
@@ -46,7 +46,7 @@
                 :label="PropertiesReference.CURRENT_GROUP_WEIGHT.title"
                 :name="PropertiesReference.CURRENT_GROUP_WEIGHT.name"
                 :initialValue="initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name]"
-                v-model="bag.currentGroupWeight"
+                v-model="product.currentGroupWeight"
                 v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name)"
         >
@@ -55,11 +55,11 @@
       </div>
     </div>
     <div class="form-group form-row">
-      <div class="col-sm-12 bag_currentKiloPrice">
+      <div class="col-sm-12">
         <mau-form-input-number
                 :label="PropertiesReference.CURRENT_KILO_PRICE.title"
                 :name="PropertiesReference.CURRENT_KILO_PRICE.name"
-                v-model="bag.currentKiloPrice"
+                v-model="product.currentKiloPrice"
                 :initialValue="initialValues[PropertiesReference.CURRENT_KILO_PRICE.name]"
                 v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.CURRENT_KILO_PRICE.name)"
@@ -70,22 +70,22 @@
       </div>
     </div>
     <div class="form-group form-row">
-      <div class="col-sm-6 bag_width">
+      <div class="col-sm-6">
         <mau-form-input-number
                 :label="PropertiesReference.WIDTH.title"
                 :name="PropertiesReference.WIDTH.name"
-                v-model="bag.width"
+                v-model="product.width"
                 :initialValue="initialValues[PropertiesReference.WIDTH.name]"
                 v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.WIDTH.name)"
         >
         </mau-form-input-number>
       </div>
-      <div class="col-sm-6 bag_length">
+      <div class="col-sm-6">
         <mau-form-input-number
                 :label="PropertiesReference.LENGTH.title"
                 :name="PropertiesReference.LENGTH.name"
-                v-model="bag.length"
+                v-model="product.length"
                 :initialValue="initialValues[PropertiesReference.LENGTH.name]"
                 v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.LENGTH.name)"
@@ -100,7 +100,7 @@
                 :label="PropertiesReference.MATERIAL.title"
                 :displayProperty="'name'"
                 :entityType="materialEntityType"
-                v-model="bag.material"
+                v-model="product.material"
                 :name="PropertiesReference.MATERIAL.name"
                 :error="errors.first(PropertiesReference.MATERIAL.name)"
                 v-validate="'object_required'"
@@ -109,29 +109,29 @@
       </div>
     </div>
     <div class="form-group form-row">
-      <div class="col-sm-12 bag_type">
-        <label>{{PropertiesReference.BAG_PACKING.title}}</label>
+      <div class="col-sm-12">
+        <label>{{PropertiesReference.PACKING.title}}</label>
         <b-form-radio-group
                 stacked
-                :id="PropertiesReference.BAG_PACKING.name"
-                v-model="bag.bagPacking"
+                :id="PropertiesReference.PACKING.name"
+                v-model="product.packing"
                 v-validate="'required'"
                 class="form-control override-outline"
-                :name="PropertiesReference.BAG_PACKING.name"
-                :data-vv-name="PropertiesReference.BAG_PACKING.name"
-                :class="getBootstrapValidationClass(errors.has(PropertiesReference.BAG_PACKING.name))"
+                :name="PropertiesReference.PACKING.name"
+                :data-vv-name="PropertiesReference.PACKING.name"
+                :class="getBootstrapValidationClass(errors.has(PropertiesReference.PACKING.name))"
         >
           <b-form-radio
-                  v-for="bagPacking in availableBagPackings"
-                  :value="bagPacking"
-                  :key="bagPacking.id"
+                  v-for="packing in availablePackings"
+                  :value="packing"
+                  :key="packing.id"
           >
-            {{bagPacking.name}}
+            {{packing.name}}
           </b-form-radio>
         </b-form-radio-group>
         <div class="invalid-feedback">
-                      <span v-show="errors.has(PropertiesReference.BAG_PACKING.name)" class="help is-danger">
-                        {{ errors.first(PropertiesReference.BAG_PACKING.name) }}
+                      <span v-show="errors.has(PropertiesReference.PACKING.name)" class="help is-danger">
+                        {{ errors.first(PropertiesReference.PACKING.name) }}
                       </span>
         </div>
       </div>
@@ -144,7 +144,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import PropertiesReference from 'renderer/api/propertiesReference/BagPropertiesReference'
+  import PropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import NormalizeObjects from 'renderer/api/functions/NormalizeObjects'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
@@ -155,12 +155,12 @@
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   export default {
-    name: 'BagForm',
+    name: 'ProductForm',
     data () {
       return {
-        bag: {
+        product: {
           material: {},
-          bagPacking: '',
+          packing: '',
           code: '',
           description: '',
           currentKiloPrice: '',
@@ -172,7 +172,7 @@
         buttonDisabled: false,
         initialValues: {},
         materialEntityType: EntityTypes.MATERIAL,
-        bagEntityType: EntityTypes.BAG,
+        productEntityType: EntityTypes.PRODUCT,
         PropertiesReference: PropertiesReference
       }
     },
@@ -209,9 +209,9 @@
     },
     computed: {
       ...mapState({
-        availableBagPackings: state => {
-          let availableBagPackings = state.api.entity.bagPackings
-          return NormalizeObjects.normalizeObjects(availableBagPackings, ['name'])
+        availablePackings: state => {
+          let availablePackings = state.api.entity.packings
+          return NormalizeObjects.normalizeObjects(availablePackings, ['name'])
         }
       })
     },
@@ -238,19 +238,19 @@
           this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = 0
           this.hasGroupWeight = false
         }
-        this.bag.bagPacking = NormalizeObjects.normalizeObject(this.initialObject[PropertiesReference.BAG_PACKING.name], ['name'])
+        this.product.packing = NormalizeObjects.normalizeObject(this.initialObject[PropertiesReference.PACKING.name], ['name'])
       },
       save: function () {
         let directParams = {
-          [PropertiesReference.CODE.name]: this.bag.code,
-          [PropertiesReference.DESCRIPTION.name]: this.bag.description,
-          [PropertiesReference.WIDTH.name]: this.bag.width,
-          [PropertiesReference.LENGTH.name]: this.bag.length,
-          [PropertiesReference.CURRENT_KILO_PRICE.name]: this.bag.currentKiloPrice,
-          [PropertiesReference.CURRENT_GROUP_WEIGHT.name]: this.hasGroupWeight ? this.bag.currentGroupWeight : 'null',
+          [PropertiesReference.CODE.name]: this.product.code,
+          [PropertiesReference.DESCRIPTION.name]: this.product.description,
+          [PropertiesReference.WIDTH.name]: this.product.width,
+          [PropertiesReference.LENGTH.name]: this.product.length,
+          [PropertiesReference.CURRENT_KILO_PRICE.name]: this.product.currentKiloPrice,
+          [PropertiesReference.CURRENT_GROUP_WEIGHT.name]: this.hasGroupWeight ? this.product.currentGroupWeight : 'null',
           // one to many
-          [PropertiesReference.MATERIAL.relationship_id_name]: this.bag.material ? this.bag.material[GlobalEntityIdentifier] : null,
-          [PropertiesReference.BAG_PACKING.relationship_id_name]: this.bag.bagPacking ? this.bag.bagPacking[GlobalEntityIdentifier] : null
+          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : null,
+          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing ? this.product.packing[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
 

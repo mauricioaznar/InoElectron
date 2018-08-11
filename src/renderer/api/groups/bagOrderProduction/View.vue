@@ -19,7 +19,7 @@
     data () {
       return {
         propertiesReference: [
-          BagOrderProductionPropertiesReference.BAGS,
+          BagOrderProductionPropertiesReference.PRODUCTS,
           BagOrderProductionPropertiesReference.EMPLOYEE,
           BagOrderProductionPropertiesReference.MACHINE
         ],
