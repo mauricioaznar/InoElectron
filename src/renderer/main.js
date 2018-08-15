@@ -39,6 +39,7 @@ Vue.use(VeeValidate, {
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = true
+Vue.config.devtools = true
 
 sync(store, router)
 

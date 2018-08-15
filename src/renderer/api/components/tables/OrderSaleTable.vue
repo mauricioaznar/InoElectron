@@ -288,6 +288,8 @@
         },
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
+          console.log('_quanitity')
+          console.log(currentStructuredObj['_quantity'])
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
             currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = productGroupWeight

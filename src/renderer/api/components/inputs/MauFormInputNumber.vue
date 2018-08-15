@@ -88,6 +88,8 @@
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       updateValue (numberString) {
+        console.log('number string')
+        console.log(numberString)
         this.$emit('input', numberString)
       }
     },
