@@ -195,8 +195,6 @@
         },
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] ? currentStructuredObj['_quantity'].replace(/[^\d.-]/g, '') : 0
-          console.log('_quanitity')
-          console.log(currentStructuredObj['_quantity'])
           let floatQuantity = parseFloat(quantity)
           let integerQuantity = parseInt(quantity)
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
