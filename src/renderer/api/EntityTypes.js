@@ -5,6 +5,10 @@ export default {
     apiName: 'product',
     title: 'Productos'
   },
+  PRODUCT_TYPE: {
+    name: 'productType',
+    apiName: 'productType'
+  },
   CLIENT: {
     name: 'client',
     apiName: 'client',
@@ -18,12 +22,21 @@ export default {
   },
   BAG_ORDER_PRODUCTION: {
     name: 'bagOrderProduction',
-    apiName: 'bagOrderProduction',
-    title: 'Ordenes de produccion'
+    apiName: 'orderProduction',
+    title: 'Ordenes de bolseo'
   },
-  BAG_ORDER_PRODUCTION_PRODUCT: {
-    name: 'bagOrderProductionProduct',
-    apiName: 'bagOrderProductionProduct'
+  ROLL_ORDER_PRODUCTION: {
+    name: 'rollOrderProduction',
+    apiName: 'orderProduction',
+    title: 'Ordenes de extrusion'
+  },
+  ORDER_PRODUCTION_TYPE: {
+    name: 'orderProductionType',
+    apiName: 'orderProductionType'
+  },
+  ORDER_PRODUCTION_PRODUCT: {
+    name: 'orderProductionProduct',
+    apiName: 'orderProductionProduct'
   },
   ORDER_ADJUSTMENT: {
     name: 'orderAdjustment',
@@ -34,9 +47,9 @@ export default {
     name: 'orderAdjustmentProduct',
     apiName: 'orderAdjustmentProduct'
   },
-  ORDER_ADJUSTMENT_ORDER_TYPE: {
-    name: 'orderAdjustmentOrderType',
-    apiName: 'orderAdjustmentOrderType'
+  ORDER_ADJUSTMENT_TYPE: {
+    name: 'orderAdjustmentType',
+    apiName: 'orderAdjustmentType'
   },
   ORDER_SALE_RECEIPT: {
     name: 'orderSaleReceipt',

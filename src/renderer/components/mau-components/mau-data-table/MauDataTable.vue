@@ -73,7 +73,6 @@
   import {getHeaders} from 'renderer/api/functions/ApiHTPPHeaders'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import isEntityEditable from 'renderer/api/functions/isEntityEditable'
-
   export default {
     name: 'MauDataTable',
     components: {
@@ -223,7 +222,8 @@
       onChangePage (page) {
         this.$refs.vuetable.changePage(page)
       },
-      getBooleanIcon: DisplayFunctions.getBooleanIcon,
+      getThreeStateBoolean: DisplayFunctions.getThreeStateBoolean,
+      getTwoStateBoolean: DisplayFunctions.getTwoStateBoolean,
       getNameFromObject: DisplayFunctions.getNameFromObject,
       getArrayLength: DisplayFunctions.getArrayLength,
       getValue: DisplayFunctions.getValue,
@@ -232,13 +232,13 @@
       getDateFromDateTime: DisplayFunctions.getDateFromDateTime,
       getDate: DisplayFunctions.getDate,
       getNameArray: DisplayFunctions.getNameArray,
-      getBagWithUnits: DisplayFunctions.getBagWithUnits,
-      getBagWithUnitsRequested: DisplayFunctions.getBagWithUnitsRequested,
-      getBagWithUnitsGiven: DisplayFunctions.getBagWithUnitsGiven,
+      getProducts: DisplayFunctions.getProducts,
+      getOrderSaleProducts: DisplayFunctions.getOrderSaleProducts,
       getPersonaArray: DisplayFunctions.getPersonaArray,
       getPersonaInformation: DisplayFunctions.getPersonaInformation,
-      getBagOrderSaleTotalCostRequested: DisplayFunctions.getBagOrderSaleTotalCostRequested,
-      getBagOrderSaleTotalCostGiven: DisplayFunctions.getBagOrderSaleTotalCostGiven
+      getOrderSaleTotalCost: DisplayFunctions.getOrderSaleTotalCost,
+      getMachineNames: DisplayFunctions.getMachineNames,
+      getDateTime: DisplayFunctions.getDateTime
     }
   }
 </script>

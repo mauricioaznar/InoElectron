@@ -2,27 +2,54 @@
   <div class="container">
     <mau-spinner v-if="!entity" :sizeType="'router'"></mau-spinner>
     <mau-entity-petitioner :id="id" :entityType="entityType" @entityResult="entityResultHandler"></mau-entity-petitioner>
-    <mau-entity-view v-if="entity" :entity="entity" :propertiesReference="propertiesReference"></mau-entity-view>
+    <mau-property-viewer v-if="entity" :entity="entity" :properties="properties"></mau-property-viewer>
   </div>
 </template>
 
 <script>
-  import PropertiesReference from 'renderer/api/propertiesReference/OrderSaleRequestPropertiesReference'
+  import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
+  import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
     name: 'ViewOrderSaleRequest',
     components: {
       MauEntityPetitioner,
-      MauSpinner},
+      MauSpinner,
+      MauPropertyViewer
+    },
     data () {
       return {
-        propertiesReference: [
-          PropertiesReference.ORDER_CODE,
-          PropertiesReference.DATE_REQUESTED,
-          PropertiesReference.CLIENT,
-          PropertiesReference.PRODUCTS
+        properties: [
+          {
+            title: OrderSalePropertiesReference.ORDER_CODE.title,
+            name: OrderSalePropertiesReference.ORDER_CODE.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: OrderSalePropertiesReference.DATE_REQUESTED.title,
+            name: OrderSalePropertiesReference.DATE_REQUESTED.name,
+            display: DisplayFunctions.getDate
+          },
+          {
+            title: OrderSalePropertiesReference.PRODUCTS.title,
+            name: OrderSalePropertiesReference.PRODUCTS.name,
+            display: DisplayFunctions.getOrderSaleProducts,
+            arguments: [1]
+          },
+          {
+            title: OrderSalePropertiesReference.PRODUCTS.title,
+            name: OrderSalePropertiesReference.PRODUCTS.name,
+            display: DisplayFunctions.getOrderSaleTotalCost,
+            arguments: [1]
+          },
+          {
+            title: OrderSalePropertiesReference.CLIENT.title,
+            name: OrderSalePropertiesReference.CLIENT.name,
+            display: DisplayFunctions.getPersona
+          }
         ],
         entityType: EntityTypes.ORDER_SALE_REQUEST,
         entity: null

@@ -83,7 +83,7 @@
 </template>
 
 <script>
-    import BagOrderProductPropertiesReference from 'renderer/api/propertiesReference/BagOrderProductPropertiesReference'
+    import BagOrderProductPropertiesReference from 'renderer/api/propertiesReference/OrderProductionProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
     import MauFormInputRegularNumber from 'renderer/api/components/inputs/MauFormInputRegularNumber.vue'
     import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
@@ -91,7 +91,6 @@
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import {mapGetters} from 'vuex'
     import cloneDeep from 'renderer/services/common/cloneDeep'
-    import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
     export default {
       name: 'ProductOrderTable',
       inject: ['$validator'],
@@ -129,19 +128,22 @@
           default: function () {
             return false
           }
+        },
+        machineId: {
+          type: Number
         }
       },
       methods: {
         emitStructureChangeEvent: function () {
-          let initialSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialProducts, 'product_id')
-          let filteredStructuredObjects = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialSaleProducts, this.currentStructuredObjects, 'product_id')
-          this.$emit('input', filteredStructuredObjects)
+          this.$emit('input', this.currentStructuredObjects)
         },
         getProductCode: function (structuredObject) {
-          return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CODE.name]
+          let product = this.getProductById(structuredObject['product_id'])
+          return product ? product[ProductPropertiesReference.CODE.name] : ''
         },
         getProductDescription: function (structuredObject) {
-          return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.DESCRIPTION.name]
+          let product = this.getProductById(structuredObject['product_id'])
+          return product ? product[ProductPropertiesReference.DESCRIPTION.name] : ''
         },
         getProductCurrentGroupWeight: function (structuredObject) {
           return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
@@ -192,21 +194,23 @@
           return productSaleGroupWeight
         },
         setCurrentObjProperties: function (currentStructuredObj) {
-          let quantity = currentStructuredObj['_quantity'] || 0
+          let quantity = currentStructuredObj['_quantity'] ? currentStructuredObj['_quantity'].replace(/[^\d.-]/g, '') : 0
+          let floatQuantity = parseFloat(quantity)
+          let integerQuantity = parseInt(quantity)
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[BagOrderProductPropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
             currentStructuredObj[BagOrderProductPropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
           if (currentStructuredObj['_calculation_type'] === 0) {
-            currentStructuredObj[BagOrderProductPropertiesReference.KILOS.name] = quantity
+            currentStructuredObj[BagOrderProductPropertiesReference.KILOS.name] = floatQuantity % 1 === 0 ? integerQuantity : floatQuantity
             if (productGroupWeight) {
-              currentStructuredObj[BagOrderProductPropertiesReference.GROUPS.name] = quantity / productGroupWeight
+              currentStructuredObj[BagOrderProductPropertiesReference.GROUPS.name] = (floatQuantity % 1 === 0 ? integerQuantity : floatQuantity) / productGroupWeight
             }
           }
           if (currentStructuredObj['_calculation_type'] === 1) {
             if (productGroupWeight) {
-              currentStructuredObj[BagOrderProductPropertiesReference.GROUPS.name] = quantity
-              currentStructuredObj[BagOrderProductPropertiesReference.KILOS.name] = quantity * productGroupWeight
+              currentStructuredObj[BagOrderProductPropertiesReference.GROUPS.name] = floatQuantity % 1 === 0 ? integerQuantity : floatQuantity
+              currentStructuredObj[BagOrderProductPropertiesReference.KILOS.name] = (floatQuantity % 1 === 0 ? integerQuantity : floatQuantity) * productGroupWeight
             }
           }
           this.emitStructureChangeEvent()
@@ -229,6 +233,9 @@
               } else {
                 saleProduct = {}
                 saleProduct['product_id'] = selectedProduct[GlobalEntityIdentifier]
+                if (this.machineId) {
+                  saleProduct['machine_id'] = this.machineId
+                }
               }
               tempCurrentStructuredObjects.push(saleProduct)
             }

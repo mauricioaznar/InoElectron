@@ -1,25 +1,25 @@
 <template>
-    <mau-entity-view :entity="persona" :propertiesReference="propertiesReference"></mau-entity-view>
+    <mau-property-viewer :entity="persona" :properties="properties"></mau-property-viewer>
 </template>
 
 <script>
     import PropertiesReference from 'renderer/api/propertiesReference/PersonaPropertiesReference'
+    import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer.vue'
+    import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
     export default {
       name: 'MauPersonaView',
+      components: {
+        MauPropertyViewer
+      },
       data () {
         return {
           entity: null,
-          propertiesReference: [
-            PropertiesReference.COMPANYNAME,
-            PropertiesReference.ID,
-            PropertiesReference.FIRSTNAME,
-            PropertiesReference.LASTNAME,
-            PropertiesReference.COUNTRY,
-            PropertiesReference.CITY,
-            PropertiesReference.ADDRESS1,
-            PropertiesReference.EMAIL,
-            PropertiesReference.HOUSEPHONE,
-            PropertiesReference.CELLPHONE
+          properties: [
+            {
+              name: PropertiesReference.COMPANYNAME.name,
+              title: PropertiesReference.COMPANYNAME.title,
+              display: DisplayFunctions.getValue
+            }
           ]
         }
       },

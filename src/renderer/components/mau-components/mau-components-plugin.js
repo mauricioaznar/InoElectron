@@ -1,7 +1,6 @@
 import MauTabs from 'renderer/components/mau-components/mau-tabs/MauTabs.vue'
 import MauWidget from 'renderer/components/mau-components/mau-widget/MauWidget.vue'
 import MauTable from 'renderer/components/mau-components/mau-table/MauTable.vue'
-import MauEntityView from 'renderer/components/mau-components/mau-entity-view/MauEntityView.vue'
 import MauResponsiveButton from 'renderer/components/mau-components/mau-responsive-button/MauResponsiveButton.vue'
 import MauCrudView from 'renderer/api/components/crud/MauCrudView.vue'
 import MauCrudCreate from 'renderer/api/components/crud/MauCrudCreate.vue'
@@ -19,7 +18,6 @@ const MauComponentsPlugin = {
     Vue.component(MauTabs.name, MauTabs)
     Vue.component(MauWidget.name, MauWidget)
     Vue.component(MauTable.name, MauTable)
-    Vue.component(MauEntityView.name, MauEntityView)
     Vue.component(MauResponsiveButton.name, MauResponsiveButton)
     Vue.component(MauCrudView.name, MauCrudView)
     Vue.component(MauCrudCreate.name, MauCrudCreate)

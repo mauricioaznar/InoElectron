@@ -11,13 +11,13 @@ let OrderAdjustmentPropertiesReference = {
   PRODUCTS: {
     title: 'Products',
     name: 'products',
-    display: DisplayFunctions.getBagWithUnits,
+    display: DisplayFunctions.getProducts,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },
-  ORDER_TYPE: {
-    name: 'order_adjustment_order_type',
+  ORDER_ADJUSTMENT_TYPE: {
+    name: 'order_adjustment_type',
     title: 'Tipo de orden',
-    relationship_id_name: 'order_adjustment_order_type_id',
+    relationship_id_name: 'order_adjustment_type_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   }

@@ -14,6 +14,7 @@
 <script>
   import PersonaView from 'renderer/api/components/template/PersonaView.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
+  import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import EntityType from 'renderer/api/EntityTypes'
   export default {
@@ -27,6 +28,7 @@
     components: {
       MauSpinner,
       MauEntityPetitioner,
+      MauPropertyViewer,
       PersonaView
     },
     props: {

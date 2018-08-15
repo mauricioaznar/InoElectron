@@ -17,39 +17,40 @@
           <div class="form-group">
               <div class="expenseType">
                   <mau-form-input-select
-                          :initialObject="initialValues[OrderAdjustmentPropertiesReference.ORDER_TYPE.name]"
-                          :label="OrderAdjustmentPropertiesReference.ORDER_TYPE.title"
+                          :initialObject="initialValues[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name]"
+                          :label="OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.title"
                           :displayProperty="'name'"
-                          v-model="productionOrder.orderType"
-                          :name="OrderAdjustmentPropertiesReference.ORDER_TYPE.name"
-                          :data-vv-as="OrderAdjustmentPropertiesReference.ORDER_TYPE.title"
-                          :error="errors.first(OrderAdjustmentPropertiesReference.ORDER_TYPE.name)"
-                          :entityType="orderTypeEntityType"
+                          v-model="productionOrder.adjustmentType"
+                          :name="OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name"
+                          :data-vv-as="OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.title"
+                          :error="errors.first(OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name)"
+                          :entityType="adjustmentTypeEntityType"
                           v-validate="'object_required'"
                   >
                   </mau-form-input-select>
               </div>
           </div>
           <div class="form-group">
-                    <mau-many-to-many-selector
+                    <mau-form-input-select
                             :label="OrderAdjustmentPropertiesReference.PRODUCTS.title"
                             :initialObjects="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
                             v-model="productionOrder.products"
-                            :selectedPropertyName="'product_id'"
                             :displayProperty="'code'"
-                            :availableObjects="availableProducts"
                             :name="OrderAdjustmentPropertiesReference.PRODUCTS.name"
+                            :error="errors.first(OrderAdjustmentPropertiesReference.PRODUCTS.name)"
+                            :data-vv-as="OrderAdjustmentPropertiesReference.PRODUCTS.title"
+                            :entityType="productEntityType"
+                            :multi="true"
+                            v-validate="'array_required'"
                     >
-                        <template slot-scope="params">
-                            <order-table
-                                :allowNegative="true"
-                                :selectedProducts="params.selectedObjects"
-                                :initialProducts="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
-                                v-model="productionOrder.adjustmentProducts"
-                            >
-                            </order-table>
-                        </template>
-                    </mau-many-to-many-selector>
+                        <order-production-table
+                            :allowNegative="true"
+                            :selectedProducts="productionOrder.products"
+                            :initialProducts="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
+                            v-model="productionOrder.adjustmentProducts"
+                        >
+                        </order-production-table>
+                    </mau-form-input-select>
           </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled" @click="save" type="button" variant="primary">Guardar</b-button>
@@ -69,7 +70,7 @@
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
-  import OrderTable from 'renderer/api/components/tables/OrderTable.vue'
+  import OrderProductionTable from 'renderer/api/components/tables/OrderProductionTable.vue'
   import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import {mapState} from 'vuex'
   export default {
@@ -82,11 +83,12 @@
           products: [],
           adjustmentProducts: [],
           date: '',
-          orderType: {}
+          adjustmentType: {}
         },
         initialValues: {},
         buttonDisabled: false,
-        orderTypeEntityType: EntityTypes.ORDER_ADJUSTMENT_ORDER_TYPE
+        adjustmentTypeEntityType: EntityTypes.ORDER_ADJUSTMENT_TYPE,
+        productEntityType: EntityTypes.PRODUCT
       }
     },
     components: {
@@ -95,7 +97,7 @@
       MauFormInputText,
       MauManyToManySelector,
       OrderSaleTable,
-      OrderTable
+      OrderProductionTable
     },
     props: {
       initialObject: {
@@ -141,15 +143,16 @@
       setInitialValues: function () {
         this.initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name] = this.initialObject[OrderAdjustmentPropertiesReference.PRODUCTS.name]
         this.initialValues[OrderAdjustmentPropertiesReference.DATE.name] = this.initialObject[OrderAdjustmentPropertiesReference.DATE.name]
-        this.initialValues[OrderAdjustmentPropertiesReference.ORDER_TYPE.name] = this.initialObject[OrderAdjustmentPropertiesReference.ORDER_TYPE.name]
+        this.initialValues[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name] = this.initialObject[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name]
       },
       save: function () {
         let directParams = {
           [OrderAdjustmentPropertiesReference.DATE.name]: this.productionOrder.date
         }
-        directParams[OrderAdjustmentPropertiesReference.ORDER_TYPE.relationship_id_name] = this.productionOrder.orderType ? this.productionOrder.orderType[GlobalEntityIdentifier] : 'null'
+        directParams[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.relationship_id_name] = this.productionOrder.adjustmentType ? this.productionOrder.adjustmentType[GlobalEntityIdentifier] : 'null'
+        let filteredAdjustmentProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(this.initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name].map(initialProductionObj => initialProductionObj.pivot), this.productionOrder.adjustmentProducts, 'id')
         let relayObjects = [
-          ManyToManyHelper.createRelayObject(this.productionOrder.adjustmentProducts, EntityTypes.ORDER_ADJUSTMENT_PRODUCT)
+          ManyToManyHelper.createRelayObject(filteredAdjustmentProducts, EntityTypes.ORDER_ADJUSTMENT_PRODUCT)
         ]
         this.$validator.validateAll().then((result) => {
           if (result) {

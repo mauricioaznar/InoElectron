@@ -7,21 +7,18 @@ let propertiesReference = {
     title: 'Codigo',
     name: 'code',
     display: DisplayFunctions.getValue,
-    required: true,
     defaultValue: MauInputDefaultValues.TEXT
   },
   DESCRIPTION: {
     title: 'Descripción',
     name: 'description',
     display: DisplayFunctions.getValue,
-    required: true,
     defaultValue: MauInputDefaultValues.TEXT
   },
   CURRENT_KILO_PRICE: {
     title: 'Precio por kilo',
     name: 'current_kilo_price',
     display: DisplayFunctions.getValue,
-    required: true,
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
@@ -29,7 +26,6 @@ let propertiesReference = {
     title: 'Peso en kilos por bulto',
     name: 'current_group_weight',
     display: DisplayFunctions.getValue,
-    required: true,
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
@@ -37,7 +33,6 @@ let propertiesReference = {
     title: 'Ancho',
     name: 'width',
     display: DisplayFunctions.getValue,
-    required: true,
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
@@ -45,7 +40,6 @@ let propertiesReference = {
     title: 'Largo',
     name: 'length',
     display: DisplayFunctions.getValue,
-    required: true,
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
@@ -54,7 +48,6 @@ let propertiesReference = {
     name: 'material',
     relationship_id_name: 'material_id',
     display: DisplayFunctions.getNameFromObject,
-    required: true,
     defaultValue: MauInputDefaultValues.SELECT
   },
   PACKING: {
@@ -62,13 +55,19 @@ let propertiesReference = {
     name: 'packing',
     relationship_id_name: 'packing_id',
     display: DisplayFunctions.getNameFromObject,
-    required: true,
     defaultValue: MauInputDefaultValues.SELECT
   },
   GROUP_WEIGHT_STRICT: {
     title: 'Requiere bultos exactos',
     name: 'group_weight_strict',
     defaultValue: MauInputDefaultValues.BOOLEAN
+  },
+  PRODUCT_TYPE: {
+    title: 'Tipo de producto',
+    name: 'product_type',
+    relationship_id_name: 'product_type_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
   }
 }
 

@@ -10,7 +10,7 @@
       :callback="callback">
       <template slot-scope="params">
         <order-production-form
-          :bagMode="true"
+          :extrusionMode="true"
           :initialObject="entity"
           :saveFunction="params.saveFunction"
           :entityType="entityType">
@@ -27,10 +27,10 @@
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'EditOrderProduction',
+    name: 'EditRollOrderProduction',
     data () {
       return {
-        entityType: EntityTypes.BAG_ORDER_PRODUCTION,
+        entityType: EntityTypes.ROLL_ORDER_PRODUCTION,
         hostRelationshipIdName: 'order_production_id',
         entity: null
       }

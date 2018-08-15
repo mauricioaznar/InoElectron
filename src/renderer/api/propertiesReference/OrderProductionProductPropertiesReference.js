@@ -1,5 +1,6 @@
 import Masks from 'renderer/api/functions/Masks'
 import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
+import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
 export default {
   KILOS: {
     title: 'Cantidad en kilos',
@@ -18,5 +19,12 @@ export default {
     name: 'group_weight',
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
+  },
+  MACHINE: {
+    title: 'Maquina',
+    name: 'machine',
+    relationship_id_name: 'machine_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
   }
 }

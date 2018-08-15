@@ -2,6 +2,21 @@
   <div>
     <div class="form-group form-row">
       <div class="col-sm-12">
+        <mau-form-input-select
+                :initialObject="initialValues[PropertiesReference.PRODUCT_TYPE.name]"
+                :label="PropertiesReference.PRODUCT_TYPE.title"
+                :displayProperty="'name'"
+                :entityType="productTypeEntityType"
+                v-model="product.productType"
+                :name="PropertiesReference.PRODUCT_TYPE.name"
+                :error="errors.first(PropertiesReference.PRODUCT_TYPE.name)"
+                v-validate="'object_required'"
+        >
+        </mau-form-input-select>
+      </div>
+    </div>
+    <div class="form-group form-row">
+      <div class="col-sm-12">
         <mau-form-input-text
                 :initialValue="initialValues[PropertiesReference.CODE.name]"
                 v-model="product.code"
@@ -33,26 +48,24 @@
         </mau-form-input-text>
       </div>
     </div>
-    <div class="form-group form-row">
-      <div class="col-sm-12">
-        <div class="mb-1">
-          <b-form-checkbox
-                  v-model="hasGroupWeight">
-            ¿Tiene peso por bulto?
-          </b-form-checkbox>
-        </div>
-        <mau-form-input-number
-                v-if="hasGroupWeight"
-                :label="PropertiesReference.CURRENT_GROUP_WEIGHT.title"
-                :name="PropertiesReference.CURRENT_GROUP_WEIGHT.name"
-                :initialValue="initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name]"
-                v-model="product.currentGroupWeight"
-                v-validate="'required|min_value:1'"
-                :error="errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name)"
-        >
-        </mau-form-input-number>
-
-      </div>
+    <div class="form-group ">
+      <mau-form-input-number
+              v-if="isBag"
+              :label="PropertiesReference.CURRENT_GROUP_WEIGHT.title"
+              :name="PropertiesReference.CURRENT_GROUP_WEIGHT.name"
+              :initialValue="initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name]"
+              v-model="product.currentGroupWeight"
+              v-validate="'required|min_value:1'"
+              :error="errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name)"
+      >
+      </mau-form-input-number>
+    </div>
+    <div class="form-group ">
+      <b-form-checkbox
+              v-if="isBag"
+              v-model="product.groupWeightStrict">
+        ¿Require de validacion exacta?
+      </b-form-checkbox>
     </div>
     <div class="form-group form-row">
       <div class="col-sm-12">
@@ -70,7 +83,7 @@
       </div>
     </div>
     <div class="form-group form-row">
-      <div class="col-sm-6">
+      <div :class="isBag ? 'col-sm-6' : 'col-sm-12'">
         <mau-form-input-number
                 :label="PropertiesReference.WIDTH.title"
                 :name="PropertiesReference.WIDTH.name"
@@ -81,7 +94,7 @@
         >
         </mau-form-input-number>
       </div>
-      <div class="col-sm-6">
+      <div v-if="isBag" class="col-sm-6">
         <mau-form-input-number
                 :label="PropertiesReference.LENGTH.title"
                 :name="PropertiesReference.LENGTH.name"
@@ -110,30 +123,17 @@
     </div>
     <div class="form-group form-row">
       <div class="col-sm-12">
-        <label>{{PropertiesReference.PACKING.title}}</label>
-        <b-form-radio-group
-                stacked
-                :id="PropertiesReference.PACKING.name"
+        <mau-form-input-select
+                :initialObject="initialValues[PropertiesReference.PACKING.name]"
+                :label="PropertiesReference.PACKING.title"
+                :displayProperty="'name'"
+                :entityType="packingEntityType"
                 v-model="product.packing"
-                v-validate="'required'"
-                class="form-control override-outline"
                 :name="PropertiesReference.PACKING.name"
-                :data-vv-name="PropertiesReference.PACKING.name"
-                :class="getBootstrapValidationClass(errors.has(PropertiesReference.PACKING.name))"
+                :error="errors.first(PropertiesReference.PACKING.name)"
+                v-validate="'object_required'"
         >
-          <b-form-radio
-                  v-for="packing in availablePackings"
-                  :value="packing"
-                  :key="packing.id"
-          >
-            {{packing.name}}
-          </b-form-radio>
-        </b-form-radio-group>
-        <div class="invalid-feedback">
-                      <span v-show="errors.has(PropertiesReference.PACKING.name)" class="help is-danger">
-                        {{ errors.first(PropertiesReference.PACKING.name) }}
-                      </span>
-        </div>
+        </mau-form-input-select>
       </div>
     </div>
     <div class="container mb-2 text-right">
@@ -143,10 +143,8 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
   import PropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import NormalizeObjects from 'renderer/api/functions/NormalizeObjects'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import MaskedInput from 'vue-text-mask'
@@ -160,20 +158,28 @@
       return {
         product: {
           material: {},
-          packing: '',
+          packing: {},
+          productType: {},
           code: '',
           description: '',
           currentKiloPrice: '',
           currentGroupWeight: '',
+          groupWeightStrict: true,
           width: '',
           length: ''
         },
-        hasGroupWeight: true,
         buttonDisabled: false,
         initialValues: {},
         materialEntityType: EntityTypes.MATERIAL,
         productEntityType: EntityTypes.PRODUCT,
+        productTypeEntityType: EntityTypes.PRODUCT_TYPE,
+        packingEntityType: EntityTypes.PACKING,
         PropertiesReference: PropertiesReference
+      }
+    },
+    computed: {
+      isBag: function () {
+        return this.product.productType[GlobalEntityIdentifier] === 1
       }
     },
     components: {
@@ -207,14 +213,6 @@
         this.setInitialValues()
       }
     },
-    computed: {
-      ...mapState({
-        availablePackings: state => {
-          let availablePackings = state.api.entity.packings
-          return NormalizeObjects.normalizeObjects(availablePackings, ['name'])
-        }
-      })
-    },
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       createDefaultInitialValues: function () {
@@ -227,38 +225,40 @@
       setInitialValues: function () {
         this.initialValues[PropertiesReference.DESCRIPTION.name] = this.initialObject[PropertiesReference.DESCRIPTION.name]
         this.initialValues[PropertiesReference.CODE.name] = this.initialObject[PropertiesReference.CODE.name]
-        this.initialValues[PropertiesReference.LENGTH.name] = this.initialObject[PropertiesReference.WIDTH.name]
+        this.initialValues[PropertiesReference.LENGTH.name] = this.initialObject[PropertiesReference.LENGTH.name]
         this.initialValues[PropertiesReference.WIDTH.name] = this.initialObject[PropertiesReference.WIDTH.name]
         this.initialValues[PropertiesReference.CURRENT_KILO_PRICE.name] = this.initialObject[PropertiesReference.CURRENT_KILO_PRICE.name] + ''
         this.initialValues[PropertiesReference.MATERIAL.name] = this.initialObject[PropertiesReference.MATERIAL.name]
-        if (this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name]) {
-          this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name]
-          this.hasGroupWeight = true
-        } else {
-          this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = 0
-          this.hasGroupWeight = false
-        }
-        this.product.packing = NormalizeObjects.normalizeObject(this.initialObject[PropertiesReference.PACKING.name], ['name'])
+        this.initialValues[PropertiesReference.PRODUCT_TYPE.name] = this.initialObject[PropertiesReference.PRODUCT_TYPE.name]
+        this.initialValues[PropertiesReference.PACKING.name] = this.initialObject[PropertiesReference.PACKING.name]
+        let currentGroupWeight = this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name] !== null ? this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name] : 0
+        this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = currentGroupWeight
+        this.product.groupWeightStrict = this.initialObject[PropertiesReference.GROUP_WEIGHT_STRICT.name] === 1
       },
       save: function () {
         let directParams = {
           [PropertiesReference.CODE.name]: this.product.code,
           [PropertiesReference.DESCRIPTION.name]: this.product.description,
           [PropertiesReference.WIDTH.name]: this.product.width,
-          [PropertiesReference.LENGTH.name]: this.product.length,
           [PropertiesReference.CURRENT_KILO_PRICE.name]: this.product.currentKiloPrice,
-          [PropertiesReference.CURRENT_GROUP_WEIGHT.name]: this.hasGroupWeight ? this.product.currentGroupWeight : 'null',
           // one to many
-          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : null,
-          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing ? this.product.packing[GlobalEntityIdentifier] : null
+          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : 'null',
+          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing ? this.product.packing[GlobalEntityIdentifier] : 'null',
+          [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : 'null'
         }
-        let indirectParams = {
-
+        if (this.isBag) {
+          directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = this.product.currentGroupWeight
+          directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = this.product.groupWeightStrict ? 1 : 0
+          directParams[PropertiesReference.LENGTH.name] = this.product.length
+        } else {
+          directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = -1
+          directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = 'null'
+          directParams[PropertiesReference.LENGTH.name] = 'null'
         }
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true
-            this.saveFunction(directParams, indirectParams)
+            this.saveFunction(directParams, {})
           }
         })
       }

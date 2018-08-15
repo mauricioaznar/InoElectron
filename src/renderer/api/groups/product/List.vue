@@ -44,6 +44,10 @@
             callback: DisplayFunctions.getNameFromObject
           },
           {
+            name: PropertiesReference.CURRENT_KILO_PRICE.name,
+            title: PropertiesReference.CURRENT_KILO_PRICE.title
+          },
+          {
             name: PropertiesReference.WIDTH.name,
             title: PropertiesReference.WIDTH.title
           },
@@ -54,10 +58,6 @@
           {
             name: PropertiesReference.CURRENT_GROUP_WEIGHT.name,
             title: PropertiesReference.CURRENT_GROUP_WEIGHT.title
-          },
-          {
-            name: PropertiesReference.CURRENT_KILO_PRICE.name,
-            title: PropertiesReference.CURRENT_KILO_PRICE.title
           }
         ],
         actions: [

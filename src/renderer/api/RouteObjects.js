@@ -209,6 +209,7 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PROD
       {
         componentName: 'List',
         groupDefault: true,
+        title: 'Ordenes de bolseo',
         navbar: true
       }
     ),
@@ -230,6 +231,46 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PROD
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
+      {
+        componentName: 'Del',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
+  {
+    componentName: 'Main',
+    category: Categories.PRODUCTION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        title: 'Ordenes de extrusion',
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
       {
         componentName: 'Del',
         params: [GlobalEntityIdentifier]

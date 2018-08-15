@@ -7,6 +7,7 @@
                 v-model="selected"
                 :label="displayProperty"
                 :track-by="'id'"
+                :multiple="multi"
                 class="form-control override-form-control"
                 :onSearch="search"
                 :clearSearchOnSelect="hasClear"
@@ -18,6 +19,7 @@
             </template>
             <span slot="no-options">No se encontraron resultados.</span>
         </vue-select>
+        <slot></slot>
         <div class="invalid-feedback">
           <span v-show="error" class="help is-danger">
             {{error}}
@@ -39,6 +41,7 @@
           options: []
         }
       },
+      inject: ['$validator'],
       $_veeValidate: {
         name () {
           return this.name
@@ -49,7 +52,7 @@
       },
       props: {
         value: {
-          type: [Object]
+          type: [Object, Array]
         },
         name: {
           type: String
@@ -77,9 +80,15 @@
           type: String
         },
         initialObject: {
-          type: Object,
+          type: [Object],
           default: function () {
             return {}
+          }
+        },
+        initialObjects: {
+          type: [Array],
+          default: function () {
+            return []
           }
         },
         hasClear: {
@@ -93,11 +102,23 @@
           default: function () {
             return {}
           }
+        },
+        multi: {
+          type: Boolean,
+          default: function () {
+            return false
+          }
         }
       },
       created () {
-        if (this.initialObject !== null && this.initialObject !== 'null' && typeof this.initialObject === 'object' && Object.keys(this.initialObject).length !== 0) {
-          this.selected = cloneDeep(this.initialObject)
+        if (this.multi) {
+          if (Array.isArray(this.initialObjects) && this.initialObjects.length !== 0) {
+            this.selected = cloneDeep(this.initialObjects)
+          }
+        } else {
+          if (this.initialObject !== null && this.initialObject !== 'null' && typeof this.initialObject === 'object' && Object.keys(this.initialObject).length !== 0) {
+            this.selected = cloneDeep(this.initialObject)
+          }
         }
         if (this.entityType) {
           ApiOperations.getWithFilterExactWithoutPagination(this.entityType, this.filterExact).then(data => {
@@ -116,8 +137,12 @@
       methods: {
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         updateValue: function (newValue) {
-          if (newValue === null) {
-            newValue = {}
+          if (this.multi) {
+
+          } else {
+            if (newValue === null) {
+              newValue = {}
+            }
           }
           this.$emit('input', newValue)
         },
@@ -142,7 +167,9 @@
           this.updateValue(newValue)
         },
         initialObject: function (newInitialObject) {
-          this.selected = newInitialObject
+          if (!this.multi) {
+            this.selected = newInitialObject
+          }
         }
       }
     }

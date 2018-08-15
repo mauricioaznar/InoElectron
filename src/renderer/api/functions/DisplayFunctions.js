@@ -1,14 +1,22 @@
 import ConvertDateTimeTo from 'renderer/services/common/ConvertDateTimeTo'
 import moment from 'moment'
+import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
 moment.locale('es')
 
 export default {
-  getBooleanIcon: function (booleanValue) {
+  getThreeStateBoolean: function (booleanValue) {
     if (booleanValue === 1) {
-      return '<span class="ld-yes"></span>'
+      return '<span class="fa fa-check"></span>'
     } else if (booleanValue === 0) {
-      return '<span class="ld-no"></span>'
+      return '<span class="fa fa-times"></span>'
     } else {
+      return ''
+    }
+  },
+  getTwoStateBoolean: function (booleanValue) {
+    if (booleanValue === 1 || booleanValue === true) {
+      return '<span class="fa fa-check"></span>'
+    } else if (booleanValue === 0 || booleanValue === false) {
       return '<span class="ld-na"></span>'
     }
   },
@@ -22,7 +30,7 @@ export default {
     return value
   },
   getPersona: function (value) {
-    let temp = value ? value.full_name : ''
+    let temp = value ? (value.first_name + ' ' + value.last_name) : ''
     return temp
   },
   getPersonaArray: function (array) {
@@ -41,7 +49,12 @@ export default {
   },
   getDate: function (date) {
     let momentDate = moment(date)
-    return momentDate.isValid() ? moment(date).format('dddd DD [de] MMMM [del] YYYY') : '-'
+    return momentDate.isValid() ? moment(date).format('dddd, MMMM D, YYYY') : '-'
+  },
+  getDateTime: function (date) {
+    let momentDate = moment(date)
+    console.log(date)
+    return momentDate.isValid() ? moment(date).format('dddd, MMMM D, YYYY. HH:mm') : '-'
   },
   getTimeFromDateTime: function (date) {
     return ConvertDateTimeTo.time(date)
@@ -55,39 +68,91 @@ export default {
   getPersonaInformation: function (persona) {
     return persona.companyname
   },
-  getBagWithUnits: function (array) {
-    let htmlString = '<ul>'
-    for (let i = 0; i < array.length; i++) {
-      htmlString += '<li class="mau-text-left">' + array[i].name + ' - ' + array[i].pivot.units + '</li>'
+  getProducts: function (array, productTypeId) {
+    let htmlString = '<table class="w-100">'
+    htmlString += '<tr><th>Codigo</th><th>Kilos</th>'
+    productTypeId = parseInt(productTypeId)
+    if (!productTypeId || productTypeId === 1) {
+      htmlString += '<th>Bultos</th>'
     }
-    return htmlString + '</ul>'
-  },
-  getBagWithUnitsRequested: function (array) {
-    let htmlString = '<ul>'
+    htmlString += '</tr>'
     for (let i = 0; i < array.length; i++) {
-      htmlString += '<li cass="mau-text-left">' + array[i].name + ' - ' + array[i].pivot.units_requested + '</li>'
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
+      htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos + ' kg</td>'
+      if (!productTypeId || productTypeId === 1) {
+        if (array[i].pivot.groups !== null) {
+          htmlString += '<td class="mau-text-right">' + array[i].pivot.groups + (array[i].pivot.groups > 1 ? ' bultos' : ' bulto') + '</td>'
+        } else {
+          htmlString += '<td></td>'
+        }
+      }
+      htmlString += '</tr>'
     }
-    return htmlString + '</ul>'
+    return htmlString + '</table>'
   },
-  getBagWithUnitsGiven: function (array) {
-    let htmlString = '<ul>'
+  getOrderSaleProducts: function (array, orderSaleTypeId) {
+    let htmlString = '<table class="w-100">'
+    orderSaleTypeId = parseInt(orderSaleTypeId)
     for (let i = 0; i < array.length; i++) {
-      htmlString += '<li cass="mau-text-left">' + array[i].name + ' - ' + array[i].pivot.units_given + '</li>'
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
+      if (orderSaleTypeId === 1) {
+        htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos_requested + ' kg</td>'
+        if (array[i].pivot.groups_requested !== null) {
+          htmlString += '<td class="mau-text-right">' + array[i].pivot.groups_requested + (array[i].pivot.groups_requested > 1 ? ' bultos' : ' bulto') + '</td>'
+        } else {
+          htmlString += '<td></td>'
+        }
+      }
+      if (orderSaleTypeId === 2) {
+        htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos_given + ' kg</td>'
+        if (array[i].pivot.groups_given !== null) {
+          htmlString += '<td class="mau-text-right">' + array[i].pivot.groups_given + (array[i].pivot.groups_given > 1 ? ' bultos' : ' bulto') + '</td>'
+        } else {
+          htmlString += '<td></td>'
+        }
+      }
+      htmlString += '</tr>'
     }
-    return htmlString + '</ul>'
+    return htmlString + '</table>'
   },
-  getBagOrderSaleTotalCostGiven: function (array) {
+  getOrderSaleTotalCost: function (array, orderSaleTypeId) {
     let total = 0
+    orderSaleTypeId = parseInt(orderSaleTypeId)
     for (let i = 0; i < array.length; i++) {
-      total += array[i].pivot.total_cost_given || 0
+      let kilosCost = 0
+      if (orderSaleTypeId === 1) {
+        kilosCost += (array[i].pivot.kilos_requested || 0) * (array[i].pivot.kilo_price || 0)
+      }
+      if (orderSaleTypeId === 2) {
+        kilosCost += (array[i].pivot.kilos_given || 0) * (array[i].pivot.kilo_price || 0)
+      }
+      total += kilosCost || 0
     }
     return '$' + total.toFixed(2)
   },
-  getBagOrderSaleTotalCostRequested: function (array) {
-    let total = 0
+  getMachineNames: function (array) {
+    let groupedMachines = []
     for (let i = 0; i < array.length; i++) {
-      total += array[i].pivot.total_cost_requested || 0
+      let machine = array[i]
+      let isMachineAlready = groupedMachines.find(machineObj => {
+        return machineObj[GlobalEntityIdentifier] === machine[GlobalEntityIdentifier]
+      })
+      if (!isMachineAlready) {
+        groupedMachines.push(machine)
+      }
     }
-    return '$' + total.toFixed(2)
+    let htmlString = ''
+    if (groupedMachines.length === 1) {
+      htmlString += groupedMachines[0].name
+    } else {
+      htmlString += '<ul>'
+      for (let i = 0; i < groupedMachines.length; i++) {
+        htmlString += '<li class="mau-text-left">' + groupedMachines[i].name + '</li>'
+      }
+      htmlString += '</ul>'
+    }
+    return groupedMachines.length === 0 ? '-' : htmlString
   }
 }

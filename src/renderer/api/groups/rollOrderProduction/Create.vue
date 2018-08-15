@@ -7,7 +7,7 @@
     >
       <template slot-scope="params">
         <order-production-form
-                :bagMode="true"
+                :extrusionMode="true"
                 :saveFunction="params.save"
                 :entityType="entityType"
         ></order-production-form>
@@ -21,11 +21,11 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateBagOrderProduction',
+    name: 'CreateRollOrderProduction',
     data () {
       return {
         hostRelationshipIdName: 'order_production_id',
-        entityType: EntityTypes.BAG_ORDER_PRODUCTION
+        entityType: EntityTypes.ROLL_ORDER_PRODUCTION
       }
     },
     components: {

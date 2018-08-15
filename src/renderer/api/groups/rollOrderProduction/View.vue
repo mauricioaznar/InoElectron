@@ -11,10 +11,10 @@
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer.vue'
-  import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import EntityTypes from 'renderer/api/EntityTypes'
   export default {
-    name: 'ViewBagOrderProduction',
+    name: 'ViewRollOrderProduction',
     components: {
       MauEntityPetitioner,
       MauSpinner,
@@ -37,7 +37,7 @@
             title: OrderProductionPropertiesReference.PRODUCTS.title,
             name: OrderProductionPropertiesReference.PRODUCTS.name,
             display: DisplayFunctions.getProducts,
-            arguments: [1]
+            arguments: [2]
           },
           {
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
@@ -45,12 +45,12 @@
             display: DisplayFunctions.getPersona
           },
           {
-            title: 'Maquina',
+            title: OrderProductionPropertiesReference.MACHINES.title,
             name: OrderProductionPropertiesReference.MACHINES.name,
             display: DisplayFunctions.getMachineNames
           }
         ],
-        entityType: EntityTypes.BAG_ORDER_PRODUCTION,
+        entityType: EntityTypes.ROLL_ORDER_PRODUCTION,
         entity: null
       }
     },

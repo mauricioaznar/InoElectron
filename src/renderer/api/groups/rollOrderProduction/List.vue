@@ -18,18 +18,18 @@
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
-    name: 'ListBagOrderProduction',
+    name: 'ListRollOrderProduction',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.BAG_ORDER_PRODUCTION),
-        filterExact: {[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name]: 1},
+        apiUrl: ApiUrls.createListUrl(EntityTypes.ROLL_ORDER_PRODUCTION),
+        filterExact: {[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name]: 2},
         canEdit: true,
         tableFields: [
           {
             name: OrderProductionPropertiesReference.PRODUCTS.name,
             title: OrderProductionPropertiesReference.PRODUCTS.title,
-            dataClass: 'child-center',
-            callback: DisplayFunctions.getProducts.name + '|' + 1
+            hidden: true,
+            callback: DisplayFunctions.getProducts.name + '|' + 2
           },
           {
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
@@ -52,7 +52,7 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewBagOrderProduction',
+            name: 'ViewRollOrderProduction',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }

@@ -4,17 +4,17 @@
           <div class="form-group">
               <div v-if="requestMode">
                   <mau-form-input-number
-                          :initialValue="initialValues[OrderSaleRequestPropertiesReference.ORDER_CODE.name]"
+                          :initialValue="initialValues[OrderSalePropertiesReference.ORDER_CODE.name]"
                           v-model="salesOrder.orderCode"
-                          :label="OrderSaleRequestPropertiesReference.ORDER_CODE.title"
-                          :name="OrderSaleRequestPropertiesReference.ORDER_CODE.name"
-                          :error="errors.first(OrderSaleRequestPropertiesReference.ORDER_CODE.name)"
+                          :label="OrderSalePropertiesReference.ORDER_CODE.title"
+                          :name="OrderSalePropertiesReference.ORDER_CODE.name"
+                          :error="errors.first(OrderSalePropertiesReference.ORDER_CODE.name)"
                           v-validate="{
                             required: true,
                             remote_unique: {
                               entityType: entityType,
-                              columnName: OrderSaleRequestPropertiesReference.ORDER_CODE.name,
-                              initialValue: String(initialValues[OrderSaleRequestPropertiesReference.ORDER_CODE.name])
+                              columnName: OrderSalePropertiesReference.ORDER_CODE.name,
+                              initialValue: String(initialValues[OrderSalePropertiesReference.ORDER_CODE.name])
                             }
                            }"
                   >
@@ -23,8 +23,8 @@
               <div v-else>
                   <div class="form-group form-row">
                       <div class="col-sm-12">
-                          <label><b>{{OrderSaleRequestPropertiesReference.ORDER_CODE.title}}</b></label>
-                          <div>{{initialValues[OrderSaleRequestPropertiesReference.ORDER_CODE.name]}}</div>
+                          <label><b>{{OrderSalePropertiesReference.ORDER_CODE.title}}</b></label>
+                          <div>{{initialValues[OrderSalePropertiesReference.ORDER_CODE.name]}}</div>
                       </div>
                   </div>
               </div>
@@ -32,11 +32,11 @@
           <div class="form-group">
               <div v-if="requestMode">
                   <mau-form-input-date-time
-                          :name="OrderSaleRequestPropertiesReference.DATE_REQUESTED.name"
-                          :label="OrderSaleRequestPropertiesReference.DATE_REQUESTED.title"
+                          :name="OrderSalePropertiesReference.DATE_REQUESTED.name"
+                          :label="OrderSalePropertiesReference.DATE_REQUESTED.title"
                           v-model="salesOrder.date_requested"
-                          :initialValue="initialValues[OrderSaleRequestPropertiesReference.DATE_REQUESTED.name]"
-                          :error="errors.first(OrderSaleRequestPropertiesReference.DATE_REQUESTED.name)"
+                          :initialValue="initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name]"
+                          :error="errors.first(OrderSalePropertiesReference.DATE_REQUESTED.name)"
                           v-validate="'required'"
                   >
                   </mau-form-input-date-time>
@@ -44,8 +44,8 @@
               <div v-else>
                   <div class="form-group form-row">
                       <div class="col-sm-12">
-                          <label><b>{{OrderSaleRequestPropertiesReference.DATE_REQUESTED.title}}</b></label>
-                          <div>{{initialValues[OrderSaleRequestPropertiesReference.DATE_REQUESTED.name]}}</div>
+                          <label><b>{{OrderSalePropertiesReference.DATE_REQUESTED.title}}</b></label>
+                          <div>{{initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name]}}</div>
                       </div>
                   </div>
               </div>
@@ -53,11 +53,11 @@
           <div class="form-group">
               <div v-if="receiptMode">
                   <mau-form-input-date-time
-                          :name="OrderSaleReceiptPropertiesReference.DATE_GIVEN.name"
-                          :label="OrderSaleReceiptPropertiesReference.DATE_GIVEN.title"
+                          :name="OrderSalePropertiesReference.DATE_GIVEN.name"
+                          :label="OrderSalePropertiesReference.DATE_GIVEN.title"
                           v-model="salesOrder.date_given"
-                          :initialValue="initialValues[OrderSaleReceiptPropertiesReference.DATE_GIVEN.name]"
-                          :error="errors.first(OrderSaleReceiptPropertiesReference.DATE_GIVEN.name)"
+                          :initialValue="initialValues[OrderSalePropertiesReference.DATE_GIVEN.name]"
+                          :error="errors.first(OrderSalePropertiesReference.DATE_GIVEN.name)"
                           v-validate="'required'"
                   >
                   </mau-form-input-date-time>
@@ -66,13 +66,13 @@
           <div class="form-group">
               <div v-if="requestMode">
                   <mau-form-input-select
-                          :initialObject="initialValues[OrderSaleRequestPropertiesReference.CLIENT.name]"
-                          :label="OrderSaleRequestPropertiesReference.CLIENT.title"
+                          :initialObject="initialValues[OrderSalePropertiesReference.CLIENT.name]"
+                          :label="OrderSalePropertiesReference.CLIENT.title"
                           :displayProperty="'companyname'"
                           :entityType="clientEntityType"
                           v-model="salesOrder.client"
-                          :name="OrderSaleRequestPropertiesReference.CLIENT.name"
-                          :error="errors.first(OrderSaleRequestPropertiesReference.CLIENT.name)"
+                          :name="OrderSalePropertiesReference.CLIENT.name"
+                          :error="errors.first(OrderSalePropertiesReference.CLIENT.name)"
                           v-validate="'object_required'"
                   >
                   </mau-form-input-select>
@@ -80,8 +80,8 @@
               <div v-else>
                   <div class="form-group form-row">
                       <div class="col-sm-12">
-                          <label><b>{{OrderSaleRequestPropertiesReference.CLIENT.title}}</b></label>
-                          <div>{{initialValues[OrderSaleRequestPropertiesReference.CLIENT.name].companyname}}</div>
+                          <label><b>{{OrderSalePropertiesReference.CLIENT.title}}</b></label>
+                          <div>{{initialValues[OrderSalePropertiesReference.CLIENT.name].companyname}}</div>
                       </div>
                   </div>
               </div>
@@ -89,13 +89,13 @@
           <div class="form-group">
               <div v-if="requestMode">
                   <mau-form-input-select
-                          :initialObject="initialValues[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name]"
-                          :label="OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.title"
+                          :initialObject="initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name]"
+                          :label="OrderSalePropertiesReference.RECEIPT_TYPE.title"
                           :displayProperty="'name'"
                           :entityType="orderSaleReceiptTypeEntityType"
                           v-model="salesOrder.receiptType"
-                          :name="OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name"
-                          :error="errors.first(OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name)"
+                          :name="OrderSalePropertiesReference.RECEIPT_TYPE.name"
+                          :error="errors.first(OrderSalePropertiesReference.RECEIPT_TYPE.name)"
                           v-validate="'object_required'"
                   >
                   </mau-form-input-select>
@@ -103,8 +103,8 @@
               <div v-else>
                   <div class="form-group form-row">
                       <div class="col-sm-12">
-                          <label><b>{{OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.title}}</b></label>
-                          <div>{{initialValues[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name].name}}</div>
+                          <label><b>{{OrderSalePropertiesReference.RECEIPT_TYPE.title}}</b></label>
+                          <div>{{initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name].name}}</div>
                       </div>
                   </div>
               </div>
@@ -112,12 +112,12 @@
           <div class="form-group">
               <div class="products">
                     <mau-many-to-many-selector
-                            :label="OrderSaleRequestPropertiesReference.PRODUCTS.title"
-                            :initialObjects="initialValues[OrderSaleRequestPropertiesReference.PRODUCTS.name]"
+                            :label="OrderSalePropertiesReference.PRODUCTS.title"
+                            :initialObjects="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                             v-model="salesOrder.products"
                             :availableObjects="availableProducts"
                             :displayProperty="'code'"
-                            :name="OrderSaleRequestPropertiesReference.PRODUCTS.name"
+                            :name="OrderSalePropertiesReference.PRODUCTS.name"
                             :selectedPropertyName="'product_id'"
                     >
                         <template slot-scope="params">
@@ -127,7 +127,7 @@
                                     :hasTax="isInvoiceSelected"
                                     :selectedProducts="params.selectedObjects"
                                     v-model="salesOrder.saleProducts"
-                                    :initialProducts="initialValues[OrderSaleRequestPropertiesReference.PRODUCTS.name]"
+                                    :initialProducts="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                             >
                             </order-sale-table>
                         </template>
@@ -142,8 +142,7 @@
 </template>
 
 <script>
-  import OrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/OrderSaleRequestPropertiesReference'
-  import OrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/OrderSaleReceiptPropertiesReference'
+  import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
@@ -153,7 +152,7 @@
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
-  import OrderTable from 'renderer/api/components/tables/OrderTable.vue'
+  import OrderTable from 'renderer/api/components/tables/OrderProductionTable.vue'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
@@ -163,8 +162,7 @@
     data () {
       return {
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
-        OrderSaleRequestPropertiesReference: OrderSaleRequestPropertiesReference,
-        OrderSaleReceiptPropertiesReference: OrderSaleReceiptPropertiesReference,
+        OrderSalePropertiesReference: OrderSalePropertiesReference,
         salesOrder: {
           orderCode: '',
           products: [],
@@ -226,7 +224,7 @@
       if (this.initialObject) {
         this.setInitialValues()
       } else {
-        ApiOperations.getMax(this.entityType, OrderSaleRequestPropertiesReference.ORDER_CODE.name).then(result => {
+        ApiOperations.getMax(this.entityType, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
           this.salesOrder.orderCode = result + 1
         })
       }
@@ -239,8 +237,8 @@
       }),
       isInvoiceSelected: function () {
         let receiptId
-        if (this.initialValues && this.initialValues[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name]) {
-          receiptId = this.initialValues[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name][GlobalEntityIdentifier]
+        if (this.initialValues && this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name]) {
+          receiptId = this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name][GlobalEntityIdentifier]
         }
         if (this.salesOrder.receiptType && this.salesOrder.receiptType[GlobalEntityIdentifier]) {
           receiptId = this.salesOrder.receiptType[GlobalEntityIdentifier]
@@ -250,39 +248,39 @@
     },
     methods: {
       createDefaultInitialValues: function () {
-        for (let propertyReference in OrderSaleRequestPropertiesReference) {
-          if (OrderSaleRequestPropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[OrderSaleRequestPropertiesReference[propertyReference].name] = OrderSaleRequestPropertiesReference[propertyReference].defaultValue
+        for (let propertyReference in OrderSalePropertiesReference) {
+          if (OrderSalePropertiesReference.hasOwnProperty(propertyReference)) {
+            this.initialValues[OrderSalePropertiesReference[propertyReference].name] = OrderSalePropertiesReference[propertyReference].defaultValue
           }
         }
-        for (let propertyReference in OrderSaleReceiptPropertiesReference) {
-          if (OrderSaleReceiptPropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[OrderSaleReceiptPropertiesReference[propertyReference].name] = OrderSaleReceiptPropertiesReference[propertyReference].defaultValue
+        for (let propertyReference in OrderSalePropertiesReference) {
+          if (OrderSalePropertiesReference.hasOwnProperty(propertyReference)) {
+            this.initialValues[OrderSalePropertiesReference[propertyReference].name] = OrderSalePropertiesReference[propertyReference].defaultValue
           }
         }
       },
       setInitialValues: function () {
-        this.initialValues[OrderSaleRequestPropertiesReference.ORDER_CODE.name] = this.initialObject[OrderSaleRequestPropertiesReference.ORDER_CODE.name]
-        this.initialValues[OrderSaleRequestPropertiesReference.PRODUCTS.name] = this.initialObject[OrderSaleRequestPropertiesReference.PRODUCTS.name]
-        this.initialValues[OrderSaleRequestPropertiesReference.DATE_REQUESTED.name] = this.initialObject[OrderSaleRequestPropertiesReference.DATE_REQUESTED.name]
-        this.initialValues[OrderSaleRequestPropertiesReference.CLIENT.name] = this.initialObject[OrderSaleRequestPropertiesReference.CLIENT.name]
-        this.initialValues[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name] = this.initialObject[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.name]
-        this.initialValues[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name] = this.initialObject[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]
-        this.initialValues[OrderSaleReceiptPropertiesReference.DATE_GIVEN.name] = this.initialObject[OrderSaleReceiptPropertiesReference.DATE_GIVEN.name]
+        this.initialValues[OrderSalePropertiesReference.ORDER_CODE.name] = this.initialObject[OrderSalePropertiesReference.ORDER_CODE.name]
+        this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.initialObject[OrderSalePropertiesReference.PRODUCTS.name]
+        this.initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name] = this.initialObject[OrderSalePropertiesReference.DATE_REQUESTED.name]
+        this.initialValues[OrderSalePropertiesReference.CLIENT.name] = this.initialObject[OrderSalePropertiesReference.CLIENT.name]
+        this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = this.initialObject[OrderSalePropertiesReference.RECEIPT_TYPE.name]
+        this.initialValues[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name] = this.initialObject[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name]
+        this.initialValues[OrderSalePropertiesReference.DATE_GIVEN.name] = this.initialObject[OrderSalePropertiesReference.DATE_GIVEN.name]
       },
       save: function () {
         let directParams = {}
         if (this.requestMode) {
-          let initialOrderStatusId = this.initialValues[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]
-          directParams[OrderSaleRequestPropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
-          directParams[OrderSaleRequestPropertiesReference.DATE_REQUESTED.name] = this.salesOrder.date_requested
-          directParams[OrderSaleRequestPropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
-          directParams[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name] = initialOrderStatusId && initialOrderStatusId > 1 ? initialOrderStatusId : 1
-          directParams[OrderSaleReceiptPropertiesReference.RECEIPT_TYPE.relationship_id_name] = this.salesOrder.receiptType ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
+          let initialOrderStatusId = this.initialValues[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name]
+          directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
+          directParams[OrderSalePropertiesReference.DATE_REQUESTED.name] = this.salesOrder.date_requested
+          directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
+          directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = this.salesOrder.receiptType ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
+          directParams[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name] = initialOrderStatusId && initialOrderStatusId > 1 ? initialOrderStatusId : 1
         }
         if (this.receiptMode) {
-          directParams[OrderSaleReceiptPropertiesReference.DATE_GIVEN.name] = this.salesOrder.date_given
-          directParams[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name] = 2
+          directParams[OrderSalePropertiesReference.DATE_GIVEN.name] = this.salesOrder.date_given
+          directParams[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name] = 2
         }
         let relayObjects = [
           ManyToManyHelper.createRelayObject(this.salesOrder.saleProducts, EntityTypes.ORDER_SALE_PRODUCT)

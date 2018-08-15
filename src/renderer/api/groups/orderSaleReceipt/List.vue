@@ -3,6 +3,7 @@
     <mau-crud-list>
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
+                      :rowClassFunction="rowClassFunction"
                       :actions="actions"
                       :filterExact="filterExact"
                       @actionClicked="actionHandler"
@@ -14,8 +15,7 @@
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
   import ApiUrls from 'renderer/api/functions/ApiUrls'
-  import OrderSaleReceiptPropertiesReference from 'renderer/api/propertiesReference/OrderSaleReceiptPropertiesReference'
-  import OrderSaleRequestPropertiesReference from 'renderer/api/propertiesReference/OrderSaleRequestPropertiesReference'
+  import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
@@ -23,38 +23,43 @@
     data () {
       return {
         apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_SALE_RECEIPT),
-        filterExact: {[OrderSaleRequestPropertiesReference.ORDER_STATUS.relationship_id_name]: 2},
+        filterExact: {[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name]: 2},
         tableFields: [
           {
-            name: OrderSaleRequestPropertiesReference.ORDER_CODE.name,
-            title: OrderSaleRequestPropertiesReference.ORDER_CODE.title,
-            sortField: OrderSaleRequestPropertiesReference.ORDER_CODE.name,
+            name: OrderSalePropertiesReference.ORDER_CODE.name,
+            title: OrderSalePropertiesReference.ORDER_CODE.title,
+            sortField: OrderSalePropertiesReference.ORDER_CODE.name,
             filter: true
           },
           {
-            name: OrderSaleReceiptPropertiesReference.DATE_GIVEN.name,
-            title: OrderSaleReceiptPropertiesReference.DATE_GIVEN.title,
-            sortField: OrderSaleReceiptPropertiesReference.DATE_GIVEN.name,
+            name: OrderSalePropertiesReference.DATE_GIVEN.name,
+            title: OrderSalePropertiesReference.DATE_GIVEN.title,
+            sortField: OrderSalePropertiesReference.DATE_GIVEN.name,
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true
           },
           {
-            name: OrderSaleReceiptPropertiesReference.PRODUCTS.name,
-            title: 'Kilos por bolsa',
-            hidden: true,
-            callback: DisplayFunctions.getBagWithUnitsGiven
+            name: OrderSalePropertiesReference.RECEIPT_TYPE.name,
+            title: OrderSalePropertiesReference.RECEIPT_TYPE.title,
+            callback: DisplayFunctions.getNameFromObject
           },
           {
-            name: OrderSaleReceiptPropertiesReference.PRODUCTS.name,
-            title: 'Total',
+            name: OrderSalePropertiesReference.PRODUCTS.name,
+            title: 'Productos solicitados',
             hidden: true,
-            callback: DisplayFunctions.getBagOrderSaleTotalCostGiven
+            callback: DisplayFunctions.getOrderSaleProducts.name + '|' + 1
           },
           {
-            name: OrderSaleRequestPropertiesReference.CLIENT.name,
-            title: OrderSaleRequestPropertiesReference.CLIENT.title,
-            callback: OrderSaleRequestPropertiesReference.CLIENT.display
+            name: OrderSalePropertiesReference.PRODUCTS.name,
+            title: 'Productos entregados',
+            hidden: true,
+            callback: DisplayFunctions.getOrderSaleProducts.name + '|' + 2
+          },
+          {
+            name: OrderSalePropertiesReference.CLIENT.name,
+            title: OrderSalePropertiesReference.CLIENT.title,
+            callback: OrderSalePropertiesReference.CLIENT.display
           }
         ],
         actions: [
@@ -75,6 +80,13 @@
             name: 'ViewOrderSaleReceipt',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
+        }
+      },
+      rowClassFunction: function (orderSale) {
+        if (orderSale[OrderSalePropertiesReference.RECEIPT_TYPE.name] === 1) {
+          return 'no-tax'
+        } else {
+          return 'with-tax'
         }
       }
     }

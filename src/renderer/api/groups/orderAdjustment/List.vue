@@ -37,12 +37,12 @@
             name: BagOrderAdjustmentPropertiesReference.PRODUCTS.name,
             title: BagOrderAdjustmentPropertiesReference.PRODUCTS.title,
             hidden: true,
-            callback: DisplayFunctions.getBagWithUnits
+            callback: DisplayFunctions.getProducts
           },
           {
-            name: BagOrderAdjustmentPropertiesReference.ORDER_TYPE.name,
-            title: BagOrderAdjustmentPropertiesReference.ORDER_TYPE.title,
-            callback: BagOrderAdjustmentPropertiesReference.ORDER_TYPE.display
+            name: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name,
+            title: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.title,
+            callback: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.display
           }
         ],
         actions: [

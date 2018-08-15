@@ -66,10 +66,6 @@
           return 'name'
         }
       },
-      selectedPropertyName: {
-        type: String,
-        required: true
-      },
       availableObjects: {
         type: Array,
         required: true

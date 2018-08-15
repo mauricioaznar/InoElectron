@@ -17,7 +17,7 @@ let OrderSalePropertiesReference = {
   PRODUCTS: {
     title: 'Productos',
     name: 'products',
-    display: DisplayFunctions.getBagWithUnitsRequested,
+    display: DisplayFunctions.getOrderSaleProducts,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },
   CLIENT: {
@@ -28,12 +28,25 @@ let OrderSalePropertiesReference = {
     required: false,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  ORDER_STATUS: {
-    name: 'orderSaleStatus',
-    title: 'Estado',
-    relationship_id_name: 'order_sale_status_id',
+  ORDER_SALE_TYPE: {
+    name: 'order_sale_type',
+    title: 'Tipo de orden',
+    relationship_id_name: 'order_sale_type_id',
     display: DisplayFunctions.getNameFromObject,
     required: false,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  DATE_GIVEN: {
+    title: 'Fecha de entrega',
+    name: 'date_given',
+    display: DisplayFunctions.getDate,
+    defaultValue: MauInputDefaultValues.DATE
+  },
+  RECEIPT_TYPE: {
+    title: 'Tipo de comprobante',
+    name: 'order_sale_receipt_type',
+    relationship_id_name: 'order_sale_receipt_type_id',
+    display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   }
 }
