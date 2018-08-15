@@ -244,6 +244,11 @@
           }
           this.currentStructuredObjects = tempCurrentStructuredObjects
           this.emitStructureChangeEvent()
+        },
+        machineId: function (machineId) {
+          this.currentStructuredObjects.forEach(currentStructuredObj => {
+            currentStructuredObj['machine_id'] = machineId
+          })
         }
       }
     }

@@ -9,9 +9,6 @@
                 class="form-control"
                 v-model="numberString"
                 :mask="mask"
-                @input="updateValue"
-                @change="updateValue"
-                @blur="$emit('blur')"
                 :disabled="disabled"
                 :class="getBootstrapValidationClass(error)">
         </masked-input>
@@ -97,6 +94,9 @@
       value: function (val) {
         this.numberString = val.toString()
         this.updateValue(this.numberString)
+      },
+      numberString: function (val) {
+        this.updateValue(val)
       }
     }
   }
