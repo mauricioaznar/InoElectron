@@ -207,7 +207,6 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
   import OrderProductionTable from 'renderer/api/components/tables/OrderProductionTable.vue'
-  import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import {mapState} from 'vuex'
   import moment from 'moment'
   export default {
@@ -245,7 +244,6 @@
       MauFormInputBootstrapSelect,
       MauFormInputDateTime,
       MauFormInputText,
-      MauManyToManySelector,
       OrderSaleTable,
       OrderProductionTable
     },
@@ -362,6 +360,7 @@
             productionProducts,
             'id'
           )
+          console.log(filteredProductionProducts)
           let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionProducts, EntityTypes.ORDER_PRODUCTION_PRODUCT)
           relayObjects.push(productionProductRelayObject)
           directParams[BagOrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name] = 2

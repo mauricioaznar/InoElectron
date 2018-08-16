@@ -26,6 +26,8 @@ function createM2MStructuredObjects (objects, selectedEntityRelationshipName) {
 function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, newRelationshipObjects, selectedEntityRelationshipName) {
   let selectedStructuredObjects = newRelationshipObjects
   let initialStructuredObjects = initialRelationshipObjects
+  console.log(initialRelationshipObjects)
+  console.log(newRelationshipObjects)
   let updatedObjects = []
   let createdObjects = selectedStructuredObjects
   let deletedObjects = []
@@ -36,7 +38,9 @@ function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, 
         return selectedObj[selectedEntityRelationshipName] === initialObj[selectedEntityRelationshipName]
       })
       if (foundObj) {
-        if (!areInitialAndSelectedPropertiesEqual(initialObj, foundObj)) {
+        let areEqual = areInitialAndSelectedPropertiesEqual(initialObj, foundObj)
+        console.log(areEqual)
+        if (!areEqual) {
           updatedObjects.push(foundObj)
         }
         deletedObjects = deletedObjects.filter(deletedObj => {
@@ -48,6 +52,7 @@ function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, 
       }
     })
   }
+  console.log(updatedObjects)
   return {
     create: createdObjects,
     del: deletedObjects,
@@ -58,6 +63,7 @@ function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, 
     for (let initialStructuredObjKey in initialStructuredObj) {
       if (initialStructuredObj.hasOwnProperty(initialStructuredObjKey)) {
         if (initialStructuredObj[initialStructuredObjKey] !== selectedStructuredObj[initialStructuredObjKey]) {
+          console.log(initialStructuredObjKey)
           areEqual = false
           break
         }

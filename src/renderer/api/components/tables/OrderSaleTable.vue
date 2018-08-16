@@ -67,7 +67,7 @@
                                 v-if="requestMode"
                                 :name="ProductOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['product_id']"
                                 :error="errors.first(ProductOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['product_id'])"
-                                v-model="currentStructuredObj.kilo_price"
+                                v-model="currentStructuredObj._kilo_price"
                                 :initialValue="getCurrentObjKiloPrice(currentStructuredObj)"
                                 :type="'float'"
                                 v-validate="'required|min_value:1'"
@@ -287,33 +287,36 @@
           return this.getCurrentObjTax(currentStructuredObj) + this.getCurrentObjTotalCostWithoutTax(currentStructuredObj)
         },
         setCurrentObjProperties: function (currentStructuredObj) {
-          let quantity = currentStructuredObj['_quantity'] || 0
+          let quantity = currentStructuredObj['_quantity'] ? currentStructuredObj['_quantity'].replace(/[^\d.-]/g, '') : 0
+          let floatQuantity = parseFloat(quantity)
+          let integerQuantity = parseInt(quantity)
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
             currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
+
           if (currentStructuredObj['_calculation_type'] === 0) {
             if (this.requestMode) {
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = floatQuantity % 1 === 0 ? integerQuantity : floatQuantity
               if (productGroupWeight) {
-                currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = quantity / productGroupWeight
+                currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = (floatQuantity % 1 === 0 ? integerQuantity : floatQuantity) / productGroupWeight
               }
             }
             if (this.receiptMode) {
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name] = quantity
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name] = floatQuantity % 1 === 0 ? integerQuantity : floatQuantity
               if (productGroupWeight) {
-                currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = quantity / productGroupWeight
+                currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = (floatQuantity % 1 === 0 ? integerQuantity : floatQuantity) / productGroupWeight
               }
             }
           }
           if (currentStructuredObj['_calculation_type'] === 1) {
             if (this.requestMode && productGroupWeight) {
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = quantity
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity * productGroupWeight
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = floatQuantity % 1 === 0 ? integerQuantity : floatQuantity
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = (floatQuantity % 1 === 0 ? integerQuantity : floatQuantity) * productGroupWeight
             }
             if (this.receiptMode && productGroupWeight) {
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = quantity
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name] = quantity * productGroupWeight
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = floatQuantity % 1 === 0 ? integerQuantity : floatQuantity
+              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name] = (floatQuantity % 1 === 0 ? integerQuantity : floatQuantity) * productGroupWeight
             }
           }
           this.emitStructureChangeEvent()

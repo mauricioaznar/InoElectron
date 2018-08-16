@@ -111,27 +111,31 @@
           </div>
           <div class="form-group">
               <div class="products">
-                    <mau-many-to-many-selector
+                    <mau-form-input-select
                             :label="OrderSalePropertiesReference.PRODUCTS.title"
                             :initialObjects="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                             v-model="salesOrder.products"
-                            :availableObjects="availableProducts"
                             :displayProperty="'code'"
                             :name="OrderSalePropertiesReference.PRODUCTS.name"
                             :selectedPropertyName="'product_id'"
+                            :data-vv-as="'Productos'"
+                            :error="errors.first(OrderSalePropertiesReference.PRODUCTS.name)"
+                            :entityType="productEntityType"
+                            :multi="true"
+                            v-validate="'array_required'"
                     >
                         <template slot-scope="params">
                             <order-sale-table
                                     :requestMode="requestMode"
                                     :receiptMode="receiptMode"
                                     :hasTax="isInvoiceSelected"
-                                    :selectedProducts="params.selectedObjects"
+                                    :selectedProducts="salesOrder.products"
                                     v-model="salesOrder.saleProducts"
                                     :initialProducts="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                             >
                             </order-sale-table>
                         </template>
-                    </mau-many-to-many-selector>
+                    </mau-form-input-select>
               </div>
           </div>
           <div class="container mb-2 text-right">
@@ -154,7 +158,6 @@
   import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
   import OrderTable from 'renderer/api/components/tables/OrderProductionTable.vue'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
-  import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import {mapState} from 'vuex'
   export default {
@@ -175,6 +178,7 @@
         initialValues: {},
         buttonDisabled: false,
         clientEntityType: EntityTypes.CLIENT,
+        productEntityType: EntityTypes.PRODUCT,
         orderSaleReceiptTypeEntityType: EntityTypes.ORDER_SALE_RECEIPT_TYPE
       }
     },
@@ -183,7 +187,6 @@
       MauFormInputDateTime,
       MauFormInputText,
       MauFormInputNumber,
-      MauManyToManySelector,
       OrderSaleTable,
       OrderTable
     },

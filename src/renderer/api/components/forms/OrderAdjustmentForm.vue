@@ -71,7 +71,6 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
   import OrderProductionTable from 'renderer/api/components/tables/OrderProductionTable.vue'
-  import MauManyToManySelector from 'renderer/components/mau-components/mau-many-to-many-selector/MauManyToManySelector.vue'
   import {mapState} from 'vuex'
   export default {
     name: 'OrderAdjustmentForm',
@@ -95,7 +94,6 @@
       MauFormInputSelect,
       MauFormInputDateTime,
       MauFormInputText,
-      MauManyToManySelector,
       OrderSaleTable,
       OrderProductionTable
     },

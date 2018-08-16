@@ -15,8 +15,6 @@ let arrayRequired = {
 let remoteUnique = {
   validate: (value, params) => {
     let initialValue = params[0].initialValue
-    console.log(initialValue)
-    console.log(value)
     return new Promise(resolve => {
       if (initialValue === value) {
         resolve({

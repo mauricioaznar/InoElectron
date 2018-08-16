@@ -24,6 +24,11 @@
         apiUrl: ApiUrls.createListUrl(EntityTypes.PRODUCT),
         tableFields: [
           {
+            name: PropertiesReference.PRODUCT_TYPE.name,
+            title: PropertiesReference.PRODUCT_TYPE.title,
+            callback: DisplayFunctions.getNameFromObject
+          },
+          {
             name: PropertiesReference.CODE.name,
             title: PropertiesReference.CODE.title,
             dataClass: 'text-center'
