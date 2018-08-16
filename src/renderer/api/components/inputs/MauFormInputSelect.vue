@@ -12,6 +12,7 @@
                 :onSearch="search"
                 :clearSearchOnSelect="hasClear"
                 :options="options"
+                :disabled="disabled"
                 :class="getBootstrapValidationClass(error)"
         >
             <template slot="option" slot-scope="option">
@@ -108,6 +109,12 @@
           default: function () {
             return false
           }
+        },
+        disabled: {
+          type: Boolean,
+          default: function () {
+            return false
+          }
         }
       },
       created () {
@@ -177,4 +184,12 @@
 
 <style lang="scss">
     .v-select .dropdown-toggle .clear { visibility: hidden; }
+    .v-select.disabled .dropdown-toggle,
+    .v-select.disabled .dropdown-toggle .clear,
+    .v-select.disabled .dropdown-toggle input,
+    .v-select.disabled .open-indicator,
+    .v-select.disabled .selected-tag .close {
+        background-color: #e9ecef;
+        cursor: default;
+    }
 </style>

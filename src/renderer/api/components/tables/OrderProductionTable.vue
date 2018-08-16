@@ -25,6 +25,9 @@
                                 :type="'float'"
                                 :negative="allowNegative"
                                 :key="'_quantity_kilo' + currentStructuredObj['product_id']"
+                                :error="errors.first('_quantity_kilo' + currentStructuredObj['product_id'])"
+                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                     required: true,
                                     not_in: ['0','-0'],
@@ -33,8 +36,6 @@
                                         isGroupWeightStrict: getProductGroupWeightStrict(currentStructuredObj)
                                     }
                                 }"
-                                :error="errors.first('_quantity_kilo' + currentStructuredObj['product_id'])"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
                         >
                         </mau-form-input-number>
                         <mau-form-input-number
@@ -44,10 +45,11 @@
                                 v-model="currentStructuredObj._quantity"
                                 :type="'regular'"
                                 :negative="allowNegative"
-                                v-validate="getProductGroupWeightStrict(currentStructuredObj) ? 'required|integer|not_in:0,-0' : 'required|not_in:0,-0'"
                                 :key="'_quantity_group' + currentStructuredObj['product_id']"
                                 :error="errors.first('_quantity_group' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
+                                :disabled="!userHasWritePrivileges"
+                                v-validate="getProductGroupWeightStrict(currentStructuredObj) ? 'required|integer|not_in:0,-0' : 'required|not_in:0,-0'"
                         >
                         </mau-form-input-number>
                     </td>
@@ -56,6 +58,7 @@
                                 v-model="currentStructuredObj._calculation_type"
                                 :initialValue="getCurrentObjInitialCalculationType(currentStructuredObj)"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
+                                :disabled="!userHasWritePrivileges"
                         >
                             <option :value="0">Kilo</option>
                             <option :value="1" v-if="getCurrentObjGroupWeight(currentStructuredObj)">Bulto</option>
@@ -85,7 +88,6 @@
 <script>
     import BagOrderProductPropertiesReference from 'renderer/api/propertiesReference/OrderProductionProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
-    import MauFormInputRegularNumber from 'renderer/api/components/inputs/MauFormInputRegularNumber.vue'
     import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
     import MauFormInputSelectBootstrap from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -108,7 +110,6 @@
         ])
       },
       components: {
-        MauFormInputRegularNumber,
         MauFormInputSelectBootstrap,
         MauFormInputNumber
       },
@@ -131,6 +132,12 @@
         },
         machineId: {
           type: Number
+        },
+        userHasWritePrivileges: {
+          type: Boolean,
+          default: function () {
+            return true
+          }
         }
       },
       methods: {

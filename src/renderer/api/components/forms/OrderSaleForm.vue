@@ -9,6 +9,7 @@
                           :label="OrderSalePropertiesReference.ORDER_CODE.title"
                           :name="OrderSalePropertiesReference.ORDER_CODE.name"
                           :error="errors.first(OrderSalePropertiesReference.ORDER_CODE.name)"
+                          :disabled="!userHasWritePrivileges"
                           v-validate="{
                             required: true,
                             remote_unique: {
@@ -31,15 +32,16 @@
           </div>
           <div class="form-group">
               <div v-if="requestMode">
-                  <mau-form-input-date-time
+                  <mau-form-input-date
                           :name="OrderSalePropertiesReference.DATE_REQUESTED.name"
                           :label="OrderSalePropertiesReference.DATE_REQUESTED.title"
                           v-model="salesOrder.date_requested"
                           :initialValue="initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name]"
                           :error="errors.first(OrderSalePropertiesReference.DATE_REQUESTED.name)"
+                          :disabled="!userHasWritePrivileges"
                           v-validate="'required'"
                   >
-                  </mau-form-input-date-time>
+                  </mau-form-input-date>
               </div>
               <div v-else>
                   <div class="form-group form-row">
@@ -52,15 +54,16 @@
           </div>
           <div class="form-group">
               <div v-if="receiptMode">
-                  <mau-form-input-date-time
+                  <mau-form-input-date
                           :name="OrderSalePropertiesReference.DATE_GIVEN.name"
                           :label="OrderSalePropertiesReference.DATE_GIVEN.title"
                           v-model="salesOrder.date_given"
                           :initialValue="initialValues[OrderSalePropertiesReference.DATE_GIVEN.name]"
                           :error="errors.first(OrderSalePropertiesReference.DATE_GIVEN.name)"
+                          :disabled="!userHasWritePrivileges"
                           v-validate="'required'"
                   >
-                  </mau-form-input-date-time>
+                  </mau-form-input-date>
               </div>
           </div>
           <div class="form-group">
@@ -73,6 +76,7 @@
                           v-model="salesOrder.client"
                           :name="OrderSalePropertiesReference.CLIENT.name"
                           :error="errors.first(OrderSalePropertiesReference.CLIENT.name)"
+                          :disabled="!userHasWritePrivileges"
                           v-validate="'object_required'"
                   >
                   </mau-form-input-select>
@@ -96,6 +100,7 @@
                           v-model="salesOrder.receiptType"
                           :name="OrderSalePropertiesReference.RECEIPT_TYPE.name"
                           :error="errors.first(OrderSalePropertiesReference.RECEIPT_TYPE.name)"
+                          :disabled="!userHasWritePrivileges"
                           v-validate="'object_required'"
                   >
                   </mau-form-input-select>
@@ -122,6 +127,7 @@
                             :error="errors.first(OrderSalePropertiesReference.PRODUCTS.name)"
                             :entityType="productEntityType"
                             :multi="true"
+                            :disabled="receiptMode || !userHasWritePrivileges"
                             v-validate="'array_required'"
                     >
                         <template slot-scope="params">
@@ -132,6 +138,7 @@
                                     :selectedProducts="salesOrder.products"
                                     v-model="salesOrder.saleProducts"
                                     :initialProducts="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
+                                    :userHasWritePrivileges="userHasWritePrivileges"
                             >
                             </order-sale-table>
                         </template>
@@ -139,7 +146,7 @@
               </div>
           </div>
           <div class="container mb-2 text-right">
-              <b-button :disabled="buttonDisabled" @click="save" type="button" variant="primary">Guardar</b-button>
+              <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
           </div>
       </div>
   </div>
@@ -153,7 +160,7 @@
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
+  import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
   import OrderTable from 'renderer/api/components/tables/OrderProductionTable.vue'
@@ -184,7 +191,7 @@
     },
     components: {
       MauFormInputSelect,
-      MauFormInputDateTime,
+      MauFormInputDate,
       MauFormInputText,
       MauFormInputNumber,
       OrderSaleTable,
@@ -201,6 +208,12 @@
       entityType: {
         type: Object,
         required: true
+      },
+      userHasWritePrivileges: {
+        type: Boolean,
+        default: function () {
+          return true
+        }
       },
       requestMode: {
         type: Boolean,

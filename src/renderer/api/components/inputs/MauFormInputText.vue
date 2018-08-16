@@ -8,6 +8,7 @@
                 v-model="stringValue"
                 :name="name"
                 type="text"
+                :disabled="disabled"
                 class="form-control"
                 :class="getBootstrapValidationClass(error)"
                 @input="updateValue"
@@ -18,6 +19,7 @@
                 :name="name"
                 v-model="stringValue"
                 class="form-control"
+                :disabled="disabled"
                 :guide="true"
                 :mask="mask"
                 :class="getBootstrapValidationClass(error)"
@@ -30,6 +32,7 @@
                 v-model="stringValue"
                 class="form-control"
                 :guide="true"
+                :disabled="disabled"
                 :mask="mask"
                 :class="getBootstrapValidationClass(error)"
                 :placeholder="'Ejemplo: 6322 542'"
@@ -43,6 +46,7 @@
                 class="form-control"
                 :guide="true"
                 :mask="mask"
+                :disabled="disabled"
                 :class="getBootstrapValidationClass(error)"
                 :placeholder="'Ejemplo: (999) 6322 542'"
                 @input="updateValue"
@@ -124,6 +128,12 @@
           },
           validator: function (value) {
             return [textInputTypes.TEXT, textInputTypes.EMAIL, textInputTypes.HOUSEPHONE, textInputTypes.CELLPHONE].indexOf(value) !== -1
+          }
+        },
+        disabled: {
+          type: Boolean,
+          default: function () {
+            return false
           }
         }
       },

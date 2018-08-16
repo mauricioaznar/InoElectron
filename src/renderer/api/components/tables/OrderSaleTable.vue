@@ -27,6 +27,9 @@
                                 v-model="currentStructuredObj._quantity"
                                 :type="'float'"
                                 :key="'_quantity_kilo' + currentStructuredObj['product_id']"
+                                :error="errors.first('_quantity_kilo' + currentStructuredObj['product_id'])"
+                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                     required: true,
                                     not_in: '0',
@@ -35,8 +38,6 @@
                                         isGroupWeightStrict: getProductGroupWeightStrict(currentStructuredObj)
                                     }
                                 }"
-                                :error="errors.first('_quantity_kilo' + currentStructuredObj['product_id'])"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
                         >
                         </mau-form-input-number>
                         <mau-form-input-number
@@ -45,10 +46,11 @@
                                 :initialValue="getCurrentObjInitialQuantity(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
                                 :type="getProductGroupWeightStrict(currentStructuredObj) ? 'regular' : 'float'"
-                                v-validate="'required|not_in:0'"
                                 :key="'_quantity_group' + currentStructuredObj['product_id']"
                                 :error="errors.first('_quantity_group' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
+                                :disabled="!userHasWritePrivileges"
+                                v-validate="'required|not_in:0'"
                         >
                         </mau-form-input-number>
                     </td>
@@ -57,6 +59,7 @@
                                 v-model="currentStructuredObj._calculation_type"
                                 :initialValue="getCurrentObjInitialCalculationType(currentStructuredObj)"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
+                                :disabled="!userHasWritePrivileges"
                         >
                             <option :value="0">Kilo</option>
                             <option :value="1" v-if="getCurrentObjGroupWeight(currentStructuredObj)">Bulto</option>
@@ -70,8 +73,9 @@
                                 v-model="currentStructuredObj._kilo_price"
                                 :initialValue="getCurrentObjKiloPrice(currentStructuredObj)"
                                 :type="'float'"
-                                v-validate="'required|min_value:1'"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
+                                :disabled="!userHasWritePrivileges"
+                                v-validate="'required|min_value:1'"
                         >
                         </mau-form-input-number>
                         <div v-if="receiptMode">
@@ -131,7 +135,6 @@
 <script>
     import ProductOrderProductSalePropertiesReference from 'renderer/api/propertiesReference/OrderSaleProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
-    import MauFormInputRegularNumber from 'renderer/api/components/inputs/MauFormInputRegularNumber.vue'
     import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
     import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
     import MauFormInputSelectBootstrap from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
@@ -154,7 +157,6 @@
         }
       },
       components: {
-        MauFormInputRegularNumber,
         MauFormInputSelect,
         MauFormInputSelectBootstrap,
         MauFormInputNumber
@@ -185,6 +187,12 @@
         },
         hasTax: {
           type: Boolean
+        },
+        userHasWritePrivileges: {
+          type: Boolean,
+          default: function () {
+            return true
+          }
         }
       },
       methods: {

@@ -7,6 +7,7 @@
                 v-model="selectedValue"
                 class="form-control custom-select"
                 :class="getBootstrapValidationClass(error)"
+                :disabled="disabled"
                 :options="availableOptions"
                 @input="valueUpdated"
         >
@@ -42,7 +43,13 @@
           }
         },
         label: String,
-        error: String
+        error: String,
+        disabled: {
+          type: Boolean,
+          default: function () {
+            return false
+          }
+        }
       },
       methods: {
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,

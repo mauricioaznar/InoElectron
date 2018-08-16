@@ -8,6 +8,7 @@
                         :label="PropertiesReference.COMPANYNAME.title"
                         :name="PropertiesReference.COMPANYNAME.name"
                         :error="errors.first(PropertiesReference.COMPANYNAME.name)"
+                        :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
@@ -22,6 +23,7 @@
                         :name="PropertiesReference.FIRSTNAME.name"
                         :type="'text'"
                         :error="errors.first(PropertiesReference.FIRSTNAME.name)"
+                        :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
@@ -34,6 +36,7 @@
                         :name="PropertiesReference.LASTNAME.name"
                         :type="'housephone'"
                         :error="errors.first(PropertiesReference.LASTNAME.name)"
+                        :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
@@ -48,6 +51,7 @@
                         :name="PropertiesReference.EMAIL.name"
                         :type="'email'"
                         :error="errors.first(PropertiesReference.EMAIL.name)"
+                        :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
@@ -60,6 +64,7 @@
                         :name="PropertiesReference.HOUSEPHONE.name"
                         :type="'housephone'"
                         :error="errors.first(PropertiesReference.HOUSEPHONE.name)"
+                        :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
@@ -72,6 +77,7 @@
                         :name="PropertiesReference.CELLPHONE.name"
                         :type="'cellphone'"
                         :error="errors.first(PropertiesReference.CELLPHONE.name)"
+                        :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
@@ -85,6 +91,7 @@
                         :label="PropertiesReference.CITY.title"
                         :name="PropertiesReference.CITY.name"
                         :error="errors.first(PropertiesReference.CITY.name)"
+                        :disabled="!userHasWritePrivileges"
                 >
                 </mau-form-input-text>
             </div>
@@ -95,6 +102,7 @@
                         :label="PropertiesReference.COUNTRY.title"
                         :name="PropertiesReference.COUNTRY.name"
                         :error="errors.first(PropertiesReference.COUNTRY.name)"
+                        :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
@@ -105,8 +113,9 @@
                         :name="PropertiesReference.ZIPCODE.name"
                         :initialValue="initialValues[PropertiesReference.ZIPCODE.name]"
                         v-model="client.zipcode"
-                        v-validate="'required|min_value:1'"
                         :error="errors.first(PropertiesReference.ZIPCODE.name)"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required|min_value:1'"
                 >
                 </mau-form-input-number>
             </div>
@@ -119,13 +128,14 @@
                         :label="PropertiesReference.ADDRESS1.title"
                         :name="PropertiesReference.ADDRESS1.name"
                         :error="errors.first(PropertiesReference.ADDRESS1.name)"
+                        :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
             </div>
         </div>
         <div class="container mb-2 text-right">
-            <b-button :disabled="buttonDisabled" @click="save" type="button" variant="primary">Guardar</b-button>
+            <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
     </div>
 </template>
@@ -171,6 +181,12 @@
       saveFunction: {
         type: Function,
         required: true
+      },
+      userHasWritePrivileges: {
+        type: Boolean,
+        default: function () {
+          return true
+        }
       }
     },
     mounted () {

@@ -3,15 +3,16 @@
       <div>
           <div class="form-group">
               <div class="date">
-                  <mau-form-input-date-time
+                  <mau-form-input-date
                           :name="OrderAdjustmentPropertiesReference.DATE.name"
                           :label="OrderAdjustmentPropertiesReference.DATE.title"
                           v-model="productionOrder.date"
                           :initialValue="initialValues[OrderAdjustmentPropertiesReference.DATE.name]"
                           :error="errors.first(OrderAdjustmentPropertiesReference.DATE.name)"
+                          :disabled="!userHasWritePrivileges"
                           v-validate="'required'"
                   >
-                  </mau-form-input-date-time>
+                  </mau-form-input-date>
               </div>
           </div>
           <div class="form-group">
@@ -25,6 +26,7 @@
                           :data-vv-as="OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.title"
                           :error="errors.first(OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name)"
                           :entityType="adjustmentTypeEntityType"
+                          :disabled="!userHasWritePrivileges"
                           v-validate="'object_required'"
                   >
                   </mau-form-input-select>
@@ -41,19 +43,21 @@
                             :data-vv-as="OrderAdjustmentPropertiesReference.PRODUCTS.title"
                             :entityType="productEntityType"
                             :multi="true"
+                            :disabled="!userHasWritePrivileges"
                             v-validate="'array_required'"
                     >
                         <order-production-table
                             :allowNegative="true"
                             :selectedProducts="productionOrder.products"
                             :initialProducts="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
+                            :userHasWritePrivileges="userHasWritePrivileges"
                             v-model="productionOrder.adjustmentProducts"
                         >
                         </order-production-table>
                     </mau-form-input-select>
           </div>
           <div class="container mb-2 text-right">
-              <b-button :disabled="buttonDisabled" @click="save" type="button" variant="primary">Guardar</b-button>
+              <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
           </div>
       </div>
   </div>
@@ -67,7 +71,7 @@
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
+  import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
   import OrderProductionTable from 'renderer/api/components/tables/OrderProductionTable.vue'
@@ -92,7 +96,7 @@
     },
     components: {
       MauFormInputSelect,
-      MauFormInputDateTime,
+      MauFormInputDate,
       MauFormInputText,
       OrderSaleTable,
       OrderProductionTable
@@ -108,6 +112,12 @@
       entityType: {
         type: Object,
         required: true
+      },
+      userHasWritePrivileges: {
+        type: Boolean,
+        default: function () {
+          return true
+        }
       }
     },
     mounted () {

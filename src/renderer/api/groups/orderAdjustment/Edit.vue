@@ -12,7 +12,9 @@
         <order-adjustment-form
           :initialObject="entity"
           :entityType="entityType"
-          :saveFunction="params.saveFunction">
+          :saveFunction="params.saveFunction"
+          :userHasWritePrivileges="false"
+        >
         </order-adjustment-form>
       </template>
     </mau-crud-edit>

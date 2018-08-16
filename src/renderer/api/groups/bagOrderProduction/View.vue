@@ -34,12 +34,6 @@
             display: DisplayFunctions.getDateTime
           },
           {
-            title: OrderProductionPropertiesReference.PRODUCTS.title,
-            name: OrderProductionPropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getProducts,
-            arguments: [1]
-          },
-          {
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
             display: DisplayFunctions.getPersona
@@ -48,6 +42,12 @@
             title: 'Maquina',
             name: OrderProductionPropertiesReference.MACHINES.name,
             display: DisplayFunctions.getMachineNames
+          },
+          {
+            title: OrderProductionPropertiesReference.PRODUCTS.title,
+            name: OrderProductionPropertiesReference.PRODUCTS.name,
+            display: DisplayFunctions.getProducts,
+            arguments: [1]
           }
         ],
         entityType: EntityTypes.BAG_ORDER_PRODUCTION,

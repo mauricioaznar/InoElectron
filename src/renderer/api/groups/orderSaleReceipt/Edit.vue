@@ -19,6 +19,7 @@
           :saveFunction="params.saveFunction"
           :receiptMode="true"
           :entityType="entityType"
+          :userHasWritePrivileges="true"
         >
         </order-sale-form>
       </template>

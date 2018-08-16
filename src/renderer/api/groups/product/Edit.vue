@@ -16,7 +16,9 @@
       <template slot-scope="params">
         <product-form
           :initialObject="entity"
-          :saveFunction="params.saveFunction">
+          :saveFunction="params.saveFunction"
+          :userHasWritePrivileges="false"
+        >
         </product-form>
       </template>
     </mau-crud-edit>

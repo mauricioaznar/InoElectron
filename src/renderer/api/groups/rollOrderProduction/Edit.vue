@@ -13,7 +13,9 @@
           :extrusionMode="true"
           :initialObject="entity"
           :saveFunction="params.saveFunction"
-          :entityType="entityType">
+          :entityType="entityType"
+          :userHasWritePrivileges="false"
+        >
         </order-production-form>
       </template>
     </mau-crud-edit>

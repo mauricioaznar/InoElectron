@@ -1,75 +1,57 @@
 <template>
-  <div>
-    <label
-            v-if="label"
-            class="form__label">
-      {{ label }}
-    </label>
-    <div class="override-form-control form-control"
-         :class="getBootstrapValidationClass(error)"
-    >
-      <flat-pickr
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <mau-form-input-date
+              :label="'Fecha ' + label"
               v-model="date"
-              :config="config"
-              @input="updateValue"
-              @change="updateValue"
+              :initialValue="initialValues['date']"
+              :inputType="'date'"
+              :error="error"
+              :disabled="disabled"
+              @input="dateChanged"
       >
-      </flat-pickr>
+      </mau-form-input-date>
     </div>
-    <div class="invalid-feedback">
-      <span v-show="error" class="help is-danger">
-        {{error}}
-      </span>
+    <div class="form-group col-md-3">
+      <mau-form-input-bootstrap-select
+              :label="'Hora ' + label"
+              :availableOptions="availableHours"
+              :error="error"
+              v-model="hour"
+              :initialValue="initialValues['hour']"
+              :disabled="disabled"
+              @input="dateChanged"
+      >
+      </mau-form-input-bootstrap-select>
+    </div>
+    <div class="form-group col-md-3   ">
+      <mau-form-input-bootstrap-select
+              :label="'Minuto ' + label"
+              :availableOptions="availableMinutes"
+              :error="error"
+              v-model="minute"
+              :initialValue="initialValues['minute']"
+              :disabled="disabled"
+              @input="dateChanged"
+      >
+      </mau-form-input-bootstrap-select>
     </div>
   </div>
 </template>
 
 <script>
-  import flatPickr from 'vue-flatpickr-component'
-  import {Spanish} from '../../../../../node_modules/flatpickr/dist/l10n/es'
-  import 'flatpickr/dist/flatpickr.css'
   import moment from 'moment'
-  import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  const rangeSeparator = ' al '
-  Spanish.rangeSeparator = rangeSeparator
+  import MauFormInputBootstrapSelect from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
+  import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   export default {
     name: 'MauFormInputDateTime',
     data () {
       return {
+        dateTime: '',
         date: '',
-        recentlyCreated: true,
-        config: {
-        },
-        rangeConfig: {
-          conjunction: ' - ',
-          mode: 'range',
-          locale: Spanish
-        },
-        dateConfig: {
-          wrap: true,
-          altInput: true,
-          altFormat: 'Y-m-d',
-          dateFormat: 'Y-m-d',
-          locale: Spanish
-        },
-        timeConfig: {
-          wrap: true,
-          enableTime: true,
-          dateFormat: 'H:i',
-          locale: Spanish,
-          time_24hr: true,
-          minDate: '7:00',
-          maxDate: '19:00',
-          minuteIncrement: 10
-        },
-        dateTimeConfig: {
-          enableTime: true,
-          wrap: true,
-          altInput: true,
-          altFormat: 'Y-m-d h:i K',
-          dateFormat: 'Y-m-d H:i:S',
-          locale: Spanish
-        }
+        hour: '',
+        minute: '',
+        initialValues: {}
       }
     },
     $_veeValidate: {
@@ -77,13 +59,12 @@
         return this.name
       },
       value () {
-        return this.date
+        return this.dateTime
       }
     },
     props: {
       value: String,
       initialValue: String,
-      name: String,
       error: {
         type: String,
         required: false
@@ -91,49 +72,57 @@
       label: {
         type: String
       },
-      inputType: {
-        type: String,
+      name: String,
+      disabled: {
+        type: Boolean,
         default: function () {
-          return 'date'
-        },
-        validator: function (date) {
-          return ['date', 'time', 'range', 'dateTime'].indexOf(date) !== -1
+          return false
+        }
+      },
+      availableHours: {
+        type: Array,
+        default: function () {
+          return ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
+        }
+      },
+      availableMinutes: {
+        type: Array,
+        default: function () {
+          return ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
         }
       }
     },
     components: {
-      flatPickr
+      MauFormInputBootstrapSelect,
+      MauFormInputDate
     },
     methods: {
-      getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       updateValue: function (val) {
+        this.dateTime = val
         this.$emit('input', val)
+      },
+      dateChanged: function () {
+        if (this.date && this.hour && this.minute) {
+          this.updateValue(this.date + ' ' + this.hour + ':' + this.minute + ':00')
+        } else {
+          this.updateValue('')
+        }
       }
     },
     created () {
-      this.date = this.value
-      if (this.initialValue) {
-        let momentDate = moment(this.initialValue)
-        if (momentDate.isValid()) {
-          this.date = this.initialValue
-        }
-      }
-      if (this.inputType === 'date') {
-        this.config = this.dateConfig
-      } else if (this.inputType === 'time') {
-        this.config = this.timeConfig
-      } else if (this.inputType === 'range') {
-        this.config = this.rangeConfig
-      } else if (this.inputType === 'dateTime') {
-        this.config = this.dateTimeConfig
+      let momentDate = moment(this.initialValue)
+      if (momentDate.isValid()) {
+        this.initialValues['date'] = moment(this.initialValue).format('YYYY-MM-DD')
+        this.initialValues['hour'] = moment(this.initialValue).format('HH')
+        this.initialValues['minute'] = moment(this.initialValue).format('mm')
       } else {
-        console.error('please specify a valid dateTime input type')
+        this.initialValues['date'] = ''
+        this.initialValues['hour'] = ''
+        this.initialValues['minute'] = ''
       }
-      this.updateValue(this.date)
     }
   }
 </script>
 
 <style lang="scss">
-
 </style>

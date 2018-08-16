@@ -16,7 +16,9 @@
       <template slot-scope="params">
         <persona-form
           :initialObject="entity"
-          :saveFunction="params.saveFunction">
+          :saveFunction="params.saveFunction"
+          :userHasWritePrivileges="false"
+        >
         </persona-form>
       </template>
     </mau-crud-edit>

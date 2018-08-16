@@ -10,6 +10,7 @@
                 v-model="product.productType"
                 :name="PropertiesReference.PRODUCT_TYPE.name"
                 :error="errors.first(PropertiesReference.PRODUCT_TYPE.name)"
+                :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
         </mau-form-input-select>
@@ -23,6 +24,7 @@
                 :label="PropertiesReference.CODE.title"
                 :name="PropertiesReference.CODE.name"
                 :error="errors.first(PropertiesReference.CODE.name)"
+                :disabled="!userHasWritePrivileges"
                 v-validate="{
                             required: true,
                             remote_unique: {
@@ -43,6 +45,7 @@
           :label="PropertiesReference.DESCRIPTION.title"
           :name="PropertiesReference.DESCRIPTION.name"
           :error="errors.first(PropertiesReference.DESCRIPTION.name)"
+          :disabled="!userHasWritePrivileges"
           v-validate="'required'"
         >
         </mau-form-input-text>
@@ -55,14 +58,16 @@
               :name="PropertiesReference.CURRENT_GROUP_WEIGHT.name"
               :initialValue="initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name]"
               v-model="product.currentGroupWeight"
-              v-validate="'required|min_value:1'"
               :error="errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name)"
+              :disabled="!userHasWritePrivileges"
+              v-validate="'required|min_value:1'"
       >
       </mau-form-input-number>
     </div>
     <div class="form-group ">
       <b-form-checkbox
               v-if="isBag"
+              :disabled="!userHasWritePrivileges"
               v-model="product.groupWeightStrict">
         ¿Require de validacion exacta?
       </b-form-checkbox>
@@ -74,9 +79,10 @@
                 :name="PropertiesReference.CURRENT_KILO_PRICE.name"
                 v-model="product.currentKiloPrice"
                 :initialValue="initialValues[PropertiesReference.CURRENT_KILO_PRICE.name]"
-                v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.CURRENT_KILO_PRICE.name)"
                 :type="'float'"
+                :disabled="!userHasWritePrivileges"
+                v-validate="'required|min_value:1'"
 
         >
         </mau-form-input-number>
@@ -89,8 +95,9 @@
                 :name="PropertiesReference.WIDTH.name"
                 v-model="product.width"
                 :initialValue="initialValues[PropertiesReference.WIDTH.name]"
-                v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.WIDTH.name)"
+                :disabled="!userHasWritePrivileges"
+                v-validate="'required|min_value:1'"
         >
         </mau-form-input-number>
       </div>
@@ -100,8 +107,9 @@
                 :name="PropertiesReference.LENGTH.name"
                 v-model="product.length"
                 :initialValue="initialValues[PropertiesReference.LENGTH.name]"
-                v-validate="'required|min_value:1'"
                 :error="errors.first(PropertiesReference.LENGTH.name)"
+                :disabled="!userHasWritePrivileges"
+                v-validate="'required|min_value:1'"
         >
         </mau-form-input-number>
       </div>
@@ -116,6 +124,7 @@
                 v-model="product.material"
                 :name="PropertiesReference.MATERIAL.name"
                 :error="errors.first(PropertiesReference.MATERIAL.name)"
+                :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
         </mau-form-input-select>
@@ -131,13 +140,14 @@
                 v-model="product.packing"
                 :name="PropertiesReference.PACKING.name"
                 :error="errors.first(PropertiesReference.PACKING.name)"
+                :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
         </mau-form-input-select>
       </div>
     </div>
     <div class="container mb-2 text-right">
-      <b-button :disabled="buttonDisabled" @click="save" type="button" variant="primary">Guardar</b-button>
+      <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
     </div>
   </div>
 </template>
@@ -198,6 +208,12 @@
       saveFunction: {
         type: Function,
         required: true
+      },
+      userHasWritePrivileges: {
+        type: Boolean,
+        default: function () {
+          return true
+        }
       }
     },
     mounted () {
