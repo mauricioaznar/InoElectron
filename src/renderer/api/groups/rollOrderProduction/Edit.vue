@@ -14,7 +14,7 @@
           :initialObject="entity"
           :saveFunction="params.saveFunction"
           :entityType="entityType"
-          :userHasWritePrivileges="false"
+          :userHasWritePrivileges="true"
         >
         </order-production-form>
       </template>

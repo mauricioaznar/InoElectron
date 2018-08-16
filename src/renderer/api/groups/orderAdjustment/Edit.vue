@@ -13,7 +13,7 @@
           :initialObject="entity"
           :entityType="entityType"
           :saveFunction="params.saveFunction"
-          :userHasWritePrivileges="false"
+          :userHasWritePrivileges="true"
         >
         </order-adjustment-form>
       </template>

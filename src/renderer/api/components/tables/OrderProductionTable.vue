@@ -153,10 +153,12 @@
           return product ? product[ProductPropertiesReference.DESCRIPTION.name] : ''
         },
         getProductCurrentGroupWeight: function (structuredObject) {
-          return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name]
+          let product = this.getProductById(structuredObject['product_id'])
+          return product ? product[ProductPropertiesReference.CURRENT_GROUP_WEIGHT.name] : ''
         },
         getProductGroupWeightStrict: function (structuredObject) {
-          return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name]
+          let product = this.getProductById(structuredObject['product_id'])
+          return product ? product[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name] : ''
         },
         getInitialSaleProduct: function (productId) {
           let initialProduct = this.initialProducts.find(product => {
@@ -201,23 +203,21 @@
           return productSaleGroupWeight
         },
         setCurrentObjProperties: function (currentStructuredObj) {
-          let quantity = currentStructuredObj['_quantity'] ? currentStructuredObj['_quantity'].replace(/[^\d.-]/g, '') : 0
-          let floatQuantity = parseFloat(quantity)
-          let integerQuantity = parseInt(quantity)
+          let quantity = currentStructuredObj['_quantity'] || 0
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[BagOrderProductPropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
             currentStructuredObj[BagOrderProductPropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
           if (currentStructuredObj['_calculation_type'] === 0) {
-            currentStructuredObj[BagOrderProductPropertiesReference.KILOS.name] = floatQuantity % 1 === 0 ? integerQuantity : floatQuantity
+            currentStructuredObj[BagOrderProductPropertiesReference.KILOS.name] = quantity % 1 === 0 ? quantity : quantity
             if (productGroupWeight) {
-              currentStructuredObj[BagOrderProductPropertiesReference.GROUPS.name] = (floatQuantity % 1 === 0 ? integerQuantity : floatQuantity) / productGroupWeight
+              currentStructuredObj[BagOrderProductPropertiesReference.GROUPS.name] = (quantity % 1 === 0 ? quantity : quantity) / productGroupWeight
             }
           }
           if (currentStructuredObj['_calculation_type'] === 1) {
             if (productGroupWeight) {
-              currentStructuredObj[BagOrderProductPropertiesReference.GROUPS.name] = floatQuantity % 1 === 0 ? integerQuantity : floatQuantity
-              currentStructuredObj[BagOrderProductPropertiesReference.KILOS.name] = (floatQuantity % 1 === 0 ? integerQuantity : floatQuantity) * productGroupWeight
+              currentStructuredObj[BagOrderProductPropertiesReference.GROUPS.name] = quantity % 1 === 0 ? quantity : quantity
+              currentStructuredObj[BagOrderProductPropertiesReference.KILOS.name] = (quantity % 1 === 0 ? quantity : quantity) * productGroupWeight
             }
           }
           this.emitStructureChangeEvent()

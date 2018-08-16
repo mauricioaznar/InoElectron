@@ -17,7 +17,7 @@
         <persona-form
           :initialObject="entity"
           :saveFunction="params.saveFunction"
-          :userHasWritePrivileges="false"
+          :userHasWritePrivileges="true"
         >
         </persona-form>
       </template>

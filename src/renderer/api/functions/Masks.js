@@ -6,18 +6,18 @@ const regularNumber = createNumberMask({
   prefix: '',
   suffix: '',
   integerLimit: 6,
-  includeThousandsSeparator: false,
+  includeThousandsSeparator: true,
   allowNegative: false
 })
 const regularNumberNegative = createNumberMask({
   prefix: '',
   suffix: '',
   integerLimit: 6,
-  includeThousandsSeparator: false,
+  includeThousandsSeparator: true,
   allowNegative: true
 })
 const floatNumber = createNumberMask({
-  includeThousandsSeparator: false,
+  includeThousandsSeparator: true,
   allowNegative: false,
   prefix: '',
   suffix: '',

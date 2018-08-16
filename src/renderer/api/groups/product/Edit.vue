@@ -17,7 +17,7 @@
         <product-form
           :initialObject="entity"
           :saveFunction="params.saveFunction"
-          :userHasWritePrivileges="false"
+          :userHasWritePrivileges="true"
         >
         </product-form>
       </template>

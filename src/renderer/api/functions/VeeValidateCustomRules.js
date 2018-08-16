@@ -1,5 +1,4 @@
 import ApiOperations from 'renderer/api/functions/ApiOperations'
-
 let objectRequired = {
   validate: value => {
     return !(Object.keys(value).length === 0 && value.constructor === Object)
@@ -36,6 +35,7 @@ let remoteUnique = {
 
 let kiloToGroup = {
   validate: (quantity, params) => {
+    console.log(quantity)
     let isValid = true
     let groupWeight = params[0].groupWeight
     let isGroupWeightStrict = params[0].isGroupWeightStrict

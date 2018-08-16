@@ -19,7 +19,7 @@
           :saveFunction="params.saveFunction"
           :requestMode="true"
           :entityType="entityType"
-          :userHasWritePrivileges="false"
+          :userHasWritePrivileges="true"
         >
         </order-sale-form>
       </template>

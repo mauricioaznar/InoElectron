@@ -23,6 +23,7 @@
 <script>
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import Masks from 'renderer/api/functions/Masks'
+  import cleanNumber from 'renderer/api/functions/cleanNumber'
   export default {
     name: 'MauFormInputNumber',
     data () {
@@ -85,14 +86,11 @@
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       updateValue (numberString) {
-        this.$emit('input', numberString)
+        let cleanedNumber = cleanNumber(numberString)
+        this.$emit('input', cleanedNumber)
       }
     },
     watch: {
-      value: function (val) {
-        this.numberString = val.toString()
-        this.updateValue(this.numberString)
-      },
       numberString: function (val) {
         this.updateValue(val)
       }
