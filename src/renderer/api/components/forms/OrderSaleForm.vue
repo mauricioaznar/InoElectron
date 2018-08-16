@@ -15,7 +15,7 @@
                             remote_unique: {
                               entityType: entityType,
                               columnName: OrderSalePropertiesReference.ORDER_CODE.name,
-                              initialValue: String(initialValues[OrderSalePropertiesReference.ORDER_CODE.name])
+                              initialValue: initialValues[OrderSalePropertiesReference.ORDER_CODE.name]
                             }
                            }"
                   >

@@ -35,7 +35,6 @@ let remoteUnique = {
 
 let kiloToGroup = {
   validate: (quantity, params) => {
-    console.log(quantity)
     let isValid = true
     let groupWeight = params[0].groupWeight
     let isGroupWeightStrict = params[0].isGroupWeightStrict
