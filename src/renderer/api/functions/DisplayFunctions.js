@@ -30,13 +30,12 @@ export default {
     return value
   },
   getPersona: function (value) {
-    let temp = value ? (value.first_name + ' ' + value.last_name) : ''
-    return temp
+    return value ? value.full_name : ''
   },
   getPersonaArray: function (array) {
     let htmlString = '<ul>'
     for (let i = 0; i < array.length; i++) {
-      htmlString += '<li>' + array[i].name + ' ' + (array[i].lastname || '') + '</li>'
+      htmlString += '<li>' + array[i].full_name + '</li>'
     }
     return htmlString + '</ul>'
   },

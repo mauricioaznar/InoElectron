@@ -72,7 +72,17 @@
           {
             title: OrderSalePropertiesReference.CLIENT.title,
             name: OrderSalePropertiesReference.CLIENT.name,
-            display: DisplayFunctions.getNameFromObject
+            display: DisplayFunctions.getPersona
+          },
+          {
+            title: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.title,
+            name: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: OrderSalePropertiesReference.TOTAL_COST_GIVEN.title,
+            name: OrderSalePropertiesReference.TOTAL_COST_GIVEN.name,
+            display: DisplayFunctions.getValue
           }
         ],
         entityType: EntityTypes.ORDER_SALE_RECEIPT,

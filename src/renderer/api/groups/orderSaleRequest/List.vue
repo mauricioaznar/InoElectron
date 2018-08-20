@@ -52,7 +52,12 @@
           {
             name: OrderSalePropertiesReference.CLIENT.name,
             title: OrderSalePropertiesReference.CLIENT.title,
-            callback: OrderSalePropertiesReference.CLIENT.display
+            callback: DisplayFunctions.getPersona
+          },
+          {
+            name: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.name,
+            title: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.title,
+            callback: DisplayFunctions.getValue
           }
         ],
         actions: [

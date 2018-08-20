@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar">
       <ul class="sidebar-menu">
-        <li v-for="(category, index) in categories">
+        <li v-for="(category, index) in categories" v-if="showDependingOnRol(category)">
           <a
               @click="getDefaultCategoryRouteObjectPath(category)"
              class="sidebar-link"
@@ -39,7 +39,10 @@
     computed: {
       ...mapGetters([
         'routeObjects',
-        'routeObjectParent'
+        'routeObjectParent',
+        'isAdminUser',
+        'isProductionUser',
+        'isSalesUser'
       ]),
       currentCategoryName: function () {
         let routeObjectParent = this.routeObjectParent(this.$route)
@@ -51,6 +54,17 @@
       }
     },
     methods: {
+      showDependingOnRol: function (category) {
+        let shouldShow = true
+        if (category.name === Categories.SALES.name) {
+          shouldShow = this.isAdminUser || this.isSalesUser
+        }
+        if (category.name === Categories.PRODUCTION.name) {
+          shouldShow = this.isAdminUser || this.isProductionUser
+        }
+        console.log(shouldShow)
+        return shouldShow
+      },
       getDefaultCategoryRouteObjectPath: function (category) {
         this.$router.push({path: this.getDefaultCategoryRouteObject(category).path})
       },

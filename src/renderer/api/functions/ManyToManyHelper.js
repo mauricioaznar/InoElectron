@@ -26,8 +26,6 @@ function createM2MStructuredObjects (objects, selectedEntityRelationshipName) {
 function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, newRelationshipObjects, selectedEntityRelationshipName) {
   let selectedStructuredObjects = newRelationshipObjects
   let initialStructuredObjects = initialRelationshipObjects
-  console.log(initialRelationshipObjects)
-  console.log(newRelationshipObjects)
   let updatedObjects = []
   let createdObjects = selectedStructuredObjects
   let deletedObjects = []

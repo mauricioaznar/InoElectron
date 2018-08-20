@@ -42,6 +42,7 @@
           this.calendarEvents = []
           let calendarItems = []
           result.forEach(item => {
+            console.log(item)
             calendarItems.push({
               title: item.abbreviation + ' ' + item.total_cost_requested,
               start: moment(item.date_requested),

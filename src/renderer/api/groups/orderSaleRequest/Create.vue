@@ -19,7 +19,6 @@
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
   import OrderSaleForm from 'renderer/api/components/forms/OrderSaleForm.vue'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import {mapGetters} from 'vuex'
   export default {
     name: 'CreateOrderSaleRequest',
@@ -30,8 +29,7 @@
       }
     },
     components: {
-      OrderSaleForm,
-      MauFormInputSelect
+      OrderSaleForm
     },
     computed: {
       ...mapGetters(['groupDefaultRouteObject'])

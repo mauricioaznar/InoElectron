@@ -2,9 +2,11 @@
     <div>
         <action-widget
                 :actions="actions"
+                :buttons="buttons"
+                @buttonClicked="buttonClicked"
         ></action-widget>
         <b-modal
-                ref="confirmDelete"
+                ref="deleteModal"
                 centered
                 title="Desea borrar esta entidad"
                 :cancel-title="'Cancelar'"
@@ -33,14 +35,18 @@
               icon: 'fa fa-plus',
               path: RouteObjectHelper.createPath(EntityTypes.PRODUCT, 'create')
             }
-          ]
+          ],
+          buttons: []
         }
       },
       computed: {
         ...mapGetters(['groupDefaultRouteObject'])
       },
       methods: {
-        actionClicked: function (action) {
+        buttonClicked: function (action) {
+          if (action.name === 'Delete') {
+            this.$refs.deleteModal.show()
+          }
         },
         setActions: function () {
           if (this.$route.params[GlobalEntityIdentifier]) {
@@ -57,8 +63,13 @@
                 path: RouteObjectHelper.createPath(EntityTypes.PRODUCT, 'view') + '/' + id
               }
             ])
+            this.buttons = [{
+              name: 'Delete',
+              icon: 'fa fa-trash'
+            }]
           } else {
             this.actions = this.alwaysActions
+            this.buttons = []
           }
         },
         confirmDelete: function () {

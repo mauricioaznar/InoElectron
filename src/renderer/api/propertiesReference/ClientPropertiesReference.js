@@ -32,5 +32,12 @@ export default {
     display: DisplayFunctions.getValue,
     mask: Masks.cellphone,
     defaultValue: MauInputDefaultValues.NUMBER
+  },
+  COMPANY: {
+    title: 'Compania',
+    name: 'company',
+    relationship_id_name: 'company_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
   }
 }

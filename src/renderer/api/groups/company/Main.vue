@@ -33,10 +33,9 @@
           {
             name: 'Create',
             icon: 'fa fa-plus',
-            path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_PRODUCTION, 'create')
+            path: RouteObjectHelper.createPath(EntityTypes.COMPANY, 'create')
           }
-        ],
-        buttons: []
+        ]
       }
     },
     computed: {
@@ -55,12 +54,12 @@
             {
               name: 'Edit',
               icon: 'fa fa-edit',
-              path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_PRODUCTION, 'edit') + '/' + id
+              path: RouteObjectHelper.createPath(EntityTypes.COMPANY, 'edit') + '/' + id
             },
             {
               name: 'View',
               icon: 'fa fa-eye',
-              path: RouteObjectHelper.createPath(EntityTypes.BAG_ORDER_PRODUCTION, 'view') + '/' + id
+              path: RouteObjectHelper.createPath(EntityTypes.COMPANY, 'view') + '/' + id
             }
           ])
           this.buttons = [{
@@ -74,7 +73,7 @@
       },
       confirmDelete: function () {
         let id = this.$route.params[GlobalEntityIdentifier]
-        ApiOperations.del(EntityTypes.BAG_ORDER_PRODUCTION, id).then(result => {
+        ApiOperations.del(EntityTypes.COMPANY, id).then(result => {
           Notifications.success(this)
           this.$router.push({name: this.groupDefaultRouteObject(this.$route).name})
         })

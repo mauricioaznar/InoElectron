@@ -23,7 +23,6 @@
 </template>
 
 <script>
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   export default {
     name: 'FilterBar',
     data () {
@@ -42,7 +41,6 @@
       }
     },
     components: {
-      MauFormInputSelect
     },
     created () {
       this.getTableFieldOptions(this.tableFields)

@@ -5,6 +5,23 @@ import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifie
 
 let routeObjects = []
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.HOME,
+  {
+    category: Categories.HOME,
+    componentName: 'Main'
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.HOME, {
+      appDefault: true,
+      componentName: 'Default',
+      categoryDefault: true,
+      groupDefault: true,
+      navbar: true,
+      title: 'Inicio'
+    })
+  ]
+))
+
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.AUTH,
   {
     category: Categories.AUTH,
@@ -13,7 +30,7 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.AUTH,
   [
     RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
       componentName: 'MyProfile',
-      categoryDefault: 'true',
+      categoryDefault: true,
       groupDefault: true,
       navbar: true,
       title: 'Mi perfil'
@@ -40,7 +57,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCT,
   [
     RouteObjectHelper.createRouteObject(EntityTypes.PRODUCT,
       {
-        appDefault: true,
         componentName: 'List',
         categoryDefault: true,
         groupDefault: true,
@@ -314,6 +330,50 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
         componentName: 'Del',
         params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+  {
+    componentName: 'Main',
+    category: Categories.SALES
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        title: 'Empresas',
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+      {
+        componentName: 'Create',
+        title: 'Empresas'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier],
+        title: 'Empresas'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier],
+        title: 'Empresas'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+      {
+        componentName: 'Del',
+        params: [GlobalEntityIdentifier],
+        title: 'Empresas'
       }
     )
   ]

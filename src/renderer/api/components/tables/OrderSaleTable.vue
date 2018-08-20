@@ -70,7 +70,7 @@
                                 v-if="requestMode"
                                 :name="ProductOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['product_id']"
                                 :error="errors.first(ProductOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['product_id'])"
-                                v-model="currentStructuredObj._kilo_price"
+                                v-model="currentStructuredObj.kilo_price"
                                 :initialValue="getCurrentObjKiloPrice(currentStructuredObj)"
                                 :type="'float'"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
@@ -124,7 +124,7 @@
                     <td v-if="hasTax"></td>
                     <td class="text-right"><b>TOTAL:</b></td>
                     <td>
-                        {{total}}
+                        {{getOrderSaleTotal(currentStructuredObjects)}}
                     </td>
                 </tr>
             </tbody>
@@ -136,7 +136,6 @@
     import ProductOrderProductSalePropertiesReference from 'renderer/api/propertiesReference/OrderSaleProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
     import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
-    import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
     import MauFormInputSelectBootstrap from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import {mapGetters} from 'vuex'
@@ -157,7 +156,6 @@
         }
       },
       components: {
-        MauFormInputSelect,
         MauFormInputSelectBootstrap,
         MauFormInputNumber
       },
@@ -293,6 +291,17 @@
         },
         getCurrentObjTotalCost: function (currentStructuredObj) {
           return this.getCurrentObjTax(currentStructuredObj) + this.getCurrentObjTotalCostWithoutTax(currentStructuredObj)
+        },
+        getOrderSaleTotal: function (currentStructuredObjects) {
+          let total = 0
+          for (let i = 0; i < currentStructuredObjects.length; i++) {
+            if (this.hasTax) {
+              total += this.getCurrentObjTotalCost(currentStructuredObjects[i])
+            } else {
+              total += this.getCurrentObjTotalCostWithoutTax(currentStructuredObjects[i])
+            }
+          }
+          return total
         },
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0

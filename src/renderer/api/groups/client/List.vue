@@ -4,6 +4,7 @@
       <persona-data-table :apiUrl="apiUrl"
                       :actionClicked="actionHandler"
                       :actions="actions"
+                      :clientMode="true"
       >
       </persona-data-table>
     </mau-crud-list>

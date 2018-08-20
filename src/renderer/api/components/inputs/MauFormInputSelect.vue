@@ -71,10 +71,10 @@
           type: String,
           required: true
         },
-        searchedProperty: {
-          type: String,
+        searchedProperties: {
+          type: Array,
           default: function () {
-            return this.displayProperty
+            return [this.displayProperty]
           }
         },
         label: {
@@ -160,7 +160,10 @@
           }
         },
         getOptions: _.debounce((search, loading, vm) => {
-          let filterLikeObject = {[vm.searchedProperty]: search}
+          let filterLikeObject = []
+          for (let i = 0; i < vm.searchedProperties.length; i++) {
+            filterLikeObject.push({[vm.searchedProperties[i]]: search})
+          }
           ApiOperations.getWithFilterLikeWithFilterExactWithoutPagination(vm.entityType, filterLikeObject, vm.filterExact).then(res => {
             vm.options = res
             loading(false)

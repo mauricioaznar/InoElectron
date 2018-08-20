@@ -27,7 +27,7 @@
         >
         </masked-input>
         <masked-input
-                v-if="type === textInputTypes.HOUSEPHONE"
+                v-if="type === textInputTypes.HOUSE_PHONE"
                 :name="name"
                 v-model="stringValue"
                 class="form-control"
@@ -66,7 +66,7 @@
     let textInputTypes = {
       EMAIL: 'email',
       TEXT: 'text',
-      HOUSEPHONE: 'housephone',
+      HOUSE_PHONE: 'house_phone',
       CELLPHONE: 'cellphone'
     }
     export default {
@@ -89,8 +89,8 @@
         if (this.type === textInputTypes.EMAIL) {
           this.mask = Masks.email
         }
-        if (this.type === textInputTypes.HOUSEPHONE) {
-          this.mask = Masks.housephone
+        if (this.type === textInputTypes.HOUSE_PHONE) {
+          this.mask = Masks.house_phone
         }
         if (this.type === textInputTypes.CELLPHONE) {
           this.mask = Masks.cellphone
@@ -127,7 +127,7 @@
             return textInputTypes.TEXT
           },
           validator: function (value) {
-            return [textInputTypes.TEXT, textInputTypes.EMAIL, textInputTypes.HOUSEPHONE, textInputTypes.CELLPHONE].indexOf(value) !== -1
+            return [textInputTypes.TEXT, textInputTypes.EMAIL, textInputTypes.HOUSE_PHONE, textInputTypes.CELLPHONE].indexOf(value) !== -1
           }
         },
         disabled: {

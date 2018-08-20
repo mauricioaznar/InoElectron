@@ -11,22 +11,20 @@
                 :id="id"
                 :entityType="entityType"
                 :entity="entity"
-                :callback="callback"
         >
         </mau-crud-del>
     </div>
 </template>
 
 <script>
-  import Entities from 'renderer/api/EntityTypes'
+  import EntityTypes from 'renderer/api/EntityTypes'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-  import {mapGetters} from 'vuex'
   export default {
-    name: 'DelBag',
+    name: 'DelClient',
     data () {
       return {
-        entityType: Entities.PRODUCT,
+        entityType: EntityTypes.CLIENT,
         entity: null
       }
     },
@@ -37,19 +35,9 @@
     props: {
       id: null
     },
-    computed: {
-      ...mapGetters([
-        'groupDefaultRouteObject'
-      ])
-    },
-    created () {
-    },
     methods: {
       entityResultHandler: function (entityObj) {
         this.entity = entityObj
-      },
-      callback: function () {
-        this.$router.push({path: this.groupDefaultRouteObject(this.$route)})
       }
     }
   }

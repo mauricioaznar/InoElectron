@@ -161,7 +161,7 @@
             })
           }
           let salesByClient = []
-          let clients = result.sales_by_client.map(salesByClientObj => { return {id: salesByClientObj.client_id, name: salesByClientObj.companyname} }).reduce((acc, current) => {
+          let clients = result.sales_by_client.map(salesByClientObj => { return {id: salesByClientObj.client_id, name: salesByClientObj.name} }).reduce((acc, current) => {
             if (acc.findIndex(storedObj => { return current.id === storedObj.id }) < 0) {
               acc.push(current)
             }

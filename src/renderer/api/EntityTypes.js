@@ -12,8 +12,12 @@ export default {
   CLIENT: {
     name: 'client',
     apiName: 'client',
-    title: 'Clientes',
-    icon: 'fa fa-address-card'
+    title: 'Clientes'
+  },
+  COMPANY: {
+    name: 'company',
+    apiName: 'company',
+    title: 'Companias'
   },
   USER: {
     name: 'user',
@@ -96,6 +100,11 @@ export default {
     name: 'auth',
     apiName: 'auth',
     title: 'Auth'
+  },
+  HOME: {
+    name: 'home',
+    apiName: 'home',
+    title: 'Home'
   },
   MATERIAL: {
     name: 'material',

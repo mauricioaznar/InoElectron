@@ -3,6 +3,31 @@ const user = state => {
   let user = state.auth.user
   return user !== null ? user : ''
 }
+const isSuperUser = state => {
+  let user = state.auth.user
+  let roleId = user ? user.role_id : 0
+  return roleId === 1
+}
+const isAdminUser = state => {
+  let user = state.auth.user
+  let roleId = user ? user.role_id : 0
+  return roleId === 1 || roleId === 2
+}
+const isProductionUser = state => {
+  let user = state.auth.user
+  let roleId = user ? user.role_id : 0
+  return roleId === 4
+}
+const isSalesUser = state => {
+  let user = state.auth.user
+  let roleId = user ? user.role_id : 0
+  return roleId === 5
+}
+const isGuestUser = state => {
+  let user = state.auth.user
+  let roleId = user ? user.role_id : 0
+  return roleId === 3
+}
 const routeObjects = state => state.routeObject.routeObjects
 const getUsers = state => {
   return state.entity.users
@@ -85,6 +110,11 @@ export {
   getUsers,
   getProductById,
   routeObjects,
+  isAdminUser,
+  isSalesUser,
+  isProductionUser,
+  isGuestUser,
+  isSuperUser,
   appDefaultRouteObject,
   appDefaultNotAuthRouteObject,
   groupDefaultRouteObject,

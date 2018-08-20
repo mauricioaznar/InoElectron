@@ -22,7 +22,7 @@ export function filterLikeQueryCreator (filterLikeObject) {
       if (loopIndex === 1) {
         filterLikeQuery += '&filter=' + filterLikeObjectKey + '&filter_value' + '=' + filterLikeObject[filterLikeObjectKey]
       } else {
-        filterLikeQuery += '&filter_' + loopIndex + '=' + filterLikeObjectKey + '&value_' + loopIndex + '=' + filterLikeObject[filterLikeObjectKey]
+        filterLikeQuery += '&filter_' + loopIndex + '=' + filterLikeObjectKey + '&filter_value_' + loopIndex + '=' + filterLikeObject[filterLikeObjectKey]
       }
       loopIndex++
     }

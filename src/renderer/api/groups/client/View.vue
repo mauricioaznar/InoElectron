@@ -7,7 +7,7 @@
               @entityResult="entityResultHandler"
       >
       </mau-entity-petitioner>
-      <persona-view v-if="entity" :persona="entity"></persona-view>
+      <persona-view v-if="entity" :persona="entity" :clientMode="true"></persona-view>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 import createNumberMask from 'text-mask-addons/dist/createNumberMask'
 import email from 'text-mask-addons/dist/emailMask'
 const cellphone = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
-const housephone = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
+const housePhone = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]
 const regularNumber = createNumberMask({
   prefix: '',
   suffix: '',
@@ -34,7 +34,7 @@ const floatNumberNegative = createNumberMask({
 })
 export default {
   email: email,
-  housephone: housephone,
+  house_phone: housePhone,
   cellphone: cellphone,
   regularNumber: regularNumber,
   regularNumberNegative: regularNumberNegative,

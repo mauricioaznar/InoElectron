@@ -11,48 +11,48 @@
 
 <script>
   import PersonaPropertiesReference from 'renderer/api/propertiesReference/PersonaPropertiesReference'
+  import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
     name: 'MauPersonaDataTable',
     data () {
       return {
-        tableFields: [
-          {
-            name: PersonaPropertiesReference.COMPANYNAME.name,
-            title: PersonaPropertiesReference.COMPANYNAME.title,
-            sortField: PersonaPropertiesReference.COMPANYNAME.name,
-            filter: true
-          },
-          {
-            name: PersonaPropertiesReference.EMAIL.name,
-            title: PersonaPropertiesReference.EMAIL.title,
-            sortField: PersonaPropertiesReference.EMAIL.name,
-            filter: true
-          },
-          {
-            name: PersonaPropertiesReference.FIRSTNAME.name,
-            title: PersonaPropertiesReference.FIRSTNAME.title,
-            sortField: PersonaPropertiesReference.FIRSTNAME.name,
-            filter: true
-          },
-          {
-            name: PersonaPropertiesReference.LASTNAME.name,
-            title: PersonaPropertiesReference.LASTNAME.title,
-            sortField: PersonaPropertiesReference.LASTNAME.name,
-            filter: true
-          },
-          {
-            name: PersonaPropertiesReference.HOUSEPHONE.name,
-            title: PersonaPropertiesReference.HOUSEPHONE.title,
-            sortField: PersonaPropertiesReference.HOUSEPHONE.name,
-            filter: true
-          },
-          {
-            name: PersonaPropertiesReference.CELLPHONE.name,
-            title: PersonaPropertiesReference.CELLPHONE.title,
-            sortField: PersonaPropertiesReference.CELLPHONE.name,
-            filter: true
-          }
-        ]
+        tableFields: []
+      }
+    },
+    created () {
+      this.tableFields = [
+        {
+          name: PersonaPropertiesReference.EMAIL.name,
+          title: PersonaPropertiesReference.EMAIL.title,
+          sortField: PersonaPropertiesReference.EMAIL.name,
+          filter: true
+        },
+        {
+          name: PersonaPropertiesReference.FIRST_NAME.name,
+          title: PersonaPropertiesReference.FIRST_NAME.title,
+          sortField: PersonaPropertiesReference.FIRST_NAME.name,
+          filter: true
+        },
+        {
+          name: PersonaPropertiesReference.LAST_NAME.name,
+          title: PersonaPropertiesReference.LAST_NAME.title,
+          sortField: PersonaPropertiesReference.LAST_NAME.name,
+          filter: true
+        },
+        {
+          name: PersonaPropertiesReference.CELLPHONE.name,
+          title: PersonaPropertiesReference.CELLPHONE.title,
+          sortField: PersonaPropertiesReference.CELLPHONE.name,
+          filter: true
+        }
+      ]
+      if (this.clientMode) {
+        this.tableFields.push({
+          name: ClientPropertiesReference.COMPANY.name,
+          title: ClientPropertiesReference.COMPANY.title,
+          callback: DisplayFunctions.getNameFromObject
+        })
       }
     },
     components: {
@@ -61,6 +61,12 @@
       apiUrl: {
         type: String,
         required: true
+      },
+      clientMode: {
+        type: Boolean,
+        default: function () {
+          return false
+        }
       },
       actions: Array,
       actionClicked: Function

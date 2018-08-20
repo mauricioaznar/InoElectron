@@ -4,7 +4,8 @@
           <div class="form-group">
               <div v-if="requestMode">
                   <mau-form-input-number
-                          :initialValue="initialValues[OrderSalePropertiesReference.ORDER_CODE.name]"
+                          :key="initialOrderCode"
+                          :initialValue="initialOrderCode"
                           v-model="salesOrder.orderCode"
                           :label="OrderSalePropertiesReference.ORDER_CODE.title"
                           :name="OrderSalePropertiesReference.ORDER_CODE.name"
@@ -15,7 +16,7 @@
                             remote_unique: {
                               entityType: entityType,
                               columnName: OrderSalePropertiesReference.ORDER_CODE.name,
-                              initialValue: initialValues[OrderSalePropertiesReference.ORDER_CODE.name]
+                              initialValue: initialOrderCode
                             }
                            }"
                   >
@@ -35,7 +36,7 @@
                   <mau-form-input-date
                           :name="OrderSalePropertiesReference.DATE_REQUESTED.name"
                           :label="OrderSalePropertiesReference.DATE_REQUESTED.title"
-                          v-model="salesOrder.date_requested"
+                          v-model="salesOrder.dateRequested"
                           :initialValue="initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name]"
                           :error="errors.first(OrderSalePropertiesReference.DATE_REQUESTED.name)"
                           :disabled="!userHasWritePrivileges"
@@ -57,7 +58,7 @@
                   <mau-form-input-date
                           :name="OrderSalePropertiesReference.DATE_GIVEN.name"
                           :label="OrderSalePropertiesReference.DATE_GIVEN.title"
-                          v-model="salesOrder.date_given"
+                          v-model="salesOrder.dateGiven"
                           :initialValue="initialValues[OrderSalePropertiesReference.DATE_GIVEN.name]"
                           :error="errors.first(OrderSalePropertiesReference.DATE_GIVEN.name)"
                           :disabled="!userHasWritePrivileges"
@@ -71,7 +72,8 @@
                   <mau-form-input-select
                           :initialObject="initialValues[OrderSalePropertiesReference.CLIENT.name]"
                           :label="OrderSalePropertiesReference.CLIENT.title"
-                          :displayProperty="'companyname'"
+                          :displayProperty="'full_name'"
+                          :searchedProperties="['first_name', 'last_name']"
                           :entityType="clientEntityType"
                           v-model="salesOrder.client"
                           :name="OrderSalePropertiesReference.CLIENT.name"
@@ -85,7 +87,7 @@
                   <div class="form-group form-row">
                       <div class="col-sm-12">
                           <label><b>{{OrderSalePropertiesReference.CLIENT.title}}</b></label>
-                          <div>{{initialValues[OrderSalePropertiesReference.CLIENT.name].companyname}}</div>
+                          <div>{{getPersona(initialValues[OrderSalePropertiesReference.CLIENT.name])}}</div>
                       </div>
                   </div>
               </div>
@@ -166,6 +168,7 @@
   import OrderTable from 'renderer/api/components/tables/OrderProductionTable.vue'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import {mapState} from 'vuex'
   export default {
     name: 'MauSimpleOrderForm',
@@ -177,11 +180,12 @@
           orderCode: '',
           products: [],
           saleProducts: [],
-          date_requested: '',
-          date_given: '',
+          dateRequested: '',
+          dateGiven: '',
           client: {},
           receiptType: {}
         },
+        initialOrderCode: '',
         initialValues: {},
         buttonDisabled: false,
         clientEntityType: EntityTypes.CLIENT,
@@ -241,7 +245,7 @@
         this.setInitialValues()
       } else {
         ApiOperations.getMax(this.entityType, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
-          this.salesOrder.orderCode = result + 1
+          this.initialOrderCode = result + 1
         })
       }
     },
@@ -263,6 +267,7 @@
       }
     },
     methods: {
+      getPersona: DisplayFunctions.getPersona,
       createDefaultInitialValues: function () {
         for (let propertyReference in OrderSalePropertiesReference) {
           if (OrderSalePropertiesReference.hasOwnProperty(propertyReference)) {
@@ -276,7 +281,7 @@
         }
       },
       setInitialValues: function () {
-        this.initialValues[OrderSalePropertiesReference.ORDER_CODE.name] = this.initialObject[OrderSalePropertiesReference.ORDER_CODE.name]
+        this.initialOrderCode = this.initialObject[OrderSalePropertiesReference.ORDER_CODE.name]
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.initialObject[OrderSalePropertiesReference.PRODUCTS.name]
         this.initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name] = this.initialObject[OrderSalePropertiesReference.DATE_REQUESTED.name]
         this.initialValues[OrderSalePropertiesReference.CLIENT.name] = this.initialObject[OrderSalePropertiesReference.CLIENT.name]
@@ -289,13 +294,13 @@
         if (this.requestMode) {
           let initialOrderStatusId = this.initialValues[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name]
           directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
-          directParams[OrderSalePropertiesReference.DATE_REQUESTED.name] = this.salesOrder.date_requested
+          directParams[OrderSalePropertiesReference.DATE_REQUESTED.name] = this.salesOrder.dateRequested
           directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
           directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = this.salesOrder.receiptType ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
           directParams[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name] = initialOrderStatusId && initialOrderStatusId > 1 ? initialOrderStatusId : 1
         }
         if (this.receiptMode) {
-          directParams[OrderSalePropertiesReference.DATE_GIVEN.name] = this.salesOrder.date_given
+          directParams[OrderSalePropertiesReference.DATE_GIVEN.name] = this.salesOrder.dateGiven
           directParams[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name] = 2
         }
         let relayObjects = [

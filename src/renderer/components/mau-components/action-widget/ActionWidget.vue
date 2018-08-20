@@ -7,9 +7,16 @@
                 class="icon-button ml-2"
                 v-for="(action, index) in actions"
                 :to="action.path"
-                :key="index">
+                :key="index + action.name">
           <span :class="action.icon"></span>
         </router-link>
+        <a
+                class="icon-button ml-2"
+                v-for="(button, index) in buttons"
+                @click="buttonClicked(button)"
+                :key="index + button.name">
+          <span :class="button.icon"></span>
+        </a>
         <a
                 v-for="(urlAction, index) in urlActions"
                 :active-class="'active'"
@@ -71,11 +78,29 @@
           }
           return isValid
         }
+      },
+      buttons: {
+        type: Array,
+        validator: function (array) {
+          let isValid = true
+          for (let arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
+            let arrayElement = array[arrayIndex]
+            if (!arrayElement.hasOwnProperty('name')) {
+              console.error('Array element ' + arrayIndex + ' has to implement')
+              isValid = false
+            }
+            if (!arrayElement.hasOwnProperty('icon')) {
+              console.error('Array element ' + arrayIndex + 'has to implement icon')
+              isValid = false
+            }
+          }
+          return isValid
+        }
       }
     },
     methods: {
-      actionClickedHandler: function (action) {
-        this.$emit('actionClicked', action)
+      buttonClicked: function (action) {
+        this.$emit('buttonClicked', action)
       }
     }
   }

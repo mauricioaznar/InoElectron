@@ -42,6 +42,18 @@ let OrderSalePropertiesReference = {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
+  TOTAL_COST_REQUESTED: {
+    title: 'Costo total solicitado',
+    name: 'total_cost_requested',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
+  TOTAL_COST_GIVEN: {
+    title: 'Costo total entregado',
+    name: 'total_cost_given',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
   RECEIPT_TYPE: {
     title: 'Tipo de comprobante',
     name: 'order_sale_receipt_type',

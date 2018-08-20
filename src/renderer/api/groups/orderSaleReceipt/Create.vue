@@ -6,7 +6,7 @@
               displayProperty="order_code_string"
               v-model="orderSaleRequestEntity"
               :entityType="orderSaleRequestEntityType"
-              :searchedProperty="'order_code'"
+              :searchedProperties="['order_code']"
               :filterExact="filterExact"
               :name="'name'"
       >

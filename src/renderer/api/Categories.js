@@ -1,4 +1,9 @@
 export default {
+  HOME: {
+    name: 'home',
+    title: 'Inicio',
+    iconClass: 'fa fa-home'
+  },
   SALES: {
     name: 'sales',
     title: 'Ventas',
