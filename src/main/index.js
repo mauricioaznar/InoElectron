@@ -34,7 +34,7 @@ function createWindow () {
     let title = app.getName()
     mainWindow.setTitle(title + ' v' + version)
   })
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
   mainWindow.on('closed', () => {
     mainWindow = null
   })
