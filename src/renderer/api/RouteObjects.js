@@ -251,6 +251,13 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PROD
         componentName: 'Del',
         params: [GlobalEntityIdentifier]
       }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
+      {
+        componentName: 'BagReport',
+        navbar: true,
+        title: 'Reporte de bolseo'
+      }
     )
   ]
 ))
@@ -290,6 +297,13 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRO
       {
         componentName: 'Del',
         params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
+      {
+        componentName: 'RollReport',
+        navbar: true,
+        title: 'Reporte de extrusion'
       }
     )
   ]

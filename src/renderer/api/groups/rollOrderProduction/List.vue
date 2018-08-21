@@ -32,6 +32,18 @@
             callback: DisplayFunctions.getProducts.name + '|' + 2
           },
           {
+            name: OrderProductionPropertiesReference.START_DATE_TIME.name,
+            title: OrderProductionPropertiesReference.START_DATE_TIME.title,
+            sortField: OrderProductionPropertiesReference.START_DATE_TIME.name,
+            filter: true
+          },
+          {
+            name: OrderProductionPropertiesReference.END_DATE_TIME.name,
+            title: OrderProductionPropertiesReference.END_DATE_TIME.title,
+            sortField: OrderProductionPropertiesReference.END_DATE_TIME.name,
+            filter: true
+          },
+          {
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
             callback: DisplayFunctions.getPersona

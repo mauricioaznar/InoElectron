@@ -49,7 +49,7 @@
                                 :error="errors.first('_quantity_group' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="getProductGroupWeightStrict(currentStructuredObj) ? 'required|integer|not_in:0,-0' : 'required|not_in:0,-0'"
+                                v-validate="'required|not_in:0,-0'"
                         >
                         </mau-form-input-number>
                     </td>
