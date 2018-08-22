@@ -62,7 +62,6 @@
         if (category.name === Categories.PRODUCTION.name) {
           shouldShow = this.isAdminUser || this.isProductionUser
         }
-        console.log(shouldShow)
         return shouldShow
       },
       getDefaultCategoryRouteObjectPath: function (category) {

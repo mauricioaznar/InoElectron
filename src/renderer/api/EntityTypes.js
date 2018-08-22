@@ -24,6 +24,10 @@ export default {
     apiName: 'user',
     title: 'Usuarios'
   },
+  PRODUCTION_INDICATOR: {
+    name: 'productionIndicator',
+    apiName: 'productionIndicator'
+  },
   BAG_ORDER_PRODUCTION: {
     name: 'bagOrderProduction',
     apiName: 'orderProduction',
@@ -41,6 +45,10 @@ export default {
   ORDER_PRODUCTION_PRODUCT: {
     name: 'orderProductionProduct',
     apiName: 'orderProductionProduct'
+  },
+  ORDER_PRODUCTION_INDICATOR: {
+    name: 'orderProductionIndicator',
+    apiName: 'orderProductionIndicator'
   },
   ORDER_ADJUSTMENT: {
     name: 'orderAdjustment',

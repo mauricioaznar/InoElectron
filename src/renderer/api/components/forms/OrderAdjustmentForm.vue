@@ -46,14 +46,14 @@
                             :disabled="!userHasWritePrivileges"
                             v-validate="'array_required'"
                     >
-                        <order-production-table
+                        <order-production-product-table
                             :allowNegative="true"
                             :selectedProducts="productionOrder.products"
                             :initialProducts="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
                             :userHasWritePrivileges="userHasWritePrivileges"
                             v-model="productionOrder.adjustmentProducts"
                         >
-                        </order-production-table>
+                        </order-production-product-table>
                     </mau-form-input-select>
           </div>
           <div class="container mb-2 text-right">
@@ -73,8 +73,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
-  import OrderProductionTable from 'renderer/api/components/tables/OrderProductionTable.vue'
+  import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
   import {mapState} from 'vuex'
   export default {
     name: 'OrderAdjustmentForm',
@@ -98,8 +97,7 @@
       MauFormInputSelect,
       MauFormInputDate,
       MauFormInputText,
-      OrderSaleTable,
-      OrderProductionTable
+      OrderProductionProductTable
     },
     props: {
       initialObject: {

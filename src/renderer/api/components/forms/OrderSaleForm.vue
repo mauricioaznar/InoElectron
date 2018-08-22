@@ -133,7 +133,7 @@
                             v-validate="'array_required'"
                     >
                         <template slot-scope="params">
-                            <order-sale-table
+                            <order-sale-product-table
                                     :requestMode="requestMode"
                                     :receiptMode="receiptMode"
                                     :hasTax="isInvoiceSelected"
@@ -142,7 +142,7 @@
                                     :initialProducts="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                                     :userHasWritePrivileges="userHasWritePrivileges"
                             >
-                            </order-sale-table>
+                            </order-sale-product-table>
                         </template>
                     </mau-form-input-select>
               </div>
@@ -164,8 +164,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import OrderSaleTable from 'renderer/api/components/tables/OrderSaleTable.vue'
-  import OrderTable from 'renderer/api/components/tables/OrderProductionTable.vue'
+  import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
@@ -198,8 +197,7 @@
       MauFormInputDate,
       MauFormInputText,
       MauFormInputNumber,
-      OrderSaleTable,
-      OrderTable
+      OrderSaleProductTable
     },
     props: {
       initialObject: {

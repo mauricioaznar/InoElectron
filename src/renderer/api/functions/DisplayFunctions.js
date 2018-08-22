@@ -52,7 +52,6 @@ export default {
   },
   getDateTime: function (date) {
     let momentDate = moment(date)
-    console.log(date)
     return momentDate.isValid() ? moment(date).format('dddd, MMMM D, YYYY. HH:mm') : '-'
   },
   getTimeFromDateTime: function (date) {

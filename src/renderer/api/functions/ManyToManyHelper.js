@@ -50,7 +50,6 @@ function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, 
       }
     })
   }
-  console.log(updatedObjects)
   return {
     create: createdObjects,
     del: deletedObjects,

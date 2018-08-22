@@ -27,6 +27,12 @@ export default {
     display: DisplayFunctions.getProducts,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },
+  PRODUCTION_INDICATORS: {
+    title: 'Indicadores',
+    name: 'production_indicators',
+    display: DisplayFunctions.getNameArray,
+    defaultValue: MauInputDefaultValues.MULTISELECT
+  },
   MACHINES: {
     title: 'Maquinas',
     name: 'machines',
