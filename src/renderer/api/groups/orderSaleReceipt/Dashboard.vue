@@ -146,7 +146,7 @@
     methods: {
       setSales: function () {
         this.isLoading = true
-        ApiOperations.getStats('sales/' + this.yearSelected).then(result => {
+        ApiOperations.getStats('sales').then(result => {
           this.sales = {}
           let salesNormal = []
           for (let i = 0; i < this.monthNames.length; i++) {
