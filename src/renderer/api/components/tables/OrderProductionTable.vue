@@ -8,8 +8,8 @@
                     <th class="mau-text-center">Cantidad</th>
                     <th class="mau-text-center">Unidad</th>
                     <th class="mau-text-center">Kilos</th>
-                    <th class="mau-text-center">Peso del bulto</th>
-                    <th class="mau-text-center">Bultos</th>
+                    <th class="mau-text-center" v-if="bagMode">Peso del bulto</th>
+                    <th class="mau-text-center" v-if="bagMode">Bultos</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,12 +69,12 @@
                             {{currentStructuredObj.kilos}}
                         </div>
                     </td>
-                    <td class="mau-text-center">
+                    <td class="mau-text-center" v-if="bagMode">
                         <div>
                             {{getProductCurrentGroupWeight(currentStructuredObj)}}
                         </div>
                     </td>
-                    <td class="mau-text-center">
+                    <td class="mau-text-center" v-if="bagMode">
                         <div>
                             {{currentStructuredObj.groups}}
                         </div>
@@ -94,7 +94,7 @@
     import {mapGetters} from 'vuex'
     import cloneDeep from 'renderer/services/common/cloneDeep'
     export default {
-      name: 'ProductOrderTable',
+      name: 'OrderProductionTable',
       inject: ['$validator'],
       data () {
         return {
@@ -132,6 +132,18 @@
         },
         machineId: {
           type: Number
+        },
+        bagMode: {
+          type: Boolean,
+          default: function () {
+            return false
+          }
+        },
+        extrusionMode: {
+          type: Boolean,
+          default: function () {
+            return false
+          }
         },
         userHasWritePrivileges: {
           type: Boolean,

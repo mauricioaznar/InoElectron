@@ -86,6 +86,7 @@
               >
                   <order-production-table
                           :allowNegative="true"
+                          :bagMode="true"
                           :machineId="productionOrder.machine ? productionOrder.machine['id'] : 0"
                           :selectedProducts="productionOrder.products"
                           :initialProducts="initialValues[BagOrderProductionPropertiesReference.PRODUCTS.name]"
@@ -128,8 +129,8 @@
                       v-validate="'array_required'"
               >
                   <order-production-table
-                          :allowNegative="true"
                           :machineId="machineObj['id']"
+                          :extrusionMode="true"
                           :selectedProducts="machineObj.products"
                           :initialProducts="machineObj.initialProducts"
                           :userHasWritePrivileges="userHasWritePrivileges"
