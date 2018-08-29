@@ -40,20 +40,14 @@
             arguments: [1]
           },
           {
-            title: OrderSalePropertiesReference.PRODUCTS.title,
-            name: OrderSalePropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getOrderSaleTotalCost,
-            arguments: [1]
+            title: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.title,
+            name: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.name,
+            display: DisplayFunctions.getValue
           },
           {
             title: OrderSalePropertiesReference.CLIENT.title,
             name: OrderSalePropertiesReference.CLIENT.name,
             display: DisplayFunctions.getPersona
-          },
-          {
-            title: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.title,
-            name: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.name,
-            display: DisplayFunctions.getValue
           }
         ],
         entityType: EntityTypes.ORDER_SALE_REQUEST,

@@ -229,10 +229,6 @@
         type: Function,
         required: true
       },
-      entityType: {
-        type: Object,
-        required: true
-      },
       bagMode: {
         type: Boolean,
         default: function () {

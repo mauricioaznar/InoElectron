@@ -33,9 +33,15 @@ let OrderProductSalePropertiesReference = {
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
-  KILO_PRICE: {
-    title: 'Precio unitario',
-    name: 'kilo_price',
+  KILO_PRICE_REQUESTED: {
+    title: 'Precio unitario solicitado',
+    name: 'kilo_price_requested',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
+  KILO_PRICE_GIVEN: {
+    title: 'Precio unitario pedido',
+    name: 'kilo_price_given',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.NUMBER
   },

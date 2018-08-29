@@ -90,6 +90,47 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCT,
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
+  {
+    componentName: 'Main',
+    category: Categories.PRODUCTION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
+      {
+        componentName: 'ProductionEventReport',
+        title: 'Reporte de eventos de produccion',
+        navbar: true,
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_ADJUSTMENT,
   {
     componentName: 'Main',

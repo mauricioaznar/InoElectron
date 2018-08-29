@@ -50,23 +50,9 @@
             arguments: [1]
           },
           {
-            name: OrderSalePropertiesReference.PRODUCTS.name,
-            title: 'Total solictado',
-            hidden: true,
-            display: DisplayFunctions.getOrderSaleTotalCost,
-            arguments: [1]
-          },
-          {
             title: 'Productos entregados',
             name: OrderSalePropertiesReference.PRODUCTS.name,
             display: DisplayFunctions.getOrderSaleProducts,
-            arguments: [2]
-          },
-          {
-            name: OrderSalePropertiesReference.PRODUCTS.name,
-            title: 'Total entregado',
-            hidden: true,
-            display: DisplayFunctions.getOrderSaleTotalCost,
             arguments: [2]
           },
           {

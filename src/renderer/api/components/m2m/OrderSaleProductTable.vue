@@ -67,10 +67,9 @@
                     </td>
                     <td class="mau-text-center">
                         <mau-form-input-number
-                                v-if="requestMode"
-                                :name="ProductOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['product_id']"
-                                :error="errors.first(ProductOrderProductSalePropertiesReference.KILO_PRICE.name + currentStructuredObj['product_id'])"
-                                v-model="currentStructuredObj.kilo_price"
+                                :name="'kilo_price' + currentStructuredObj['product_id']"
+                                :error="errors.first('kilo_price' + currentStructuredObj['product_id'])"
+                                v-model="currentStructuredObj._kilo_price"
                                 :initialValue="getCurrentObjKiloPrice(currentStructuredObj)"
                                 :type="'float'"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
@@ -78,9 +77,6 @@
                                 v-validate="'required|min_value:1'"
                         >
                         </mau-form-input-number>
-                        <div v-if="receiptMode">
-                            {{getCurrentObjKiloPrice(currentStructuredObj)}}
-                        </div>
                     </td>
                     <td>
                         <div v-if="requestMode">
@@ -219,8 +215,17 @@
         },
         getCurrentObjKiloPrice: function (structuredObject) {
           let currentKiloPrice = this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CURRENT_KILO_PRICE.name]
-          if (structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE.name]) {
-            currentKiloPrice = structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE.name]
+          if (this.requestMode) {
+            if (structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name]) {
+              currentKiloPrice = structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name]
+            }
+          }
+          if (this.receiptMode) {
+            if (structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_GIVEN.name]) {
+              currentKiloPrice = structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_GIVEN.name]
+            } else if (structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name]) {
+              currentKiloPrice = structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name]
+            }
           }
           return currentKiloPrice
         },
@@ -305,11 +310,17 @@
         },
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
+          let kiloPrice = currentStructuredObj['_kilo_price'] || 0
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
             currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
-
+          if (this.requestMode) {
+            currentStructuredObj[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name] = kiloPrice
+          }
+          if (this.receiptMode) {
+            currentStructuredObj[ProductOrderProductSalePropertiesReference.KILO_PRICE_GIVEN.name] = kiloPrice
+          }
           if (currentStructuredObj['_calculation_type'] === 0) {
             if (this.requestMode) {
               currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity % 1 === 0 ? quantity : quantity

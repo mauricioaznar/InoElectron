@@ -22,7 +22,6 @@
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer.vue'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
-  import AppActions from 'renderer/app/store/AppActions'
   export default {
     name: 'ViewProduct',
     data () {
@@ -70,7 +69,6 @@
       }
     },
     created () {
-      this.$store.dispatch(AppActions.SET_IS_ROUTE_OBJECT_LOADING, true)
     },
     components: {
       MauEntityPetitioner,
@@ -98,7 +96,6 @@
             display: DisplayFunctions.getThreeStateBoolean
           })
         }
-        this.$store.dispatch(AppActions.SET_IS_ROUTE_OBJECT_LOADING, false)
       }
     },
     props: {

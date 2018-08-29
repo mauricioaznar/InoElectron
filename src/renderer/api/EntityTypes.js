@@ -28,6 +28,19 @@ export default {
     name: 'productionIndicator',
     apiName: 'productionIndicator'
   },
+  PRODUCTION_EVENT: {
+    name: 'productionEvent',
+    apiName: 'productionEvent',
+    title: 'Eventos de produccion'
+  },
+  PRODUCTION_EVENT_TYPE: {
+    name: 'productionEventType',
+    apiName: 'productionEventType'
+  },
+  PRODUCTION_EVENT_CHECK: {
+    name: 'productionEventCheck',
+    apiName: 'productionEventCheck'
+  },
   BAG_ORDER_PRODUCTION: {
     name: 'bagOrderProduction',
     apiName: 'orderProduction',

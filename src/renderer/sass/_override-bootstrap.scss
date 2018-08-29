@@ -1,7 +1,12 @@
+@import "variables";
+
 :focus {
   outline: #4ab2e3 1px solid;
 }
 
+.danger {
+  color: $brand-danger;
+}
 .form-control {
   border-width: 1px !important;
 }
