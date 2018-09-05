@@ -12,6 +12,7 @@
 <script>
   import PersonaPropertiesReference from 'renderer/api/propertiesReference/PersonaPropertiesReference'
   import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
+  import EmployeePropertiesReference from 'renderer/api/propertiesReference/EmployeePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
     name: 'MauPersonaDataTable',
@@ -20,14 +21,28 @@
         tableFields: []
       }
     },
+    props: {
+      apiUrl: {
+        type: String,
+        required: true
+      },
+      clientMode: {
+        type: Boolean,
+        default: function () {
+          return false
+        }
+      },
+      employeeMode: {
+        type: Boolean,
+        default: function () {
+          return false
+        }
+      },
+      actions: Array,
+      actionClicked: Function
+    },
     created () {
       this.tableFields = [
-        {
-          name: PersonaPropertiesReference.EMAIL.name,
-          title: PersonaPropertiesReference.EMAIL.title,
-          sortField: PersonaPropertiesReference.EMAIL.name,
-          filter: true
-        },
         {
           name: PersonaPropertiesReference.FIRST_NAME.name,
           title: PersonaPropertiesReference.FIRST_NAME.title,
@@ -53,23 +68,22 @@
           title: ClientPropertiesReference.COMPANY.title,
           callback: DisplayFunctions.getNameFromObject
         })
+        this.tableFields.push({
+          name: PersonaPropertiesReference.EMAIL.name,
+          title: PersonaPropertiesReference.EMAIL.title,
+          sortField: PersonaPropertiesReference.EMAIL.name,
+          filter: true
+        })
+      }
+      if (this.employeeMode) {
+        this.tableFields.push({
+          name: EmployeePropertiesReference.EMPLOYEE_TYPE.name,
+          title: EmployeePropertiesReference.EMPLOYEE_TYPE.title,
+          callback: DisplayFunctions.getNameFromObject
+        })
       }
     },
     components: {
-    },
-    props: {
-      apiUrl: {
-        type: String,
-        required: true
-      },
-      clientMode: {
-        type: Boolean,
-        default: function () {
-          return false
-        }
-      },
-      actions: Array,
-      actionClicked: Function
     }
   }
 </script>

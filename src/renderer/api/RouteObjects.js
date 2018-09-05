@@ -380,10 +380,37 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
         componentName: 'View',
         params: [GlobalEntityIdentifier]
       }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
+    )
+  ]
+))
+
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
+  {
+    componentName: 'Main',
+    category: Categories.PRODUCTION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
       {
-        componentName: 'Del',
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
+      {
+        componentName: 'View',
         params: [GlobalEntityIdentifier]
       }
     )
