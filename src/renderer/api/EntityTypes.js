@@ -105,6 +105,10 @@ export default {
     apiName: 'employee',
     title: 'Empleados'
   },
+  EMPLOYEE_TYPE: {
+    name: 'employeeType',
+    apiName: 'employeeType'
+  },
   NOTIFICATION: {
     name: 'notification',
     apiName: 'notification',
