@@ -139,29 +139,6 @@
                   </order-production-product-table>
               </mau-form-input-select>
           </div>
-          <div class="form-group">
-              <mau-form-input-select
-                      :initialObjects="initialValues[OrderProductionPropertiesReference.PRODUCTION_INDICATORS.name]"
-                      :label="OrderProductionPropertiesReference.PRODUCTION_INDICATORS.title"
-                      :displayProperty="'name'"
-                      v-model="productionIndicators"
-                      :name="OrderProductionPropertiesReference.PRODUCTION_INDICATORS.name"
-                      :data-vv-as="'Indicadores'"
-                      :error="errors.first(OrderProductionPropertiesReference.PRODUCTION_INDICATORS.name)"
-                      :entityType="productionIndicatorEntityType"
-                      :disabled="!userHasWritePrivileges"
-                      :multi="true"
-                      v-validate="'array_required'"
-              >
-                  <order-production-indicator-selector
-                          :selectedIndicators="productionIndicators"
-                          :initialIndicators="initialValues[OrderProductionPropertiesReference.PRODUCTION_INDICATORS.name]"
-                          :userHasWritePrivileges="userHasWritePrivileges"
-                          v-model="productionOrder.productionIndicators"
-                  >
-                  </order-production-indicator-selector>
-              </mau-form-input-select>
-          </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
           </div>
@@ -193,7 +170,6 @@
         productionOrder: {
           products: [],
           productionProducts: [],
-          productionIndicators: [],
           startDateTime: '',
           endDateTime: '',
           machines: [],
@@ -202,7 +178,6 @@
           date: ''
         },
         machineObjects: [],
-        productionIndicators: [],
         machineObject: {},
         initialValues: {},
         buttonDisabled: false,
@@ -284,7 +259,6 @@
       },
       setInitialValues: function () {
         this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name] = this.initialObject[OrderProductionPropertiesReference.PRODUCTS.name]
-        this.initialValues[OrderProductionPropertiesReference.PRODUCTION_INDICATORS.name] = this.initialObject[OrderProductionPropertiesReference.PRODUCTION_INDICATORS.name]
         this.initialValues[OrderProductionPropertiesReference.START_DATE_TIME.name] = this.initialObject[OrderProductionPropertiesReference.START_DATE_TIME.name]
         this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] = this.initialObject[OrderProductionPropertiesReference.END_DATE_TIME.name]
         this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] = this.initialObject[OrderProductionPropertiesReference.EMPLOYEE.name]
@@ -342,14 +316,6 @@
           relayObjects.push(productionProductRelayObject)
           directParams[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name] = 1
         }
-        let filteredProductionIndicators = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
-          this.initialValues[OrderProductionPropertiesReference.PRODUCTION_INDICATORS.name].map(initialProductionObj => initialProductionObj.pivot),
-          this.productionOrder.productionIndicators,
-          'id'
-        )
-        console.log(this.initialValues[OrderProductionPropertiesReference.PRODUCTION_INDICATORS.name].map(initialProductionObj => initialProductionObj.pivot))
-        let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionIndicators, EntityTypes.ORDER_PRODUCTION_INDICATOR)
-        relayObjects.push(productionProductRelayObject)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true

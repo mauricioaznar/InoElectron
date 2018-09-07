@@ -50,7 +50,7 @@
                             :type="'cellphone'"
                             :error="errors.first(PersonaPropertiesReference.CELLPHONE.name)"
                             :disabled="!userHasWritePrivileges"
-                            v-validate="'required'"
+                            v-validate="clientMode ? 'required' : ''"
                     >
                     </mau-form-input-text>
             </div>
