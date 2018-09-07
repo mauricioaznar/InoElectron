@@ -417,6 +417,39 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.MACHINE,
+  {
+    componentName: 'Main',
+    category: Categories.PRODUCTION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.MACHINE,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.MACHINE,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.MACHINE,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.MACHINE,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
   {
     componentName: 'Main',

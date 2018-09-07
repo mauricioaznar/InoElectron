@@ -100,6 +100,10 @@ export default {
     apiName: 'machine',
     title: 'Maquinas'
   },
+  MACHINE_TYPE: {
+    name: 'machineType',
+    apiName: 'machineType'
+  },
   EMPLOYEE: {
     name: 'employee',
     apiName: 'employee',

@@ -7,29 +7,41 @@
               @entityResult="entityResultHandler"
       >
       </mau-entity-petitioner>
-      <persona-view v-if="entity" :persona="entity" :employeeMode="true"></persona-view>
+      <mau-property-viewer v-if="entity" :entity="entity" :properties="properties"></mau-property-viewer>
   </div>
 </template>
 
 <script>
-  import PersonaView from 'renderer/api/components/template/PersonaView.vue'
+  import MachinePropertiesReference from 'renderer/api/propertiesReference/MachinePropertiesReference'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import EntityType from 'renderer/api/EntityTypes'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
-    name: 'ViewEmployee',
+    name: 'ViewMachine',
     data () {
       return {
         entity: null,
-        entityType: EntityType.EMPLOYEE
+        entityType: EntityType.MACHINE,
+        properties: [
+          {
+            title: MachinePropertiesReference.NAME.title,
+            name: MachinePropertiesReference.NAME.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: MachinePropertiesReference.MACHINE_TYPE.title,
+            name: MachinePropertiesReference.MACHINE_TYPE.name,
+            display: DisplayFunctions.getNameFromObject
+          }
+        ]
       }
     },
     components: {
       MauSpinner,
       MauEntityPetitioner,
-      MauPropertyViewer,
-      PersonaView
+      MauPropertyViewer
     },
     props: {
       id: null
