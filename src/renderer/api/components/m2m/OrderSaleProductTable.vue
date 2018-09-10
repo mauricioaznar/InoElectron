@@ -32,7 +32,7 @@
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                     required: true,
-                                    not_in: '0',
+                                    not_in: requestMode ? '0' : '-1',
                                     kilo_to_group: {
                                         groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
                                         isGroupWeightStrict: getProductGroupWeightStrict(currentStructuredObj)
@@ -50,7 +50,10 @@
                                 :error="errors.first('_quantity_group' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required|not_in:0'"
+                                v-validate="{
+                                  required: true,
+                                  not_in: requestMode ? '0' : '-1'
+                                }"
                         >
                         </mau-form-input-number>
                     </td>

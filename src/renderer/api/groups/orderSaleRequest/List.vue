@@ -23,7 +23,6 @@
     data () {
       return {
         apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_SALE_RECEIPT),
-        filterExact: {[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name]: 1},
         tableFields: [
           {
             name: OrderSalePropertiesReference.ORDER_CODE.name,
