@@ -38,33 +38,38 @@
     methods: {
       setCalendar: function () {
         this.isLoading = true
-        ApiOperations.getStats('requests').then(result => {
+        Promise.all([
+          ApiOperations.getWithoutPagination(EntityTypes.ORDER_REQUEST),
+          ApiOperations.getWithoutPagination(EntityTypes.ORDER_SALE)
+        ]).then(result => {
           this.calendarEvents = []
           let calendarItems = []
-          result.forEach(item => {
-            console.log(item)
+          let requests = result[0]
+          for (let requestIndex = 0; requestIndex < requests.length; requestIndex++) {
+            let requestObj = requests[requestIndex]
             calendarItems.push({
-              title: item.abbreviation + ' ' + item.total_cost_requested,
-              start: moment(item.date_requested),
+              title: requestObj.company.abbreviation + ' ' + requestObj.total_cost,
+              start: moment(requestObj.date),
               cssClass: 'request',
               YOUR_DATA: {
-                id: item.id,
+                id: requestObj.id,
                 request: true
               }
             })
-            let dateGiven = moment(item.date_given)
-            if (dateGiven.isValid()) {
-              calendarItems.push({
-                title: item.abbreviation + ' ' + item.total_cost_given,
-                start: moment(item.date_given),
-                cssClass: 'receipt',
-                YOUR_DATA: {
-                  id: item.id,
-                  receipt: true
-                }
-              })
-            }
-          })
+          }
+          let sales = result[1]
+          for (let saleIndex = 0; saleIndex < sales.length; saleIndex++) {
+            let saleObj = sales[saleIndex]
+            calendarItems.push({
+              title: saleObj.company.abbreviation + ' ' + saleObj.total_cost,
+              start: moment(saleObj.date),
+              cssClass: 'sale',
+              YOUR_DATA: {
+                id: saleObj.id,
+                sale: true
+              }
+            })
+          }
           this.calendarEvents = calendarItems
           let vm = this
           this.timeout = setTimeout(function () {
@@ -75,10 +80,10 @@
       eventClicked: function (obj) {
         let id = obj.YOUR_DATA.id
         if (obj.YOUR_DATA.request) {
-          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE, 'view') + '/' + id})
+          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_REQUEST, 'view') + '/' + id})
         }
-        if (obj.YOUR_DATA.receipt) {
-          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE_RECEIPT, 'view') + '/' + id})
+        if (obj.YOUR_DATA.sale) {
+          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE, 'view') + '/' + id})
         }
       }
     },
@@ -98,7 +103,7 @@
             box-sizing: content-box;
         }
     }
-    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.receipt {
+    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.sale {
         background-color: #cb7832;
 
     }

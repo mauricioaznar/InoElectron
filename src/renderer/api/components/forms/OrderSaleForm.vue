@@ -35,13 +35,13 @@
           </div>
           <div class="form-group">
               <mau-form-input-select
-                      :initialObject="initialValues[OrderSalePropertiesReference.COMPANY.name]"
-                      :label="OrderSalePropertiesReference.COMPANY.title"
+                      :initialObject="initialValues[OrderRequestPropertiesReference.COMPANY.name]"
+                      :label="OrderRequestPropertiesReference.COMPANY.title"
                       :displayProperty="'name'"
                       :entityType="companyEntityType"
                       v-model="salesOrder.company"
-                      :name="OrderSalePropertiesReference.COMPANY.name"
-                      :error="errors.first(OrderSalePropertiesReference.COMPANY.name)"
+                      :name="OrderRequestPropertiesReference.COMPANY.name"
+                      :error="errors.first(OrderRequestPropertiesReference.COMPANY.name)"
                       :disabled="true"
                       v-validate="'object_required'"
               >
@@ -152,6 +152,7 @@
       return {
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         OrderSalePropertiesReference: OrderSalePropertiesReference,
+        OrderRequestPropertiesReference: OrderRequestPropertiesReference,
         salesOrder: {
           orderCode: '',
           products: [],
@@ -241,7 +242,7 @@
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.PRODUCTS.name)
         this.initialValues[OrderSalePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.DATE.name)
         this.initialValues[OrderSalePropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT.name)
-        this.initialValues[OrderSalePropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.COMPANY.name)
+        this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.COMPANY.name)
         this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
         this.initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_STATUS.name)
       },
@@ -255,7 +256,6 @@
         directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
         directParams[OrderSalePropertiesReference.DATE.name] = this.salesOrder.date
         directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
-        directParams[OrderSalePropertiesReference.COMPANY.relationship_id_name] = this.salesOrder.company ? this.salesOrder.company[GlobalEntityIdentifier] : 'null'
         directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = this.salesOrder.receiptType ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
         directParams[OrderSalePropertiesReference.ORDER_SALE_STATUS.relationship_id_name] = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] : 'null'
         let initialOrderSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderSalePropertiesReference.PRODUCTS.name], 'product_id')

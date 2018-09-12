@@ -8,15 +8,9 @@ let OrderRequestPropertiesReference = {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
-  DATE_REQUESTED: {
+  DATE: {
     title: 'Fecha de solicitud',
-    name: 'date_requested',
-    display: DisplayFunctions.getDate,
-    defaultValue: MauInputDefaultValues.DATE
-  },
-  DATE_DELIVERED: {
-    title: 'Fecha de entrega',
-    name: 'date_given',
+    name: 'date',
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },

@@ -8,6 +8,10 @@ export function getWithFilterLike (entityType) {
   return Vue.http.get(ApiUrls.createListUrl(entityType), {headers: getHeaders()}).then(getServerResponseData)
 }
 
+export function getWithoutPagination (entityType) {
+  return Vue.http.get(ApiUrls.createListUrl(entityType) + '?paginate=false', {headers: getHeaders()}).then(getServerResponseData)
+}
+
 export function getWithFilterLikeWithoutPagination (entityType, filterLikeObject) {
   let filterLikeQuery = FilterHelper.filterLikeQueryCreator(filterLikeObject)
   return Vue.http.get(ApiUrls.createListUrl(entityType) + '?paginate=false' + filterLikeQuery, {headers: getHeaders()}).then(getServerResponseData)
@@ -86,7 +90,8 @@ export default {
   create: create,
   del: del,
   getWithFilterLike: getWithFilterLike,
-  getWithoutPagination: getWithFilterLikeWithoutPagination,
+  getWithoutPagination: getWithoutPagination,
+  getWithFilterLikeWithoutPagination: getWithFilterLikeWithoutPagination,
   getWithFilterExactWithoutPagination: getWithFilterExactWithoutPagination,
   getWithFilterLikeWithFilterExactWithoutPagination: getWithFilterLikeWithFilterExactWithoutPagination,
   getMe: getMe,

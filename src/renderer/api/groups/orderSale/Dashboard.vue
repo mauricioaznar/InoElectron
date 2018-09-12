@@ -3,15 +3,17 @@
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
         <h2 v-if="!isLoading">Reporte de ventas</h2>
         <div class="row" v-if="!isLoading">
-            <div class="col-sm">
-                <h6>Dinero</h6>
+            <div class="col-sm-12 py-2">
+                <h6>Pedidos vs ventas por mes por ingreso</h6>
                 <mau-bar-chart
                         :chartData="salesByMonthCostData"
                         :options="chartOptions"
                         :width="400"
                         :height="200"
                 ></mau-bar-chart>
-                <h6>Kilos</h6>
+            </div>
+            <div class="col-sm-12 py-2">
+                <h6>Pedidos vs ventas por mes por kilos</h6>
                 <mau-bar-chart
                         :chartData="salesByMonthKilosData"
                         :options="chartOptions"
@@ -19,32 +21,32 @@
                         :height="200"
                 ></mau-bar-chart>
             </div>
-        </div>  
+        </div>
         <div class="row" v-if="!isLoading">
-            <div class="col-sm">
-                <h6>Dinero</h6>
+            <div class="col-sm-12 py-2">
+                <h6>Pedidos vs ventas por mes por ingreso por cliente</h6>
                 <mau-line-chart
                         :chartData="salesByMonthByClientCostData"
                         :options="chartOptions"
                         :width="400"
                         :height="200"
                 ></mau-line-chart>
-                <div>
-                    <h6>Kilos</h6>
-                    <mau-line-chart
-                            :chartData="salesByMonthByClientKilosData"
-                            :options="chartOptions"
-                            :width="400"
-                            :height="200"
-                    ></mau-line-chart>
-                </div>
+            </div>
+            <div class="col-sm-12 py-2">
+                <h6>Pedidos vs ventas por mes por kilos por cliente</h6>
+                <mau-line-chart
+                        :chartData="salesByMonthByClientKilosData"
+                        :options="chartOptions"
+                        :width="400"
+                        :height="200"
+                ></mau-line-chart>
             </div>
         </div>
         <div class="row" v-if="!isLoading">
-            <div class="col-sm">
-                <h6>Balance</h6>
+            <div class="col-sm-12 py-2">
+                <h6>Balance (Ventas vs pedidos) por ingreso</h6>
                 <mau-line-chart
-                        :chartData="salesByMonthByClientBalanceData"
+                        :chartData="salesByMonthByCompanyBalanceData"
                         :options="chartNegativeOptions"
                         :width="400"
                         :height="400"
@@ -67,7 +69,7 @@
         salesByMonthKilosData: '',
         salesByMonthByClientKilosData: '',
         salesByMonthByClientCostData: '',
-        salesByMonthByClientBalanceData: '',
+        salesByMonthByCompanyBalanceData: '',
         isLoading: true,
         timeout: '',
         yearSelected: '2018',
@@ -150,39 +152,46 @@
           this.sales = {}
           let salesNormal = []
           for (let i = 0; i < this.monthNames.length; i++) {
-            let saleObjFound = result.sales_normal.find(saleObj => {
-              return saleObj.month - 1 === i
+            let saleNormalObjFound = result.sales_normal.find(saleNormalObj => {
+              return saleNormalObj.month - 1 === i
+            })
+            let requestNormalObjFound = result.requests_normal.find(requestNormalObj => {
+              return requestNormalObj.month - 1 === i
             })
             salesNormal.push({
-              total_cost_given: saleObjFound ? saleObjFound.total_cost_given : 0,
-              total_kilos_given: saleObjFound ? saleObjFound.kilos_given : 0,
-              total_cost_requested: saleObjFound ? saleObjFound.total_cost_requested : 0,
-              total_kilos_requested: saleObjFound ? saleObjFound.kilos_requested : 0
+              total_cost_given: saleNormalObjFound ? saleNormalObjFound.total_cost : 0,
+              total_kilos_given: saleNormalObjFound ? saleNormalObjFound.kilos : 0,
+              total_cost_requested: requestNormalObjFound ? requestNormalObjFound.total_cost : 0,
+              total_kilos_requested: requestNormalObjFound ? requestNormalObjFound.kilos : 0
             })
           }
-          let salesByClient = []
-          let clients = result.sales_by_client.map(salesByClientObj => { return {id: salesByClientObj.client_id, name: salesByClientObj.name} }).reduce((acc, current) => {
+          let salesByCompany = []
+          let companies = result.sales_by_client.map(salesByCompanyObj => { return {id: salesByCompanyObj.company_id, name: salesByCompanyObj.company_name} }).reduce((acc, current) => {
             if (acc.findIndex(storedObj => { return current.id === storedObj.id }) < 0) {
               acc.push(current)
             }
             return acc
           }, [])
-          for (let i = 0; i < clients.length; i++) {
-            let salesByClientByYear = []
+          for (let i = 0; i < companies.length; i++) {
+            let salesByCompanyByYear = []
             for (let j = 0; j < this.monthNames.length; j++) {
-              let saleObjFound = result.sales_by_client.find(saleObj => {
-                return saleObj.month - 1 === j && saleObj.client_id === clients[i].id
+              let saleByClientObjFound = result.sales_by_client.find(saleObj => {
+                return saleObj.month - 1 === j && saleObj.company_id === companies[i].id
               })
-              salesByClientByYear.push({
-                total_cost: saleObjFound ? saleObjFound.total_cost_given : 0,
-                total_kilos: saleObjFound ? saleObjFound.kilos_given : 0,
-                total_balance: saleObjFound ? saleObjFound.total_balance : 0
+              let requestByClientObjFound = result.requests_by_client.find(requestObj => {
+                return requestObj.month - 1 === j && requestObj.company_id === companies[i].id
+              })
+              let totalBalance = (requestByClientObjFound ? requestByClientObjFound.total_cost : 0) - (saleByClientObjFound ? saleByClientObjFound.total_cost : 0)
+              salesByCompanyByYear.push({
+                total_cost: saleByClientObjFound ? saleByClientObjFound.total_cost : 0,
+                total_kilos: saleByClientObjFound ? saleByClientObjFound.kilos : 0,
+                total_balance: totalBalance
               })
             }
-            salesByClient.push({id: clients[i].id, name: clients[i].name, data: salesByClientByYear})
+            salesByCompany.push({id: companies[i].id, name: companies[i].name, data: salesByCompanyByYear})
           }
           this.sales.normal = salesNormal
-          this.sales.byClient = salesByClient
+          this.sales.byCompany = salesByCompany
           let vm = this
           this.timeout = setTimeout(function () {
             vm.isLoading = false
@@ -212,14 +221,14 @@
           labels: this.monthNames,
           datasets: [
             {
-              label: 'Kilos vendidos',
-              backgroundColor: '#BF112E',
-              data: kilosGiven
-            },
-            {
               label: 'Kilos solicitados',
               backgroundColor: '#E42',
               data: kilosRequested
+            },
+            {
+              label: 'Kilos vendidos',
+              backgroundColor: '#BF112E',
+              data: kilosGiven
             }
           ]
         }
@@ -227,61 +236,62 @@
           labels: this.monthNames,
           datasets: [
             {
-              label: 'Costo vendido',
-              backgroundColor: '#13A399',
-              data: totalCostGiven
-            },
-            {
               label: 'Costo solicitado',
               backgroundColor: '#506',
               data: totalCostRequested
+            },
+            {
+              label: 'Costo vendido',
+              backgroundColor: '#13A399',
+              data: totalCostGiven
             }
           ]
         }
-        let salesByMonthByClientKilosDataSets = []
-        sales.byClient.forEach((clientData, index) => {
-          let kilosData = clientData.data.map(kilosCostData => {
+        let salesByMonthByCompanyKilosDataSets = []
+        sales.byCompany.forEach((companyData, index) => {
+          let kilosData = companyData.data.map(kilosCostData => {
             return kilosCostData.total_kilos
           })
-          salesByMonthByClientKilosDataSets.push({
-            label: clientData.name,
+          salesByMonthByCompanyKilosDataSets.push({
+            label: companyData.name,
             borderColor: this.colors[index],
             data: kilosData
           })
         })
         this.salesByMonthByClientKilosData = {
           labels: this.monthNames,
-          datasets: salesByMonthByClientKilosDataSets
+          datasets: salesByMonthByCompanyKilosDataSets
         }
-        let salesByMonthByClientCostDataSets = []
-        sales.byClient.forEach((clientData, index) => {
-          let costData = clientData.data.map(kilosCostData => {
+        let salesByMonthByCompanyCostDataSets = []
+        sales.byCompany.forEach((companyData, index) => {
+          let costData = companyData.data.map(kilosCostData => {
             return kilosCostData.total_cost
           })
-          salesByMonthByClientCostDataSets.push({
-            label: clientData.name,
+          salesByMonthByCompanyCostDataSets.push({
+            label: companyData.name,
             borderColor: this.colors[index],
             data: costData
           })
         })
         this.salesByMonthByClientCostData = {
           labels: this.monthNames,
-          datasets: salesByMonthByClientCostDataSets
+          datasets: salesByMonthByCompanyCostDataSets
         }
-        let salesByMonthByClientBalanceDataSets = []
-        sales.byClient.forEach((clientData, index) => {
-          let balanceData = clientData.data.map(kilosCostData => {
+        let salesByMonthByCompanyBalanceDataSets = []
+        sales.byCompany.forEach((companyData, index) => {
+          let balanceData = companyData.data.map(kilosCostData => {
             return kilosCostData.total_balance
           })
-          salesByMonthByClientBalanceDataSets.push({
-            label: clientData.name,
+
+          salesByMonthByCompanyBalanceDataSets.push({
+            label: companyData.name,
             borderColor: this.colors[index],
             data: balanceData
           })
         })
-        this.salesByMonthByClientBalanceData = {
+        this.salesByMonthByCompanyBalanceData = {
           labels: this.monthNames,
-          datasets: salesByMonthByClientBalanceDataSets
+          datasets: salesByMonthByCompanyBalanceDataSets
         }
       }
     }

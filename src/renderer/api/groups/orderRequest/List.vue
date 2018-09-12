@@ -30,9 +30,9 @@
             filter: true
           },
           {
-            name: OrderRequestPropertiesReference.DATE_REQUESTED.name,
-            title: OrderRequestPropertiesReference.DATE_REQUESTED.title,
-            sortField: OrderRequestPropertiesReference.DATE_REQUESTED.name,
+            name: OrderRequestPropertiesReference.DATE.name,
+            title: OrderRequestPropertiesReference.DATE.title,
+            sortField: OrderRequestPropertiesReference.DATE.name,
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true

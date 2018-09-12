@@ -23,11 +23,11 @@
           </div>
           <div class="form-group">
               <mau-form-input-date
-                      :name="OrderRequestPropertiesReference.DATE_REQUESTED.name"
-                      :label="OrderRequestPropertiesReference.DATE_REQUESTED.title"
-                      v-model="requestOrder.dateRequested"
-                      :initialValue="initialValues[OrderRequestPropertiesReference.DATE_REQUESTED.name]"
-                      :error="errors.first(OrderRequestPropertiesReference.DATE_REQUESTED.name)"
+                      :name="OrderRequestPropertiesReference.DATE.name"
+                      :label="OrderRequestPropertiesReference.DATE.title"
+                      v-model="requestOrder.date"
+                      :initialValue="initialValues[OrderRequestPropertiesReference.DATE.name]"
+                      :error="errors.first(OrderRequestPropertiesReference.DATE.name)"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'required'"
               >
@@ -137,8 +137,7 @@
           orderCode: '',
           products: [],
           requestProducts: [],
-          dateRequested: '',
-          dateGiven: '',
+          date: '',
           client: {},
           company: {},
           orderRequestStatus: {}
@@ -148,7 +147,7 @@
         buttonDisabled: false,
         companyId: '',
         initialClient: {},
-        clientFilterExact: {},
+        clientFilterExact: {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: 0},
         clientEntityType: EntityTypes.CLIENT,
         companyEntityType: EntityTypes.COMPANY,
         orderRequestStatusEntityType: EntityTypes.ORDER_REQUEST_STATUS,
@@ -234,14 +233,14 @@
         this.initialOrderCode = this.initialObject[OrderRequestPropertiesReference.ORDER_CODE.name]
         this.initialClient = this.initialObject[OrderRequestPropertiesReference.CLIENT.name]
         this.initialValues[OrderRequestPropertiesReference.PRODUCTS.name] = this.initialObject[OrderRequestPropertiesReference.PRODUCTS.name]
-        this.initialValues[OrderRequestPropertiesReference.DATE_REQUESTED.name] = this.initialObject[OrderRequestPropertiesReference.DATE_REQUESTED.name]
+        this.initialValues[OrderRequestPropertiesReference.DATE.name] = this.initialObject[OrderRequestPropertiesReference.DATE.name]
         this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = this.initialObject[OrderRequestPropertiesReference.COMPANY.name]
         this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name] = this.initialObject[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name]
       },
       save: function () {
         let directParams = {}
         directParams[OrderRequestPropertiesReference.ORDER_CODE.name] = this.requestOrder.orderCode
-        directParams[OrderRequestPropertiesReference.DATE_REQUESTED.name] = this.requestOrder.dateRequested
+        directParams[OrderRequestPropertiesReference.DATE.name] = this.requestOrder.date
         directParams[OrderRequestPropertiesReference.CLIENT.relationship_id_name] = this.requestOrder.client ? this.requestOrder.client[GlobalEntityIdentifier] : 'null'
         directParams[OrderRequestPropertiesReference.COMPANY.relationship_id_name] = this.requestOrder.company ? this.requestOrder.company[GlobalEntityIdentifier] : 'null'
         directParams[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] : 'null'

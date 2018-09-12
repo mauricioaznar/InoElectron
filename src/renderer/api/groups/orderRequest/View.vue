@@ -25,8 +25,8 @@
             display: DisplayFunctions.getValue
           },
           {
-            title: OrderRequestPropertiesReference.DATE_REQUESTED.title,
-            name: OrderRequestPropertiesReference.DATE_REQUESTED.name,
+            title: OrderRequestPropertiesReference.DATE.title,
+            name: OrderRequestPropertiesReference.DATE.name,
             display: DisplayFunctions.getDate
           },
           {

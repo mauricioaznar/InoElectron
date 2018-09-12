@@ -30,21 +30,21 @@ const mutations = {
 
 const actions = {
   [EntityActions.GET_PACKINGS]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.PACKING).then(data => {
+    ApiFunctions.getWithFilterLikeWithoutPagination(EntityTypes.PACKING).then(data => {
       commit('SET_PACKINGS', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_PRODUCTS]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.PRODUCT).then(data => {
+    ApiFunctions.getWithFilterLikeWithoutPagination(EntityTypes.PRODUCT).then(data => {
       commit('SET_PRODUCTS', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_USERS]: function ({commit}) {
-    ApiFunctions.getWithoutPagination(EntityTypes.USER).then(data => {
+    ApiFunctions.getWithFilterLikeWithoutPagination(EntityTypes.USER).then(data => {
       commit('SET_USERS', data)
     }).catch(e => {
       console.log(e)
