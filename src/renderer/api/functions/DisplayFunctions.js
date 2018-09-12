@@ -23,6 +23,9 @@ export default {
   getNameFromObject: function (object) {
     return object ? object.name : ''
   },
+  getPropertyFromObject: function (object, propertyName = 'name') {
+    return object ? object[propertyName] : ''
+  },
   getArrayLength: function (array) {
     return array ? array.length : ''
   },
@@ -89,43 +92,26 @@ export default {
     }
     return htmlString + '</table>'
   },
-  getOrderSaleProducts: function (array, orderSaleTypeId) {
+  getOrderSaleProducts: function (array) {
     let htmlString = '<table class="w-100">'
-    orderSaleTypeId = parseInt(orderSaleTypeId)
     for (let i = 0; i < array.length; i++) {
       htmlString += '<tr>'
       htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
-      if (orderSaleTypeId === 1) {
-        htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos_requested + ' kg</td>'
-        if (array[i].pivot.groups_requested !== null) {
-          htmlString += '<td class="mau-text-right">' + array[i].pivot.groups_requested + (array[i].pivot.groups_requested > 1 ? ' bultos' : ' bulto') + '</td>'
-        } else {
-          htmlString += '<td></td>'
-        }
-      }
-      if (orderSaleTypeId === 2) {
-        htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos_given + ' kg</td>'
-        if (array[i].pivot.groups_given !== null) {
-          htmlString += '<td class="mau-text-right">' + array[i].pivot.groups_given + (array[i].pivot.groups_given > 1 ? ' bultos' : ' bulto') + '</td>'
-        } else {
-          htmlString += '<td></td>'
-        }
+      htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos + ' kg</td>'
+      if (array[i].pivot.groups !== null) {
+        htmlString += '<td class="mau-text-right">' + array[i].pivot.groups + (array[i].pivot.groups > 1 ? ' bultos' : ' bulto') + '</td>'
+      } else {
+        htmlString += '<td></td>'
       }
       htmlString += '</tr>'
     }
     return htmlString + '</table>'
   },
-  getOrderSaleTotalCost: function (array, orderSaleTypeId) {
+  getOrderSaleTotalCost: function (array) {
     let total = 0
-    orderSaleTypeId = parseInt(orderSaleTypeId)
     for (let i = 0; i < array.length; i++) {
       let kilosCost = 0
-      if (orderSaleTypeId === 1) {
-        kilosCost += (array[i].pivot.kilos_requested || 0) * (array[i].pivot.kilo_price || 0)
-      }
-      if (orderSaleTypeId === 2) {
-        kilosCost += (array[i].pivot.kilos_given || 0) * (array[i].pivot.kilo_price || 0)
-      }
+      kilosCost += (array[i].pivot.kilos || 0) * (array[i].pivot.kilo_price || 0)
       total += kilosCost || 0
     }
     return '$' + total.toFixed(2)

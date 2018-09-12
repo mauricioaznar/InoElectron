@@ -6,11 +6,10 @@
       :entityType="entityType"
     >
       <template slot-scope="params">
-        <order-sale-form
+        <order-request-form
           :saveFunction="params.save"
-          :requestMode="true"
           :entityType="entityType"
-        ></order-sale-form>
+        ></order-request-form>
       </template>
     </mau-crud-create>
   </div>
@@ -18,18 +17,18 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import OrderSaleForm from 'renderer/api/components/forms/OrderSaleForm.vue'
+  import OrderRequestForm from 'renderer/api/components/forms/OrderRequestForm.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateOrderSaleRequest',
+    name: 'CreateOrderRequest',
     data () {
       return {
-        hostRelationshipIdName: 'order_sale_id',
-        entityType: EntityTypes.ORDER_SALE_REQUEST
+        hostRelationshipIdName: 'order_request_id',
+        entityType: EntityTypes.ORDER_REQUEST
       }
     },
     components: {
-      OrderSaleForm
+      OrderRequestForm
     },
     computed: {
       ...mapGetters(['groupDefaultRouteObject'])

@@ -7,52 +7,62 @@
 </template>
 
 <script>
-  import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
+  import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
-    name: 'ViewOrderSaleRequest',
-    components: {
-      MauEntityPetitioner,
-      MauSpinner,
-      MauPropertyViewer
-    },
+    name: 'ViewOrderRequest',
     data () {
       return {
+        entityType: EntityTypes.ORDER_REQUEST,
         properties: [
           {
-            title: OrderSalePropertiesReference.ORDER_CODE.title,
-            name: OrderSalePropertiesReference.ORDER_CODE.name,
+            title: OrderRequestPropertiesReference.ORDER_CODE.title,
+            name: OrderRequestPropertiesReference.ORDER_CODE.name,
             display: DisplayFunctions.getValue
           },
           {
-            title: OrderSalePropertiesReference.DATE_REQUESTED.title,
-            name: OrderSalePropertiesReference.DATE_REQUESTED.name,
+            title: OrderRequestPropertiesReference.DATE_REQUESTED.title,
+            name: OrderRequestPropertiesReference.DATE_REQUESTED.name,
             display: DisplayFunctions.getDate
           },
           {
-            title: OrderSalePropertiesReference.PRODUCTS.title,
-            name: OrderSalePropertiesReference.PRODUCTS.name,
+            title: OrderRequestPropertiesReference.PRODUCTS.title,
+            name: OrderRequestPropertiesReference.PRODUCTS.name,
             display: DisplayFunctions.getOrderSaleProducts,
             arguments: [1]
           },
           {
-            title: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.title,
-            name: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.name,
+            title: OrderRequestPropertiesReference.TOTAL_COST.title,
+            name: OrderRequestPropertiesReference.TOTAL_COST.name,
             display: DisplayFunctions.getValue
           },
           {
-            title: OrderSalePropertiesReference.CLIENT.title,
-            name: OrderSalePropertiesReference.CLIENT.name,
+            title: OrderRequestPropertiesReference.CLIENT.title,
+            name: OrderRequestPropertiesReference.CLIENT.name,
             display: DisplayFunctions.getPersona
+          },
+          {
+            title: OrderRequestPropertiesReference.COMPANY.title,
+            name: OrderRequestPropertiesReference.COMPANY.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.title,
+            name: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name,
+            display: DisplayFunctions.getNameFromObject
           }
         ],
-        entityType: EntityTypes.ORDER_SALE_REQUEST,
         entity: null
       }
+    },
+    components: {
+      MauEntityPetitioner,
+      MauSpinner,
+      MauPropertyViewer
     },
     props: {
       id: null

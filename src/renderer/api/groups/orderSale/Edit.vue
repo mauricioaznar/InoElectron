@@ -3,22 +3,22 @@
     <mau-spinner v-if="!entity" :sizeType="'router'"></mau-spinner>
     <mau-entity-petitioner
             :id="id"
-            :entityType="entityType"
+            :entityType="orderSaleEntityType"
             @entityResult="entityResultHandler"
     >
     </mau-entity-petitioner>
     <mau-crud-edit
-            v-if="entity"
-            :id="id"
-            :relationshipIdName="hostRelationshipIdName"
-            :entityType="entityType"
-            :callback="callback">
+      v-if="entity"
+      :id="id"
+      :relationshipIdName="hostRelationshipIdName"
+      :entityType="orderSaleEntityType"
+      :callback="callback">
       <template slot-scope="params">
         <order-sale-form
           :initialObject="entity"
           :saveFunction="params.saveFunction"
-          :requestMode="true"
-          :entityType="entityType"
+          :receiptMode="true"
+          :orderRequest="entity.order_request"
           :userHasWritePrivileges="true"
         >
         </order-sale-form>
@@ -34,10 +34,10 @@
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'EditOrderSaleRequest',
+    name: 'EditOrderSale',
     data () {
       return {
-        entityType: EntityTypes.ORDER_SALE_REQUEST,
+        orderSaleEntityType: EntityTypes.ORDER_SALE,
         hostRelationshipIdName: 'order_sale_id',
         entity: null
       }
@@ -47,8 +47,11 @@
     },
     components: {
       OrderSaleForm,
-      MauSpinner,
-      MauEntityPetitioner
+      MauEntityPetitioner,
+      MauSpinner
+    },
+    computed: {
+      ...mapGetters(['groupDefaultRouteObject'])
     },
     methods: {
       callback: function () {
@@ -57,9 +60,6 @@
       entityResultHandler: function (entityObj) {
         this.entity = entityObj
       }
-    },
-    computed: {
-      ...mapGetters(['groupDefaultRouteObject'])
     }
   }
 </script>

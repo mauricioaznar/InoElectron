@@ -32,7 +32,7 @@
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                     required: true,
-                                    not_in: requestMode ? '0' : '-1',
+                                    not_in: saleMode ? '-1' : '0',
                                     kilo_to_group: {
                                         groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
                                         isGroupWeightStrict: getProductGroupWeightStrict(currentStructuredObj)
@@ -52,7 +52,7 @@
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                   required: true,
-                                  not_in: requestMode ? '0' : '-1'
+                                  not_in: saleMode ? '-1' : '0'
                                 }"
                         >
                         </mau-form-input-number>
@@ -82,23 +82,13 @@
                         </mau-form-input-number>
                     </td>
                     <td>
-                        <div v-if="requestMode">
-                            {{currentStructuredObj.kilos_requested}}
-                        </div>
-                        <div v-if="receiptMode">
-                            {{currentStructuredObj.kilos_given}}
-                        </div>
+                        {{currentStructuredObj.kilos}}
                     </td>
                     <td class="mau-text-center">
                         {{getCurrentObjGroupWeight(currentStructuredObj)}}
                     </td>
                     <td class="mau-text-center">
-                        <div v-if="requestMode">
-                            {{currentStructuredObj.groups_requested}}
-                        </div>
-                        <div v-if="receiptMode">
-                            {{currentStructuredObj.groups_given}}
-                        </div>
+                        {{currentStructuredObj.groups}}
                     </td>
                     <td v-if="hasTax" class="mau-text-center">
                         {{getCurrentObjTax(currentStructuredObj)}}
@@ -123,7 +113,7 @@
                     <td v-if="hasTax"></td>
                     <td class="text-right"><b>TOTAL:</b></td>
                     <td>
-                        {{getOrderSaleTotal(currentStructuredObjects)}}
+                        {{getOrderTotalCost(currentStructuredObjects)}}
                     </td>
                 </tr>
             </tbody>
@@ -132,14 +122,14 @@
 </template>
 
 <script>
-    import ProductOrderProductSalePropertiesReference from 'renderer/api/propertiesReference/OrderSaleProductPropertiesReference'
+    import OrderSaleProductPropertiesReference from 'renderer/api/propertiesReference/OrderSaleProductPropertiesReference'
+    import OrderRequestProductPropertiesReference from 'renderer/api/propertiesReference/OrderRequestProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
     import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
     import MauFormInputSelectBootstrap from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import {mapGetters} from 'vuex'
     import cloneDeep from 'renderer/services/common/cloneDeep'
-    import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
     export default {
       name: 'OrderSaleTable',
       inject: ['$validator'],
@@ -150,7 +140,7 @@
             {value: 1, text: 'Bulto', name: 'GroupCalculationType'}
           ],
           currentStructuredObjects: [],
-          ProductOrderProductSalePropertiesReference: ProductOrderProductSalePropertiesReference,
+          OrderSaleProductPropertiesReference: OrderSaleProductPropertiesReference,
           total: 0
         }
       },
@@ -176,10 +166,7 @@
             return []
           }
         },
-        requestMode: {
-          type: Boolean
-        },
-        receiptMode: {
+        saleMode: {
           type: Boolean
         },
         hasTax: {
@@ -194,9 +181,7 @@
       },
       methods: {
         emitStructureChangeEvent: function () {
-          let initialSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialProducts, 'product_id')
-          let filteredStructuredObjects = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialSaleProducts, this.currentStructuredObjects, 'product_id')
-          this.$emit('input', filteredStructuredObjects)
+          this.$emit('input', this.currentStructuredObjects)
         },
         getProductCode: function (structuredObject) {
           return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CODE.name]
@@ -210,7 +195,7 @@
         getProductGroupWeightStrict: function (structuredObject) {
           return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.GROUP_WEIGHT_STRICT.name]
         },
-        getInitialSaleProduct: function (productId) {
+        getInitialOrderProduct: function (productId) {
           let initialProduct = this.initialProducts.find(product => {
             return product[GlobalEntityIdentifier] === productId
           })
@@ -218,41 +203,22 @@
         },
         getCurrentObjKiloPrice: function (structuredObject) {
           let currentKiloPrice = this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CURRENT_KILO_PRICE.name]
-          if (this.requestMode) {
-            if (structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name]) {
-              currentKiloPrice = structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name]
-            }
-          }
-          if (this.receiptMode) {
-            if (structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_GIVEN.name]) {
-              currentKiloPrice = structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_GIVEN.name]
-            } else if (structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name]) {
-              currentKiloPrice = structuredObject[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name]
-            }
+          if (structuredObject[OrderRequestProductPropertiesReference.KILO_PRICE.name]) {
+            currentKiloPrice = structuredObject[OrderRequestProductPropertiesReference.KILO_PRICE.name]
           }
           return currentKiloPrice
         },
         getCurrentObjInitialQuantity: function (currentStructuredObj) {
           let quantity = 0
-          let initialSaleProduct = this.getInitialSaleProduct(currentStructuredObj['product_id'])
+          let initialOrderProduct = this.getInitialOrderProduct(currentStructuredObj['product_id'])
           let initialCalculationType = this.getCurrentObjInitialCalculationType(currentStructuredObj)
-          if (initialSaleProduct) {
+          if (initialOrderProduct) {
             let initialSaleQuantityValue
             if (initialCalculationType === 0) {
-              if (this.requestMode) {
-                initialSaleQuantityValue = initialSaleProduct[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
-              }
-              if (this.receiptMode) {
-                initialSaleQuantityValue = initialSaleProduct[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name]
-              }
+              initialSaleQuantityValue = initialOrderProduct[OrderSaleProductPropertiesReference.KILOS.name]
             }
             if (initialCalculationType === 1) {
-              if (this.requestMode) {
-                initialSaleQuantityValue = initialSaleProduct[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name]
-              }
-              if (this.receiptMode) {
-                initialSaleQuantityValue = initialSaleProduct[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name]
-              }
+              initialSaleQuantityValue = initialOrderProduct[OrderSaleProductPropertiesReference.GROUPS.name]
             }
             if (initialSaleQuantityValue && initialSaleQuantityValue > 0) {
               quantity = initialSaleQuantityValue
@@ -264,7 +230,7 @@
           let calculationType = currentStructuredObj['_calculation_type']
           let currentObjGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (calculationType !== 0 && calculationType !== 1) {
-            if (this.hasTax && currentObjGroupWeight) {
+            if (currentObjGroupWeight) {
               calculationType = 1
             } else {
               calculationType = 0
@@ -273,34 +239,28 @@
           return calculationType
         },
         getCurrentObjGroupWeight: function (currentStructuredObj) {
-          let productSaleGroupWeight = null
-          let initialSaleProduct = this.getInitialSaleProduct(currentStructuredObj['product_id'])
-          if (initialSaleProduct) {
-            productSaleGroupWeight = initialSaleProduct[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name]
+          let orderProductGroupWeight = null
+          let initialOrderProduct = this.getInitialOrderProduct(currentStructuredObj['product_id'])
+          if (initialOrderProduct) {
+            orderProductGroupWeight = initialOrderProduct[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name]
           } else {
-            productSaleGroupWeight = this.getProductCurrentGroupWeight(currentStructuredObj)
+            orderProductGroupWeight = this.getProductCurrentGroupWeight(currentStructuredObj)
           }
-          return productSaleGroupWeight
+          return orderProductGroupWeight
         },
         getCurrentObjTax: function (currentStructuredObj) {
           let totalCostWithoutTax = this.getCurrentObjTotalCostWithoutTax(currentStructuredObj)
           return totalCostWithoutTax * 0.16
         },
         getCurrentObjTotalCostWithoutTax: function (currentStructuredObj) {
-          let kilos = 0
+          let kilos = currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name]
           let kiloPrice = this.getCurrentObjKiloPrice(currentStructuredObj)
-          if (this.requestMode) {
-            kilos = currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name]
-          }
-          if (this.receiptMode) {
-            kilos = currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name]
-          }
           return kilos * kiloPrice
         },
         getCurrentObjTotalCost: function (currentStructuredObj) {
           return this.getCurrentObjTax(currentStructuredObj) + this.getCurrentObjTotalCostWithoutTax(currentStructuredObj)
         },
-        getOrderSaleTotal: function (currentStructuredObjects) {
+        getOrderTotalCost: function (currentStructuredObjects) {
           let total = 0
           for (let i = 0; i < currentStructuredObjects.length; i++) {
             if (this.hasTax) {
@@ -315,37 +275,20 @@
           let quantity = currentStructuredObj['_quantity'] || 0
           let kiloPrice = currentStructuredObj['_kilo_price'] || 0
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
-          if (!currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
-            currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
+          if (!currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
+            currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
-          if (this.requestMode) {
-            currentStructuredObj[ProductOrderProductSalePropertiesReference.KILO_PRICE_REQUESTED.name] = kiloPrice
-          }
-          if (this.receiptMode) {
-            currentStructuredObj[ProductOrderProductSalePropertiesReference.KILO_PRICE_GIVEN.name] = kiloPrice
-          }
+          currentStructuredObj[OrderSaleProductPropertiesReference.KILO_PRICE.name] = kiloPrice
           if (currentStructuredObj['_calculation_type'] === 0) {
-            if (this.requestMode) {
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = quantity % 1 === 0 ? quantity : quantity
-              if (productGroupWeight) {
-                currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = (quantity % 1 === 0 ? quantity : quantity) / productGroupWeight
-              }
-            }
-            if (this.receiptMode) {
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name] = quantity % 1 === 0 ? quantity : quantity
-              if (productGroupWeight) {
-                currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = (quantity % 1 === 0 ? quantity : quantity) / productGroupWeight
-              }
+            currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = quantity % 1 === 0 ? quantity : quantity
+            if (productGroupWeight) {
+              currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = (quantity % 1 === 0 ? quantity : quantity) / productGroupWeight
             }
           }
           if (currentStructuredObj['_calculation_type'] === 1) {
-            if (this.requestMode && productGroupWeight) {
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_REQUESTED.name] = quantity % 1 === 0 ? quantity : quantity
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_REQUESTED.name] = (quantity % 1 === 0 ? quantity : quantity) * productGroupWeight
-            }
-            if (this.receiptMode && productGroupWeight) {
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.GROUPS_GIVEN.name] = quantity % 1 === 0 ? quantity : quantity
-              currentStructuredObj[ProductOrderProductSalePropertiesReference.KILOS_GIVEN.name] = (quantity % 1 === 0 ? quantity : quantity) * productGroupWeight
+            if (productGroupWeight) {
+              currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = quantity % 1 === 0 ? quantity : quantity
+              currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = (quantity % 1 === 0 ? quantity : quantity) * productGroupWeight
             }
           }
           this.emitStructureChangeEvent()
@@ -362,7 +305,7 @@
             if (currentStructuredObjFound) {
               tempCurrentStructuredObjects.push(currentStructuredObjFound)
             } else {
-              let saleProduct = this.getInitialSaleProduct(selectedProduct[GlobalEntityIdentifier])
+              let saleProduct = this.getInitialOrderProduct(selectedProduct[GlobalEntityIdentifier])
               if (saleProduct) {
                 saleProduct = cloneDeep(saleProduct)
               } else {

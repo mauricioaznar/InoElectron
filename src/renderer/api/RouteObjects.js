@@ -164,44 +164,44 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_ADJUSTME
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_REQUEST,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
   {
     componentName: 'Main',
     category: Categories.SALES
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_REQUEST,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
       {
         componentName: 'List',
         groupDefault: true,
         navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_REQUEST,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
       {
         componentName: 'Calendar',
         title: 'Calendario',
         navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_REQUEST,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
       {
         componentName: 'Create'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_REQUEST,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
       {
         componentName: 'Edit',
         params: [GlobalEntityIdentifier]
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_REQUEST,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
       {
         componentName: 'View',
         params: [GlobalEntityIdentifier]
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_REQUEST,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
       {
         componentName: 'Del',
         params: [GlobalEntityIdentifier]
@@ -210,44 +210,44 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_REQ
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_RECEIPT,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
   {
     componentName: 'Main',
     category: Categories.SALES
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_RECEIPT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
       {
         componentName: 'List',
         groupDefault: true,
         navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_RECEIPT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
       {
         componentName: 'Dashboard',
         title: 'Reportes',
         navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_RECEIPT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
       {
         componentName: 'Create'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_RECEIPT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
       {
         componentName: 'Edit',
         params: [GlobalEntityIdentifier]
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_RECEIPT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
       {
         componentName: 'View',
         params: [GlobalEntityIdentifier]
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE_RECEIPT,
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
       {
         componentName: 'Del',
         params: [GlobalEntityIdentifier]

@@ -2,7 +2,7 @@ import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
 import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
 import Masks from 'renderer/api/functions/Masks'
 
-let OrderProductSalePropertiesReference = {
+let OrderRequestProductPropertiesReference = {
   KILOS: {
     title: 'Cantidad en kilos',
     name: 'kilos',
@@ -29,4 +29,4 @@ let OrderProductSalePropertiesReference = {
   }
 }
 
-export default OrderProductSalePropertiesReference
+export default OrderRequestProductPropertiesReference

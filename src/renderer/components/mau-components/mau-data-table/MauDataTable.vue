@@ -238,7 +238,8 @@
       getPersonaInformation: DisplayFunctions.getPersonaInformation,
       getOrderSaleTotalCost: DisplayFunctions.getOrderSaleTotalCost,
       getMachineNames: DisplayFunctions.getMachineNames,
-      getDateTime: DisplayFunctions.getDateTime
+      getDateTime: DisplayFunctions.getDateTime,
+      getPropertyFromObject: DisplayFunctions.getPropertyFromObject
     }
   }
 </script>

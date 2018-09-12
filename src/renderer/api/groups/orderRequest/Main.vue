@@ -2,7 +2,6 @@
     <div>
         <action-widget
                 :actions="actions"
-                :urlActions="urlActions"
                 :buttons="buttons"
                 @buttonClicked="buttonClicked"
         ></action-widget>
@@ -22,7 +21,6 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
   import Notifications from 'renderer/api/functions/Notifications'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   import {mapGetters} from 'vuex'
@@ -35,11 +33,8 @@
           {
             name: 'Create',
             icon: 'fa fa-plus',
-            path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE_RECEIPT, 'create')
+            path: RouteObjectHelper.createPath(EntityTypes.ORDER_REQUEST, 'create')
           }
-        ],
-        urlActions: [],
-        alwaysUrlActions: [
         ],
         buttons: []
       }
@@ -60,12 +55,12 @@
             {
               name: 'Edit',
               icon: 'fa fa-edit',
-              path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE_RECEIPT, 'edit') + '/' + id
+              path: RouteObjectHelper.createPath(EntityTypes.ORDER_REQUEST, 'edit') + '/' + id
             },
             {
               name: 'View',
               icon: 'fa fa-eye',
-              path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE_RECEIPT, 'view') + '/' + id
+              path: RouteObjectHelper.createPath(EntityTypes.ORDER_REQUEST, 'view') + '/' + id
             }
           ])
           this.buttons = [{
@@ -77,22 +72,9 @@
           this.buttons = []
         }
       },
-      setUrlActions: function () {
-        if (this.$route.params[GlobalEntityIdentifier]) {
-          this.urlActions = this.alwaysUrlActions.concat([
-            {
-              name: 'PDF',
-              icon: 'fa fa-file-pdf-o',
-              url: ApiUrls.createPdfDownloadUrl(this.$route.params[GlobalEntityIdentifier])
-            }
-          ])
-        } else {
-          this.urlActions = this.alwaysUrlActions
-        }
-      },
       confirmDelete: function () {
         let id = this.$route.params[GlobalEntityIdentifier]
-        ApiOperations.del(EntityTypes.ORDER_SALE_RECEIPT, id).then(result => {
+        ApiOperations.del(EntityTypes.ORDER_REQUEST, id).then(result => {
           Notifications.success(this)
           this.$router.push({name: this.groupDefaultRouteObject(this.$route).name})
         })
@@ -100,12 +82,10 @@
     },
     created () {
       this.setActions()
-      this.setUrlActions()
     },
     watch: {
       $route: function () {
         this.setActions()
-        this.setUrlActions()
       }
     }
   }

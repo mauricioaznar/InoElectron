@@ -1,16 +1,22 @@
 import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
 import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
 
-let OrderSalePropertiesReference = {
+let OrderRequestPropertiesReference = {
   ORDER_CODE: {
     title: 'Identificador de la orden',
     name: 'order_code',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
-  DATE: {
-    title: 'Fecha',
-    name: 'date',
+  DATE_REQUESTED: {
+    title: 'Fecha de solicitud',
+    name: 'date_requested',
+    display: DisplayFunctions.getDate,
+    defaultValue: MauInputDefaultValues.DATE
+  },
+  DATE_DELIVERED: {
+    title: 'Fecha de entrega',
+    name: 'date_given',
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
@@ -25,7 +31,13 @@ let OrderSalePropertiesReference = {
     title: 'Cliente',
     relationship_id_name: 'client_id',
     display: DisplayFunctions.getPersonaInformation,
-    required: false,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  ORDER_REQUEST_STATUS: {
+    name: 'order_request_status',
+    title: 'Status',
+    relationship_id_name: 'order_request_status_id',
+    display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
   COMPANY: {
@@ -33,43 +45,14 @@ let OrderSalePropertiesReference = {
     title: 'Compania',
     relationship_id_name: 'company_id',
     display: DisplayFunctions.getNameFromObject,
-    required: false,
-    defaultValue: MauInputDefaultValues.SELECT
-  },
-  ORDER_SALE_TYPE: {
-    name: 'order_sale_type',
-    title: 'Tipo de orden',
-    relationship_id_name: 'order_sale_type_id',
-    display: DisplayFunctions.getNameFromObject,
-    required: false,
-    defaultValue: MauInputDefaultValues.SELECT
-  },
-  ORDER_SALE_STATUS: {
-    name: 'order_sale_status',
-    title: 'Status',
-    relationship_id_name: 'order_sale_status_id',
-    display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
   TOTAL_COST: {
-    title: 'Costo total solicitado',
+    title: 'Costo total',
     name: 'total_cost',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.NUMBER
-  },
-  ORDER_REQUEST: {
-    title: 'Pedido',
-    name: 'order_request',
-    relationship_id_name: 'order_request_id',
-    defaultValue: MauInputDefaultValues.SELECT
-  },
-  RECEIPT_TYPE: {
-    title: 'Tipo de comprobante',
-    name: 'order_sale_receipt_type',
-    relationship_id_name: 'order_sale_receipt_type_id',
-    display: DisplayFunctions.getNameFromObject,
-    defaultValue: MauInputDefaultValues.SELECT
   }
 }
 
-export default OrderSalePropertiesReference
+export default OrderRequestPropertiesReference

@@ -8,37 +8,37 @@
     >
     </mau-entity-petitioner>
     <mau-crud-edit
-      v-if="entity"
-      :id="id"
-      :relationshipIdName="hostRelationshipIdName"
-      :entityType="entityType"
-      :callback="callback">
+            v-if="entity"
+            :id="id"
+            :relationshipIdName="hostRelationshipIdName"
+            :entityType="entityType"
+            :callback="callback">
       <template slot-scope="params">
-        <order-sale-form
+        <order-request-form
           :initialObject="entity"
           :saveFunction="params.saveFunction"
-          :receiptMode="true"
+          :requestMode="true"
           :entityType="entityType"
           :userHasWritePrivileges="true"
         >
-        </order-sale-form>
+        </order-request-form>
       </template>
     </mau-crud-edit>
   </div>
 </template>
 
 <script>
-  import OrderSaleForm from 'renderer/api/components/forms/OrderSaleForm.vue'
+  import OrderRequestForm from 'renderer/api/components/forms/OrderRequestForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'EditOrderSaleReceipt',
+    name: 'EditOrderRequest',
     data () {
       return {
-        entityType: EntityTypes.ORDER_SALE_RECEIPT,
-        hostRelationshipIdName: 'order_sale_id',
+        entityType: EntityTypes.ORDER_REQUEST,
+        hostRelationshipIdName: 'order_request_id',
         entity: null
       }
     },
@@ -46,12 +46,9 @@
       id: null
     },
     components: {
-      OrderSaleForm,
-      MauEntityPetitioner,
-      MauSpinner
-    },
-    computed: {
-      ...mapGetters(['groupDefaultRouteObject'])
+      OrderRequestForm,
+      MauSpinner,
+      MauEntityPetitioner
     },
     methods: {
       callback: function () {
@@ -60,6 +57,9 @@
       entityResultHandler: function (entityObj) {
         this.entity = entityObj
       }
+    },
+    computed: {
+      ...mapGetters(['groupDefaultRouteObject'])
     }
   }
 </script>

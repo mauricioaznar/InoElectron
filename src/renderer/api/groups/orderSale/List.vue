@@ -3,9 +3,7 @@
     <mau-crud-list>
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
-                      :rowClassFunction="rowClassFunction"
                       :actions="actions"
-                      :filterExact="filterExact"
                       @actionClicked="actionHandler"
       ></mau-data-table>
     </mau-crud-list>
@@ -19,25 +17,16 @@
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
-    name: 'ListBagOrderSaleReceipt',
+    name: 'ListBagOrderSale',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_SALE_RECEIPT),
-        filterExact: {[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name]: 2},
+        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_SALE),
         tableFields: [
           {
             name: OrderSalePropertiesReference.ORDER_CODE.name,
             title: OrderSalePropertiesReference.ORDER_CODE.title,
             sortField: OrderSalePropertiesReference.ORDER_CODE.name,
             filter: true
-          },
-          {
-            name: OrderSalePropertiesReference.DATE_GIVEN.name,
-            title: OrderSalePropertiesReference.DATE_GIVEN.title,
-            sortField: OrderSalePropertiesReference.DATE_GIVEN.name,
-            callback: DisplayFunctions.getDateFromDateTime,
-            filter: true,
-            default: true
           },
           {
             name: OrderSalePropertiesReference.RECEIPT_TYPE.name,
@@ -48,13 +37,13 @@
             name: OrderSalePropertiesReference.PRODUCTS.name,
             title: 'Productos solicitados',
             hidden: true,
-            callback: DisplayFunctions.getOrderSaleProducts.name + '|' + 1
+            callback: DisplayFunctions.getOrderSaleProducts.name
           },
           {
             name: OrderSalePropertiesReference.PRODUCTS.name,
             title: 'Productos entregados',
             hidden: true,
-            callback: DisplayFunctions.getOrderSaleProducts.name + '|' + 2
+            callback: DisplayFunctions.getOrderSaleProducts.name
           },
           {
             name: OrderSalePropertiesReference.CLIENT.name,
@@ -62,13 +51,18 @@
             callback: DisplayFunctions.getPersona
           },
           {
-            name: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.name,
-            title: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.title,
-            callback: DisplayFunctions.getValue
+            name: OrderSalePropertiesReference.ORDER_SALE_STATUS.name,
+            title: OrderSalePropertiesReference.ORDER_SALE_STATUS.title,
+            callback: DisplayFunctions.getNameFromObject
           },
           {
-            name: OrderSalePropertiesReference.TOTAL_COST_GIVEN.name,
-            title: OrderSalePropertiesReference.TOTAL_COST_GIVEN.title,
+            name: OrderSalePropertiesReference.ORDER_REQUEST.name,
+            title: OrderSalePropertiesReference.ORDER_REQUEST.title,
+            callback: DisplayFunctions.getPropertyFromObject.name + '|' + 'order_code'
+          },
+          {
+            name: OrderSalePropertiesReference.TOTAL_COST.name,
+            title: OrderSalePropertiesReference.TOTAL_COST.title,
             callback: DisplayFunctions.getValue
           }
         ],
@@ -87,16 +81,9 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewOrderSaleReceipt',
+            name: 'ViewOrderSale',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
-        }
-      },
-      rowClassFunction: function (orderSale) {
-        if (orderSale[OrderSalePropertiesReference.RECEIPT_TYPE.name] === 1) {
-          return 'no-tax'
-        } else {
-          return 'with-tax'
         }
       }
     }

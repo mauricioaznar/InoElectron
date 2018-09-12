@@ -14,7 +14,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
-    name: 'ViewOrderSaleReceipt',
+    name: 'ViewOrderSale',
     components: {
       MauEntityPetitioner,
       MauSpinner,
@@ -29,13 +29,8 @@
             display: DisplayFunctions.getValue
           },
           {
-            title: OrderSalePropertiesReference.DATE_REQUESTED.title,
-            name: OrderSalePropertiesReference.DATE_REQUESTED.name,
-            display: DisplayFunctions.getDate
-          },
-          {
-            title: OrderSalePropertiesReference.DATE_GIVEN.title,
-            name: OrderSalePropertiesReference.DATE_GIVEN.name,
+            title: OrderSalePropertiesReference.DATE.title,
+            name: OrderSalePropertiesReference.DATE.name,
             display: DisplayFunctions.getDate
           },
           {
@@ -61,13 +56,24 @@
             display: DisplayFunctions.getPersona
           },
           {
-            title: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.title,
-            name: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.name,
-            display: DisplayFunctions.getValue
+            title: OrderSalePropertiesReference.COMPANY.title,
+            name: OrderSalePropertiesReference.COMPANY.name,
+            display: DisplayFunctions.getNameFromObject
           },
           {
-            title: OrderSalePropertiesReference.TOTAL_COST_GIVEN.title,
-            name: OrderSalePropertiesReference.TOTAL_COST_GIVEN.name,
+            title: OrderSalePropertiesReference.ORDER_SALE_STATUS.title,
+            name: OrderSalePropertiesReference.ORDER_SALE_STATUS.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: OrderSalePropertiesReference.ORDER_REQUEST.title,
+            name: OrderSalePropertiesReference.ORDER_REQUEST.name,
+            display: DisplayFunctions.getPropertyFromObject,
+            arguments: ['order_code']
+          },
+          {
+            title: OrderSalePropertiesReference.TOTAL_COST.title,
+            name: OrderSalePropertiesReference.TOTAL_COST.name,
             display: DisplayFunctions.getValue
           }
         ],

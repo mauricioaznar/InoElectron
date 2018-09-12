@@ -2,119 +2,94 @@
   <div>
       <div>
           <div class="form-group">
-              <div v-if="requestMode">
-                  <mau-form-input-number
-                          :key="initialOrderCode"
-                          :initialValue="initialOrderCode"
-                          v-model="salesOrder.orderCode"
-                          :label="OrderSalePropertiesReference.ORDER_CODE.title"
-                          :name="OrderSalePropertiesReference.ORDER_CODE.name"
-                          :error="errors.first(OrderSalePropertiesReference.ORDER_CODE.name)"
-                          :disabled="!userHasWritePrivileges"
-                          v-validate="{
-                            required: true,
-                            remote_unique: {
-                              entityType: entityType,
-                              columnName: OrderSalePropertiesReference.ORDER_CODE.name,
-                              initialValue: initialOrderCode
-                            }
-                           }"
-                  >
-                  </mau-form-input-number>
-              </div>
-              <div v-else>
-                  <div class="form-group form-row">
-                      <div class="col-sm-12">
-                          <label><b>{{OrderSalePropertiesReference.ORDER_CODE.title}}</b></label>
-                          <div>{{initialValues[OrderSalePropertiesReference.ORDER_CODE.name]}}</div>
-                      </div>
-                  </div>
-              </div>
+              <mau-form-input-number
+                      :key="initialOrderCode"
+                      :initialValue="initialOrderCode"
+                      v-model="salesOrder.orderCode"
+                      :label="OrderSalePropertiesReference.ORDER_CODE.title"
+                      :name="OrderSalePropertiesReference.ORDER_CODE.name"
+                      :error="errors.first(OrderSalePropertiesReference.ORDER_CODE.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="{
+                        required: true,
+                        remote_unique: {
+                          entityType: orderSaleEntityType,
+                          columnName: OrderSalePropertiesReference.ORDER_CODE.name,
+                          initialValue: initialOrderCode
+                        }
+                       }"
+              >
+              </mau-form-input-number>
           </div>
           <div class="form-group">
-              <div v-if="requestMode">
-                  <mau-form-input-date
-                          :name="OrderSalePropertiesReference.DATE_REQUESTED.name"
-                          :label="OrderSalePropertiesReference.DATE_REQUESTED.title"
-                          v-model="salesOrder.dateRequested"
-                          :initialValue="initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name]"
-                          :error="errors.first(OrderSalePropertiesReference.DATE_REQUESTED.name)"
-                          :disabled="!userHasWritePrivileges"
-                          v-validate="'required'"
-                  >
-                  </mau-form-input-date>
-              </div>
-              <div v-else>
-                  <div class="form-group form-row">
-                      <div class="col-sm-12">
-                          <label><b>{{OrderSalePropertiesReference.DATE_REQUESTED.title}}</b></label>
-                          <div>{{initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name]}}</div>
-                      </div>
-                  </div>
-              </div>
+              <mau-form-input-date
+                      :name="OrderSalePropertiesReference.DATE.name"
+                      :label="OrderSalePropertiesReference.DATE.title"
+                      v-model="salesOrder.date"
+                      :initialValue="initialValues[OrderSalePropertiesReference.DATE.name]"
+                      :error="errors.first(OrderSalePropertiesReference.DATE.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'required'"
+              >
+              </mau-form-input-date>
           </div>
           <div class="form-group">
-              <div v-if="receiptMode">
-                  <mau-form-input-date
-                          :name="OrderSalePropertiesReference.DATE_GIVEN.name"
-                          :label="OrderSalePropertiesReference.DATE_GIVEN.title"
-                          v-model="salesOrder.dateGiven"
-                          :initialValue="initialValues[OrderSalePropertiesReference.DATE_GIVEN.name]"
-                          :error="errors.first(OrderSalePropertiesReference.DATE_GIVEN.name)"
-                          :disabled="!userHasWritePrivileges"
-                          v-validate="'required'"
-                  >
-                  </mau-form-input-date>
-              </div>
+              <mau-form-input-select
+                      :initialObject="initialValues[OrderSalePropertiesReference.COMPANY.name]"
+                      :label="OrderSalePropertiesReference.COMPANY.title"
+                      :displayProperty="'name'"
+                      :entityType="companyEntityType"
+                      v-model="salesOrder.company"
+                      :name="OrderSalePropertiesReference.COMPANY.name"
+                      :error="errors.first(OrderSalePropertiesReference.COMPANY.name)"
+                      :disabled="true"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select>
           </div>
           <div class="form-group">
-              <div v-if="requestMode">
-                  <mau-form-input-select
-                          :initialObject="initialValues[OrderSalePropertiesReference.CLIENT.name]"
-                          :label="OrderSalePropertiesReference.CLIENT.title"
-                          :displayProperty="'full_name'"
-                          :searchedProperties="['first_name', 'last_name']"
-                          :entityType="clientEntityType"
-                          v-model="salesOrder.client"
-                          :name="OrderSalePropertiesReference.CLIENT.name"
-                          :error="errors.first(OrderSalePropertiesReference.CLIENT.name)"
-                          :disabled="!userHasWritePrivileges"
-                          v-validate="'object_required'"
-                  >
-                  </mau-form-input-select>
-              </div>
-              <div v-else>
-                  <div class="form-group form-row">
-                      <div class="col-sm-12">
-                          <label><b>{{OrderSalePropertiesReference.CLIENT.title}}</b></label>
-                          <div>{{getPersona(initialValues[OrderSalePropertiesReference.CLIENT.name])}}</div>
-                      </div>
-                  </div>
-              </div>
+              <mau-form-input-select
+                      :initialObject="initialValues[OrderSalePropertiesReference.CLIENT.name]"
+                      :label="OrderSalePropertiesReference.CLIENT.title"
+                      :displayProperty="'full_name'"
+                      :searchedProperties="['first_name', 'last_name']"
+                      :entityType="clientEntityType"
+                      v-model="salesOrder.client"
+                      :filterExact="clientFilterExact"
+                      :name="OrderSalePropertiesReference.CLIENT.name"
+                      :error="errors.first(OrderSalePropertiesReference.CLIENT.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select>
           </div>
           <div class="form-group">
-              <div v-if="requestMode">
-                  <mau-form-input-select
-                          :initialObject="initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name]"
-                          :label="OrderSalePropertiesReference.RECEIPT_TYPE.title"
-                          :displayProperty="'name'"
-                          :entityType="orderSaleReceiptTypeEntityType"
-                          v-model="salesOrder.receiptType"
-                          :name="OrderSalePropertiesReference.RECEIPT_TYPE.name"
-                          :error="errors.first(OrderSalePropertiesReference.RECEIPT_TYPE.name)"
-                          :disabled="!userHasWritePrivileges"
-                          v-validate="'object_required'"
-                  >
-                  </mau-form-input-select>
-              </div>
-              <div v-else>
-                  <div class="form-group form-row">
-                      <div class="col-sm-12">
-                          <label><b>{{OrderSalePropertiesReference.RECEIPT_TYPE.title}}</b></label>
-                          <div>{{initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name].name}}</div>
-                      </div>
-                  </div>
-              </div>
+              <mau-form-input-select
+                      :initialObject="initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name]"
+                      :label="OrderSalePropertiesReference.ORDER_SALE_STATUS.title"
+                      :displayProperty="'name'"
+                      :entityType="orderSaleStatusEntityType"
+                      v-model="salesOrder.orderSaleStatus"
+                      :name="OrderSalePropertiesReference.ORDER_SALE_STATUS.name"
+                      :error="errors.first(OrderSalePropertiesReference.ORDER_SALE_STATUS.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select>
+          </div>
+          <div class="form-group">
+              <mau-form-input-select
+                      :initialObject="initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name]"
+                      :label="OrderSalePropertiesReference.RECEIPT_TYPE.title"
+                      :displayProperty="'name'"
+                      :entityType="orderSaleReceiptTypeEntityType"
+                      v-model="salesOrder.receiptType"
+                      :name="OrderSalePropertiesReference.RECEIPT_TYPE.name"
+                      :error="errors.first(OrderSalePropertiesReference.RECEIPT_TYPE.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select>
           </div>
           <div class="form-group">
               <div class="products">
@@ -129,13 +104,12 @@
                             :error="errors.first(OrderSalePropertiesReference.PRODUCTS.name)"
                             :entityType="productEntityType"
                             :multi="true"
-                            :disabled="receiptMode || !userHasWritePrivileges"
+                            :disabled="!userHasWritePrivileges"
                             v-validate="'array_required'"
                     >
                         <template slot-scope="params">
                             <order-sale-product-table
-                                    :requestMode="requestMode"
-                                    :receiptMode="receiptMode"
+                                    :saleMode="true"
                                     :hasTax="isInvoiceSelected"
                                     :selectedProducts="salesOrder.products"
                                     v-model="salesOrder.saleProducts"
@@ -156,6 +130,8 @@
 
 <script>
   import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
+  import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
+  import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
@@ -167,6 +143,7 @@
   import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
+  import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import {mapState} from 'vuex'
   export default {
@@ -179,16 +156,21 @@
           orderCode: '',
           products: [],
           saleProducts: [],
-          dateRequested: '',
-          dateGiven: '',
+          date: '',
           client: {},
+          company: {},
+          orderSaleStatus: {},
           receiptType: {}
         },
         initialOrderCode: '',
         initialValues: {},
         buttonDisabled: false,
+        clientFilterExact: {},
         clientEntityType: EntityTypes.CLIENT,
+        companyEntityType: EntityTypes.COMPANY,
+        orderSaleStatusEntityType: EntityTypes.ORDER_SALE_STATUS,
         productEntityType: EntityTypes.PRODUCT,
+        orderSaleEntityType: EntityTypes.ORDER_SALE,
         orderSaleReceiptTypeEntityType: EntityTypes.ORDER_SALE_RECEIPT_TYPE
       }
     },
@@ -207,27 +189,15 @@
         type: Function,
         required: true
       },
-      entityType: {
-        type: Object,
-        required: true
-      },
       userHasWritePrivileges: {
         type: Boolean,
         default: function () {
           return true
         }
       },
-      requestMode: {
-        type: Boolean,
-        default: function () {
-          return false
-        }
-      },
-      receiptMode: {
-        type: Boolean,
-        default: function () {
-          return false
-        }
+      orderRequest: {
+        type: Object,
+        required: true
       }
     },
     mounted () {
@@ -238,14 +208,14 @@
       }.bind(this))
     },
     created () {
-      this.createDefaultInitialValues()
-      if (this.initialObject) {
-        this.setInitialValues()
-      } else {
-        ApiOperations.getMax(this.entityType, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
+      this.setInitialValues()
+      if (!this.initialObject) {
+        ApiOperations.getMax(this.orderSaleEntityType, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
           this.initialOrderCode = result + 1
         })
+        this.overrideInitialValuesWithOrderRequest()
       }
+      this.clientFilterExact = {[ClientPropertiesReference.COMPANY.relationship_id_name]: this.orderRequest[OrderRequestPropertiesReference.COMPANY.relationship_id_name]}
     },
     computed: {
       ...mapState({
@@ -266,43 +236,36 @@
     },
     methods: {
       getPersona: DisplayFunctions.getPersona,
-      createDefaultInitialValues: function () {
-        for (let propertyReference in OrderSalePropertiesReference) {
-          if (OrderSalePropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[OrderSalePropertiesReference[propertyReference].name] = OrderSalePropertiesReference[propertyReference].defaultValue
-          }
-        }
-        for (let propertyReference in OrderSalePropertiesReference) {
-          if (OrderSalePropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[OrderSalePropertiesReference[propertyReference].name] = OrderSalePropertiesReference[propertyReference].defaultValue
-          }
-        }
-      },
       setInitialValues: function () {
-        this.initialOrderCode = this.initialObject[OrderSalePropertiesReference.ORDER_CODE.name]
-        this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.initialObject[OrderSalePropertiesReference.PRODUCTS.name]
-        this.initialValues[OrderSalePropertiesReference.DATE_REQUESTED.name] = this.initialObject[OrderSalePropertiesReference.DATE_REQUESTED.name]
-        this.initialValues[OrderSalePropertiesReference.CLIENT.name] = this.initialObject[OrderSalePropertiesReference.CLIENT.name]
-        this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = this.initialObject[OrderSalePropertiesReference.RECEIPT_TYPE.name]
-        this.initialValues[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name] = this.initialObject[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name]
-        this.initialValues[OrderSalePropertiesReference.DATE_GIVEN.name] = this.initialObject[OrderSalePropertiesReference.DATE_GIVEN.name]
+        this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.ORDER_CODE.name)
+        this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.PRODUCTS.name)
+        this.initialValues[OrderSalePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.DATE.name)
+        this.initialValues[OrderSalePropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT.name)
+        this.initialValues[OrderSalePropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.COMPANY.name)
+        this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
+        this.initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_STATUS.name)
+      },
+      overrideInitialValuesWithOrderRequest: function () {
+        this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]
+        this.initialValues[OrderSalePropertiesReference.CLIENT.name] = this.orderRequest[OrderRequestPropertiesReference.CLIENT.name]
+        this.initialValues[OrderSalePropertiesReference.COMPANY.name] = this.orderRequest[OrderRequestPropertiesReference.COMPANY.name]
       },
       save: function () {
         let directParams = {}
-        if (this.requestMode) {
-          let initialOrderStatusId = this.initialValues[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name]
-          directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
-          directParams[OrderSalePropertiesReference.DATE_REQUESTED.name] = this.salesOrder.dateRequested
-          directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
-          directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = this.salesOrder.receiptType ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
-          directParams[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name] = initialOrderStatusId && initialOrderStatusId > 1 ? initialOrderStatusId : 1
-        }
-        if (this.receiptMode) {
-          directParams[OrderSalePropertiesReference.DATE_GIVEN.name] = this.salesOrder.dateGiven
-          directParams[OrderSalePropertiesReference.ORDER_SALE_TYPE.relationship_id_name] = 2
+        directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
+        directParams[OrderSalePropertiesReference.DATE.name] = this.salesOrder.date
+        directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
+        directParams[OrderSalePropertiesReference.COMPANY.relationship_id_name] = this.salesOrder.company ? this.salesOrder.company[GlobalEntityIdentifier] : 'null'
+        directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = this.salesOrder.receiptType ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
+        directParams[OrderSalePropertiesReference.ORDER_SALE_STATUS.relationship_id_name] = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] : 'null'
+        let initialOrderSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderSalePropertiesReference.PRODUCTS.name], 'product_id')
+        let filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialOrderSaleProducts, this.salesOrder.saleProducts, 'product_id')
+        if (!this.initialObject) {
+          directParams[OrderSalePropertiesReference.ORDER_REQUEST.relationship_id_name] = this.orderRequest ? this.orderRequest[GlobalEntityIdentifier] : 'null'
+          filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations([], this.salesOrder.saleProducts, 'product_id')
         }
         let relayObjects = [
-          ManyToManyHelper.createRelayObject(this.salesOrder.saleProducts, EntityTypes.ORDER_SALE_PRODUCT)
+          ManyToManyHelper.createRelayObject(filteredOrderSaleProducts, EntityTypes.ORDER_SALE_PRODUCT)
         ]
         this.$validator.validateAll().then((result) => {
           if (result) {

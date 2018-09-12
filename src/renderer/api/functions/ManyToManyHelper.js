@@ -37,7 +37,6 @@ function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, 
       })
       if (foundObj) {
         let areEqual = areInitialAndSelectedPropertiesEqual(initialObj, foundObj)
-        console.log(areEqual)
         if (!areEqual) {
           updatedObjects.push(foundObj)
         }
@@ -60,7 +59,6 @@ function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, 
     for (let initialStructuredObjKey in initialStructuredObj) {
       if (initialStructuredObj.hasOwnProperty(initialStructuredObjKey)) {
         if (initialStructuredObj[initialStructuredObjKey] !== selectedStructuredObj[initialStructuredObjKey]) {
-          console.log(initialStructuredObjKey)
           areEqual = false
           break
         }

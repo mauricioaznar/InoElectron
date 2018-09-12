@@ -301,7 +301,6 @@
             productionProducts,
             'id'
           )
-          console.log(filteredProductionProducts)
           let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionProducts, EntityTypes.ORDER_PRODUCTION_PRODUCT)
           relayObjects.push(productionProductRelayObject)
           directParams[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name] = 2

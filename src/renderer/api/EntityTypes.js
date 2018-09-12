@@ -86,14 +86,31 @@ export default {
     apiName: 'orderSaleReceiptType',
     title: 'Tipo de comprobante'
   },
-  ORDER_SALE_REQUEST: {
-    name: 'orderSaleRequest',
+  ORDER_SALE: {
+    name: 'orderSale',
     apiName: 'orderSale',
-    title: 'Pedidos'
+    title: 'Ventas'
+  },
+  ORDER_SALE_STATUS: {
+    name: 'orderSaleStatus',
+    apiName: 'orderSaleStatus'
   },
   ORDER_SALE_PRODUCT: {
     name: 'orderSaleProduct',
     apiName: 'orderSaleProduct'
+  },
+  ORDER_REQUEST: {
+    name: 'orderRequest',
+    apiName: 'orderRequest',
+    title: 'Pedidos'
+  },
+  ORDER_REQUEST_STATUS: {
+    name: 'orderRequestStatus',
+    apiName: 'orderRequestStatus'
+  },
+  ORDER_REQUEST_PRODUCT: {
+    name: 'orderRequestProduct',
+    apiName: 'orderRequestProduct'
   },
   MACHINE: {
     name: 'machine',

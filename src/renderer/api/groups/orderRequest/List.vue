@@ -5,7 +5,6 @@
                       :tableFields="tableFields"
                       :rowClassFunction="rowClassFunction"
                       :actions="actions"
-                      :filterExact="filterExact"
                       @actionClicked="actionHandler"
       ></mau-data-table>
     </mau-crud-list>
@@ -15,47 +14,52 @@
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
   import ApiUrls from 'renderer/api/functions/ApiUrls'
-  import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
+  import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
-    name: 'ListBagOrderSaleRequest',
+    name: 'ListOrderRequest',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_SALE_RECEIPT),
+        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_REQUEST),
         tableFields: [
           {
-            name: OrderSalePropertiesReference.ORDER_CODE.name,
-            title: OrderSalePropertiesReference.ORDER_CODE.title,
-            sortField: OrderSalePropertiesReference.ORDER_CODE.name,
+            name: OrderRequestPropertiesReference.ORDER_CODE.name,
+            title: OrderRequestPropertiesReference.ORDER_CODE.title,
+            sortField: OrderRequestPropertiesReference.ORDER_CODE.name,
             filter: true
           },
           {
-            name: OrderSalePropertiesReference.DATE_REQUESTED.name,
-            title: OrderSalePropertiesReference.DATE_REQUESTED.title,
-            sortField: OrderSalePropertiesReference.DATE_REQUESTED.name,
+            name: OrderRequestPropertiesReference.DATE_REQUESTED.name,
+            title: OrderRequestPropertiesReference.DATE_REQUESTED.title,
+            sortField: OrderRequestPropertiesReference.DATE_REQUESTED.name,
             callback: DisplayFunctions.getDateFromDateTime,
             filter: true,
             default: true
           },
           {
-            name: OrderSalePropertiesReference.RECEIPT_TYPE.name,
-            title: OrderSalePropertiesReference.RECEIPT_TYPE.title,
-            callback: DisplayFunctions.getNameFromObject
-          },
-          {
-            name: OrderSalePropertiesReference.PRODUCTS.name,
+            name: OrderRequestPropertiesReference.PRODUCTS.name,
             title: 'Productos solicitados',
-            callback: DisplayFunctions.getOrderSaleProducts.name + '|' + 1
+            callback: DisplayFunctions.getOrderSaleProducts.name
           },
           {
-            name: OrderSalePropertiesReference.CLIENT.name,
-            title: OrderSalePropertiesReference.CLIENT.title,
+            name: OrderRequestPropertiesReference.CLIENT.name,
+            title: OrderRequestPropertiesReference.CLIENT.title,
             callback: DisplayFunctions.getPersona
           },
           {
-            name: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.name,
-            title: OrderSalePropertiesReference.TOTAL_COST_REQUESTED.title,
+            name: OrderRequestPropertiesReference.COMPANY.name,
+            title: OrderRequestPropertiesReference.COMPANY.title,
+            callback: DisplayFunctions.getNameFromObject
+          },
+          {
+            name: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name,
+            title: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.title,
+            callback: DisplayFunctions.getNameFromObject
+          },
+          {
+            name: OrderRequestPropertiesReference.TOTAL_COST.name,
+            title: OrderRequestPropertiesReference.TOTAL_COST.title,
             callback: DisplayFunctions.getValue
           }
         ],
@@ -74,17 +78,12 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewOrderSaleRequest',
+            name: 'ViewOrderRequest',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }
       },
       rowClassFunction: function (orderSale) {
-        if (orderSale[OrderSalePropertiesReference.RECEIPT_TYPE.name][GlobalEntityIdentifier] === 1) {
-          return 'no-tax'
-        } else {
-          return 'with-tax'
-        }
       }
     }
   }
