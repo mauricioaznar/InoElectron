@@ -29,6 +29,14 @@
             filter: true
           },
           {
+            name: OrderSalePropertiesReference.DATE.name,
+            title: OrderSalePropertiesReference.DATE.title,
+            sortField: OrderSalePropertiesReference.DATE.name,
+            callback: DisplayFunctions.getDateFromDateTime,
+            filter: true,
+            default: true
+          },
+          {
             name: OrderSalePropertiesReference.RECEIPT_TYPE.name,
             title: OrderSalePropertiesReference.RECEIPT_TYPE.title,
             callback: DisplayFunctions.getNameFromObject
