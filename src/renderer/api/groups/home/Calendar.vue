@@ -30,10 +30,10 @@
     },
     created () {
       this.setCalendar()
-      let vm = this
-      this.interval = setInterval(function () {
-        vm.setCalendar()
-      }, 30000)
+      // let vm = this
+      // this.interval = setInterval(function () {
+      // vm.setCalendar()
+      // }, 30000)
     },
     methods: {
       setCalendar: function () {
@@ -89,7 +89,7 @@
     },
     beforeDestroy: function () {
       clearTimeout(this.timeout)
-      clearInterval(this.interval)
+      // clearInterval(this.interval)
     },
     components: {
       FullCalendar

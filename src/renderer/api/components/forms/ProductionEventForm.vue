@@ -31,7 +31,6 @@
                     :error="errors.first(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name)"
                     :entityType="productionEventTypeEntityType"
                     :disabled="!userHasWritePrivileges"
-                    v-validate="'object_required'"
             >
             </mau-form-input-select>
         </div>
@@ -46,7 +45,6 @@
                     :error="errors.first(ProductionEventPropertiesReference.MACHINE.name)"
                     :entityType="machineEntityType"
                     :disabled="!userHasWritePrivileges"
-                    v-validate="'object_required'"
             >
             </mau-form-input-select>
         </div>
@@ -160,7 +158,9 @@
         if (this.isMachineFailureTypeSelected) {
           directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = this.productionEvent.machine ? this.productionEvent.machine[GlobalEntityIdentifier] : 'null'
         } else {
-          directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = 'null'
+          if (this.initialObject[ProductionEventPropertiesReference.MACHINE.name]) {
+            directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = 'null'
+          }
         }
         let relayObjects = []
         let filteredProductionChecks = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
