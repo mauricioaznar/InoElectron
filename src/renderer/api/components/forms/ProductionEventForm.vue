@@ -87,6 +87,7 @@
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import EntityTypes from 'renderer/api/EntityTypes'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
+  import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     data () {
@@ -113,12 +114,6 @@
       saveFunction: {
         type: Function,
         required: true
-      },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
       }
     },
     components: {
@@ -135,32 +130,25 @@
       }.bind(this))
     },
     created () {
-      this.createDefaultInitialValues()
-      if (this.initialObject) {
-        this.setInitialValues(this.initialObject)
-      }
+      this.setInitialValues()
     },
     computed: {
       isMachineFailureTypeSelected: function () {
         return this.productionEvent.productionEventType ? this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 : false
+      },
+      userHasWritePrivileges: function () {
+        return true
       }
     },
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
-      createDefaultInitialValues: function () {
-        for (let propertyReference in ProductionEventPropertiesReference) {
-          if (ProductionEventPropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[ProductionEventPropertiesReference[propertyReference].name] = ProductionEventPropertiesReference[propertyReference].defaultValue
-          }
-        }
-      },
       setInitialValues: function () {
-        this.initialValues[ProductionEventPropertiesReference.START_DATE_TIME.name] = this.initialObject[ProductionEventPropertiesReference.START_DATE_TIME.name]
-        this.initialValues[ProductionEventPropertiesReference.END_DATE_TIME.name] = this.initialObject[ProductionEventPropertiesReference.END_DATE_TIME.name]
-        this.initialValues[ProductionEventPropertiesReference.MACHINE.name] = this.initialObject[ProductionEventPropertiesReference.MACHINE.name]
-        this.initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name] = this.initialObject[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name]
-        this.initialValues[ProductionEventPropertiesReference.DESCRIPTION.name] = this.initialObject[ProductionEventPropertiesReference.DESCRIPTION.name]
-        this.initialValues[ProductionEventPropertiesReference.CHECKS.name] = this.initialObject[ProductionEventPropertiesReference.CHECKS.name]
+        this.initialValues[ProductionEventPropertiesReference.START_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.START_DATE_TIME.name)
+        this.initialValues[ProductionEventPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.END_DATE_TIME.name)
+        this.initialValues[ProductionEventPropertiesReference.MACHINE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.MACHINE.name)
+        this.initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name)
+        this.initialValues[ProductionEventPropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.DESCRIPTION.name)
+        this.initialValues[ProductionEventPropertiesReference.CHECKS.name] = DefaultValuesHelper.array(this.initialObject, ProductionEventPropertiesReference.CHECKS.name)
       },
       save: function () {
         let directParams = {

@@ -153,6 +153,7 @@
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import MauFormInputBootstrapSelect from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
+  import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
@@ -160,7 +161,6 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
   import OrderProductionIndicatorSelector from 'renderer/api/components/m2m/OrderProductionIndicatorSelector.vue'
-  import {mapState} from 'vuex'
   export default {
     name: 'MauSimpleOrderForm',
     data () {
@@ -215,12 +215,6 @@
         default: function () {
           return false
         }
-      },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
       }
     },
     mounted () {
@@ -231,37 +225,19 @@
       }.bind(this))
     },
     created () {
-      this.createDefaultInitialValues()
-      if (this.initialObject) {
-        this.setInitialValues(this.initialObject)
-      }
+      this.setInitialValues()
     },
     computed: {
-      ...mapState({
-        availableProducts: state => {
-          return state.api.entity.products
-        }
-      })
+      userHasWritePrivileges: function () {
+        return true
+      }
     },
     methods: {
-      createDefaultInitialValues: function () {
-        for (let propertyReference in OrderProductionPropertiesReference) {
-          if (OrderProductionPropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[OrderProductionPropertiesReference[propertyReference].name] = OrderProductionPropertiesReference[propertyReference].defaultValue
-          }
-        }
-        if (this.extrusionMode) {
-          this.initialValues['_machines'] = []
-        }
-        if (this.bagMode) {
-          this.initialValues['_machine'] = {}
-        }
-      },
       setInitialValues: function () {
-        this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name] = this.initialObject[OrderProductionPropertiesReference.PRODUCTS.name]
-        this.initialValues[OrderProductionPropertiesReference.START_DATE_TIME.name] = this.initialObject[OrderProductionPropertiesReference.START_DATE_TIME.name]
-        this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] = this.initialObject[OrderProductionPropertiesReference.END_DATE_TIME.name]
-        this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] = this.initialObject[OrderProductionPropertiesReference.EMPLOYEE.name]
+        this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderProductionPropertiesReference.PRODUCTS.name)
+        this.initialValues[OrderProductionPropertiesReference.START_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.START_DATE_TIME.name)
+        this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.END_DATE_TIME.name)
+        this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, OrderProductionPropertiesReference.EMPLOYEE.name)
         if (this.extrusionMode) {
           let initialMachines = []
           if (this.initialObject[OrderProductionPropertiesReference.MACHINES.name]) {

@@ -74,7 +74,7 @@
   import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
-  import {mapState} from 'vuex'
+  import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   export default {
     name: 'OrderAdjustmentForm',
     data () {
@@ -110,12 +110,6 @@
       entityType: {
         type: Object,
         required: true
-      },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
       }
     },
     mounted () {
@@ -126,30 +120,18 @@
       }.bind(this))
     },
     created () {
-      this.createDefaultInitialValues()
-      if (this.initialObject) {
-        this.setInitialValues(this.initialObject)
-      }
+      this.setInitialValues()
     },
     computed: {
-      ...mapState({
-        availableProducts: state => {
-          return state.api.entity.products
-        }
-      })
+      userHasWritePrivileges: function () {
+        return true
+      }
     },
     methods: {
-      createDefaultInitialValues: function () {
-        for (let propertyReference in OrderAdjustmentPropertiesReference) {
-          if (OrderAdjustmentPropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[OrderAdjustmentPropertiesReference[propertyReference].name] = OrderAdjustmentPropertiesReference[propertyReference].defaultValue
-          }
-        }
-      },
       setInitialValues: function () {
-        this.initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name] = this.initialObject[OrderAdjustmentPropertiesReference.PRODUCTS.name]
-        this.initialValues[OrderAdjustmentPropertiesReference.DATE.name] = this.initialObject[OrderAdjustmentPropertiesReference.DATE.name]
-        this.initialValues[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name] = this.initialObject[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name]
+        this.initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderAdjustmentPropertiesReference.PRODUCTS.name)
+        this.initialValues[OrderAdjustmentPropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderAdjustmentPropertiesReference.DATE.name)
+        this.initialValues[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name)
       },
       save: function () {
         let directParams = {

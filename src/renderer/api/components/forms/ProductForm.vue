@@ -162,6 +162,7 @@
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
+  import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   export default {
     name: 'ProductForm',
     data () {
@@ -190,6 +191,9 @@
     computed: {
       isBag: function () {
         return this.product.productType[GlobalEntityIdentifier] === 1
+      },
+      userHasWritePrivileges: function () {
+        return true
       }
     },
     components: {
@@ -208,12 +212,6 @@
       saveFunction: {
         type: Function,
         required: true
-      },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
       }
     },
     mounted () {
@@ -224,32 +222,23 @@
       }.bind(this))
     },
     created () {
-      this.createDefaultInitialValues()
-      if (this.initialObject) {
-        this.setInitialValues()
-      }
+      this.setInitialValues()
     },
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
-      createDefaultInitialValues: function () {
-        for (let propertyReference in PropertiesReference) {
-          if (PropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[PropertiesReference[propertyReference].name] = PropertiesReference[propertyReference].defaultValue
-          }
-        }
-      },
       setInitialValues: function () {
-        this.initialValues[PropertiesReference.DESCRIPTION.name] = this.initialObject[PropertiesReference.DESCRIPTION.name]
-        this.initialValues[PropertiesReference.CODE.name] = this.initialObject[PropertiesReference.CODE.name]
-        this.initialValues[PropertiesReference.LENGTH.name] = this.initialObject[PropertiesReference.LENGTH.name]
-        this.initialValues[PropertiesReference.WIDTH.name] = this.initialObject[PropertiesReference.WIDTH.name]
-        this.initialValues[PropertiesReference.CURRENT_KILO_PRICE.name] = this.initialObject[PropertiesReference.CURRENT_KILO_PRICE.name] + ''
-        this.initialValues[PropertiesReference.MATERIAL.name] = this.initialObject[PropertiesReference.MATERIAL.name]
-        this.initialValues[PropertiesReference.PRODUCT_TYPE.name] = this.initialObject[PropertiesReference.PRODUCT_TYPE.name]
-        this.initialValues[PropertiesReference.PACKING.name] = this.initialObject[PropertiesReference.PACKING.name]
-        let currentGroupWeight = this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name] !== null ? this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name] : 0
-        this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = currentGroupWeight
-        this.product.groupWeightStrict = this.initialObject[PropertiesReference.GROUP_WEIGHT_STRICT.name] === 1
+        this.initialValues[PropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.DESCRIPTION.name)
+        this.initialValues[PropertiesReference.CODE.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.CODE.name)
+        this.initialValues[PropertiesReference.LENGTH.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.LENGTH.name)
+        this.initialValues[PropertiesReference.WIDTH.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.WIDTH.name)
+        this.initialValues[PropertiesReference.CURRENT_KILO_PRICE.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.CURRENT_KILO_PRICE.name)
+        this.initialValues[PropertiesReference.MATERIAL.name] = DefaultValuesHelper.object(this.initialObject, PropertiesReference.MATERIAL.name)
+        this.initialValues[PropertiesReference.PRODUCT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, PropertiesReference.PRODUCT_TYPE.name)
+        this.initialValues[PropertiesReference.PACKING.name] = DefaultValuesHelper.object(this.initialObject, PropertiesReference.PACKING.name)
+        this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.CURRENT_GROUP_WEIGHT.name)
+        if (this.initialObject) {
+          this.product.groupWeightStrict = this.initialObject[PropertiesReference.GROUP_WEIGHT_STRICT.name] === 1
+        }
       },
       save: function () {
         let directParams = {

@@ -115,7 +115,6 @@
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
-  import {mapState} from 'vuex'
   export default {
     name: 'CompanyForm',
     data () {
@@ -145,12 +144,6 @@
       saveFunction: {
         type: Function,
         required: true
-      },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
       }
     },
     mounted () {
@@ -164,8 +157,9 @@
       this.setInitialValues()
     },
     computed: {
-      ...mapState({
-      })
+      userHasWritePrivileges: function () {
+        return true
+      }
     },
     methods: {
       getPersonaArray: DisplayFunctions.getPersonaArray,

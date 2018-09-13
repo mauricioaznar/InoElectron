@@ -44,7 +44,6 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
-  import {mapState} from 'vuex'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'MachineForm',
@@ -71,12 +70,6 @@
       saveFunction: {
         type: Function,
         required: true
-      },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
       }
     },
     mounted () {
@@ -90,8 +83,9 @@
       this.setInitialValues()
     },
     computed: {
-      ...mapState({
-      })
+      userHasWritePrivileges: function () {
+        return true
+      }
     },
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
