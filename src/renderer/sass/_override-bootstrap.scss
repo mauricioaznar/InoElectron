@@ -37,6 +37,7 @@
 .form-control {
   font-size: 13px !important;
   border-radius: 0 !important;
+  color: $body-color;
 }
 label {
   font-weight: 600;
@@ -488,4 +489,9 @@ select {
   text-overflow: '';
 }
 
-.custom-select { }
+.tabs .nav-tabs .nav-item .nav-link {
+  color: $body-color;
+  &.active {
+    color: $brand-primary;
+  }
+}

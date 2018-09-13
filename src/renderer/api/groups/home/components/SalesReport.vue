@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
         <h2 v-if="!isLoading">Reporte de ventas</h2>
         <div class="row" v-if="!isLoading">
@@ -140,10 +140,10 @@
       moment.locale('es')
       this.monthNames = moment.months()
       this.setSales()
-      let vm = this
-      this.interval = setInterval(function () {
-        vm.setSales()
-      }, 60000)
+      // let vm = this
+      // this.interval = setInterval(function () {
+      // vm.setSales()
+      // }, 60000)
     },
     methods: {
       setSales: function () {
@@ -201,7 +201,7 @@
     },
     beforeDestroy: function () {
       clearTimeout(this.timeout)
-      clearInterval(this.interval)
+      // clearInterval(this.interval)
     },
     watch: {
       sales: function (sales) {

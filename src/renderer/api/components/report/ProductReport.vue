@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
         <b-table v-if="!isLoading" :items="items" :fields="monthTableFields">
             <template slot="show_details" slot-scope="row">
@@ -65,10 +65,10 @@
             this.defaultDates.push(daysInMonthArray)
           }
           this.setProduction()
-          let vm = this
-          this.interval = setInterval(function () {
-            vm.setProduction()
-          }, 30000)
+          // let vm = this
+          // this.interval = setInterval(function () {
+          // vm.setProduction()
+          // }, 30000)
         }
       },
       methods: {
@@ -126,7 +126,7 @@
         },
         beforeDestroy: function () {
           clearTimeout(this.timeout)
-          clearInterval(this.interval)
+          // clearInterval(this.interval)
         }
       },
       components: {

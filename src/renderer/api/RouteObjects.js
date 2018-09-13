@@ -18,7 +18,19 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.HOME,
       groupDefault: true,
       navbar: true,
       title: 'Inicio'
-    })
+    }),
+    RouteObjectHelper.createRouteObject(EntityTypes.HOME, {
+      componentName: 'Analytics',
+      navbar: true,
+      title: 'Analytics'
+    }),
+    RouteObjectHelper.createRouteObject(EntityTypes.HOME,
+      {
+        componentName: 'Calendar',
+        title: 'Calendario',
+        navbar: true
+      }
+    )
   ]
 ))
 
@@ -79,13 +91,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCT,
         componentName: 'View',
         params: [GlobalEntityIdentifier]
       }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.PRODUCT,
-      {
-        componentName: 'GetInventory',
-        navbar: true,
-        title: 'Inventario'
-      }
     )
   ]
 ))
@@ -117,14 +122,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVE
     RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
       {
         componentName: 'View',
-        params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
-      {
-        componentName: 'ProductionEventReport',
-        title: 'Reporte de eventos de produccion',
-        navbar: true,
         params: [GlobalEntityIdentifier]
       }
     )
@@ -179,13 +176,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
       {
-        componentName: 'Calendar',
-        title: 'Calendario',
-        navbar: true
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
-      {
         componentName: 'Create'
       }
     ),
@@ -198,12 +188,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
     RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
       {
         componentName: 'View',
-        params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
-      {
-        componentName: 'Del',
         params: [GlobalEntityIdentifier]
       }
     )
@@ -225,13 +209,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
       {
-        componentName: 'Dashboard',
-        title: 'Reportes',
-        navbar: true
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
-      {
         componentName: 'Create'
       }
     ),
@@ -244,12 +221,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
     RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
       {
         componentName: 'View',
-        params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_SALE,
-      {
-        componentName: 'Del',
         params: [GlobalEntityIdentifier]
       }
     )
@@ -286,19 +257,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PROD
         componentName: 'Edit',
         params: [GlobalEntityIdentifier]
       }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
-      {
-        componentName: 'Del',
-        params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.BAG_ORDER_PRODUCTION,
-      {
-        componentName: 'BagReport',
-        navbar: true,
-        title: 'Reporte de bolseo'
-      }
     )
   ]
 ))
@@ -332,19 +290,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRO
       {
         componentName: 'Edit',
         params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
-      {
-        componentName: 'Del',
-        params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRODUCTION,
-      {
-        componentName: 'RollReport',
-        navbar: true,
-        title: 'Reporte de extrusion'
       }
     )
   ]
@@ -480,13 +425,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
     RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
       {
         componentName: 'View',
-        params: [GlobalEntityIdentifier],
-        title: 'Empresas'
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
-      {
-        componentName: 'Del',
         params: [GlobalEntityIdentifier],
         title: 'Empresas'
       }

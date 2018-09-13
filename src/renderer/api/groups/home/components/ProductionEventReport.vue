@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
         <b-table v-if="!isLoading" :items="monthItems" :fields="monthTableFields">
             <template slot="show_details" slot-scope="row">
@@ -20,7 +20,7 @@
     import moment from 'moment'
     moment.locale('es')
     export default {
-      name: 'ProductionReport',
+      name: 'ProductionEventReport',
       data () {
         return {
           isLoading: true,
@@ -36,10 +36,10 @@
       },
       created () {
         this.setGroupsData()
-        let vm = this
-        this.interval = setInterval(function () {
-          vm.setGroupsData()
-        }, 300000)
+        // let vm = this
+        // this.interval = setInterval(function () {
+        // vm.setGroupsData()
+        // }, 300000)
       },
       methods: {
         setGroupsData: function () {
@@ -73,7 +73,7 @@
         },
         beforeDestroy: function () {
           clearTimeout(this.timeout)
-          clearInterval(this.interval)
+          // clearInterval(this.interval)
         }
       },
       components: {
@@ -109,7 +109,6 @@
               })
               filteredGroupedDataByMonthByEventType.forEach(filteredGroupedDataObj => {
                 monthItem['event_id' + groupedDataObj.meta.id] += filteredGroupedDataObj.count
-                console.log(moment(filteredGroupedDataObj.date).date())
                 let dayIndex = moment(filteredGroupedDataObj.date).date() - 1
                 dayItems[dayIndex]['event_id' + groupedDataObj.meta.id] = filteredGroupedDataObj.count
               })

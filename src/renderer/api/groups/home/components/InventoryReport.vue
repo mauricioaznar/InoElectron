@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
         <h2 v-if="!isLoading">Inventario</h2>
         <h6 v-if="!isLoading">Bolsas</h6>
@@ -88,10 +88,10 @@
       },
       created () {
         this.setInventory()
-        let vm = this
-        this.interval = setInterval(function () {
-          vm.setInventory()
-        }, 30000)
+        // let vm = this
+        // this.interval = setInterval(function () {
+        // vm.setInventory()
+        // }, 30000)
       },
       methods: {
         setInventory: function () {
@@ -126,7 +126,7 @@
       },
       beforeDestroy: function () {
         clearTimeout(this.timeout)
-        clearInterval(this.interval)
+        // clearInterval(this.interval)
       },
       watch: {
         inventory: function (inventory) {
