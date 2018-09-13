@@ -34,7 +34,7 @@ export default {
     defaultValue: MauInputDefaultValues.NUMBER
   },
   COMPANY: {
-    title: 'Compania',
+    title: 'Empresa',
     name: 'company',
     relationship_id_name: 'company_id',
     display: DisplayFunctions.getNameFromObject,

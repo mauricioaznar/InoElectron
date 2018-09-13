@@ -65,14 +65,15 @@
           </div>
           <div class="form-group">
               <mau-form-input-select
-                      :initialObject="initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name]"
+                      :key="initialOrderSaleStatus ? initialOrderSaleStatus[GlobalEntityIdentifier] : 0"
+                      :initialObject="initialOrderSaleStatus"
                       :label="OrderSalePropertiesReference.ORDER_SALE_STATUS.title"
                       :displayProperty="'name'"
                       :entityType="orderSaleStatusEntityType"
                       v-model="salesOrder.orderSaleStatus"
                       :name="OrderSalePropertiesReference.ORDER_SALE_STATUS.name"
                       :error="errors.first(OrderSalePropertiesReference.ORDER_SALE_STATUS.name)"
-                      :disabled="!userHasWritePrivileges"
+                      :disabled="!isAdminUser"
                       v-validate="'object_required'"
               >
               </mau-form-input-select>
@@ -145,7 +146,7 @@
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
-  import {mapState} from 'vuex'
+  import {mapGetters} from 'vuex'
   export default {
     name: 'MauSimpleOrderForm',
     data () {
@@ -153,6 +154,7 @@
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         OrderSalePropertiesReference: OrderSalePropertiesReference,
         OrderRequestPropertiesReference: OrderRequestPropertiesReference,
+        GlobalEntityIdentifier: GlobalEntityIdentifier,
         salesOrder: {
           orderCode: '',
           products: [],
@@ -166,12 +168,13 @@
         initialOrderCode: '',
         initialValues: {},
         buttonDisabled: false,
-        clientFilterExact: {},
+        clientFilterExact: {[ClientPropertiesReference.COMPANY.relationship_id_name]: this.orderRequest[OrderRequestPropertiesReference.COMPANY.relationship_id_name]},
         clientEntityType: EntityTypes.CLIENT,
         companyEntityType: EntityTypes.COMPANY,
         orderSaleStatusEntityType: EntityTypes.ORDER_SALE_STATUS,
         productEntityType: EntityTypes.PRODUCT,
         orderSaleEntityType: EntityTypes.ORDER_SALE,
+        initialOrderSaleStatus: {},
         orderSaleReceiptTypeEntityType: EntityTypes.ORDER_SALE_RECEIPT_TYPE
       }
     },
@@ -189,12 +192,6 @@
       saveFunction: {
         type: Function,
         required: true
-      },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
       },
       orderRequest: {
         type: Object,
@@ -214,16 +211,20 @@
         ApiOperations.getMax(this.orderSaleEntityType, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
           this.initialOrderCode = result + 1
         })
+        ApiOperations.getById(this.orderSaleStatusEntityType, 1).then(result => {
+          this.initialOrderSaleStatus = result
+        })
         this.overrideInitialValuesWithOrderRequest()
       }
-      this.clientFilterExact = {[ClientPropertiesReference.COMPANY.relationship_id_name]: this.orderRequest[OrderRequestPropertiesReference.COMPANY.relationship_id_name]}
     },
     computed: {
-      ...mapState({
-        availableProducts: state => {
-          return state.api.entity.products
-        }
-      }),
+      ...mapGetters([
+        'isAdminUser'
+      ]),
+      userHasWritePrivileges: function () {
+        let isOrderCompleted = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] === 2 : false
+        return this.isAdminUser || !isOrderCompleted
+      },
       isInvoiceSelected: function () {
         let receiptId
         if (this.initialValues && this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name]) {
@@ -244,7 +245,7 @@
         this.initialValues[OrderSalePropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT.name)
         this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.COMPANY.name)
         this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
-        this.initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_STATUS.name)
+        this.initialOrderSaleStatus = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_STATUS.name)
       },
       overrideInitialValuesWithOrderRequest: function () {
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]

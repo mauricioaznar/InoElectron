@@ -103,7 +103,7 @@
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
-  import {mapState} from 'vuex'
+  import {mapGetters} from 'vuex'
   import EntityTypes from 'renderer/api/EntityTypes'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
@@ -140,12 +140,6 @@
         type: Function,
         required: true
       },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
-      },
       clientMode: {
         type: Boolean,
         default: function () {
@@ -170,8 +164,12 @@
       this.setInitialValues()
     },
     computed: {
-      ...mapState({
-      })
+      ...mapGetters([
+        'isAdminUser'
+      ]),
+      userHasWritePrivileges: function () {
+        return true
+      }
     },
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,

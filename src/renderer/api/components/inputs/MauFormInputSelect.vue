@@ -175,11 +175,6 @@
       watch: {
         selected: function (newValue) {
           this.updateValue(newValue)
-        },
-        initialObject: function (newInitialObject) {
-          if (!this.multi) {
-            this.selected = newInitialObject
-          }
         }
       }
     }

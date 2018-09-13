@@ -66,14 +66,15 @@
           </div>
           <div class="form-group">
               <mau-form-input-select
-                      :initialObject="initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name]"
+                      :key="initialOrderRequestStatus ? initialOrderRequestStatus[GlobalEntityIdentifier] : 0"
+                      :initialObject="initialOrderRequestStatus"
                       :label="OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.title"
                       :displayProperty="'name'"
                       :entityType="orderRequestStatusEntityType"
                       v-model="requestOrder.orderRequestStatus"
                       :name="OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name"
                       :error="errors.first(OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name)"
-                      :disabled="!userHasWritePrivileges"
+                      :disabled="!isAdminUser"
                       v-validate="'object_required'"
               >
               </mau-form-input-select>
@@ -126,13 +127,15 @@
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
-  import {mapState} from 'vuex'
+  import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
+  import {mapGetters} from 'vuex'
   export default {
     name: 'MauSimpleOrderForm',
     data () {
       return {
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         OrderRequestPropertiesReference: OrderRequestPropertiesReference,
+        GlobalEntityIdentifier: GlobalEntityIdentifier,
         requestOrder: {
           orderCode: '',
           products: [],
@@ -142,10 +145,11 @@
           company: {},
           orderRequestStatus: {}
         },
-        initialOrderCode: '',
         initialValues: {},
         buttonDisabled: false,
+        initialOrderCode: '',
         companyId: '',
+        initialOrderRequestStatus: {},
         initialClient: {},
         clientFilterExact: {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: 0},
         clientEntityType: EntityTypes.CLIENT,
@@ -175,12 +179,6 @@
         type: Object,
         required: true
       },
-      userHasWritePrivileges: {
-        type: Boolean,
-        default: function () {
-          return true
-        }
-      },
       requestMode: {
         type: Boolean,
         default: function () {
@@ -202,40 +200,34 @@
       }.bind(this))
     },
     created () {
-      this.createDefaultInitialValues()
-      if (this.initialObject) {
-        this.setInitialValues()
-      } else {
+      this.setInitialValues()
+      if (!this.initialObject) {
         ApiOperations.getMax(this.orderRequestEntityType, OrderRequestPropertiesReference.ORDER_CODE.name).then(result => {
           this.initialOrderCode = result + 1
+        })
+        ApiOperations.getById(this.orderRequestStatusEntityType, 1).then(result => {
+          this.initialOrderRequestStatus = result
         })
       }
     },
     computed: {
-      ...mapState({
-      })
+      userHasWritePrivileges: function () {
+        let isOrderCompleted = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] === 2 : false
+        return this.isAdminUser || !isOrderCompleted
+      },
+      ...mapGetters([
+        'isAdminUser'
+      ])
     },
     methods: {
       getPersona: DisplayFunctions.getPersona,
-      createDefaultInitialValues: function () {
-        for (let propertyReference in OrderRequestPropertiesReference) {
-          if (OrderRequestPropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[OrderRequestPropertiesReference[propertyReference].name] = OrderRequestPropertiesReference[propertyReference].defaultValue
-          }
-        }
-        for (let propertyReference in OrderRequestPropertiesReference) {
-          if (OrderRequestPropertiesReference.hasOwnProperty(propertyReference)) {
-            this.initialValues[OrderRequestPropertiesReference[propertyReference].name] = OrderRequestPropertiesReference[propertyReference].defaultValue
-          }
-        }
-      },
       setInitialValues: function () {
-        this.initialOrderCode = this.initialObject[OrderRequestPropertiesReference.ORDER_CODE.name]
-        this.initialClient = this.initialObject[OrderRequestPropertiesReference.CLIENT.name]
-        this.initialValues[OrderRequestPropertiesReference.PRODUCTS.name] = this.initialObject[OrderRequestPropertiesReference.PRODUCTS.name]
-        this.initialValues[OrderRequestPropertiesReference.DATE.name] = this.initialObject[OrderRequestPropertiesReference.DATE.name]
-        this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = this.initialObject[OrderRequestPropertiesReference.COMPANY.name]
-        this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name] = this.initialObject[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name]
+        this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.ORDER_CODE.name)
+        this.initialOrderRequestStatus = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name)
+        this.initialClient = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.CLIENT.name)
+        this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.COMPANY.name)
+        this.initialValues[OrderRequestPropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderRequestPropertiesReference.PRODUCTS.name)
+        this.initialValues[OrderRequestPropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.DATE.name)
       },
       save: function () {
         let directParams = {}

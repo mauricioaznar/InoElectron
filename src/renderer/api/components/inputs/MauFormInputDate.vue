@@ -9,9 +9,10 @@
          :class="getBootstrapValidationClass(error)"
     >
       <flat-pickr
+              :key="flatpickrKey"
+              :disabled="disabled"
               v-model="date"
               :config="config"
-              :disabled="disabled"
               @input="updateValue"
               @change="updateValue"
       >
@@ -39,19 +40,22 @@
       return {
         date: '',
         recentlyCreated: true,
+        flatpickrKey: 0,
         config: {
         },
         rangeConfig: {
           conjunction: ' - ',
           mode: 'range',
-          locale: Spanish
+          locale: Spanish,
+          allowInput: true
         },
         dateConfig: {
           wrap: true,
           altInput: true,
           altFormat: 'Y-m-d',
           dateFormat: 'Y-m-d',
-          locale: Spanish
+          locale: Spanish,
+          allowInput: true
         },
         timeConfig: {
           wrap: true,
@@ -61,7 +65,8 @@
           time_24hr: true,
           minDate: '7:00',
           maxDate: '19:00',
-          minuteIncrement: 10
+          minuteIncrement: 10,
+          allowInput: true
         },
         dateTimeConfig: {
           enableTime: true,
@@ -69,7 +74,8 @@
           altInput: true,
           altFormat: 'Y-m-d h:i K',
           dateFormat: 'Y-m-d H:i:S',
-          locale: Spanish
+          locale: Spanish,
+          allowInput: true
         }
       }
     },
@@ -137,6 +143,11 @@
         console.error('please specify a valid dateTime input type')
       }
       this.updateValue(this.date)
+    },
+    watch: {
+      disabled: function () {
+        this.flatpickrKey = 1
+      }
     }
   }
 </script>

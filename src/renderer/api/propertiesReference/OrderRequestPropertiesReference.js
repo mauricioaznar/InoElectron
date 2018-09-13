@@ -36,7 +36,7 @@ let OrderRequestPropertiesReference = {
   },
   COMPANY: {
     name: 'company',
-    title: 'Compania',
+    title: 'Empresa',
     relationship_id_name: 'company_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
