@@ -39,12 +39,6 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
-            title: 'Productos solicitados',
-            name: OrderSalePropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getOrderSaleProducts,
-            arguments: [1]
-          },
-          {
             title: 'Productos entregados',
             name: OrderSalePropertiesReference.PRODUCTS.name,
             display: DisplayFunctions.getOrderSaleProducts,

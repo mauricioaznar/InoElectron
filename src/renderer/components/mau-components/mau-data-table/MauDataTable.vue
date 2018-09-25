@@ -239,7 +239,8 @@
       getOrderSaleTotalCost: DisplayFunctions.getOrderSaleTotalCost,
       getMachineNames: DisplayFunctions.getMachineNames,
       getDateTime: DisplayFunctions.getDateTime,
-      getPropertyFromObject: DisplayFunctions.getPropertyFromObject
+      getPropertyFromObject: DisplayFunctions.getPropertyFromObject,
+      getOrderSales: DisplayFunctions.getOrderSales
     }
   }
 </script>

@@ -14,6 +14,7 @@
 <script>
   import ProductForm from '../../components/forms/ProductForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
+  import EntityActions from 'renderer/api/store/entityActions.js'
   import {mapGetters} from 'vuex'
   export default {
     name: 'CreateProduct',
@@ -32,6 +33,7 @@
     },
     methods: {
       callback: function () {
+        this.$store.dispatch(EntityActions.GET_PRODUCTS)
         this.$router.push({path: this.groupDefaultRouteObject(this.$route).path})
       }
     }

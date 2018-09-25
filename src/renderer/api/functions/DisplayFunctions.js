@@ -107,6 +107,16 @@ export default {
     }
     return htmlString + '</table>'
   },
+  getOrderSales: function (array) {
+    let htmlString = '<table class="w-100">'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].order_code + '</td>'
+      htmlString += '<td class="mau-text-right">' + array[i].total_cost + '</td>'
+      htmlString += '</tr>'
+    }
+    return htmlString + '</table>'
+  },
   getOrderSaleTotalCost: function (array) {
     let total = 0
     for (let i = 0; i < array.length; i++) {

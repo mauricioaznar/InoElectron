@@ -113,6 +113,7 @@
                                     :saleMode="true"
                                     :hasTax="isInvoiceSelected"
                                     :selectedProducts="salesOrder.products"
+                                    :requestedProducts="requestedProducts"
                                     v-model="salesOrder.saleProducts"
                                     :initialProducts="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                                     :userHasWritePrivileges="userHasWritePrivileges"
@@ -168,6 +169,7 @@
         initialOrderCode: '',
         initialValues: {},
         buttonDisabled: false,
+        requestedProducts: [],
         clientFilterExact: {[ClientPropertiesReference.COMPANY.relationship_id_name]: this.orderRequest[OrderRequestPropertiesReference.COMPANY.relationship_id_name]},
         clientEntityType: EntityTypes.CLIENT,
         companyEntityType: EntityTypes.COMPANY,
@@ -222,8 +224,8 @@
         'isAdminUser'
       ]),
       userHasWritePrivileges: function () {
-        let isOrderCompleted = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] === 2 : false
-        return this.isAdminUser || !isOrderCompleted
+        let isOrderPending = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] === 1 : false
+        return this.isAdminUser || isOrderPending
       },
       isInvoiceSelected: function () {
         let receiptId
@@ -246,6 +248,7 @@
         this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.COMPANY.name)
         this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
         this.initialOrderSaleStatus = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_STATUS.name)
+        this.requestedProducts = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]
       },
       overrideInitialValuesWithOrderRequest: function () {
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]
@@ -274,6 +277,9 @@
             this.saveFunction(directParams, relayObjects)
           }
         })
+      },
+      isProductOversold: function () {
+        console.log()
       }
     },
     watch: {

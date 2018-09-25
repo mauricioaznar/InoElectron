@@ -40,7 +40,13 @@
           {
             name: OrderRequestPropertiesReference.PRODUCTS.name,
             title: 'Productos solicitados',
-            callback: DisplayFunctions.getOrderSaleProducts.name
+            callback: DisplayFunctions.getOrderSaleProducts
+          },
+          {
+            name: OrderRequestPropertiesReference.ORDER_SALES.name,
+            title: 'Ventas',
+            hidden: true,
+            callback: DisplayFunctions.getOrderSales
           },
           {
             name: OrderRequestPropertiesReference.CLIENT.name,

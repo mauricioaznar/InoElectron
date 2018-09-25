@@ -2,7 +2,7 @@
   <div class="container">
     <div class="form-group">
       <mau-form-input-select
-              :label="'Pedidos pendientes'"
+              :label="'Pedidos en produccion'"
               displayProperty="order_code_string"
               v-model="orderRequestEntity"
               :entityType="orderRequestEntityType"
@@ -46,7 +46,7 @@
         hostRelationshipIdName: 'order_sale_id',
         orderSaleEntityType: EntityTypes.ORDER_SALE,
         orderRequestEntityType: EntityTypes.ORDER_REQUEST,
-        orderRequestFilterExact: {[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name]: 1},
+        orderRequestFilterExact: {[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name]: 2},
         orderRequestEntity: null,
         orderRequestEntityId: null
       }

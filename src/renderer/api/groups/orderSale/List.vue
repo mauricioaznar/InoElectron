@@ -43,12 +43,6 @@
           },
           {
             name: OrderSalePropertiesReference.PRODUCTS.name,
-            title: 'Productos solicitados',
-            hidden: true,
-            callback: DisplayFunctions.getOrderSaleProducts.name
-          },
-          {
-            name: OrderSalePropertiesReference.PRODUCTS.name,
             title: 'Productos entregados',
             hidden: true,
             callback: DisplayFunctions.getOrderSaleProducts.name

@@ -32,8 +32,12 @@
           {
             title: OrderRequestPropertiesReference.PRODUCTS.title,
             name: OrderRequestPropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getOrderSaleProducts,
-            arguments: [1]
+            display: DisplayFunctions.getOrderSaleProducts
+          },
+          {
+            title: OrderRequestPropertiesReference.ORDER_SALES.title,
+            name: OrderRequestPropertiesReference.ORDER_SALES.name,
+            display: DisplayFunctions.getOrderSales
           },
           {
             title: OrderRequestPropertiesReference.TOTAL_COST.title,

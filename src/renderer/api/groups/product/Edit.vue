@@ -30,6 +30,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
+  import EntityActions from 'renderer/api/store/entityActions.js'
   import {mapGetters} from 'vuex'
   export default {
     name: 'EditBag',
@@ -53,6 +54,7 @@
     },
     methods: {
       callback: function () {
+        this.$store.dispatch(EntityActions.GET_PRODUCTS)
         this.$router.push({path: this.groupDefaultRouteObject(this.$route).path})
       },
       entityResultHandler: function (entityObj) {

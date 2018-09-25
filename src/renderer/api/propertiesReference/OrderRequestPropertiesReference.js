@@ -20,6 +20,12 @@ let OrderRequestPropertiesReference = {
     display: DisplayFunctions.getOrderSaleProducts,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },
+  ORDER_SALES: {
+    title: 'Ventas',
+    name: 'order_sales',
+    display: DisplayFunctions.getOrderSaleProducts,
+    defaultValue: MauInputDefaultValues.MULTISELECT
+  },
   CLIENT: {
     name: 'client',
     title: 'Cliente',

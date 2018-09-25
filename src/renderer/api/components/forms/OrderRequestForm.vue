@@ -212,8 +212,8 @@
     },
     computed: {
       userHasWritePrivileges: function () {
-        let isOrderCompleted = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] === 2 : false
-        return this.isAdminUser || !isOrderCompleted
+        let isOrderPending = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] === 1 : false
+        return this.isAdminUser || isOrderPending
       },
       ...mapGetters([
         'isAdminUser'
