@@ -52,10 +52,10 @@
         for (let i = 0; i < tableFieldsLength; i++) {
           let option = {}
           let tableFieldObj = tableFields[i]
-          option.value = tableFieldObj.name
+          option.value = tableFieldObj
           option.text = tableFieldObj.title
           if (tableFieldObj.default) {
-            this.selectedOption = option.value
+            this.selectedOption = option
           }
           if (!tableFieldObj.hidden) {
             options.push(option)
@@ -64,9 +64,15 @@
         this.options = options
       },
       doFilter () {
-        let filterParams = {
-          'filter': this.selectedOption,
-          'filter_value': this.filteredText
+        let filterParams = {}
+        if (!this.selectedOption.entity) {
+          filterParams['filter'] = this.selectedOption.name
+          filterParams['filter_value'] = this.filteredText
+        }
+        if (this.selectedOption.entity) {
+          filterParams['filter'] = this.selectedOption.entityFieldName
+          filterParams['filter_value'] = this.filteredText
+          filterParams['filter_entity'] = this.selectedOption.entity
         }
         this.$emit('filter', filterParams)
       }

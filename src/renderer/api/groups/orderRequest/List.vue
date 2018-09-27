@@ -40,7 +40,8 @@
           {
             name: OrderRequestPropertiesReference.PRODUCTS.name,
             title: 'Productos solicitados',
-            callback: DisplayFunctions.getOrderSaleProducts
+            callback: DisplayFunctions.getOrderSaleProducts,
+            hidden: true
           },
           {
             name: OrderRequestPropertiesReference.ORDER_SALES.name,
@@ -51,22 +52,29 @@
           {
             name: OrderRequestPropertiesReference.CLIENT.name,
             title: OrderRequestPropertiesReference.CLIENT.title,
-            callback: DisplayFunctions.getPersona
+            callback: DisplayFunctions.getPersona,
+            entity: EntityTypes.CLIENT.name,
+            entityFieldName: 'name'
           },
           {
             name: OrderRequestPropertiesReference.COMPANY.name,
             title: OrderRequestPropertiesReference.COMPANY.title,
-            callback: DisplayFunctions.getNameFromObject
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.COMPANY.name,
+            entityFieldName: 'name'
           },
           {
             name: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name,
             title: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.title,
-            callback: DisplayFunctions.getNameFromObject
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.ORDER_REQUEST_STATUS.name,
+            entityFieldName: 'name'
           },
           {
             name: OrderRequestPropertiesReference.TOTAL_COST.name,
             title: OrderRequestPropertiesReference.TOTAL_COST.title,
-            callback: DisplayFunctions.getValue
+            callback: DisplayFunctions.getValue,
+            hidden: true
           }
         ],
         actions: [

@@ -71,14 +71,14 @@
           </div>
           <div class="form-group" v-if="bagMode">
               <mau-form-input-select
-                      :initialObjects="initialValues[OrderProductionPropertiesReference.PRODUCTS.name]"
-                      :label="OrderProductionPropertiesReference.PRODUCTS.title"
+                      :initialObjects="initialValues['bags']"
+                      :label="'Bolsas'"
                       :displayProperty="'code'"
-                      v-model="productionOrder.products"
-                      :name="OrderProductionPropertiesReference.PRODUCTS.name"
+                      v-model="productionOrder.bags"
+                      :name="'bags'"
                       :filterExact="{product_type_id: 1}"
                       :data-vv-as="'Productos'"
-                      :error="errors.first(OrderProductionPropertiesReference.PRODUCTS.name)"
+                      :error="errors.first('bags')"
                       :entityType="productEntityType"
                       :multi="true"
                       :disabled="!userHasWritePrivileges"
@@ -88,9 +88,35 @@
                           :allowNegative="true"
                           :bagMode="true"
                           :machineId="productionOrder.machine ? productionOrder.machine['id'] : 0"
-                          :selectedProducts="productionOrder.products"
-                          :initialProducts="initialValues[OrderProductionPropertiesReference.PRODUCTS.name]"
-                          v-model="productionOrder.productionProducts"
+                          :selectedProducts="productionOrder.bags"
+                          :initialProducts="initialValues['bags']"
+                          v-model="productionOrder.orderProductionBags"
+                          :userHasWritePrivileges="userHasWritePrivileges"
+                  >
+                  </order-production-product-table>
+              </mau-form-input-select>
+          </div>
+          <div class="form-group" v-if="bagMode">
+              <mau-form-input-select
+                      :initialObjects="initialValues['rolls']"
+                      :label="'Rollos'"
+                      :displayProperty="'code'"
+                      v-model="productionOrder.rolls"
+                      :name="'rolls'"
+                      :filterExact="{product_type_id: 2}"
+                      :data-vv-as="'Rollos'"
+                      :error="errors.first('rolls')"
+                      :entityType="productEntityType"
+                      :multi="true"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'array_required'"
+              >
+                  <order-production-product-table
+                          :allowNegative="true"
+                          :machineId="productionOrder.machine ? productionOrder.machine['id'] : 0"
+                          :selectedProducts="productionOrder.rolls"
+                          :initialProducts="initialValues['rolls']"
+                          v-model="productionOrder.orderProductionRolls"
                           :userHasWritePrivileges="userHasWritePrivileges"
                   >
                   </order-production-product-table>
@@ -115,10 +141,10 @@
           </div>
           <div class="form-group" v-if="extrusionMode" v-for="(machineObj, index) in machineObjects">
               <mau-form-input-select
-                      :initialObjects="machineObj.initialProducts"
+                      :initialObjects="machineObj.initialRolls"
                       :label="machineObj.machineName"
                       :displayProperty="'code'"
-                      v-model="machineObj.products"
+                      v-model="machineObj.rolls"
                       :name="'_machine' + machineObj.id"
                       :data-vv-as="machineObj.id"
                       :error="errors.first('_machine' + machineObj.id)"
@@ -131,10 +157,10 @@
                   <order-production-product-table
                           :machineId="machineObj['id']"
                           :extrusionMode="true"
-                          :selectedProducts="machineObj.products"
-                          :initialProducts="machineObj.initialProducts"
+                          :selectedProducts="machineObj.rolls"
+                          :initialProducts="machineObj.initialRolls"
                           :userHasWritePrivileges="userHasWritePrivileges"
-                          v-model="machineObj.productionProducts"
+                          v-model="machineObj.productionRolls"
                   >
                   </order-production-product-table>
               </mau-form-input-select>
@@ -147,7 +173,6 @@
 </template>
 
 <script>
-  import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
@@ -159,6 +184,7 @@
   import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
   import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
   import OrderProductionIndicatorSelector from 'renderer/api/components/m2m/OrderProductionIndicatorSelector.vue'
   export default {
@@ -168,8 +194,10 @@
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         OrderProductionPropertiesReference: OrderProductionPropertiesReference,
         productionOrder: {
-          products: [],
-          productionProducts: [],
+          bags: [],
+          rolls: [],
+          orderProductionRolls: [],
+          orderProductionBags: [],
           startDateTime: '',
           endDateTime: '',
           machines: [],
@@ -234,7 +262,10 @@
     },
     methods: {
       setInitialValues: function () {
-        this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderProductionPropertiesReference.PRODUCTS.name)
+        let products = DefaultValuesHelper.array(this.initialObject, OrderProductionPropertiesReference.PRODUCTS.name)
+        this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name] = products
+        this.initialValues['bags'] = products.filter(product => { return product['product_type_id'] === 1 })
+        this.initialValues['rolls'] = products.filter(product => { return product['product_type_id'] === 2 })
         this.initialValues[OrderProductionPropertiesReference.START_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.START_DATE_TIME.name)
         this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.END_DATE_TIME.name)
         this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, OrderProductionPropertiesReference.EMPLOYEE.name)
@@ -266,28 +297,30 @@
         directParams[OrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : 'null'
         let relayObjects = []
         if (this.extrusionMode) {
-          let productionProducts = []
+          let productionRolls = []
           for (let i = 0; i < this.machineObjects.length; i++) {
-            for (let j = 0; j < this.machineObjects[i].productionProducts.length; j++) {
-              productionProducts.push(this.machineObjects[i].productionProducts[j])
+            for (let j = 0; j < this.machineObjects[i].productionRolls.length; j++) {
+              productionRolls.push(this.machineObjects[i].productionRolls[j])
             }
           }
-          let filteredProductionProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          let filteredProductionRolls = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
             this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name].map(initialProductionObj => initialProductionObj.pivot),
-            productionProducts,
+            productionRolls,
             'id'
           )
-          let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionProducts, EntityTypes.ORDER_PRODUCTION_PRODUCT)
+          console.log(filteredProductionRolls)
+          let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionRolls, EntityTypes.ORDER_PRODUCTION_PRODUCT)
           relayObjects.push(productionProductRelayObject)
           directParams[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name] = 2
         }
         if (this.bagMode) {
-          let filteredProductionProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          let orderProductionProducts = this.productionOrder.orderProductionBags.concat(this.productionOrder.orderProductionRolls)
+          let filteredProductionRolls = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
             this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name].map(initialProductionObj => initialProductionObj.pivot),
-            this.productionOrder.productionProducts,
+            orderProductionProducts,
             'id'
           )
-          let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionProducts, EntityTypes.ORDER_PRODUCTION_PRODUCT)
+          let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionRolls, EntityTypes.ORDER_PRODUCTION_PRODUCT)
           relayObjects.push(productionProductRelayObject)
           directParams[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name] = 1
         }
@@ -308,17 +341,17 @@
         for (let i = 0; i < machines.length; i++) {
           let machineId = machines[i][GlobalEntityIdentifier]
           let machineObjFound = this.machineObjects.find(machineObj => { return machineObj[GlobalEntityIdentifier] === machineId })
-          let machineProducts = machineObjFound ? machineObjFound.products : []
-          let machineProductionProducts = machineObjFound ? machineObjFound.productionProducts : []
-          let machineInitialProductionProducts = this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name].filter(product => product.pivot['machine_id'] === machineId).map(product => product.pivot)
-          let machineInitialProducts = this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name].filter(product => product.pivot['machine_id'] === machineId).map(product => product)
+          let machineRolls = machineObjFound ? machineObjFound.rolls : []
+          let machineProductionRolls = machineObjFound ? machineObjFound.productionRolls : []
+          let machineInitialProductionRolls = this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name].filter(product => product.pivot['machine_id'] === machineId).map(product => product.pivot)
+          let machineInitialRolls = this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name].filter(product => product.pivot['machine_id'] === machineId).map(product => product)
           machineObjects.push({
             id: machineId,
             machineName: machines[i].name,
-            initialProductionProducts: machineInitialProductionProducts,
-            initialProducts: machineInitialProducts,
-            productionProducts: machineProductionProducts,
-            products: machineProducts
+            initialProductionRolls: machineInitialProductionRolls,
+            initialRolls: machineInitialRolls,
+            productionRolls: machineProductionRolls,
+            rolls: machineRolls
           })
         }
         this.machineObjects = machineObjects

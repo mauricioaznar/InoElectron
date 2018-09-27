@@ -36,7 +36,9 @@
           {
             title: MachinePropertiesReference.MACHINE_TYPE.title,
             name: MachinePropertiesReference.MACHINE_TYPE.name,
-            callback: DisplayFunctions.getNameFromObject
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.MACHINE_TYPE.name,
+            entityFieldName: 'name'
           }
         ]
       }

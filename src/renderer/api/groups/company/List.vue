@@ -42,7 +42,8 @@
           {
             title: CompanyPropertiesReference.CLIENTS.title,
             name: CompanyPropertiesReference.CLIENTS.name,
-            callback: DisplayFunctions.getPersonaArray
+            callback: DisplayFunctions.getPersonaArray,
+            hidden: true
           }
         ],
         actions: [

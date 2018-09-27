@@ -5,20 +5,22 @@
                 <tr>
                     <th class="mau-text-center">Producto</th>
                     <th class="mau-text-center">Descripcion</th>
-                    <th class="mau-text-center">Cantidad</th>
-                    <th class="mau-text-center">Unidad</th>
-                    <th class="mau-text-center" v-if="bagMode">Kilos</th>
+                    <th class="mau-text-center" v-if="bagMode">Cantidad</th>
+                    <th class="mau-text-center" v-if="bagMode">Unidad</th>
+                    <th class="mau-text-center">Kilos</th>
                     <th class="mau-text-center" v-if="bagMode">Peso del bulto</th>
-                    <th class="mau-text-center" v-if="bagMode">Bultos</th>
+                    <th class="mau-text-center">
+                        {{bagMode ? 'Bultos' : 'Rollos'}}
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(currentStructuredObj, index) in currentStructuredObjects" :key="index">
                     <td class="mau-text-center">{{getProductCode(currentStructuredObj)}}</td>
                     <td class="mau-text-center">{{getProductDescription(currentStructuredObj)}}</td>
-                    <td class="mau-text-center">
+                    <td class="mau-text-center" v-if="bagMode">
                         <mau-form-input-number
-                                v-if="currentStructuredObj['_calculation_type'] === 0 && !(!getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj))"
+                                v-if="currentStructuredObj['_calculation_type'] === 0 && getCurrentObjGroupWeight(currentStructuredObj)"
                                 :name="'_quantity_kilo' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialKilos(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
@@ -39,7 +41,7 @@
                         >
                         </mau-form-input-number>
                         <mau-form-input-number
-                                v-if="currentStructuredObj['_calculation_type'] === 1 && !(!getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj))"
+                                v-if="currentStructuredObj['_calculation_type'] === 1 && getCurrentObjGroupWeight(currentStructuredObj)"
                                 :name="'_quantity_group' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialGroups(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
@@ -53,10 +55,10 @@
                         >
                         </mau-form-input-number>
                     </td>
-                    <td class="mau-text-center extra-select-width">
+                    <td class="mau-text-center extra-select-width" v-if="bagMode">
                         <mau-form-input-select-bootstrap
                                 v-model="currentStructuredObj._calculation_type"
-                                v-if="!(!getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj))"
+                                v-if="!(!getCurrentObjGroupWeight(currentStructuredObj))"
                                 :initialValue="getCurrentObjInitialCalculationType(currentStructuredObj)"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
@@ -65,8 +67,8 @@
                             <option :value="1" v-if="getCurrentObjGroupWeight(currentStructuredObj)">Bulto</option>
                         </mau-form-input-select-bootstrap>
                     </td>
-                    <td class="mau-text-center" v-if="bagMode">
-                        <div v-if="getCurrentObjGroupWeight(currentStructuredObj)">
+                    <td class="mau-text-center">
+                        <div v-if="bagMode && getCurrentObjGroupWeight(currentStructuredObj)">
                             {{currentStructuredObj.kilos}}
                         </div>
                         <mau-form-input-number
@@ -89,8 +91,8 @@
                             {{getProductCurrentGroupWeight(currentStructuredObj)}}
                         </div>
                     </td>
-                    <td class="mau-text-center" v-if="bagMode">
-                        <div v-if="getCurrentObjGroupWeight(currentStructuredObj)">
+                    <td class="mau-text-center">
+                        <div v-if="bagMode && getCurrentObjGroupWeight(currentStructuredObj)">
                             {{currentStructuredObj.groups}}
                         </div>
                         <mau-form-input-number

@@ -42,7 +42,9 @@
           {
             name: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name,
             title: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.title,
-            callback: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.display
+            callback: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.display,
+            entity: EntityTypes.ORDER_ADJUSTMENT_TYPE.name,
+            entityFieldName: 'name'
           }
         ],
         actions: [

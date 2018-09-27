@@ -46,7 +46,9 @@
           {
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
-            callback: DisplayFunctions.getPersona
+            callback: DisplayFunctions.getPersona,
+            entity: EntityTypes.EMPLOYEE.name,
+            entityFieldName: 'name'
           }
         ],
         actions: [

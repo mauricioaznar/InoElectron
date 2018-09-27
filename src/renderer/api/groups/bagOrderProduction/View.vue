@@ -44,10 +44,16 @@
             display: DisplayFunctions.getMachineNames
           },
           {
-            title: OrderProductionPropertiesReference.PRODUCTS.title,
+            title: 'Bolsas',
             name: OrderProductionPropertiesReference.PRODUCTS.name,
             display: DisplayFunctions.getProducts,
             arguments: [1]
+          },
+          {
+            title: 'Rollos',
+            name: OrderProductionPropertiesReference.PRODUCTS.name,
+            display: DisplayFunctions.getProducts,
+            arguments: [2]
           }
         ],
         entityType: EntityTypes.BAG_ORDER_PRODUCTION,

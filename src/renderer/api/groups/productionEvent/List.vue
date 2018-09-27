@@ -41,12 +41,16 @@
           {
             name: ProductionEventPropertiesReference.MACHINE.name,
             title: ProductionEventPropertiesReference.MACHINE.title,
-            callback: DisplayFunctions.getNameFromObject
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.MACHINE.name,
+            entityFieldName: 'name'
           },
           {
             name: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name,
             title: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title,
-            callback: DisplayFunctions.getNameFromObject
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.PRODUCTION_EVENT_TYPE.name,
+            entityFieldName: 'name'
           },
           {
             name: ProductionEventPropertiesReference.CHECKS.name,

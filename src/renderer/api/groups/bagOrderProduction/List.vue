@@ -27,9 +27,15 @@
         tableFields: [
           {
             name: OrderProductionPropertiesReference.PRODUCTS.name,
-            title: OrderProductionPropertiesReference.PRODUCTS.title,
-            dataClass: 'child-center',
-            callback: DisplayFunctions.getProducts.name + '|' + 1
+            title: 'Bolsas',
+            callback: DisplayFunctions.getProducts.name + '|' + 1,
+            hidden: true
+          },
+          {
+            name: OrderProductionPropertiesReference.PRODUCTS.name,
+            title: 'Rollos',
+            callback: DisplayFunctions.getProducts.name + '|' + 2,
+            hidden: true
           },
           {
             name: OrderProductionPropertiesReference.START_DATE_TIME.name,
@@ -46,7 +52,9 @@
           {
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
-            callback: DisplayFunctions.getPersona
+            callback: DisplayFunctions.getPersona,
+            entity: EntityTypes.EMPLOYEE.name,
+            entityFieldName: 'name'
           }
         ],
         actions: [

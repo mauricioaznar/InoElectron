@@ -26,7 +26,9 @@
           {
             name: PropertiesReference.PRODUCT_TYPE.name,
             title: PropertiesReference.PRODUCT_TYPE.title,
-            callback: DisplayFunctions.getNameFromObject
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.PRODUCT_TYPE.name,
+            entityFieldName: 'name'
           },
           {
             name: PropertiesReference.CODE.name,
@@ -41,12 +43,16 @@
           {
             name: PropertiesReference.MATERIAL.name,
             title: PropertiesReference.MATERIAL.title,
-            callback: DisplayFunctions.getNameFromObject
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.MATERIAL.name,
+            entityFieldName: 'name'
           },
           {
             name: PropertiesReference.PACKING.name,
             title: PropertiesReference.PACKING.title,
-            callback: DisplayFunctions.getNameFromObject
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.PACKING.name,
+            entityFieldName: 'name'
           },
           {
             name: PropertiesReference.CURRENT_KILO_PRICE.name,
