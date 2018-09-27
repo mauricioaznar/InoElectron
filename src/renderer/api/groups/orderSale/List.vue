@@ -40,21 +40,27 @@
             name: OrderSalePropertiesReference.RECEIPT_TYPE.name,
             title: OrderSalePropertiesReference.RECEIPT_TYPE.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.RECEIPT_TYPE.name,
+            entity: EntityTypes.ORDER_SALE_RECEIPT_TYPE.name,
             entityFieldName: 'name'
           },
           {
             name: OrderSalePropertiesReference.PRODUCTS.name,
-            title: 'Productos entregados',
+            title: 'Bolsas entregadas',
             hidden: true,
-            callback: DisplayFunctions.getOrderSaleProducts.name
+            callback: DisplayFunctions.getProducts.name + '|' + 1
+          },
+          {
+            name: OrderSalePropertiesReference.PRODUCTS.name,
+            title: 'Rollos entregados',
+            hidden: true,
+            callback: DisplayFunctions.getProducts.name + '|' + 2
           },
           {
             name: OrderSalePropertiesReference.CLIENT.name,
             title: OrderSalePropertiesReference.CLIENT.title,
             callback: DisplayFunctions.getPersona,
             entity: EntityTypes.CLIENT.name,
-            entityFieldName: 'name'
+            entityFieldName: 'last_name'
           },
           {
             name: OrderSalePropertiesReference.ORDER_SALE_STATUS.name,
@@ -66,7 +72,7 @@
           {
             name: OrderSalePropertiesReference.ORDER_REQUEST.name,
             title: OrderSalePropertiesReference.ORDER_REQUEST.title,
-            callback: DisplayFunctions.getPropertyFromObject.name + '|' + 'order_code',
+            callback: DisplayFunctions.getPropertyFromObject.name + '|order_code',
             entity: EntityTypes.ORDER_REQUEST.name,
             entityFieldName: 'order_code'
           },

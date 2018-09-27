@@ -30,14 +30,16 @@
             display: DisplayFunctions.getDate
           },
           {
-            title: OrderRequestPropertiesReference.PRODUCTS.title,
+            title: 'Bolsas solicitadas',
             name: OrderRequestPropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getOrderSaleProducts
+            display: DisplayFunctions.getProducts,
+            arguments: [1]
           },
           {
-            title: OrderRequestPropertiesReference.ORDER_SALES.title,
-            name: OrderRequestPropertiesReference.ORDER_SALES.name,
-            display: DisplayFunctions.getOrderSales
+            title: 'Rollos solicitados',
+            name: OrderRequestPropertiesReference.PRODUCTS.name,
+            display: DisplayFunctions.getProducts,
+            arguments: [2]
           },
           {
             title: OrderRequestPropertiesReference.TOTAL_COST.title,

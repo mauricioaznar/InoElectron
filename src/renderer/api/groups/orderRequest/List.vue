@@ -39,15 +39,15 @@
           },
           {
             name: OrderRequestPropertiesReference.PRODUCTS.name,
-            title: 'Productos solicitados',
-            callback: DisplayFunctions.getOrderSaleProducts,
+            title: 'Bolsas solicitadas',
+            callback: DisplayFunctions.getProducts.name + '|' + 1,
             hidden: true
           },
           {
-            name: OrderRequestPropertiesReference.ORDER_SALES.name,
-            title: 'Ventas',
-            hidden: true,
-            callback: DisplayFunctions.getOrderSales
+            name: OrderRequestPropertiesReference.PRODUCTS.name,
+            title: 'Rollos solicitados',
+            callback: DisplayFunctions.getProducts.name + '|' + 2,
+            hidden: true
           },
           {
             name: OrderRequestPropertiesReference.CLIENT.name,
