@@ -124,6 +124,7 @@
           </div>
           <div class="form-group" v-if="extrusionMode">
               <mau-form-input-select
+                      :key="machinesKey"
                       :initialObjects="initialValues['_machines']"
                       :label="'Maquinas'"
                       :displayProperty="'name'"
@@ -187,6 +188,7 @@
   import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
   import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
   import OrderProductionIndicatorSelector from 'renderer/api/components/m2m/OrderProductionIndicatorSelector.vue'
+  import ApiOperations from 'renderer/api/functions/ApiOperations'
   export default {
     name: 'MauSimpleOrderForm',
     data () {
@@ -208,6 +210,7 @@
         machineObjects: [],
         machineObject: {},
         initialValues: {},
+        machinesKey: 0,
         buttonDisabled: false,
         machineEntityType: EntityTypes.MACHINE,
         employeeEntityType: EntityTypes.EMPLOYEE,
@@ -270,16 +273,21 @@
         this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.END_DATE_TIME.name)
         this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, OrderProductionPropertiesReference.EMPLOYEE.name)
         if (this.extrusionMode) {
-          let initialMachines = []
-          if (this.initialObject[OrderProductionPropertiesReference.MACHINES.name]) {
+          if (this.initialObject && this.initialObject[OrderProductionPropertiesReference.MACHINES.name]) {
+            let initialMachines = []
             this.initialObject[OrderProductionPropertiesReference.MACHINES.name].forEach(machineObj => {
               let initialMachineDuplicated = initialMachines.find(initialMachineObj => machineObj[GlobalEntityIdentifier] === initialMachineObj[GlobalEntityIdentifier])
               if (!initialMachineDuplicated) {
                 initialMachines.push(machineObj)
               }
             })
+            this.initialValues['_machines'] = initialMachines
+          } else {
+            ApiOperations.getWithFilterExactWithoutPagination(EntityTypes.MACHINE, {machine_type_id: 2}).then(result => {
+              this.initialValues['_machines'] = result
+              this.machinesKey = 1
+            })
           }
-          this.initialValues['_machines'] = initialMachines
         }
         if (this.bagMode) {
           let initialMachine = {}

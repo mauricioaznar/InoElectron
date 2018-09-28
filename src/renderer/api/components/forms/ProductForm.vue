@@ -133,6 +133,7 @@
     <div class="form-group form-row">
       <div class="col-sm-12">
         <mau-form-input-select
+                v-if="isProductBag()"
                 :initialObject="initialValues[PropertiesReference.PACKING.name]"
                 :label="PropertiesReference.PACKING.title"
                 :displayProperty="'name'"
@@ -239,6 +240,9 @@
         if (this.initialObject) {
           this.product.groupWeightStrict = this.initialObject[PropertiesReference.GROUP_WEIGHT_STRICT.name] === 1
         }
+      },
+      isProductBag: function () {
+        return this.product && this.product.productType && this.product.productType[GlobalEntityIdentifier] === 1
       },
       save: function () {
         let directParams = {
