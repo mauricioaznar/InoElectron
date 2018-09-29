@@ -76,7 +76,7 @@
                                 :name="'_manual_kilos' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialKilos(currentStructuredObj)"
                                 v-model="currentStructuredObj._manual_kilos"
-                                :type="'regular'"
+                                :type="'float'"
                                 :negative="allowNegative"
                                 :key="'_manual_kilos' + currentStructuredObj['product_id']"
                                 :error="errors.first('_manual_kilos' + currentStructuredObj['product_id'])"
