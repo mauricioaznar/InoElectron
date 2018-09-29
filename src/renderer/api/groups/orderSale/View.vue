@@ -39,9 +39,15 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
-            title: 'Productos entregados',
+            title: 'Bolsas entregadas',
             name: OrderSalePropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getOrderSaleProducts,
+            display: DisplayFunctions.getProducts,
+            arguments: [1]
+          },
+          {
+            title: 'Rollos entregados',
+            name: OrderSalePropertiesReference.PRODUCTS.name,
+            display: DisplayFunctions.getProducts,
             arguments: [2]
           },
           {
