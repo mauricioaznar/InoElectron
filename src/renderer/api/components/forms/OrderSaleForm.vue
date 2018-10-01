@@ -98,7 +98,7 @@
                             :label="OrderSalePropertiesReference.PRODUCTS.title"
                             :initialObjects="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                             v-model="salesOrder.products"
-                            :displayProperty="'code'"
+                            :displayProperty="'description'"
                             :name="OrderSalePropertiesReference.PRODUCTS.name"
                             :selectedPropertyName="'product_id'"
                             :data-vv-as="'Productos'"

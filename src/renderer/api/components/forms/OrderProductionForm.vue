@@ -73,7 +73,7 @@
               <mau-form-input-select
                       :initialObjects="initialValues['bags']"
                       :label="'Bolsas'"
-                      :displayProperty="'code'"
+                      :displayProperty="'description'"
                       v-model="productionOrder.bags"
                       :name="'bags'"
                       :filterExact="{product_type_id: 1}"
@@ -100,7 +100,7 @@
               <mau-form-input-select
                       :initialObjects="initialValues['rolls']"
                       :label="'Rollos'"
-                      :displayProperty="'code'"
+                      :displayProperty="'description'"
                       v-model="productionOrder.rolls"
                       :name="'rolls'"
                       :filterExact="{product_type_id: 2}"
