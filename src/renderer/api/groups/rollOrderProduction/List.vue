@@ -44,6 +44,12 @@
             filter: true
           },
           {
+            name: OrderProductionPropertiesReference.WASTE.name,
+            title: OrderProductionPropertiesReference.WASTE.title,
+            sortField: OrderProductionPropertiesReference.WASTE.name,
+            filter: true
+          },
+          {
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
             callback: DisplayFunctions.getPersona,

@@ -48,6 +48,11 @@
             title: OrderProductionPropertiesReference.MACHINES.title,
             name: OrderProductionPropertiesReference.MACHINES.name,
             display: DisplayFunctions.getMachineNames
+          },
+          {
+            title: OrderProductionPropertiesReference.WASTE.title,
+            name: OrderProductionPropertiesReference.WASTE.name,
+            display: DisplayFunctions.getValue
           }
         ],
         entityType: EntityTypes.ROLL_ORDER_PRODUCTION,

@@ -166,6 +166,18 @@
                   </order-production-product-table>
               </mau-form-input-select>
           </div>
+          <div class="form-group">
+              <mau-form-input-number
+                      :label="OrderProductionPropertiesReference.WASTE.title"
+                      :name="OrderProductionPropertiesReference.WASTE.name"
+                      v-model="productionOrder.waste"
+                      :initialValue="initialValues[OrderProductionPropertiesReference.WASTE.name]"
+                      :error="errors.first(OrderProductionPropertiesReference.WASTE.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'required|min_value:1'"
+              >
+              </mau-form-input-number>
+          </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
           </div>
@@ -184,6 +196,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
+  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
   import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
@@ -205,6 +218,7 @@
           machines: [],
           machine: {},
           employee: {},
+          waste: '',
           date: ''
         },
         machineObjects: [],
@@ -224,6 +238,7 @@
       MauFormInputDate,
       MauFormInputDateTime,
       MauFormInputText,
+      MauFormInputNumber,
       OrderProductionProductTable,
       OrderProductionIndicatorSelector
     },
@@ -272,6 +287,7 @@
         this.initialValues[OrderProductionPropertiesReference.START_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.START_DATE_TIME.name)
         this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.END_DATE_TIME.name)
         this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, OrderProductionPropertiesReference.EMPLOYEE.name)
+        this.initialValues[OrderProductionPropertiesReference.WASTE.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.WASTE.name)
         if (this.extrusionMode) {
           if (this.initialObject && this.initialObject[OrderProductionPropertiesReference.MACHINES.name]) {
             let initialMachines = []
@@ -300,7 +316,8 @@
       save: function () {
         let directParams = {
           [OrderProductionPropertiesReference.START_DATE_TIME.name]: this.productionOrder.startDateTime,
-          [OrderProductionPropertiesReference.END_DATE_TIME.name]: this.productionOrder.endDateTime
+          [OrderProductionPropertiesReference.END_DATE_TIME.name]: this.productionOrder.endDateTime,
+          [OrderProductionPropertiesReference.WASTE.name]: this.productionOrder.waste
         }
         directParams[OrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : 'null'
         let relayObjects = []

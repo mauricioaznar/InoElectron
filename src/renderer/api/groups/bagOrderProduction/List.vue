@@ -44,6 +44,12 @@
             filter: true
           },
           {
+            name: OrderProductionPropertiesReference.WASTE.name,
+            title: OrderProductionPropertiesReference.WASTE.title,
+            sortField: OrderProductionPropertiesReference.WASTE.name,
+            filter: true
+          },
+          {
             name: OrderProductionPropertiesReference.END_DATE_TIME.name,
             title: OrderProductionPropertiesReference.END_DATE_TIME.title,
             sortField: OrderProductionPropertiesReference.END_DATE_TIME.name,

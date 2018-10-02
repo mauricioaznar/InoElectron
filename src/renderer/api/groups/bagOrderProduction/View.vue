@@ -54,6 +54,11 @@
             name: OrderProductionPropertiesReference.PRODUCTS.name,
             display: DisplayFunctions.getProducts,
             arguments: [2]
+          },
+          {
+            title: OrderProductionPropertiesReference.WASTE.title,
+            name: OrderProductionPropertiesReference.WASTE.name,
+            display: DisplayFunctions.getValue
           }
         ],
         entityType: EntityTypes.BAG_ORDER_PRODUCTION,
