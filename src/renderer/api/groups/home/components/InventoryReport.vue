@@ -13,7 +13,7 @@
             </thead>
             <tbody>
             <tr v-for="(item, index) in inventory">
-                <td>{{item.code}}</td>
+                <td>{{item.description}}</td>
                 <td>{{item.current_kilos}}</td>
                 <td>{{item.current_groups}}</td>
             </tr>
@@ -110,7 +110,7 @@
               let currentGroups = -(groupsGiven) + groupsAdjusted + groupsProduced
               if (currentKilos !== 0) {
                 inventoryItems.push({
-                  code: item.code,
+                  description: item.description,
                   current_kilos: currentKilos,
                   current_groups: currentGroups
                 })
