@@ -278,6 +278,7 @@
           directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = -1
           directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = 'null'
           directParams[PropertiesReference.LENGTH.name] = 'null'
+          directParams[PropertiesReference.PACKING.relationship_id_name] = 'null'
         }
         this.$validator.validateAll().then((result) => {
           if (result) {
