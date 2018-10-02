@@ -174,6 +174,7 @@
                       :initialValue="initialValues[OrderProductionPropertiesReference.WASTE.name]"
                       :error="errors.first(OrderProductionPropertiesReference.WASTE.name)"
                       :disabled="!userHasWritePrivileges"
+                      :type="'float'"
                       v-validate="'required|min_value:1'"
               >
               </mau-form-input-number>
