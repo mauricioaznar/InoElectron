@@ -52,8 +52,16 @@
       </div>
     </div>
     <div class="form-group ">
-      <mau-form-input-number
+      <b-form-checkbox
               v-if="isBag"
+              :disabled="!userHasWritePrivileges"
+              v-model="product.requiresGroupWeight">
+        ¿Require peso por bulto?
+      </b-form-checkbox>
+    </div>
+    <div class="form-group ">
+      <mau-form-input-number
+              v-if="isBag && product.requiresGroupWeight"
               :label="PropertiesReference.CURRENT_GROUP_WEIGHT.title"
               :name="PropertiesReference.CURRENT_GROUP_WEIGHT.name"
               :initialValue="initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name]"
@@ -66,7 +74,7 @@
     </div>
     <div class="form-group ">
       <b-form-checkbox
-              v-if="isBag"
+              v-if="isBag && product.requiresGroupWeight"
               :disabled="!userHasWritePrivileges"
               v-model="product.groupWeightStrict">
         ¿Require de validacion exacta?
@@ -177,6 +185,7 @@
           currentKiloPrice: '',
           currentGroupWeight: '',
           groupWeightStrict: true,
+          requiresGroupWeight: true,
           width: '',
           length: ''
         },
@@ -237,6 +246,7 @@
         this.initialValues[PropertiesReference.PRODUCT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, PropertiesReference.PRODUCT_TYPE.name)
         this.initialValues[PropertiesReference.PACKING.name] = DefaultValuesHelper.object(this.initialObject, PropertiesReference.PACKING.name)
         this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.CURRENT_GROUP_WEIGHT.name)
+        this.product.requiresGroupWeight = !isNaN(this.initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name])
         if (this.initialObject) {
           this.product.groupWeightStrict = this.initialObject[PropertiesReference.GROUP_WEIGHT_STRICT.name] === 1
         }
@@ -256,8 +266,13 @@
           [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : 'null'
         }
         if (this.isBag) {
-          directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = this.product.currentGroupWeight
-          directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = this.product.groupWeightStrict ? 1 : 0
+          if (this.product.requiresGroupWeight) {
+            directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = this.product.currentGroupWeight
+            directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = this.product.groupWeightStrict ? 1 : 0
+          } else {
+            directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = 'null'
+            directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = 0
+          }
           directParams[PropertiesReference.LENGTH.name] = this.product.length
         } else {
           directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = -1
