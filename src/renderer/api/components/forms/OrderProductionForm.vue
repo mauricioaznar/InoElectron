@@ -65,7 +65,6 @@
                       :error="errors.first('_machine')"
                       :entityType="machineEntityType"
                       :disabled="!userHasWritePrivileges"
-                      v-validate="'object_required'"
               >
               </mau-form-input-select>
           </div>
