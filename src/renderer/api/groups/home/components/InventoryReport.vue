@@ -111,6 +111,7 @@
               if (currentKilos !== 0) {
                 inventoryItems.push({
                   description: item.description,
+                  code: item.code,
                   current_kilos: currentKilos,
                   current_groups: currentGroups
                 })
