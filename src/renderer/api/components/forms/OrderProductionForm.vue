@@ -81,7 +81,6 @@
                       :entityType="productEntityType"
                       :multi="true"
                       :disabled="!userHasWritePrivileges"
-                      v-validate="'array_required'"
               >
                   <order-production-product-table
                           :allowNegative="true"
@@ -174,7 +173,6 @@
                       :error="errors.first(OrderProductionPropertiesReference.WASTE.name)"
                       :disabled="!userHasWritePrivileges"
                       :type="'float'"
-                      v-validate="'required|min_value:1'"
               >
               </mau-form-input-number>
           </div>
