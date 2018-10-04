@@ -61,6 +61,10 @@ autoUpdater.on('update-available', () => {
   })
 })
 
+autoUpdater.on('update-not-available', () => {
+  createWindow()
+})
+
 autoUpdater.on('update-downloaded', () => {
   autoUpdater.quitAndInstall()
 })
