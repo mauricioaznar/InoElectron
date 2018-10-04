@@ -40,17 +40,9 @@ function createWindow () {
   })
 }
 
-app.on('ready', createWindow)
-
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
-  }
-})
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
   }
 })
 
@@ -65,22 +57,21 @@ app.on('activate', () => {
 autoUpdater.on('update-available', () => {
   dialog.showMessageBox({
     type: 'info',
-    message: 'Se esta descargando la nueva actualizacion'
+    message: 'Se esta descargando la nueva version'
   })
 })
 
 autoUpdater.on('update-downloaded', () => {
-  dialog.showMessageBox({
-    type: 'info',
-    message: 'Hay una nueva actualizacion disponible, desea descargarla?',
-    buttons: ['Yes', 'No']
-  }, (response) => {
-    if (response === 0) {
-      autoUpdater.quitAndInstall()
-    }
-  })
+  autoUpdater.quitAndInstall()
 })
 
 app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdatesAndNotify()
+  if (process.env.NODE_ENV === 'production') {
+    if (process.platform !== 'darwin') {
+      autoUpdater.checkForUpdatesAndNotify()
+    } else {
+      createWindow()
+    }
+  }
+  if (process.env.NODE_ENV === 'development') createWindow()
 })
