@@ -37,7 +37,7 @@
                             :label="OrderAdjustmentPropertiesReference.PRODUCTS.title"
                             :initialObjects="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
                             v-model="productionOrder.products"
-                            :displayProperty="'code'"
+                            :displayProperty="'description'"
                             :name="OrderAdjustmentPropertiesReference.PRODUCTS.name"
                             :error="errors.first(OrderAdjustmentPropertiesReference.PRODUCTS.name)"
                             :data-vv-as="OrderAdjustmentPropertiesReference.PRODUCTS.title"

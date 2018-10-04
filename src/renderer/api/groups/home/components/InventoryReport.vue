@@ -129,7 +129,7 @@
               let groupsProduced = item.groups_produced || 0
               let groupsCut = item.groups_cut || 0
               let currentGroups = +(-(groupsGiven + groupsCut).toFixed(12) + groupsAdjusted + groupsProduced).toFixed(12)
-              if (currentKilos !== 0) {
+              if (currentKilos >= 0.01 || currentKilos <= -0.01) {
                 inventoryItems.push({
                   description: item.description,
                   code: item.code,
