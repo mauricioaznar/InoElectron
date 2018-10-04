@@ -9,9 +9,7 @@
                     <th class="mau-text-center" v-if="bagMode">Unidad</th>
                     <th class="mau-text-center">Kilos</th>
                     <th class="mau-text-center" v-if="bagMode">Peso del bulto</th>
-                    <th class="mau-text-center">
-                        {{bagMode ? 'Bultos' : 'Rollos'}}
-                    </th>
+                    <th class="mau-text-center">Grupos</th>
                 </tr>
             </thead>
             <tbody>

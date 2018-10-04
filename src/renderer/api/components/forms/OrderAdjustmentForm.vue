@@ -48,6 +48,7 @@
                     >
                         <order-production-product-table
                             :allowNegative="true"
+                            :bagMode="true"
                             :selectedProducts="productionOrder.products"
                             :initialProducts="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
                             :userHasWritePrivileges="userHasWritePrivileges"

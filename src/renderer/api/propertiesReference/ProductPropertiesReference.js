@@ -23,7 +23,7 @@ let propertiesReference = {
     defaultValue: MauInputDefaultValues.NUMBER
   },
   CURRENT_GROUP_WEIGHT: {
-    title: 'Peso en kilos por bulto',
+    title: 'Peso en kilos por grupo',
     name: 'current_group_weight',
     display: DisplayFunctions.getValue,
     mask: Masks.regularNumber,

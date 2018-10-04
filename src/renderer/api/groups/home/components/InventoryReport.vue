@@ -7,6 +7,7 @@
             <thead>
             <tr>
                 <th scope="col">Nombre</th>
+                <th scope="col">Codigo</th>
                 <th scope="col">Kilos Actuales</th>
                 <th scope="col">Bultos Actuales</th>
             </tr>
@@ -14,6 +15,7 @@
             <tbody>
             <tr v-for="(item, index) in inventory">
                 <td>{{item.description}}</td>
+                <td>{{item.code}}</td>
                 <td>{{item.current_kilos}}</td>
                 <td>{{item.current_groups}}</td>
             </tr>
@@ -36,7 +38,7 @@
                 ></mau-bar-chart>
             </div>
             <div class="col-sm">
-                <h6>Sobrevendidas</h6>
+                <h6>Excedidos</h6>
                 <mau-bar-chart
                         :chartData="soldOutKilosData"
                         :options="chartOptions"
@@ -93,21 +95,40 @@
         // vm.setInventory()
         // }, 30000)
       },
+      props: {
+        type: {
+          type: String,
+          validator: function (value) {
+            return ['Roll', 'Bag'].indexOf(value) !== -1
+          },
+          required: true
+        }
+      },
       methods: {
         setInventory: function () {
           this.isLoading = true
-          ApiOperations.getStats('inventory').then(result => {
+          let endpointName = ''
+          if (this.type === 'Bag') {
+            endpointName = 'bagInventory'
+          } else if (this.type === 'Roll') {
+            endpointName = 'rollInventory'
+          } else {
+            return
+          }
+          ApiOperations.getStats(endpointName).then(result => {
             this.inventory = []
             let inventoryItems = []
             result.forEach(item => {
               let kilosGiven = item.kilos_given || 0
               let kilosAdjusted = item.kilos_adjusted || 0
               let kilosProduced = item.kilos_produced || 0
-              let currentKilos = -(kilosGiven) + kilosAdjusted + kilosProduced
+              let kilosCut = item.kilos_cut || 0
+              let currentKilos = +(-(kilosGiven + kilosCut).toFixed(12) + kilosAdjusted + kilosProduced).toFixed(12)
               let groupsGiven = item.groups_given || 0
               let groupsAdjusted = item.groups_adjusted || 0
               let groupsProduced = item.groups_produced || 0
-              let currentGroups = -(groupsGiven) + groupsAdjusted + groupsProduced
+              let groupsCut = item.groups_cut || 0
+              let currentGroups = +(-(groupsGiven + groupsCut).toFixed(12) + groupsAdjusted + groupsProduced).toFixed(12)
               if (currentKilos !== 0) {
                 inventoryItems.push({
                   description: item.description,
