@@ -142,7 +142,7 @@
               <mau-form-input-select
                       :initialObjects="machineObj.initialRolls"
                       :label="machineObj.machineName"
-                      :displayProperty="'code'"
+                      :displayProperty="'description'"
                       v-model="machineObj.rolls"
                       :name="'_machine' + machineObj.id"
                       :data-vv-as="machineObj.id"

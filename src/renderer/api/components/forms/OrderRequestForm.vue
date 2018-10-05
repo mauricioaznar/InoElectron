@@ -85,7 +85,7 @@
                             :label="OrderRequestPropertiesReference.PRODUCTS.title"
                             :initialObjects="initialValues[OrderRequestPropertiesReference.PRODUCTS.name]"
                             v-model="requestOrder.products"
-                            :displayProperty="'code'"
+                            :displayProperty="'description'"
                             :name="OrderRequestPropertiesReference.PRODUCTS.name"
                             :data-vv-as="'Productos'"
                             :error="errors.first(OrderRequestPropertiesReference.PRODUCTS.name)"
