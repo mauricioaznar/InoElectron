@@ -107,7 +107,6 @@
                       :entityType="productEntityType"
                       :multi="true"
                       :disabled="!userHasWritePrivileges"
-                      v-validate="'array_required'"
               >
                   <order-production-product-table
                           :allowNegative="true"
