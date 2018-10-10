@@ -48,10 +48,19 @@ let OrderRequestPropertiesReference = {
     defaultValue: MauInputDefaultValues.SELECT
   },
   TOTAL_COST: {
-    title: 'Costo total',
+    title: 'Costo total solicitado',
     name: 'total_cost',
-    display: DisplayFunctions.getValue,
-    defaultValue: MauInputDefaultValues.NUMBER
+    display: DisplayFunctions.getValue
+  },
+  ORDER_SALES_PRODUCTS_NOT_REQUESTED: {
+    title: 'Productos vendidos (no incluidos en los pedidos)',
+    name: 'order_sales_products_not_requested',
+    display: DisplayFunctions.getOrderSalesProductsNotRequested
+  },
+  ORDER_SALES_PRODUCTS_REQUESTED: {
+    title: 'Productos solicitados vs vendidos',
+    name: 'order_sales_products_requested',
+    display: DisplayFunctions.getOrderSalesProductsRequested
   }
 }
 

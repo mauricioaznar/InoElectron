@@ -38,15 +38,15 @@
             default: true
           },
           {
-            name: OrderRequestPropertiesReference.PRODUCTS.name,
-            title: 'Bolsas solicitadas',
-            callback: DisplayFunctions.getProducts.name + '|' + 1,
+            name: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_REQUESTED.name,
+            title: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_REQUESTED.title,
+            callback: DisplayFunctions.getOrderSalesProductsRequested,
             hidden: true
           },
           {
-            name: OrderRequestPropertiesReference.PRODUCTS.name,
-            title: 'Rollos solicitados',
-            callback: DisplayFunctions.getProducts.name + '|' + 2,
+            name: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_NOT_REQUESTED.name,
+            title: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_NOT_REQUESTED.title,
+            callback: DisplayFunctions.getOrderSalesProductsNotRequested,
             hidden: true
           },
           {

@@ -240,7 +240,9 @@
       getMachineNames: DisplayFunctions.getMachineNames,
       getDateTime: DisplayFunctions.getDateTime,
       getPropertyFromObject: DisplayFunctions.getPropertyFromObject,
-      getOrderSales: DisplayFunctions.getOrderSales
+      getOrderSales: DisplayFunctions.getOrderSales,
+      getOrderSalesProductsRequested: DisplayFunctions.getOrderSalesProductsRequested,
+      getOrderSalesProductsNotRequested: DisplayFunctions.getOrderSalesProductsNotRequested
     }
   }
 </script>

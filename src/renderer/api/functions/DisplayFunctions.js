@@ -163,5 +163,39 @@ export default {
       htmlString += '</ul>'
     }
     return groupedMachines.length === 0 ? '-' : htmlString
+  },
+  getOrderSalesProductsRequested: function (array) {
+    let htmlString = '<table class="w-100">'
+    htmlString += '<tr>'
+    htmlString += '<th>Producto</th>'
+    htmlString += '<th>Kilos solicitados</th>'
+    htmlString += '<th>Kilos vendidos</th>'
+    htmlString += '</tr>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
+      htmlString += '<td class="mau-text-right">' + array[i].order_request_kilos || 0 + '</td>'
+      if (array[i].order_sales_kilos) {
+        htmlString += '<td class="mau-text-right">' + array[i].order_sales_kilos || 0 + '</td>'
+      } else {
+        htmlString += '<td class="mau-text-right"></td>'
+      }
+      htmlString += '</tr>'
+    }
+    return htmlString + '</table>'
+  },
+  getOrderSalesProductsNotRequested: function (array) {
+    let htmlString = '<table class="w-100">'
+    htmlString += '<tr>'
+    htmlString += '<th>Producto</th>'
+    htmlString += '<th>Kilos vendidos</th>'
+    htmlString += '</tr>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
+      htmlString += '<td class="mau-text-right">' + array[i].order_sales_kilos + '</td>'
+      htmlString += '</tr>'
+    }
+    return htmlString + '</table>'
   }
 }

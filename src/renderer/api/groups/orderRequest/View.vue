@@ -30,23 +30,6 @@
             display: DisplayFunctions.getDate
           },
           {
-            title: 'Bolsas solicitadas',
-            name: OrderRequestPropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getProducts,
-            arguments: [1]
-          },
-          {
-            title: 'Rollos solicitados',
-            name: OrderRequestPropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getProducts,
-            arguments: [2]
-          },
-          {
-            title: OrderRequestPropertiesReference.TOTAL_COST.title,
-            name: OrderRequestPropertiesReference.TOTAL_COST.name,
-            display: DisplayFunctions.getValue
-          },
-          {
             title: OrderRequestPropertiesReference.CLIENT.title,
             name: OrderRequestPropertiesReference.CLIENT.name,
             display: DisplayFunctions.getPersona
@@ -60,6 +43,21 @@
             title: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.title,
             name: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name,
             display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_REQUESTED.title,
+            name: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_REQUESTED.name,
+            display: DisplayFunctions.getOrderSalesProductsRequested
+          },
+          {
+            title: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_NOT_REQUESTED.title,
+            name: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_NOT_REQUESTED.name,
+            display: DisplayFunctions.getOrderSalesProductsNotRequested
+          },
+          {
+            title: OrderRequestPropertiesReference.TOTAL_COST.title,
+            name: OrderRequestPropertiesReference.TOTAL_COST.name,
+            display: DisplayFunctions.getValue
           }
         ],
         entity: null
