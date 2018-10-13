@@ -10,6 +10,10 @@
                 <th scope="col">Codigo</th>
                 <th scope="col">Kilos Actuales</th>
                 <th scope="col">Bultos Actuales</th>
+                <th scope="col" v-if="type === 'Bag'">Kilos de pedidos pendientes/en produccion</th>
+                <th scope="col" v-if="type === 'Bag'">Bultos de pedidos pendientes/en produccion</th>
+                <th scope="col" v-if="type === 'Bag'">Kilos de ventas pendientes</th>
+                <th scope="col" v-if="type === 'Bag'">Bultos de ventas pendientes</th>
             </tr>
             </thead>
             <tbody>
@@ -18,6 +22,10 @@
                 <td>{{item.code}}</td>
                 <td>{{item.current_kilos}}</td>
                 <td>{{item.current_groups}}</td>
+                <td v-if="type === 'Bag'">{{item.kilos_requested_pending}}</td>
+                <td v-if="type === 'Bag'">{{item.groups_requested_pending}}</td>
+                <td v-if="type === 'Bag'">{{item.kilos_sold_pending}}</td>
+                <td v-if="type === 'Bag'">{{item.groups_sold_pending}}</td>
             </tr>
             </tbody>
         </table>
@@ -119,22 +127,30 @@
             this.inventory = []
             let inventoryItems = []
             result.forEach(item => {
-              let kilosGiven = item.kilos_given || 0
+              let kilosSoldGiven = item.kilos_sold_given || 0
+              let kilosSoldPending = item.kilos_sold_pending || 0
+              let kilosRequestedPending = item.kilos_requested_pending || 0
               let kilosAdjusted = item.kilos_adjusted || 0
               let kilosProduced = item.kilos_produced || 0
               let kilosCut = item.kilos_cut || 0
-              let currentKilos = +(-(kilosGiven + kilosCut).toFixed(12) + kilosAdjusted + kilosProduced).toFixed(12)
-              let groupsGiven = item.groups_given || 0
+              let currentKilos = +(-(kilosSoldGiven + kilosCut).toFixed(12) + kilosAdjusted + kilosProduced).toFixed(12)
+              let groupsSoldGiven = item.groups_sold_given || 0
+              let groupsSoldPending = item.groups_sold_pending || 0
+              let groupsRequestedPending = item.groups_requested_pending || 0
               let groupsAdjusted = item.groups_adjusted || 0
               let groupsProduced = item.groups_produced || 0
               let groupsCut = item.groups_cut || 0
-              let currentGroups = +(-(groupsGiven + groupsCut).toFixed(12) + groupsAdjusted + groupsProduced).toFixed(12)
+              let currentGroups = +(-(groupsSoldGiven + groupsCut).toFixed(12) + groupsAdjusted + groupsProduced).toFixed(12)
               if (currentKilos >= 0.01 || currentKilos <= -0.01) {
                 inventoryItems.push({
                   description: item.description,
                   code: item.code,
                   current_kilos: currentKilos,
-                  current_groups: currentGroups
+                  kilos_sold_pending: kilosSoldPending,
+                  kilos_requested_pending: kilosRequestedPending,
+                  current_groups: currentGroups,
+                  groups_sold_pending: groupsSoldPending,
+                  groups_requested_pending: groupsRequestedPending
                 })
               }
             })
