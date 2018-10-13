@@ -136,14 +136,17 @@
         productionByMachine: function (productionByMachine) {
           let monthTableFields = productionByMachine.map(productionByMachineObj => { return { key: 'machine' + productionByMachineObj.machineId, label: productionByMachineObj.machineName } })
           monthTableFields.unshift({key: 'month', label: 'Mes'})
+          monthTableFields.push({key: 'machine0', label: 'Total'})
           monthTableFields.push({key: 'show_details', label: ''})
           let dayTableFields = productionByMachine.map(productionByMachineObj => { return { key: 'machine' + productionByMachineObj.machineId, label: productionByMachineObj.machineName } })
+          dayTableFields.push({key: 'machine0', label: 'Total'})
           dayTableFields.unshift({key: 'day', label: 'Dia'})
           let items = []
           for (let i = 1; i <= 12; i++) {
             let month = i < 10 ? '0' + i : i
             let daysInMonth = moment('2018-' + month, 'YYYY-MM').daysInMonth()
             let item = {}
+            item['machine' + 0] = 0
             productionByMachine.forEach((productionByMachineObj, index) => {
               item['machine' + productionByMachineObj.machineId] = 0
               item['machineMonthData'] = []
@@ -154,12 +157,15 @@
               productionByMachine.forEach((productionByMachineObj, index) => {
                 subItem['day'] = j + 1
                 subItem['machine' + productionByMachineObj.machineId] = 0
+                subItem['machine' + 0] = 0
               })
               for (let k = 0; k < 48; k++) {
                 productionByMachine.forEach((productionByMachineObj, index) => {
                   let efficiency = (productionByMachineObj.data[i - 1][j][k] ? productionByMachineObj.data[i - 1][j][k] : 0)
-                  item['machine' + productionByMachineObj.machineId] += efficiency
-                  subItem['machine' + productionByMachineObj.machineId] += efficiency
+                  item['machine' + productionByMachineObj.machineId] = Math.round((item['machine' + productionByMachineObj.machineId] + efficiency) * 100) / 100
+                  item['machine' + 0] = Math.round((item['machine' + 0] + efficiency) * 100) / 100
+                  subItem['machine' + 0] = Math.round((subItem['machine' + 0] + efficiency) * 100) / 100 // day total
+                  subItem['machine' + productionByMachineObj.machineId] = Math.round((subItem['machine' + productionByMachineObj.machineId] + efficiency) * 100) / 100
                 })
               }
               item['machineMonthData'].push(subItem)
