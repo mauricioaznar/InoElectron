@@ -140,6 +140,7 @@
           monthTableFields.push({key: 'show_details', label: ''})
           let dayTableFields = productionByMachine.map(productionByMachineObj => { return { key: 'machine' + productionByMachineObj.machineId, label: productionByMachineObj.machineName } })
           dayTableFields.push({key: 'machine0', label: 'Total'})
+          dayTableFields.unshift({key: 'weekday', label: 'Dia de la semana'})
           dayTableFields.unshift({key: 'day', label: 'Dia'})
           let items = []
           for (let i = 1; i <= 12; i++) {
@@ -152,16 +153,19 @@
               item['machineMonthData'] = []
               item['month'] = moment(i, 'M').format('MMMM')
             })
-            for (let j = 0; j < daysInMonth; j++) {
+            for (let j = 1; j <= daysInMonth; j++) {
               let subItem = {}
+              let day = j < 10 ? '0' + j : j
+              let dayOfTheWeekName = moment('2018-' + month + '-' + day, 'YYYY-MM-DD').format('dd')
               productionByMachine.forEach((productionByMachineObj, index) => {
-                subItem['day'] = j + 1
+                subItem['day'] = j
+                subItem['weekday'] = dayOfTheWeekName
                 subItem['machine' + productionByMachineObj.machineId] = 0
                 subItem['machine' + 0] = 0
               })
-              for (let k = 0; k < 48; k++) {
+              for (let k = 1; k <= 48; k++) {
                 productionByMachine.forEach((productionByMachineObj, index) => {
-                  let efficiency = (productionByMachineObj.data[i - 1][j][k] ? productionByMachineObj.data[i - 1][j][k] : 0)
+                  let efficiency = (productionByMachineObj.data[i - 1][j - 1][k - 1] ? productionByMachineObj.data[i - 1][j - 1][k - 1] : 0)
                   item['machine' + productionByMachineObj.machineId] = Math.round((item['machine' + productionByMachineObj.machineId] + efficiency) * 100) / 100
                   item['machine' + 0] = Math.round((item['machine' + 0] + efficiency) * 100) / 100
                   subItem['machine' + 0] = Math.round((subItem['machine' + 0] + efficiency) * 100) / 100 // day total
