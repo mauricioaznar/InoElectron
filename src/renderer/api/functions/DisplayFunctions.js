@@ -24,8 +24,6 @@ export default {
     return object ? object.name : ''
   },
   getPropertyFromObject: function (object, propertyName = 'name') {
-    console.log(object)
-    console.log(object[propertyName])
     return object ? object[propertyName] : ''
   },
   getArrayLength: function (array) {
