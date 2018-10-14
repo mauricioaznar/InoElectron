@@ -10,8 +10,8 @@
                 <th scope="col">Codigo</th>
                 <th scope="col">Kilos Actuales</th>
                 <th scope="col">Bultos Actuales</th>
-                <th scope="col" v-if="type === 'Bag'">Kilos de pedidos pendientes/en produccion</th>
-                <th scope="col" v-if="type === 'Bag'">Bultos de pedidos pendientes/en produccion</th>
+                <th scope="col" v-if="type === 'Bag'">Kilos restantes de pedidos pendientes/en produccion</th>
+                <th scope="col" v-if="type === 'Bag'">Bultos restantes pedidos pendientes/en produccion</th>
                 <th scope="col" v-if="type === 'Bag'">Kilos de ventas pendientes</th>
                 <th scope="col" v-if="type === 'Bag'">Bultos de ventas pendientes</th>
             </tr>
@@ -129,14 +129,18 @@
             result.forEach(item => {
               let kilosSoldGiven = item.kilos_sold_given || 0
               let kilosSoldPending = item.kilos_sold_pending || 0
-              let kilosRequestedPending = item.kilos_requested_pending || 0
+              let kilosRequested = item.kilos_requested || 0
+              let kilosRequestedGiven = item.kilos_requested_given || 0
+              let kilosRequestedPending = Math.round((kilosRequested - kilosRequestedGiven) * 100) / 100
               let kilosAdjusted = item.kilos_adjusted || 0
               let kilosProduced = item.kilos_produced || 0
               let kilosCut = item.kilos_cut || 0
               let currentKilos = +(-(kilosSoldGiven + kilosCut).toFixed(12) + kilosAdjusted + kilosProduced).toFixed(12)
               let groupsSoldGiven = item.groups_sold_given || 0
               let groupsSoldPending = item.groups_sold_pending || 0
-              let groupsRequestedPending = item.groups_requested_pending || 0
+              let groupsRequested = item.groups_requested || 0
+              let groupsRequestedGiven = item.groups_requested_given || 0
+              let groupsRequestedPending = Math.round((groupsRequested - groupsRequestedGiven) * 100) / 100
               let groupsAdjusted = item.groups_adjusted || 0
               let groupsProduced = item.groups_produced || 0
               let groupsCut = item.groups_cut || 0
@@ -147,6 +151,7 @@
                   code: item.code,
                   current_kilos: currentKilos,
                   kilos_sold_pending: kilosSoldPending,
+                  kilos_requested: kilosRequested,
                   kilos_requested_pending: kilosRequestedPending,
                   current_groups: currentGroups,
                   groups_sold_pending: groupsSoldPending,
