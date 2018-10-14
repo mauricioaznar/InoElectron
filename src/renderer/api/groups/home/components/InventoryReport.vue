@@ -2,14 +2,16 @@
     <div>
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
         <h2 v-if="!isLoading">Inventario</h2>
-        <h6 v-if="!isLoading">Bolsas</h6>
+        <h6 v-if="!isLoading && type === 'Bag'">Bolsas</h6>
+        <h6 v-if="!isLoading && type === 'Roll'">Rollos</h6>
         <table v-if="!isLoading" class="table">
             <thead>
             <tr>
                 <th scope="col">Nombre</th>
                 <th scope="col">Codigo</th>
                 <th scope="col">Kilos Actuales</th>
-                <th scope="col">Bultos Actuales</th>
+                <th scope="col" v-if="type === 'Bag'">Bultos Actuales</th>
+                <th scope="col" v-if="type === 'Roll'">Rollos Actuales</th>
                 <th scope="col" v-if="type === 'Bag'">Kilos restantes de pedidos pendientes/en produccion</th>
                 <th scope="col" v-if="type === 'Bag'">Bultos restantes pedidos pendientes/en produccion</th>
                 <th scope="col" v-if="type === 'Bag'">Kilos de ventas pendientes</th>
@@ -135,7 +137,7 @@
               let kilosAdjusted = item.kilos_adjusted || 0
               let kilosProduced = item.kilos_produced || 0
               let kilosCut = item.kilos_cut || 0
-              let currentKilos = +(-(kilosSoldGiven + kilosCut).toFixed(12) + kilosAdjusted + kilosProduced).toFixed(12)
+              let currentKilos = Math.round((-(kilosSoldGiven + kilosCut) + (kilosAdjusted + kilosProduced)) * 100) / 100
               let groupsSoldGiven = item.groups_sold_given || 0
               let groupsSoldPending = item.groups_sold_pending || 0
               let groupsRequested = item.groups_requested || 0
@@ -145,7 +147,7 @@
               let groupsProduced = item.groups_produced || 0
               let groupsCut = item.groups_cut || 0
               let currentGroups = +(-(groupsSoldGiven + groupsCut).toFixed(12) + groupsAdjusted + groupsProduced).toFixed(12)
-              if (currentKilos >= 0.01 || currentKilos <= -0.01) {
+              if ((this.type === 'Bag' && (currentKilos >= 0.01 || currentKilos <= -0.01)) || (this.type === 'Roll' && (currentKilos >= 0.01 || currentKilos <= -0.01 || currentGroups > 0 || currentGroups < 0))) {
                 inventoryItems.push({
                   description: item.description,
                   code: item.code,
