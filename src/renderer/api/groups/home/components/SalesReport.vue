@@ -219,8 +219,7 @@
               }
             }
           }
-          
-          for (let saleIndex = 0; saleIndex < requests.length; saleIndex++) {
+          for (let saleIndex = 0; saleIndex < sales.length; saleIndex++) {
             let sale = sales[saleIndex]
             let companyFound = companies.find(companyObj => { return companyObj['id'] === sale['company_id'] })
             let saleMomentDate = moment(sale['order_sale_date'])
