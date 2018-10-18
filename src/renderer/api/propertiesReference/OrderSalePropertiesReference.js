@@ -52,7 +52,7 @@ let OrderSalePropertiesReference = {
     defaultValue: MauInputDefaultValues.SELECT
   },
   TOTAL_COST: {
-    title: 'Costo total solicitado',
+    title: 'Total',
     name: 'total_cost',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.NUMBER

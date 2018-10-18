@@ -12,7 +12,7 @@
                     <th class="mau-text-center">Peso en kilos por bulto</th>
                     <th class="mau-text-center">Cantidad en bultos</th>
                     <th v-if="hasTax" class="mau-text-center">IVA</th>
-                    <th class="mau-text-center">Costo Total</th>
+                    <th class="mau-text-center">Total</th>
                 </tr>
             </thead>
             <tbody>

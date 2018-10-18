@@ -6,12 +6,12 @@
             <thead>
                 <tr>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Total de pedidos</th>
-                    <th scope="col">Total de pedidos finalizados</th>
-                    <th scope="col">Total de ventas</th>
-                    <th scope="col">Total de dinero estimado</th>
-                    <th scope="col">Total de ganancias</th>
-                    <th scope="col">Dias de differencia entre pedidos finalizados y su ultima venta / cantidad de pedidos finalizados </th>
+                    <th scope="col">Cantidad de pedidos</th>
+                    <th scope="col">Cantidad de pedidos finalizados</th>
+                    <th scope="col">Cantidad de ventas</th>
+                    <th scope="col">Total estimado de pedidos finalizados</th>
+                    <th scope="col">Total ventas de ventas finalizadas</th>
+                    <th scope="col">Promedio de dias de entrega </th>
                 </tr>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
         <h2 v-if="!isLoading">Reporte de ventas</h2>
         <div class="row" v-if="!isLoading">
             <div class="col-sm-12 py-2">
-                <h6>Dinero estimado de pedidos vs dinero ingresado de ventas (sin IVA) por mes</h6>
+                <h6>Comparativo de total estimado de pedidos vs total de ventas (sin IVA) por mes</h6>
                 <mau-bar-chart
                         :chartData="salesByMonthCostData"
                         :options="chartOptions"
@@ -39,7 +39,7 @@
                 ></mau-bar-chart>
             </div>
             <div class="col-sm-12 py-2">
-                <h6>Kilos estimado de pedidos vs kilos vendidos de ventas por mes</h6>
+                <h6>Comparativo de kilos estimados de pedidos vs kilos vendidos de ventas por mes</h6>
                 <mau-bar-chart
                         :chartData="salesByMonthKilosData"
                         :options="chartOptions"
@@ -50,18 +50,18 @@
         </div>
         <div class="row" v-if="!isLoading">
             <div class="col-sm-12 py-2">
-                <h6>Kilos de ventas por cliente por mes</h6>
+                <h6>Total de ventas por cliente por mes</h6>
                 <mau-line-chart
-                        :chartData="salesByMonthByClientKilosData"
+                        :chartData="salesByMonthByClientCostData"
                         :options="chartOptions"
                         :width="400"
                         :height="400"
                 ></mau-line-chart>
             </div>
             <div class="col-sm-12 py-2">
-                <h6>Dinero de ventas por cliente por mes</h6>
+                <h6>Total de kilos de ventas por cliente por mes</h6>
                 <mau-line-chart
-                        :chartData="salesByMonthByClientCostData"
+                        :chartData="salesByMonthByClientKilosData"
                         :options="chartOptions"
                         :width="400"
                         :height="400"
@@ -70,7 +70,7 @@
         </div>
         <div class="row" v-if="!isLoading">
             <div class="col-sm-12 py-2">
-                <h6>sumas de: costo estimado de los pedidos finalizados - costo real de las ventas del pedido finalizado, ordenadas por cliente por mes (se toma la fecha del pedido como referencia)</h6>
+                <h6>Total estimado de pedidos finalizados - total de ventas de ventas finalizadas</h6>
                 <mau-line-chart
                         :chartData="salesByMonthByCompanyBalanceData"
                         :options="chartCostReachedOptions"
