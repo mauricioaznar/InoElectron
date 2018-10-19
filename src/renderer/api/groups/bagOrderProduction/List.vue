@@ -27,14 +27,8 @@
         tableFields: [
           {
             name: OrderProductionPropertiesReference.PRODUCTS.name,
-            title: 'Bolsas',
-            callback: DisplayFunctions.getProducts.name + '|' + 1,
-            hidden: true
-          },
-          {
-            name: OrderProductionPropertiesReference.PRODUCTS.name,
-            title: 'Rollos',
-            callback: DisplayFunctions.getProducts.name + '|' + 2,
+            title: 'Productos',
+            callback: DisplayFunctions.getProducts,
             hidden: true
           },
           {

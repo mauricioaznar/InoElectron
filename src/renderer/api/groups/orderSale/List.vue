@@ -45,15 +45,9 @@
           },
           {
             name: OrderSalePropertiesReference.PRODUCTS.name,
-            title: 'Bolsas entregadas',
+            title: 'Productos',
             hidden: true,
-            callback: DisplayFunctions.getProducts.name + '|' + 1
-          },
-          {
-            name: OrderSalePropertiesReference.PRODUCTS.name,
-            title: 'Rollos entregados',
-            hidden: true,
-            callback: DisplayFunctions.getProducts.name + '|' + 2
+            callback: DisplayFunctions.getProducts
           },
           {
             name: OrderSalePropertiesReference.CLIENT.name,

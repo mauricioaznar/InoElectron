@@ -9,7 +9,7 @@
                     <th scope="col">Cantidad de pedidos</th>
                     <th scope="col">Cantidad de pedidos finalizados</th>
                     <th scope="col">Cantidad de ventas</th>
-                    <th scope="col">Total estimado de pedidos finalizados</th>
+                    <th scope="col">Total de pedidos finalizados</th>
                     <th scope="col">Total ventas de ventas finalizadas</th>
                     <th scope="col">Promedio de dias de entrega </th>
                 </tr>
@@ -30,7 +30,7 @@
         <h2 v-if="!isLoading">Reporte de ventas</h2>
         <div class="row" v-if="!isLoading">
             <div class="col-sm-12 py-2">
-                <h6>Comparativo de total estimado de pedidos vs total de ventas (sin IVA) por mes</h6>
+                <h6>Comparativo de total de pedidos vs total de ventas (sin IVA) por mes</h6>
                 <mau-bar-chart
                         :chartData="salesByMonthCostData"
                         :options="chartOptions"
@@ -39,7 +39,7 @@
                 ></mau-bar-chart>
             </div>
             <div class="col-sm-12 py-2">
-                <h6>Comparativo de kilos estimados de pedidos vs kilos vendidos de ventas por mes</h6>
+                <h6>Comparativo de kilos de pedidos vs kilos vendidos de ventas por mes</h6>
                 <mau-bar-chart
                         :chartData="salesByMonthKilosData"
                         :options="chartOptions"
@@ -70,7 +70,7 @@
         </div>
         <div class="row" v-if="!isLoading">
             <div class="col-sm-12 py-2">
-                <h6>Total estimado de pedidos finalizados - total de ventas de ventas finalizadas</h6>
+                <h6>Total de pedidos finalizados - total de ventas de ventas finalizadas</h6>
                 <mau-line-chart
                         :chartData="salesByMonthByCompanyBalanceData"
                         :options="chartCostReachedOptions"
@@ -290,7 +290,7 @@
               data: totalCostSoldYearData
             },
             {
-              label: 'Dinero estimado en los pedidos',
+              label: 'Dinero en los pedidos',
               backgroundColor: '#AA2',
               data: totalCostRequestedYearData
             }

@@ -69,21 +69,12 @@ export default {
   getPersonaInformation: function (persona) {
     return persona.companyname
   },
-  getProducts: function (array, productTypeId) {
+  getProducts: function (array) {
     let htmlString = '<table class="w-100">'
-    htmlString += '<tr><th>Codigo</th><th>Kilos</th>'
-    productTypeId = parseInt(productTypeId)
-    if (!productTypeId || productTypeId === 1) {
-      htmlString += '<th>Bultos</th>'
-    }
-    if (!productTypeId || productTypeId === 2) {
-      htmlString += '<th>Rollos</th>'
-    }
+    htmlString += '<tr><th>Codigo</th><th>Kilos</th><th>Grupos</th>'
     htmlString += '</tr>'
     for (let i = 0; i < array.length; i++) {
-      if (productTypeId && array[i].product_type_id.toString() !== productTypeId.toString()) {
-        continue
-      }
+      let productTypeId = array[i].product_type_id
       htmlString += '<tr>'
       htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
       htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos + ' kg</td>'

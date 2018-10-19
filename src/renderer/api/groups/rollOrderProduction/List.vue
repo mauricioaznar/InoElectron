@@ -29,7 +29,7 @@
             name: OrderProductionPropertiesReference.PRODUCTS.name,
             title: OrderProductionPropertiesReference.PRODUCTS.title,
             hidden: true,
-            callback: DisplayFunctions.getProducts.name + '|' + 2
+            callback: DisplayFunctions.getProducts
           },
           {
             name: OrderProductionPropertiesReference.START_DATE_TIME.name,

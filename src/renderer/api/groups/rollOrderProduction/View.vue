@@ -36,8 +36,7 @@
           {
             title: OrderProductionPropertiesReference.PRODUCTS.title,
             name: OrderProductionPropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getProducts,
-            arguments: [2]
+            display: DisplayFunctions.getProducts
           },
           {
             title: OrderProductionPropertiesReference.EMPLOYEE.title,

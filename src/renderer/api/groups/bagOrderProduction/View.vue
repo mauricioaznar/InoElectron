@@ -44,16 +44,9 @@
             display: DisplayFunctions.getMachineNames
           },
           {
-            title: 'Bolsas',
+            title: 'Productos',
             name: OrderProductionPropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getProducts,
-            arguments: [1]
-          },
-          {
-            title: 'Rollos',
-            name: OrderProductionPropertiesReference.PRODUCTS.name,
-            display: DisplayFunctions.getProducts,
-            arguments: [2]
+            display: DisplayFunctions.getProducts
           },
           {
             title: OrderProductionPropertiesReference.WASTE.title,

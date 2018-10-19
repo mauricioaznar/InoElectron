@@ -30,7 +30,6 @@
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                     required: true,
-                                    not_in: ['0','-0'],
                                     kilo_to_group: {
                                         groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
                                         isGroupWeightStrict: getProductGroupWeightStrict(currentStructuredObj)
@@ -49,7 +48,7 @@
                                 :error="errors.first('_quantity_group' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required|not_in:0,-0'"
+                                v-validate="'required'"
                         >
                         </mau-form-input-number>
                     </td>
@@ -80,7 +79,7 @@
                                 :error="errors.first('_manual_kilos' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required|not_in:0,-0'"
+                                v-validate="'required'"
                         >
                         </mau-form-input-number>
                     </td>
@@ -104,7 +103,7 @@
                                 :error="errors.first('_manual_groups' + currentStructuredObj['product_id'])"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required|not_in:0,-0'"
+                                v-validate="'required'"
                         >
                         </mau-form-input-number>
                     </td>
