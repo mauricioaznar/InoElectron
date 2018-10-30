@@ -159,7 +159,7 @@
               let groupsProduced = item.groups_produced || 0
               let groupsCut = item.groups_cut || 0
               let currentGroups = +(-(groupsSoldGiven + groupsCut).toFixed(12) + groupsAdjusted + groupsProduced).toFixed(12)
-              if ((this.type === 'Bag' && ((currentKilos >= 0.01 || currentKilos <= -0.01)) || (kilosRequestedToBeProduced >= 0.01 || kilosRequestedToBeProduced <= -0.01)) || (this.type === 'Roll' && (currentKilos >= 0.01 || currentKilos <= -0.01 || currentGroups > 0 || currentGroups < 0))) {
+              if ((this.type === 'Bag' && ((currentKilos >= 0.01 || currentKilos <= -0.01)) || (kilosRequestedToBeProduced >= 0.01)) || (this.type === 'Roll' && (currentKilos >= 0.01 || currentKilos <= -0.01 || currentGroups > 0 || currentGroups < 0))) {
                 inventoryItems.push({
                   description: item.description,
                   code: item.code,
