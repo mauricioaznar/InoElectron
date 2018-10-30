@@ -16,10 +16,10 @@
                 <th scope="col" v-if="type === 'Bag'">Bultos restantes por producir</th>
                 <th scope="col" v-if="type === 'Bag'">Kilos en pedidos pendientes</th>
                 <th scope="col" v-if="type === 'Bag'">Bultos en pedidos pendientes</th>
-                <th scope="col" v-if="type === 'Bag'">Kilos en pedidos en produccion</th>
-                <th scope="col" v-if="type === 'Bag'">Bultos en pedidos en produccion</th>
-                <th scope="col" v-if="type === 'Bag'">Kilos de ventas pendientes</th>
-                <th scope="col" v-if="type === 'Bag'">Bultos de ventas pendientes</th>
+                <!--<th scope="col" v-if="type === 'Bag'">Kilos en pedidos en produccion</th>-->
+                <!--<th scope="col" v-if="type === 'Bag'">Bultos en pedidos en produccion</th>-->
+                <!--<th scope="col" v-if="type === 'Bag'">Kilos de ventas pendientes</th>-->
+                <!--<th scope="col" v-if="type === 'Bag'">Bultos de ventas pendientes</th>-->
             </tr>
             </thead>
             <tbody>
@@ -32,10 +32,10 @@
                 <td v-if="type === 'Bag'">{{item.groups_requested_to_be_produced}}</td>
                 <td v-if="type === 'Bag'">{{item.kilos_requested_pending}}</td>
                 <td v-if="type === 'Bag'">{{item.groups_requested_pending}}</td>
-                <td v-if="type === 'Bag'">{{item.kilos_requested_in_production}}</td>
-                <td v-if="type === 'Bag'">{{item.groups_requested_in_production}}</td>
-                <td v-if="type === 'Bag'">{{item.kilos_sold_pending}}</td>
-                <td v-if="type === 'Bag'">{{item.groups_sold_pending}}</td>
+                <!--<td v-if="type === 'Bag'">{{item.kilos_requested_in_production}}</td>-->
+                <!--<td v-if="type === 'Bag'">{{item.groups_requested_in_production}}</td>-->
+                <!--<td v-if="type === 'Bag'">{{item.kilos_sold_pending}}</td>-->
+                <!--<td v-if="type === 'Bag'">{{item.groups_sold_pending}}</td>-->
             </tr>
             </tbody>
         </table>
