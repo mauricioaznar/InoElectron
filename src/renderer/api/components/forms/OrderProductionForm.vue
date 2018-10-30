@@ -139,6 +139,7 @@
           </div>
           <div class="form-group" v-if="extrusionMode" v-for="(machineObj, index) in machineObjects">
               <mau-form-input-select
+                      v-if="machineObj.selected"
                       :initialObjects="machineObj.initialRolls"
                       :label="machineObj.machineName"
                       :displayProperty="'description'"
@@ -321,8 +322,10 @@
         if (this.extrusionMode) {
           let productionRolls = []
           for (let i = 0; i < this.machineObjects.length; i++) {
-            for (let j = 0; j < this.machineObjects[i].productionRolls.length; j++) {
-              productionRolls.push(this.machineObjects[i].productionRolls[j])
+            if (this.machineObjects[i].selected) {
+              for (let j = 0; j < this.machineObjects[i].productionRolls.length; j++) {
+                productionRolls.push(this.machineObjects[i].productionRolls[j])
+              }
             }
           }
           let filteredProductionRolls = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
@@ -358,25 +361,31 @@
       initialObject: function (initialObject) {
         this.setInitialValues(initialObject)
       },
-      'productionOrder.machines': function (machines) {
-        let machineObjects = []
-        for (let i = 0; i < machines.length; i++) {
-          let machineId = machines[i][GlobalEntityIdentifier]
+      'productionOrder.machines': function (newMachines) {
+        this.machineObjects.forEach(machineObj => {
+          machineObj.selected = false
+        })
+        for (let i = 0; i < newMachines.length; i++) {
+          let machineId = newMachines[i][GlobalEntityIdentifier]
           let machineObjFound = this.machineObjects.find(machineObj => { return machineObj[GlobalEntityIdentifier] === machineId })
           let machineRolls = machineObjFound ? machineObjFound.rolls : []
           let machineProductionRolls = machineObjFound ? machineObjFound.productionRolls : []
           let machineInitialProductionRolls = this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name].filter(product => product.pivot['machine_id'] === machineId).map(product => product.pivot)
           let machineInitialRolls = this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name].filter(product => product.pivot['machine_id'] === machineId).map(product => product)
-          machineObjects.push({
-            id: machineId,
-            machineName: machines[i].name,
-            initialProductionRolls: machineInitialProductionRolls,
-            initialRolls: machineInitialRolls,
-            productionRolls: machineProductionRolls,
-            rolls: machineRolls
-          })
+          if (!machineObjFound) {
+            this.machineObjects.push({
+              selected: true,
+              id: machineId,
+              machineName: newMachines[i].name,
+              initialProductionRolls: machineInitialProductionRolls,
+              initialRolls: machineInitialRolls,
+              productionRolls: machineProductionRolls,
+              rolls: machineRolls
+            })
+          } else {
+            machineObjFound.selected = true
+          }
         }
-        this.machineObjects = machineObjects
       }
     }
   }

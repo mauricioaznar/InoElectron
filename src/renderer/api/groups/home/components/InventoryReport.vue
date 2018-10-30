@@ -12,8 +12,12 @@
                 <th scope="col">Kilos Actuales</th>
                 <th scope="col" v-if="type === 'Bag'">Bultos Actuales</th>
                 <th scope="col" v-if="type === 'Roll'">Rollos Actuales</th>
-                <th scope="col" v-if="type === 'Bag'">Kilos restantes de pedidos pendientes/en produccion</th>
-                <th scope="col" v-if="type === 'Bag'">Bultos restantes pedidos pendientes/en produccion</th>
+                <th scope="col" v-if="type === 'Bag'">Kilos restantes por producir</th>
+                <th scope="col" v-if="type === 'Bag'">Bultos restantes por producir</th>
+                <th scope="col" v-if="type === 'Bag'">Kilos en pedidos pendientes</th>
+                <th scope="col" v-if="type === 'Bag'">Bultos en pedidos pendientes</th>
+                <th scope="col" v-if="type === 'Bag'">Kilos en pedidos en produccion</th>
+                <th scope="col" v-if="type === 'Bag'">Bultos en pedidos en produccion</th>
                 <th scope="col" v-if="type === 'Bag'">Kilos de ventas pendientes</th>
                 <th scope="col" v-if="type === 'Bag'">Bultos de ventas pendientes</th>
             </tr>
@@ -24,8 +28,12 @@
                 <td>{{item.code}}</td>
                 <td>{{item.current_kilos}}</td>
                 <td>{{item.current_groups}}</td>
+                <td v-if="type === 'Bag'">{{item.kilos_requested_to_be_produced}}</td>
+                <td v-if="type === 'Bag'">{{item.groups_requested_to_be_produced}}</td>
                 <td v-if="type === 'Bag'">{{item.kilos_requested_pending}}</td>
                 <td v-if="type === 'Bag'">{{item.groups_requested_pending}}</td>
+                <td v-if="type === 'Bag'">{{item.kilos_requested_in_production}}</td>
+                <td v-if="type === 'Bag'">{{item.groups_requested_in_production}}</td>
                 <td v-if="type === 'Bag'">{{item.kilos_sold_pending}}</td>
                 <td v-if="type === 'Bag'">{{item.groups_sold_pending}}</td>
             </tr>
@@ -133,7 +141,9 @@
               let kilosSoldPending = item.kilos_sold_pending || 0
               let kilosRequested = item.kilos_requested || 0
               let kilosRequestedGiven = item.kilos_requested_given || 0
-              let kilosRequestedPending = Math.round((kilosRequested - kilosRequestedGiven) * 100) / 100
+              let kilosRequestedPending = item.kilos_requested_pending || 0
+              let kilosRequestedInProduction = item.kilos_requested_in_production || 0
+              let kilosRequestedToBeProduced = Math.round((kilosRequested - kilosRequestedGiven) * 100) / 100
               let kilosAdjusted = item.kilos_adjusted || 0
               let kilosProduced = item.kilos_produced || 0
               let kilosCut = item.kilos_cut || 0
@@ -141,13 +151,15 @@
               let groupsSoldGiven = item.groups_sold_given || 0
               let groupsSoldPending = item.groups_sold_pending || 0
               let groupsRequested = item.groups_requested || 0
+              let groupsRequestedPending = item.groups_requested_pending || 0
+              let groupsRequestedInProduction = item.groups_requested_to_be_produced || 0
               let groupsRequestedGiven = item.groups_requested_given || 0
-              let groupsRequestedPending = Math.round((groupsRequested - groupsRequestedGiven) * 100) / 100
+              let groupsRequestedToBeProduced = Math.round((groupsRequested - groupsRequestedGiven) * 100) / 100
               let groupsAdjusted = item.groups_adjusted || 0
               let groupsProduced = item.groups_produced || 0
               let groupsCut = item.groups_cut || 0
               let currentGroups = +(-(groupsSoldGiven + groupsCut).toFixed(12) + groupsAdjusted + groupsProduced).toFixed(12)
-              if ((this.type === 'Bag' && ((currentKilos >= 0.01 || currentKilos <= -0.01)) || (kilosRequestedPending >= 0.01 || kilosRequestedPending <= -0.01)) || (this.type === 'Roll' && (currentKilos >= 0.01 || currentKilos <= -0.01 || currentGroups > 0 || currentGroups < 0))) {
+              if ((this.type === 'Bag' && ((currentKilos >= 0.01 || currentKilos <= -0.01)) || (kilosRequestedToBeProduced >= 0.01 || kilosRequestedToBeProduced <= -0.01)) || (this.type === 'Roll' && (currentKilos >= 0.01 || currentKilos <= -0.01 || currentGroups > 0 || currentGroups < 0))) {
                 inventoryItems.push({
                   description: item.description,
                   code: item.code,
@@ -155,9 +167,14 @@
                   kilos_sold_pending: kilosSoldPending,
                   kilos_requested: kilosRequested,
                   kilos_requested_pending: kilosRequestedPending,
+                  kilos_requested_in_production: kilosRequestedInProduction,
+                  kilos_requested_to_be_produced: kilosRequestedToBeProduced,
                   current_groups: currentGroups,
                   groups_sold_pending: groupsSoldPending,
-                  groups_requested_pending: groupsRequestedPending
+                  groups_requested: groupsRequested,
+                  groups_requested_pending: groupsRequestedPending,
+                  groups_requested_in_production: groupsRequestedInProduction,
+                  groups_requested_to_be_produced: groupsRequestedToBeProduced
                 })
               }
             })
