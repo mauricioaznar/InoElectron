@@ -12,16 +12,16 @@ let arrayRequired = {
 }
 
 let remoteUnique = {
-  validate: (value, params) => {
-    let initialValue = params[0].initialValue
+  validate: (value, params, data) => {
+    let initialValue = params.initialValue
     return new Promise(resolve => {
       if (initialValue === value) {
         resolve({
           valid: true
         })
       } else {
-        let filterExactObject = {[params[0].columnName]: value}
-        ApiOperations.getWithFilterExactWithoutPagination(params[0].entityType, filterExactObject).then(result => {
+        let filterExactObject = {[params.columnName]: value}
+        ApiOperations.getWithFilterExactWithoutPagination(params.entityType, filterExactObject).then(result => {
           let isValueUsed = result.length > 0
           resolve({
             valid: !isValueUsed,
@@ -36,8 +36,8 @@ let remoteUnique = {
 let kiloToGroup = {
   validate: (quantity, params) => {
     let isValid = true
-    let groupWeight = params[0].groupWeight
-    let isGroupWeightStrict = params[0].isGroupWeightStrict
+    let groupWeight = params.groupWeight
+    let isGroupWeightStrict = params.isGroupWeightStrict
     if (groupWeight && groupWeight > 0 && isGroupWeightStrict) {
       let quantityAbsolute = Math.abs(quantity)
       let remainder = quantityAbsolute % groupWeight

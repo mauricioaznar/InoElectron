@@ -11,7 +11,6 @@ import Notifications from 'vue-notification'
 import VeeValidate, { Validator } from 'vee-validate'
 import VeeValidateDictionary from 'renderer/api/functions/VeeValidateDictionary'
 import VeeValidateCustomRules from 'renderer/api/functions/VeeValidateCustomRules'
-import esLocale from 'vee-validate/dist/locale/es'
 Vue.use(Notifications)
 moment.locale('es', {
   longDateFormat: {
@@ -26,7 +25,6 @@ moment.locale('es', {
 Vue.use(MauPlugin)
 Vue.use(BootstrapVue)
 Vue.use(VueResource)
-Validator.localize(esLocale)
 Validator.extend('object_required', VeeValidateCustomRules.objectRequired)
 Validator.extend('array_required', VeeValidateCustomRules.arrayRequired)
 Validator.extend('remote_unique', VeeValidateCustomRules.remoteUnique, {immediate: false})
