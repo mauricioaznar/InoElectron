@@ -48,6 +48,11 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.AUTH,
       title: 'Mi perfil'
     }),
     RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
+      componentName: 'UserManual',
+      navbar: true,
+      title: 'Manual de usuario'
+    }),
+    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
       componentName: 'Downloads',
       navbar: true,
       title: 'Descargas'

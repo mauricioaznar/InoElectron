@@ -23,6 +23,7 @@
             <span>{{user.email}}</span>
           </template>
           <b-dropdown-item class="dropdown-item text-right" :to="myProfilePathObject">Mi Perfil</b-dropdown-item>
+          <b-dropdown-item class="dropdown-item text-right" :to="userManualPathObject">Manual de usuario</b-dropdown-item>
           <b-dropdown-item class="dropdown-item text-right" v-on:click.prevent="logout">Cerrar sesion</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -43,6 +44,7 @@
     data () {
       return {
         myProfilePathObject: {path: RouteObjectHelper.createPath(EntityTypes.AUTH, 'MyProfile')},
+        userManualPathObject: {path: RouteObjectHelper.createPath(EntityTypes.AUTH, 'UserManual')},
         navbarRouteObjects: [],
         navbarTitle: '',
         navbarIcon: '',
