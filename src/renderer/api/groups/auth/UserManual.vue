@@ -1,11 +1,91 @@
 <template>
     <div class="container">
         <div class="row">
-            <h2 class="col-sm-12">Funcionamiento general de la aplicación</h2>
-            <p class="col-sm-12"> La aplicación esta compuesta por 2 modulos: ventas y producción</p>
+            <h6 class="col-sm-12">¿Cómo navegar entre áreas?</h6>
+            <p class="col-sm-12">Cada área se puede navegar utilizando los vinculos en la barra de navegación vertical.</p>
         </div>
         <div class="row">
-            <h4 class="col-sm-12">¿Que operaciones puedo realizar en el modulo de ventas?</h4>
+            <h6 class="col-sm-12">¿Cómo navegar entre los diferentes módulos que componen una área?</h6>
+            <p class="col-sm-12">Cada área esta divida en secciones, cada una de ellas se pueden navegar utilizando el submenu izquierdo ubicado en la barra de navegación horizontal.</p>
+        </div>
+        <div class="row">
+            <h6 class="col-sm-12">¿Cómo crear un producto* en el sistema?</h6>
+            <ol>
+                <li>Seleccionar el vínculo de "producción" en la barra de navegación vertical</li>
+                <li>Seleccionar el vínculo de navegación de "productos" en el submenu izquierdo ubicado en la barra de navegación horizontal</li>
+                <li>Seleccionar el ícono <span class="fa fa-plus"></span> ubicado en la esquina superior derecha de la apliación</li>
+                <li>Completar los campos solicitados</li>
+                <li>Seleccionar el botón de guardar cuando haya finalizado</li>
+            </ol>
+            <p class="col-sm-12">
+                *Los pasos siguientes aplican tambien para las demás entidades del sistema, a excepción del paso 1 y 2. Estos pasos dependerán de las entidades que correspondan por área
+            </p>
+        </div>
+        <div class="row">
+            <h6 class="col-sm-12">¿Cómo buscar un producto* en el sistema?</h6>
+            <ol>
+                <li>Seleccionar el vínculo de "producción" en la barra de navegación vertical</li>
+                <li>Seleccionar el vínculo de navegación de "productos" en el submenu izquierdo ubicado en la barra de navegación horizontal (el usuario navegará al listado de entidades)
+                <li>
+                    Si es necesario, el usuario puede filtar la lista de productos utilizando la segunda barra de navegación horizontal y siguiendo los siguientes sub pasos:
+                    <ol class="c">
+                        <li>Seleccionar una propiedad a filtrar para los productos utilizando el campo izquierdo en la</li>
+                        <li>Llenar el campo derecho para especificar un valor para la propiedad filtrada (los usuarios recibiran un listado de productos que tengan el valor indicado para la propiedad filtrada)</li>
+                        <li>Seleccionar el botón de buscar</li>
+                    </ol>
+                </li>
+                <li>Si no es necesario filtrar, el usuario puede desplazar la lista utilizando los botones de navegacion ubicados en el lado inferior de la misma.</li>
+            </ol>
+            <p class="col-sm-12">
+                *Los pasos siguientes aplican tambien para las demás entidades del sistema, a excepción del paso 1 y 2. Estos pasos dependerán de las entidades que correspondan por área
+            </p>
+        </div>
+        <div class="row">
+            <h6 class="col-sm-12">¿Cómo editar un producto* en el sistema?</h6>
+            <ol>
+                <li>Seleccionar el vínculo de "producción" en la barra de navegación vertical</li>
+                <li>Seleccionar el vínculo de navegación de "productos" en el submenu izquierdo ubicado en la barra de navegación horizontal</li>
+                <li>Buscar el producto previamente creado en el sistema</li>
+                <li>Seleccionar el ícono de <span class="fa fa-eye"></span> ubicado en la esquina superior derecha de la apliación</li>
+                <li>Seleccionar el ícono de <span class="fa fa-edit"></span> ubicado en la esquina superior derecha de la apliación</li>
+                <li>Completar los campos solicitados</li>
+                <li>Seleccionar el botón de guardar cuando haya finalizado</li>
+            </ol>
+            <p class="col-sm-12">
+                *Los pasos siguientes aplican tambien para las demás entidades del sistema, a excepción del paso 1 y 2. Estos pasos dependerán de las entidades que correspondan por área
+            </p>
+        </div>
+        <div class="row">
+            <h6 class="col-sm-12">¿Cómo eliminar un producto* en el sistema?</h6>
+            <ol>
+                <li>Seleccionar el vínculo de "producción" en la barra de navegación vertical</li>
+                <li>Seleccionar el vínculo de navegación de "productos" en el submenu izquierdo ubicado en la barra de navegación horizontal</li>
+                <li>Buscar el producto previamente creado en el sistema</li>
+                <li>Seleccionar el ícono de <span class="fa fa-eye"></span> ubicado en la esquina superior derecha de la apliación</li>
+                <li>Seleccionar el ícono de <span class="fa fa-trash"></span> ubicado en la esquina superior derecha de la apliación</li>
+            </ol>
+            <p class="col-sm-12">
+                *Los pasos siguientes aplican tambien para las demás entidades del sistema, a excepción del paso 1 y 2. Estos pasos dependerán de las entidades que correspondan por área
+            </p>
+        </div>
+        <div class="row">
+            <h6 class="col-sm-12">¿Cómo ver un producto* en el sistema?</h6>
+            <ol>
+                <li>Seleccionar el vínculo de "producción" en la barra de navegación vertical</li>
+                <li>Seleccionar el vínculo de navegación de "productos" en el submenu izquierdo ubicado en la barra de navegación horizontal</li>
+                <li>Buscar el producto previamente creado en el sistema</li>
+                <li>Seleccionar el ícono de <span class="fa fa-eye"></span> ubicado en la esquina superior derecha de la apliación</li>
+            </ol>
+            <p class="col-sm-12">
+                *Los pasos siguientes aplican tambien para las demás entidades del sistema, a excepción del paso 1 y 2. Estos pasos dependerán de las entidades que correspondan por área
+            </p>
+        </div>
+        <div class="row">
+            <h6 class="col-sm-12"></h6>
+            <p class="col-sm-12">La aplica</p>
+        </div>
+        <div class="row">
+            <h6 class="col-sm-12">¿Que operaciones puedo realizar en el modulo de ventas?</h6>
             <div class="col-sm-12">
                 <ul>
                     <li>Crear un cliente</li>
@@ -32,7 +112,7 @@
             </div>
         </div>
         <div class="row">
-            <h4 class="col-sm-12">¿Que operaciones puedo realizar en el modulo de producción?</h4>
+            <h6 class="col-sm-12">¿Que operaciones puedo realizar en el modulo de producción?</h6>
             <div class="col-sm-12">
                 <ul>
                     <li>Crear un producto</li>
@@ -75,3 +155,9 @@
       }
     }
 </script>
+
+<style lang="scss">
+    ol.c {
+        list-style-type: upper-roman;
+    }
+</style>
