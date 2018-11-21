@@ -73,10 +73,37 @@
                       v-model="salesOrder.orderSaleStatus"
                       :name="OrderSalePropertiesReference.ORDER_SALE_STATUS.name"
                       :error="errors.first(OrderSalePropertiesReference.ORDER_SALE_STATUS.name)"
-                      :disabled="!isAdminUser"
+                      :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
               </mau-form-input-select>
+          </div>
+          <div class="form-group">
+              <mau-form-input-select
+                      :initialObject="initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name]"
+                      :label="OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.title"
+                      :displayProperty="'name'"
+                      :entityType="orderSaleCollectionStatusEntityType"
+                      v-model="salesOrder.orderSaleCollectionStatus"
+                      :name="OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name"
+                      :error="errors.first(OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select>
+          </div>
+          <div class="form-group" v-if="isPartiallyPaidStatusSelected">
+              <mau-form-input-number
+                      :name="OrderSalePropertiesReference.AMOUNT_COLLECTED.name"
+                      :label="OrderSalePropertiesReference.AMOUNT_COLLECTED.title"
+                      v-model="salesOrder.amountCollected"
+                      :type="'float'"
+                      :initialValue="initialValues[OrderSalePropertiesReference.AMOUNT_COLLECTED.name]"
+                      :error="errors.first(OrderSalePropertiesReference.AMOUNT_COLLECTED.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'required'"
+              >
+              </mau-form-input-number>
           </div>
           <div class="form-group">
               <mau-form-input-select
@@ -161,9 +188,11 @@
           products: [],
           saleProducts: [],
           date: '',
+          amountCollected: '',
           client: {},
           company: {},
           orderSaleStatus: {},
+          orderSaleCollectionStatus: {},
           receiptType: {}
         },
         initialOrderCode: '',
@@ -174,6 +203,7 @@
         clientEntityType: EntityTypes.CLIENT,
         companyEntityType: EntityTypes.COMPANY,
         orderSaleStatusEntityType: EntityTypes.ORDER_SALE_STATUS,
+        orderSaleCollectionStatusEntityType: EntityTypes.ORDER_SALE_COLLECTION_STATUS,
         productEntityType: EntityTypes.PRODUCT,
         orderSaleEntityType: EntityTypes.ORDER_SALE,
         initialOrderSaleStatus: {},
@@ -224,8 +254,9 @@
         'isAdminUser'
       ]),
       userHasWritePrivileges: function () {
-        let isOrderPending = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] === 1 : false
-        return this.isAdminUser || isOrderPending
+        let isOrderCollected = this.initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name] ? this.initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name] === 2 : false
+        let isOrderDelivered = this.initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name] ? this.initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name] === 3 : false
+        return this.isAdminUser || !(isOrderDelivered || isOrderCollected)
       },
       isInvoiceSelected: function () {
         let receiptId
@@ -236,6 +267,16 @@
           receiptId = this.salesOrder.receiptType[GlobalEntityIdentifier]
         }
         return receiptId === 2
+      },
+      isPartiallyPaidStatusSelected: function () {
+        let collectionStatusId
+        if (this.initialValues && this.initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name]) {
+          collectionStatusId = this.initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name][GlobalEntityIdentifier]
+        }
+        if (this.salesOrder.orderSaleCollectionStatus && this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier]) {
+          collectionStatusId = this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier]
+        }
+        return collectionStatusId === 2
       }
     },
     methods: {
@@ -247,6 +288,8 @@
         this.initialValues[OrderSalePropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT.name)
         this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.COMPANY.name)
         this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
+        this.initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name)
+        this.initialValues[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.AMOUNT_COLLECTED.name)
         this.initialOrderSaleStatus = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_STATUS.name)
         this.requestedProducts = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]
       },
@@ -262,6 +305,10 @@
         directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
         directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = this.salesOrder.receiptType ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
         directParams[OrderSalePropertiesReference.ORDER_SALE_STATUS.relationship_id_name] = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] : 'null'
+        directParams[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] = this.salesOrder.orderSaleCollectionStatus ? this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier] : 'null'
+        if (this.isPartiallyPaidStatusSelected) {
+          directParams[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = this.salesOrder.amountCollected
+        }
         let initialOrderSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderSalePropertiesReference.PRODUCTS.name], 'product_id')
         let filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialOrderSaleProducts, this.salesOrder.saleProducts, 'product_id')
         if (!this.initialObject) {

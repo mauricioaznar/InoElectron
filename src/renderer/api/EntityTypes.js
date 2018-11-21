@@ -95,6 +95,10 @@ export default {
     name: 'orderSaleStatus',
     apiName: 'orderSaleStatus'
   },
+  ORDER_SALE_COLLECTION_STATUS: {
+    name: 'orderSaleCollectionStatus',
+    apiName: 'orderSaleCollectionStatus'
+  },
   ORDER_SALE_PRODUCT: {
     name: 'orderSaleProduct',
     apiName: 'orderSaleProduct'

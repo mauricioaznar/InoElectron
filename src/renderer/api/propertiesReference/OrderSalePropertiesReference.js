@@ -46,10 +46,23 @@ let OrderSalePropertiesReference = {
   },
   ORDER_SALE_STATUS: {
     name: 'order_sale_status',
-    title: 'Status',
+    title: 'Estado de entrega',
     relationship_id_name: 'order_sale_status_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
+  },
+  ORDER_SALE_COLLECTION_STATUS: {
+    name: 'order_sale_collection_status',
+    title: 'Estado de cobranza',
+    relationship_id_name: 'order_sale_collection_status_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  AMOUNT_COLLECTED: {
+    title: 'Cantidad cobrada',
+    name: 'amount_collected',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.FLOAT
   },
   TOTAL_COST: {
     title: 'Total',

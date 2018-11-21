@@ -17,6 +17,7 @@
   import FullCalendar from 'vue-fullcalendar'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
+  import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import EntityTypes from 'renderer/api/EntityTypes'
   import moment from 'moment'
   export default {
@@ -39,36 +40,47 @@
       setCalendar: function () {
         this.isLoading = true
         Promise.all([
-          ApiOperations.getWithoutPagination(EntityTypes.ORDER_REQUEST),
           ApiOperations.getWithoutPagination(EntityTypes.ORDER_SALE)
         ]).then(result => {
           this.calendarEvents = []
           let calendarItems = []
-          let requests = result[0]
-          for (let requestIndex = 0; requestIndex < requests.length; requestIndex++) {
-            let requestObj = requests[requestIndex]
-            calendarItems.push({
-              title: requestObj.company.abbreviation + ' ' + requestObj.total_cost,
-              start: moment(requestObj.date),
-              cssClass: 'request',
-              YOUR_DATA: {
-                id: requestObj.id,
-                request: true
-              }
-            })
-          }
-          let sales = result[1]
+          let sales = result[0]
           for (let saleIndex = 0; saleIndex < sales.length; saleIndex++) {
             let saleObj = sales[saleIndex]
-            calendarItems.push({
-              title: saleObj.company.abbreviation + ' ' + saleObj.total_cost,
-              start: moment(saleObj.date),
-              cssClass: 'sale',
-              YOUR_DATA: {
-                id: saleObj.id,
-                sale: true
-              }
-            })
+            let totalCost = parseInt(saleObj.total_cost / 1000)
+            if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 1) {
+              calendarItems.push({
+                title: saleObj.company.abbreviation + ' ' + totalCost + 'k p',
+                start: moment(saleObj.date),
+                cssClass: 'sale pending',
+                YOUR_DATA: {
+                  id: saleObj.id,
+                  sale: true
+                }
+              })
+            }
+            if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 2) {
+              calendarItems.push({
+                title: saleObj.company.abbreviation + ' ' + totalCost + 'k pc',
+                start: moment(saleObj.date),
+                cssClass: 'sale partially-collected',
+                YOUR_DATA: {
+                  id: saleObj.id,
+                  sale: true
+                }
+              })
+            }
+            if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 3) {
+              calendarItems.push({
+                title: saleObj.company.abbreviation + ' ' + totalCost + 'k c',
+                start: moment(saleObj.date),
+                cssClass: 'sale collected',
+                YOUR_DATA: {
+                  id: saleObj.id,
+                  sale: true
+                }
+              })
+            }
           }
           this.calendarEvents = calendarItems
           let vm = this
@@ -79,12 +91,7 @@
       },
       eventClicked: function (obj) {
         let id = obj.YOUR_DATA.id
-        if (obj.YOUR_DATA.request) {
-          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_REQUEST, 'view') + '/' + id})
-        }
-        if (obj.YOUR_DATA.sale) {
-          this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE, 'view') + '/' + id})
-        }
+        this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE, 'view') + '/' + id})
       }
     },
     beforeDestroy: function () {
@@ -103,11 +110,13 @@
             box-sizing: content-box;
         }
     }
-    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.sale {
-        background-color: #cb7832;
-
+    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.sale.pending {
+        background-color: #D3D3D3;
     }
-    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.request {
-        background-color: #0b97c4;
+    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.sale.partially-collected {
+        background-color: #99badd;
+    }
+    .full-calendar-body .dates .dates-events .events-week .events-day .event-box .event-item.sale.collected {
+        background-color: #badd99;
     }
 </style>

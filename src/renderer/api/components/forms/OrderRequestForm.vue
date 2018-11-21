@@ -74,7 +74,7 @@
                       v-model="requestOrder.orderRequestStatus"
                       :name="OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name"
                       :error="errors.first(OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name)"
-                      :disabled="!isAdminUser"
+                      :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
               </mau-form-input-select>
@@ -212,7 +212,7 @@
     },
     computed: {
       userHasWritePrivileges: function () {
-        let isOrderPending = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] === 1 : false
+        let isOrderPending = this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] ? this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] === 1 : true
         return this.isAdminUser || isOrderPending
       },
       ...mapGetters([

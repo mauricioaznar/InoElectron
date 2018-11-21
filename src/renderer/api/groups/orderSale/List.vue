@@ -64,6 +64,13 @@
             entityFieldName: 'name'
           },
           {
+            name: OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name,
+            title: OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.title,
+            callback: DisplayFunctions.getNameFromObject,
+            entity: EntityTypes.ORDER_SALE_COLLECTION_STATUS.name,
+            entityFieldName: 'name'
+          },
+          {
             name: OrderSalePropertiesReference.ORDER_REQUEST.name,
             title: OrderSalePropertiesReference.ORDER_REQUEST.title,
             callback: DisplayFunctions.getPropertyFromObject.name + '|order_code',

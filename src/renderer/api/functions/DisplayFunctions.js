@@ -71,12 +71,12 @@ export default {
   },
   getProducts: function (array) {
     let htmlString = '<table class="w-100">'
-    htmlString += '<tr><th>Codigo</th><th>Kilos</th><th>Grupos</th>'
+    htmlString += '<tr><th>Producto</th><th>Kilos</th><th>Grupos</th>'
     htmlString += '</tr>'
     for (let i = 0; i < array.length; i++) {
       let productTypeId = array[i].product_type_id
       htmlString += '<tr>'
-      htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
+      htmlString += '<td class="mau-text-left">' + array[i].description + '</td>'
       htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos + ' kg</td>'
       if (!productTypeId || productTypeId === 1) {
         if (array[i].pivot.groups !== null) {
@@ -162,7 +162,7 @@ export default {
     htmlString += '</tr>'
     for (let i = 0; i < array.length; i++) {
       htmlString += '<tr>'
-      htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
+      htmlString += '<td class="mau-text-left">' + array[i].description + '</td>'
       htmlString += '<td class="mau-text-right">' + array[i].order_request_kilos || 0 + '</td>'
       if (array[i].order_sales_kilos) {
         htmlString += '<td class="mau-text-right">' + array[i].order_sales_kilos || 0 + '</td>'
@@ -181,7 +181,7 @@ export default {
     htmlString += '</tr>'
     for (let i = 0; i < array.length; i++) {
       htmlString += '<tr>'
-      htmlString += '<td class="mau-text-left">' + array[i].code + '</td>'
+      htmlString += '<td class="mau-text-left">' + array[i].description + '</td>'
       htmlString += '<td class="mau-text-right">' + array[i].order_sales_kilos + '</td>'
       htmlString += '</tr>'
     }
