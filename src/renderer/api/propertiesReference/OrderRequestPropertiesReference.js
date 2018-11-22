@@ -35,7 +35,7 @@ let OrderRequestPropertiesReference = {
   },
   ORDER_REQUEST_STATUS: {
     name: 'order_request_status',
-    title: 'Status',
+    title: 'Estado del pedido',
     relationship_id_name: 'order_request_status_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT

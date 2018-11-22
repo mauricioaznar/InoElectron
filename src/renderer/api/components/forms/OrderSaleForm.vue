@@ -73,21 +73,22 @@
                       v-model="salesOrder.orderSaleStatus"
                       :name="OrderSalePropertiesReference.ORDER_SALE_STATUS.name"
                       :error="errors.first(OrderSalePropertiesReference.ORDER_SALE_STATUS.name)"
-                      :disabled="!userHasWritePrivileges"
+                      :disabled="!isAdminUser"
                       v-validate="'object_required'"
               >
               </mau-form-input-select>
           </div>
           <div class="form-group">
               <mau-form-input-select
-                      :initialObject="initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name]"
+                      :key="initialOrderSaleCollectionStatus ? initialOrderSaleCollectionStatus[GlobalEntityIdentifier] : 0"
+                      :initialObject="initialOrderSaleCollectionStatus"
                       :label="OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.title"
                       :displayProperty="'name'"
                       :entityType="orderSaleCollectionStatusEntityType"
                       v-model="salesOrder.orderSaleCollectionStatus"
                       :name="OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name"
                       :error="errors.first(OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name)"
-                      :disabled="!userHasWritePrivileges"
+                      :disabled="!isAdminUser"
                       v-validate="'object_required'"
               >
               </mau-form-input-select>
@@ -207,6 +208,7 @@
         productEntityType: EntityTypes.PRODUCT,
         orderSaleEntityType: EntityTypes.ORDER_SALE,
         initialOrderSaleStatus: {},
+        initialOrderSaleCollectionStatus: {},
         orderSaleReceiptTypeEntityType: EntityTypes.ORDER_SALE_RECEIPT_TYPE
       }
     },
@@ -245,6 +247,9 @@
         })
         ApiOperations.getById(this.orderSaleStatusEntityType, 1).then(result => {
           this.initialOrderSaleStatus = result
+        })
+        ApiOperations.getById(this.orderSaleCollectionStatusEntityType, 1).then(result => {
+          this.initialOrderSaleCollectionStatus = result
         })
         this.overrideInitialValuesWithOrderRequest()
       }
@@ -288,8 +293,8 @@
         this.initialValues[OrderSalePropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT.name)
         this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.COMPANY.name)
         this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
-        this.initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name)
         this.initialValues[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.AMOUNT_COLLECTED.name)
+        this.initialOrderSaleCollectionStatus = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name)
         this.initialOrderSaleStatus = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_STATUS.name)
         this.requestedProducts = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]
       },

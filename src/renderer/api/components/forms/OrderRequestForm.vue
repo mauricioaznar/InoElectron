@@ -74,7 +74,7 @@
                       v-model="requestOrder.orderRequestStatus"
                       :name="OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name"
                       :error="errors.first(OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name)"
-                      :disabled="!userHasWritePrivileges"
+                      :disabled="!isAdminUser"
                       v-validate="'object_required'"
               >
               </mau-form-input-select>
