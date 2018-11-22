@@ -55,6 +55,12 @@
             callback: DisplayFunctions.getPersona,
             entity: EntityTypes.EMPLOYEE.name,
             entityFieldName: 'name'
+          },
+          {
+            name: OrderProductionPropertiesReference.MACHINES.name,
+            title: OrderProductionPropertiesReference.MACHINES.title,
+            callback: DisplayFunctions.getFirstNameFromArray,
+            hidden: true
           }
         ],
         actions: [

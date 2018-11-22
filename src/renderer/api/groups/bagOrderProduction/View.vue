@@ -41,7 +41,7 @@
           {
             title: 'Maquina',
             name: OrderProductionPropertiesReference.MACHINES.name,
-            display: DisplayFunctions.getMachineNames
+            display: DisplayFunctions.getFirstNameFromArray
           },
           {
             title: 'Productos',

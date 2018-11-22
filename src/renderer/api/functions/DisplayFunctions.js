@@ -49,6 +49,9 @@ export default {
     }
     return htmlString + '</ul>'
   },
+  getFirstNameFromArray: function (array) {
+    return array[0].name
+  },
   getDate: function (date) {
     let momentDate = moment(date)
     return momentDate.isValid() ? moment(date).format('dddd, MMMM D, YYYY') : '-'
