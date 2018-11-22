@@ -24,6 +24,7 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import Notifications from 'renderer/api/functions/Notifications'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import ApiUrls from 'renderer/api/functions/ApiUrls'
   import {mapGetters} from 'vuex'
   export default {
     components: {ActionWidget},
@@ -78,13 +79,13 @@
       },
       setUrlActions: function () {
         if (this.$route.params[GlobalEntityIdentifier]) {
-          // this.urlActions = this.alwaysUrlActions.concat([
-          //  {
-          //    name: 'PDF',
-          //   icon: 'fa fa-file-pdf-o',
-          //    url: ApiUrls.createPdfDownloadUrl(this.$route.params[GlobalEntityIdentifier])
-          //  }
-          // ])
+          this.urlActions = this.alwaysUrlActions.concat([
+            {
+              name: 'PDF',
+              icon: 'fa fa-file-pdf-o',
+              url: ApiUrls.createPdfDownloadUrl(this.$route.params[GlobalEntityIdentifier])
+            }
+          ])
         } else {
           this.urlActions = this.alwaysUrlActions
         }

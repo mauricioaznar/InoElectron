@@ -3,15 +3,6 @@
     <mau-spinner v-if="!entity" :sizeType="'router'"></mau-spinner>
     <mau-entity-petitioner :id="id" :entityType="entityType" @entityResult="entityResultHandler"></mau-entity-petitioner>
     <mau-property-viewer v-if="entity" :entity="entity" :properties="properties"></mau-property-viewer>
-    <a
-            v-if="entity && isOrderRequestCompleted"
-            :active-class="'active'"
-            class="btn btn-primary ml-2"
-            :href="receiptPdfUrl"
-    >
-      <span :class="'fa fa-file-pdf-o'"> </span>
-      Imprimir remision
-    </a>
   </div>
 </template>
 
@@ -22,8 +13,6 @@
   import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
-  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'ViewOrderSale',
     components: {
@@ -33,7 +22,6 @@
     },
     data () {
       return {
-        receiptPdfUrl: ApiUrls.createPdfDownloadUrl(this.$route.params[GlobalEntityIdentifier]),
         properties: [
           {
             title: OrderSalePropertiesReference.ORDER_CODE.title,
@@ -89,11 +77,6 @@
         ],
         entityType: EntityTypes.ORDER_SALE_RECEIPT,
         entity: null
-      }
-    },
-    computed: {
-      isOrderRequestCompleted: function () {
-        return this.entity && this.entity.order_request.order_request_status_id === 3
       }
     },
     props: {
