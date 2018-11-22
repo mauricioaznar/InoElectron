@@ -26,6 +26,11 @@
   "build": {
     "productName": "Industria",
     "appId": "org.simulatedgreg.electron-vue",
+    "publish": [{
+      "provider": "github",
+      "owner": "mauricioaznar",
+      "repo": "InoElectron"
+    }],
     "directories": {
       "output": "dist"
     },
