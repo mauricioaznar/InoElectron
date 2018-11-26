@@ -96,6 +96,7 @@
                     >
                         <template slot-scope="params">
                             <order-sale-product-table
+                                    :saleMode="true"
                                     :selectedProducts="requestOrder.products"
                                     v-model="requestOrder.requestProducts"
                                     :initialProducts="initialValues[OrderRequestPropertiesReference.PRODUCTS.name]"
