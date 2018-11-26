@@ -50,7 +50,7 @@
             let totalCost = parseInt(saleObj.total_cost / 1000)
             if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 1) {
               calendarItems.push({
-                title: saleObj.company.abbreviation + ' ' + totalCost + 'k p',
+                title: '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k p',
                 start: moment(saleObj.date),
                 cssClass: 'sale pending',
                 YOUR_DATA: {
@@ -61,7 +61,7 @@
             }
             if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 2) {
               calendarItems.push({
-                title: saleObj.company.abbreviation + ' ' + totalCost + 'k pc',
+                title: '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k pc',
                 start: moment(saleObj.date),
                 cssClass: 'sale partially-collected',
                 YOUR_DATA: {
@@ -72,7 +72,7 @@
             }
             if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 3) {
               calendarItems.push({
-                title: saleObj.company.abbreviation + ' ' + totalCost + 'k c',
+                title: '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k c',
                 start: moment(saleObj.date),
                 cssClass: 'sale collected',
                 YOUR_DATA: {
