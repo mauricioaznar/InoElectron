@@ -108,6 +108,7 @@
           </div>
           <div class="form-group">
               <mau-form-input-select
+                      v-if="!isReplacementStatusSelected"
                       :initialObject="initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name]"
                       :label="OrderSalePropertiesReference.RECEIPT_TYPE.title"
                       :displayProperty="'name'"
@@ -138,7 +139,7 @@
                     >
                         <template slot-scope="params">
                             <order-sale-product-table
-                                    :saleMode="true"
+                                    :saleMode="!isReplacementStatusSelected"
                                     :hasTax="isInvoiceSelected"
                                     :selectedProducts="salesOrder.products"
                                     :requestedProducts="requestedProducts"
@@ -282,6 +283,16 @@
           collectionStatusId = this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier]
         }
         return collectionStatusId === 2
+      },
+      isReplacementStatusSelected: function () {
+        let collectionStatusId
+        if (this.initialValues && this.initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name]) {
+          collectionStatusId = this.initialValues[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name][GlobalEntityIdentifier]
+        }
+        if (this.salesOrder.orderSaleCollectionStatus && this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier]) {
+          collectionStatusId = this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier]
+        }
+        return collectionStatusId === 4
       }
     },
     methods: {
@@ -308,12 +319,10 @@
         directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
         directParams[OrderSalePropertiesReference.DATE.name] = this.salesOrder.date
         directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
-        directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = this.salesOrder.receiptType ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
+        directParams[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = this.isPartiallyPaidStatusSelected ? this.salesOrder.amountCollected : 0
+        directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = (!this.isReplacementStatusSelected && this.salesOrder.receiptType) ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
         directParams[OrderSalePropertiesReference.ORDER_SALE_STATUS.relationship_id_name] = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] : 'null'
         directParams[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] = this.salesOrder.orderSaleCollectionStatus ? this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier] : 'null'
-        if (this.isPartiallyPaidStatusSelected) {
-          directParams[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = this.salesOrder.amountCollected
-        }
         let initialOrderSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderSalePropertiesReference.PRODUCTS.name], 'product_id')
         let filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialOrderSaleProducts, this.salesOrder.saleProducts, 'product_id')
         if (!this.initialObject) {

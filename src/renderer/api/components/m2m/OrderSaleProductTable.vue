@@ -7,12 +7,12 @@
                     <th class="mau-text-center">Descripción</th>
                     <th class="mau-text-center">Cantidad</th>
                     <th class="mau-text-center">Unidad</th>
-                    <th class="mau-text-center">Precio unitario en kilos</th>
+                    <th v-if="saleMode" class="mau-text-center">Precio unitario en kilos</th>
                     <th class="mau-text-center">Cantidad en kilos</th>
                     <th class="mau-text-center">Peso en kilos por bulto</th>
                     <th class="mau-text-center">Cantidad en bultos</th>
-                    <th v-if="hasTax" class="mau-text-center">IVA</th>
-                    <th class="mau-text-center">Total</th>
+                    <th v-if="saleMode && hasTax" class="mau-text-center">IVA</th>
+                    <th v-if="saleMode" class="mau-text-center">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +67,7 @@
                             <option :value="1" v-if="getCurrentObjGroupWeight(currentStructuredObj)">Bulto</option>
                         </mau-form-input-select-bootstrap>
                     </td>
-                    <td class="mau-text-center">
+                    <td v-if="saleMode" class="mau-text-center">
                         <mau-form-input-number
                                 :name="'kilo_price' + currentStructuredObj['product_id']"
                                 :error="errors.first('kilo_price' + currentStructuredObj['product_id'])"
@@ -119,10 +119,10 @@
                         >
                         </mau-form-input-number>
                     </td>
-                    <td v-if="hasTax" class="mau-text-center">
+                    <td v-if="saleMode && hasTax" class="mau-text-center">
                         {{getCurrentObjTax(currentStructuredObj)}}
                     </td>
-                    <td class="mau-text-center">
+                    <td v-if="saleMode" class="mau-text-center">
                         <div v-if="hasTax">
                             {{getCurrentObjTotalCost(currentStructuredObj)}}
                         </div>
@@ -139,9 +139,9 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td v-if="hasTax"></td>
-                    <td class="text-right"><b>TOTAL:</b></td>
-                    <td>
+                    <td v-if="saleMode && hasTax"></td>
+                    <td v-if="saleMode" class="text-right"><b>TOTAL:</b></td>
+                    <td v-if="saleMode">
                         {{getOrderTotalCost(currentStructuredObjects)}}
                     </td>
                 </tr>
@@ -308,7 +308,7 @@
         },
         setCurrentObjProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
-          let kiloPrice = currentStructuredObj['_kilo_price'] || 0
+          let kiloPrice = (this.saleMode && currentStructuredObj['_kilo_price']) ? currentStructuredObj['_kilo_price'] : 0
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
             currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
@@ -329,10 +329,12 @@
           this.emitStructureChangeEvent()
         },
         setCurrentObjManualProperties: function (currentStructuredObj) {
+          let kiloPrice = (this.saleMode && currentStructuredObj['_kilo_price']) ? currentStructuredObj['_kilo_price'] : 0
           let manualGroups = currentStructuredObj['_manual_groups'] || 0
           let manualKilos = currentStructuredObj['_manual_kilos'] || 0
           currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = manualGroups
           currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = manualKilos
+          currentStructuredObj[OrderSaleProductPropertiesReference.KILO_PRICE.name] = kiloPrice
           this.emitStructureChangeEvent()
         }
       },
