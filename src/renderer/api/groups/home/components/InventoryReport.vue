@@ -143,7 +143,7 @@
               let kilosRequestedGiven = item.kilos_requested_given || 0
               let kilosRequestedPending = item.kilos_requested_pending || 0
               let kilosRequestedInProduction = item.kilos_requested_in_production || 0
-              let kilosRequestedToBeProduced = Math.round((kilosRequested - kilosRequestedGiven) * 100) / 100
+              let kilosRequestedToBeProduced = Math.round((kilosRequestedInProduction - kilosRequestedGiven) * 100) / 100
               let kilosAdjusted = item.kilos_adjusted || 0
               let kilosProduced = item.kilos_produced || 0
               let kilosCut = item.kilos_cut || 0
@@ -152,9 +152,9 @@
               let groupsSoldPending = item.groups_sold_pending || 0
               let groupsRequested = item.groups_requested || 0
               let groupsRequestedPending = item.groups_requested_pending || 0
-              let groupsRequestedInProduction = item.groups_requested_to_be_produced || 0
+              let groupsRequestedInProduction = item.groups_requested_in_production || 0
               let groupsRequestedGiven = item.groups_requested_given || 0
-              let groupsRequestedToBeProduced = Math.round((groupsRequested - groupsRequestedGiven) * 100) / 100
+              let groupsRequestedToBeProduced = Math.round((groupsRequestedInProduction - groupsRequestedGiven) * 100) / 100
               let groupsAdjusted = item.groups_adjusted || 0
               let groupsProduced = item.groups_produced || 0
               let groupsCut = item.groups_cut || 0
