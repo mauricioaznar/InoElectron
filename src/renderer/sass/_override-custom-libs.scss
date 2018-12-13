@@ -170,6 +170,10 @@
   text-align: left;
 }
 
+.mau-text-center {
+  text-align: center;
+}
+
 .fa-disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -200,3 +204,4 @@
 .form-control.flatpickr-input {
   color: $body-color;
 }
+
