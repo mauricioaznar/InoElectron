@@ -7,22 +7,26 @@
             <template slot="show_details" slot-scope="row">
                 <!-- we use @click.stop here to prevent emitting of a 'row-clicked' event  -->
                 <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
-                    {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
+                    {{ row.detailsShowing ? 'Ocultar' : 'Mostrar'}} Detalles
                 </b-button>
             </template>
             <template slot="row-details" slot-scope="row">
                 <table>
                     <tr>
-                        <th>Orden #</th>
+                        <th>Pedido #</th>
                         <th>Cliente</th>
                         <th>Kilos solicitados</th>
                         <th>Kilos vendidos</th>
+                        <th>Bultos solicitados</th>
+                        <th>Bultos vendidos</th>
                     </tr>
                     <tr v-for="orderItem in row.item['order_items_not_finalized']">
-                        <td>{{ orderItem['order_request_order_code']}}</td>
+                        <td class="mau-text-center">{{ orderItem['order_request_order_code']}}</td>
                         <td>{{ orderItem['company_name']}}</td>
-                        <td>{{ orderItem['total_kilos_requested_not_finalized']}}</td>
-                        <td>{{ orderItem['total_kilos_sold_given']}}</td>
+                        <td class="mau-text-center">{{ orderItem['total_kilos_requested_not_finalized']}}</td>
+                        <td class="mau-text-center">{{ orderItem['total_kilos_sold_given']}}</td>
+                        <td class="mau-text-center">{{ orderItem['total_groups_requested_not_finalized']}}</td>
+                        <td class="mau-text-center">{{ orderItem['total_groups_sold_given']}}</td>
                     </tr>
                 </table>
             </template>
@@ -66,14 +70,14 @@
               tdClass: 'mau-text-center',
               sortable: true
             },
-            total_kilos_requested_to_produce: {
-              key: 'total_kilos_requested_to_produce',
+            total_kilos_requested_to_be_produced: {
+              key: 'total_kilos_requested_to_be_produced',
               label: 'Kilos restantes por producir',
               tdClass: 'mau-text-center',
               sortable: true
             },
-            total_groups_requested_to_produce: {
-              key: 'total_groups_requested_to_produce',
+            total_groups_requested_to_be_produced: {
+              key: 'total_groups_requested_to_be_produced',
               label: 'Bultos restantes por producir',
               tdClass: 'mau-text-center',
               sortable: true
@@ -162,22 +166,20 @@
                 if (!productObj['totalGroupsRequestedNotFinalizedGiven']) {
                   productObj['totalGroupsRequestedNotFinalizedGiven'] = 0
                 }
-                if (saleProductObj['product_id'] === 107) {
-                  console.log(saleProductObj)
-                }
                 if (saleProductObj['order_request_status_id'] === 2 && saleProductObj['order_sale_status_id'] === 2) {
-                  productObj['totalKilosRequestedNotFinalizedGiven'] += saleProductObj['kilos']
-                  productObj['totalGroupsRequestedNotFinalizedGiven'] += saleProductObj['groups']
                   let orderItemObjFound = productObj['orderItemsNotFinalized'].find(orderItemObj => { return orderItemObj['order_request_order_code'] === saleProductObj['order_request_order_code'] })
                   if (orderItemObjFound) {
                     if (!orderItemObjFound['total_kilos_sold_given']) {
                       orderItemObjFound['total_kilos_sold_given'] = 0
+                      orderItemObjFound['total_groups_sold_given'] = 0
                     }
                     orderItemObjFound['total_kilos_sold_given'] += saleProductObj['kilos']
+                    orderItemObjFound['total_groups_sold_given'] += saleProductObj['groups']
                   } else {
                     productObj['orderItemsNotFinalized'].push({
                       'order_request_order_code': saleProductObj['order_request_order_code'],
                       'total_kilos_sold_given': saleProductObj['kilos'],
+                      'total_groups_sold_given': saleProductObj['groups'],
                       'company_name': saleProductObj['company_name']
                     })
                   }
@@ -209,18 +211,19 @@
                   productObj['totalGroupsRequestedInProduction'] = 0
                 }
                 if (requestProductObj['order_request_status_id'] === 2) {
-                  productObj['totalGroupsRequestedInProduction'] += requestProductObj['groups']
-                  productObj['totalKilosRequestedInProduction'] += requestProductObj['kilos']
                   let orderItemObjFound = productObj['orderItemsNotFinalized'].find(orderItemObj => { return orderItemObj['order_request_order_code'] === requestProductObj['order_request_order_code'] })
                   if (orderItemObjFound) {
                     if (!orderItemObjFound['total_kilos_requested_not_finalized']) {
                       orderItemObjFound['total_kilos_requested_not_finalized'] = 0
+                      orderItemObjFound['total_groups_requested_not_finalized'] = 0
                     }
                     orderItemObjFound['total_kilos_requested_not_finalized'] += requestProductObj['kilos']
+                    orderItemObjFound['total_groups_requested_not_finalized'] += requestProductObj['groups']
                   } else {
                     productObj['orderItemsNotFinalized'].push({
                       'order_request_order_code': requestProductObj['order_request_order_code'],
                       'total_kilos_requested_not_finalized': requestProductObj['kilos'],
+                      'total_groups_requested_not_finalized': requestProductObj['groups'],
                       'company_name': requestProductObj['company_name']
                     })
                   }
@@ -254,39 +257,52 @@
                 (productObj['totalGroupsProduced'] ? productObj['totalGroupsProduced'] : 0) +
                 (productObj['totalGroupsAdjusted'] ? productObj['totalGroupsAdjusted'] : 0) -
                 (productObj['totalGroupsSoldGiven'] ? productObj['totalGroupsSoldGiven'] : 0)
-              productObj['totalKilosRequestedToProduce'] =
-                (productObj['totalKilosRequestedInProduction'] ? productObj['totalKilosRequestedInProduction'] : 0) -
-                (productObj['totalKilosRequestedNotFinalizedGiven'] ? productObj['totalKilosRequestedNotFinalizedGiven'] : 0)
-              productObj['totalGroupsRequestedToProduce'] =
-                (productObj['totalGroupsRequestedInProduction'] ? productObj['totalGroupsRequestedInProduction'] : 0) -
-                (productObj['totalGroupsRequestedNotFinalizedGiven'] ? productObj['totalGroupsRequestedNotFinalizedGiven'] : 0)
-              if (productObj['totalKilosInInventory'] > 0.01 || productObj['totalKilosInInventory'] < -0.01) {
+              productObj['totalKilosRequestedToBeProduced'] = 0
+              productObj['totalGroupsRequestedToBeProduced'] = 0
+              productObj['orderItemsNotFinalized'].forEach(orderItemNotFinalizedObj => {
+                if (orderItemNotFinalizedObj['total_kilos_requested_not_finalized']) {
+                  if (orderItemNotFinalizedObj['total_kilos_sold_given']) {
+                    if (orderItemNotFinalizedObj['total_kilos_requested_not_finalized'] > orderItemNotFinalizedObj['total_kilos_sold_given']) {
+                      productObj['totalKilosRequestedToBeProduced'] += (orderItemNotFinalizedObj['total_kilos_requested_not_finalized'] - orderItemNotFinalizedObj['total_kilos_sold_given'])
+                      productObj['totalGroupsRequestedToBeProduced'] += (orderItemNotFinalizedObj['total_groups_requested_not_finalized'] - orderItemNotFinalizedObj['total_groups_sold_given'])
+                    }
+                  } else {
+                    productObj['totalKilosRequestedToBeProduced'] += orderItemNotFinalizedObj['total_kilos_requested_not_finalized']
+                    productObj['totalGroupsRequestedToBeProduced'] += orderItemNotFinalizedObj['total_groups_requested_not_finalized']
+                  }
+                }
+              })
+              if (productObj.id === 12) {
+                console.log(productObj)
+              }
+              if ((productObj['totalKilosInInventory'] > 0.01 || productObj['totalKilosInInventory'] < -0.01) || productObj['totalKilosRequestedToBeProduced'] > 0.01) {
                 inventoryProductsItems.push({
                   'code': productObj.code,
                   'description': productObj.description,
-                  'total_kilos_requested': productObj['totalKilosRequested'],
-                  'total_groups_requested': productObj['totalGroupsRequested'],
-                  'total_kilos_requested_pending': productObj['totalKilosRequestedPending'],
-                  'total_groups_requested_pending': productObj['totalGroupsRequestedPending'],
-                  'total_kilos_sold': productObj['totalKilosSold'],
-                  'total_groups_sold': productObj['totalGroupsSold'],
-                  'total_kilos_produced': productObj['totalKilosProduced'],
-                  'total_groups_produced': productObj['totalGroupsProduced'],
-                  'total_kilos_adjusted': productObj['totalKilosAdjusted'],
-                  'total_groups_adjusted': productObj['totalGroupsAdjusted'],
-                  'total_kilos_in_inventory': productObj['totalKilosInInventory'],
-                  'total_groups_in_inventory': productObj['totalGroupsInInventory'],
-                  'total_kilos_sold_given': productObj['totalKilosSoldGiven'],
-                  'total_kilos_requested_in_production': productObj['totalKilosRequestedInProduction'],
-                  'total_groups_requested_in_production': productObj['totalGroupsRequestedInProduction'],
-                  'total_kilos_requested_not_finalized_given': productObj['totalKilosRequestedNotFinalizedGiven'],
-                  'total_groups_requested_not_finalized_given': productObj['totalGroupsRequestedNotFinalizedGiven'],
-                  'total_kilos_requested_to_produce': productObj['totalKilosRequestedToProduce'],
-                  'total_groups_requested_to_produce': productObj['totalGroupsRequestedToProduce'],
+                  'total_kilos_requested': productObj['totalKilosRequested'] ? Math.round(productObj['totalKilosRequested'] * 100) / 100 : 0,
+                  'total_groups_requested': productObj['totalGroupsRequested'] ? Math.round(productObj['totalGroupsRequested'] * 100) / 100 : 0,
+                  'total_kilos_requested_pending': productObj['totalKilosRequestedPending'] ? Math.round(productObj['totalKilosRequestedPending'] * 100) / 100 : 0,
+                  'total_groups_requested_pending': productObj['totalGroupsRequestedPending'] ? Math.round(productObj['totalGroupsRequestedPending'] * 100) / 100 : 0,
+                  'total_kilos_sold': productObj['totalKilosSold'] ? Math.round(productObj['totalKilosSold'] * 100) / 100 : 0,
+                  'total_groups_sold': productObj['totalGroupsSold'] ? Math.round(productObj['totalGroupsSold'] * 100) / 100 : 0,
+                  'total_kilos_produced': productObj['totalKilosProduced'] ? Math.round(productObj['totalKilosProduced'] * 100) / 100 : 0,
+                  'total_groups_produced': productObj['totalGroupsProduced'] ? Math.round(productObj['totalGroupsProduced'] * 100) / 100 : 0,
+                  'total_kilos_adjusted': productObj['totalKilosAdjusted'] ? Math.round(productObj['totalKilosAdjusted'] * 100) / 100 : 0,
+                  'total_groups_adjusted': productObj['totalGroupsAdjusted'] ? Math.round(productObj['totalGroupsAdjusted'] * 100) / 100 : 0,
+                  'total_kilos_in_inventory': productObj['totalKilosInInventory'] ? Math.round(productObj['totalKilosInInventory'] * 100) : 0,
+                  'total_groups_in_inventory': productObj['totalGroupsInInventory'] ? Math.round(productObj['totalGroupsInInventory'] * 100) / 100 : 0,
+                  'total_kilos_sold_given': productObj['totalKilosSoldGiven'] ? Math.round(productObj['totalKilosSoldGiven'] * 100) / 100 : 0,
+                  'total_kilos_requested_in_production': productObj['totalKilosRequestedInProduction'] ? Math.round(productObj['totalKilosRequestedInProduction'] * 100) / 100 : 0,
+                  'total_groups_requested_in_production': productObj['totalGroupsRequestedInProduction'] ? Math.round(productObj['totalGroupsRequestedInProduction'] * 100) / 100 : 0,
+                  'total_kilos_requested_not_finalized_given': productObj['totalKilosRequestedNotFinalizedGiven'] ? Math.round(productObj['totalKilosRequestedNotFinalizedGiven'] * 100) / 100 : 0,
+                  'total_groups_requested_not_finalized_given': productObj['totalGroupsRequestedNotFinalizedGiven'] ? Math.round(productObj['totalGroupsRequestedNotFinalizedGiven'] * 100) / 100 : 0,
+                  'total_kilos_requested_to_be_produced': productObj['totalKilosRequestedToBeProduced'] ? Math.round(productObj['totalKilosRequestedToBeProduced'] * 100) / 100 : 0,
+                  'total_groups_requested_to_be_produced': productObj['totalGroupsRequestedToBeProduced'] ? Math.round(productObj['totalGroupsRequestedToBeProduced'] * 100) / 100 : 0,
                   'order_items_not_finalized': productObj['orderItemsNotFinalized']
                 })
               }
             })
+            console.log(inventoryProductsItems.length)
             this.inventoryProductsItems = inventoryProductsItems
             let vm = this
             this.timeout = setTimeout(function () {
@@ -300,7 +316,6 @@
       },
       watch: {
         inventoryProductsItems: function (inventoryProducts) {
-          console.log(inventoryProducts)
         }
       }
     }
