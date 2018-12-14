@@ -289,7 +289,7 @@
                   'total_groups_produced': productObj['totalGroupsProduced'] ? Math.round(productObj['totalGroupsProduced'] * 100) / 100 : 0,
                   'total_kilos_adjusted': productObj['totalKilosAdjusted'] ? Math.round(productObj['totalKilosAdjusted'] * 100) / 100 : 0,
                   'total_groups_adjusted': productObj['totalGroupsAdjusted'] ? Math.round(productObj['totalGroupsAdjusted'] * 100) / 100 : 0,
-                  'total_kilos_in_inventory': productObj['totalKilosInInventory'] ? Math.round(productObj['totalKilosInInventory'] * 100) : 0,
+                  'total_kilos_in_inventory': productObj['totalKilosInInventory'] ? Math.round(productObj['totalKilosInInventory'] * 100) / 100 : 0,
                   'total_groups_in_inventory': productObj['totalGroupsInInventory'] ? Math.round(productObj['totalGroupsInInventory'] * 100) / 100 : 0,
                   'total_kilos_sold_given': productObj['totalKilosSoldGiven'] ? Math.round(productObj['totalKilosSoldGiven'] * 100) / 100 : 0,
                   'total_kilos_requested_in_production': productObj['totalKilosRequestedInProduction'] ? Math.round(productObj['totalKilosRequestedInProduction'] * 100) / 100 : 0,
