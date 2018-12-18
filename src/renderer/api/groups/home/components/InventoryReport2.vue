@@ -275,7 +275,7 @@
               if (productObj.id === 12) {
                 console.log(productObj)
               }
-              if ((productObj['totalKilosInInventory'] > 0.01 || productObj['totalKilosInInventory'] < -0.01) || productObj['totalKilosRequestedToBeProduced'] > 0.01) {
+              if ((productObj['totalKilosInInventory'] > 0.01 || productObj['totalKilosInInventory'] < -0.01) || productObj['totalKilosRequestedToBeProduced'] > 0.01 || productObj['totalKilosRequestedPending'] > 0.01) {
                 inventoryProductsItems.push({
                   'code': productObj.code,
                   'description': productObj.description,
@@ -316,6 +316,7 @@
       },
       watch: {
         inventoryProductsItems: function (inventoryProducts) {
+          console.log(inventoryProducts.length)
         }
       }
     }
