@@ -234,9 +234,9 @@
         let directParams = {}
         directParams[OrderRequestPropertiesReference.ORDER_CODE.name] = this.requestOrder.orderCode
         directParams[OrderRequestPropertiesReference.DATE.name] = this.requestOrder.date
-        directParams[OrderRequestPropertiesReference.CLIENT.relationship_id_name] = this.requestOrder.client ? this.requestOrder.client[GlobalEntityIdentifier] : 'null'
-        directParams[OrderRequestPropertiesReference.COMPANY.relationship_id_name] = this.requestOrder.company ? this.requestOrder.company[GlobalEntityIdentifier] : 'null'
-        directParams[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] : 'null'
+        directParams[OrderRequestPropertiesReference.CLIENT.relationship_id_name] = this.requestOrder.client ? this.requestOrder.client[GlobalEntityIdentifier] : null
+        directParams[OrderRequestPropertiesReference.COMPANY.relationship_id_name] = this.requestOrder.company ? this.requestOrder.company[GlobalEntityIdentifier] : null
+        directParams[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] : null
         let initialOrderRequestProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderRequestPropertiesReference.PRODUCTS.name], 'product_id')
         let filteredOrderRequestProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialOrderRequestProducts, this.requestOrder.requestProducts, 'product_id')
         let relayObjects = [

@@ -317,7 +317,7 @@
           [OrderProductionPropertiesReference.END_DATE_TIME.name]: this.productionOrder.endDateTime,
           [OrderProductionPropertiesReference.WASTE.name]: this.productionOrder.waste
         }
-        directParams[OrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : 'null'
+        directParams[OrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : null
         let relayObjects = []
         if (this.extrusionMode) {
           let productionRolls = []

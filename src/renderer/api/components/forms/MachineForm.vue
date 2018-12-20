@@ -96,7 +96,7 @@
       save: function () {
         let directParams = {
           [MachinePropertiesReference.NAME.name]: this.machine.name,
-          [MachinePropertiesReference.MACHINE_TYPE.relationship_id_name]: this.machine.machineType ? this.machine.machineType[GlobalEntityIdentifier] : 'null'
+          [MachinePropertiesReference.MACHINE_TYPE.relationship_id_name]: this.machine.machineType ? this.machine.machineType[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
         }

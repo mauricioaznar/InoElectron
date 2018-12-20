@@ -152,14 +152,14 @@
         let directParams = {
           [ProductionEventPropertiesReference.START_DATE_TIME.name]: this.productionEvent.startDateTime,
           [ProductionEventPropertiesReference.END_DATE_TIME.name]: this.productionEvent.endDateTime,
-          [ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.relationship_id_name]: this.productionEvent.productionEventType ? this.productionEvent.productionEventType[GlobalEntityIdentifier] : 'null',
+          [ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.relationship_id_name]: this.productionEvent.productionEventType ? this.productionEvent.productionEventType[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.DESCRIPTION.name]: this.productionEvent.description
         }
         if (this.isMachineFailureTypeSelected) {
-          directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = this.productionEvent.machine ? this.productionEvent.machine[GlobalEntityIdentifier] : 'null'
+          directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = this.productionEvent.machine ? this.productionEvent.machine[GlobalEntityIdentifier] : null
         } else {
           if (this.initialObject[ProductionEventPropertiesReference.MACHINE.name]) {
-            directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = 'null'
+            directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = null
           }
         }
         let relayObjects = []

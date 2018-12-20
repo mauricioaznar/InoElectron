@@ -138,7 +138,7 @@
         let directParams = {
           [OrderAdjustmentPropertiesReference.DATE.name]: this.productionOrder.date
         }
-        directParams[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.relationship_id_name] = this.productionOrder.adjustmentType ? this.productionOrder.adjustmentType[GlobalEntityIdentifier] : 'null'
+        directParams[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.relationship_id_name] = this.productionOrder.adjustmentType ? this.productionOrder.adjustmentType[GlobalEntityIdentifier] : null
         let filteredAdjustmentProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(this.initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name].map(initialProductionObj => initialProductionObj.pivot), this.productionOrder.adjustmentProducts, 'id')
         let relayObjects = [
           ManyToManyHelper.createRelayObject(filteredAdjustmentProducts, EntityTypes.ORDER_ADJUSTMENT_PRODUCT)

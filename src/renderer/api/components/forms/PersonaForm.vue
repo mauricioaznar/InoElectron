@@ -192,11 +192,11 @@
           [PersonaPropertiesReference.CELLPHONE.name]: this.persona.cellphone ? this.persona.cellphone.replace(/\D+/g, '') : ''
         }
         if (this.clientMode) {
-          directParams[ClientPropertiesReference.COMPANY.relationship_id_name] = this.persona.company ? this.persona.company[GlobalEntityIdentifier] : 'null'
+          directParams[ClientPropertiesReference.COMPANY.relationship_id_name] = this.persona.company ? this.persona.company[GlobalEntityIdentifier] : null
           directParams[ClientPropertiesReference.EMAIL.name] = this.persona.email
         }
         if (this.employeeMode) {
-          directParams[EmployeePropertiesReference.EMPLOYEE_TYPE.relationship_id_name] = this.persona.employeeType ? this.persona.employeeType[GlobalEntityIdentifier] : 'null'
+          directParams[EmployeePropertiesReference.EMPLOYEE_TYPE.relationship_id_name] = this.persona.employeeType ? this.persona.employeeType[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
         }

@@ -263,25 +263,25 @@
           [PropertiesReference.WIDTH.name]: this.product.width,
           [PropertiesReference.CURRENT_KILO_PRICE.name]: this.product.currentKiloPrice,
           // one to many
-          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : 'null',
-          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing ? this.product.packing[GlobalEntityIdentifier] : 'null',
-          [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : 'null'
+          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : null,
+          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing ? this.product.packing[GlobalEntityIdentifier] : null,
+          [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : null
         }
         if (this.isBag) {
           if (this.product.requiresGroupWeight) {
             directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = this.product.currentGroupWeight
             directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = this.product.groupWeightStrict ? 1 : 0
           } else {
-            directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = 'null'
+            directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = null
             directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = 0
           }
           directParams[PropertiesReference.LENGTH.name] = this.product.length
         } else {
           directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = -1
-          directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = 'null'
-          directParams[PropertiesReference.LENGTH.name] = 'null'
+          directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = null
+          directParams[PropertiesReference.LENGTH.name] = null
           if (this.initialObject) {
-            directParams[PropertiesReference.PACKING.relationship_id_name] = 'null'
+            directParams[PropertiesReference.PACKING.relationship_id_name] = null
           }
         }
         this.$validator.validateAll().then((result) => {
