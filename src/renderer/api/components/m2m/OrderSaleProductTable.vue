@@ -361,6 +361,13 @@
           }
           this.currentStructuredObjects = tempCurrentStructuredObjects
           this.emitStructureChangeEvent()
+        },
+        saleMode: function (saleMode) {
+          if (!saleMode) {
+            this.currentStructuredObjects.forEach(currentStructuredObj => {
+              currentStructuredObj[OrderSaleProductPropertiesReference.KILO_PRICE.name] = 0
+            })
+          }
         }
       }
     }

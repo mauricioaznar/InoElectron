@@ -318,15 +318,15 @@
         let directParams = {}
         directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
         directParams[OrderSalePropertiesReference.DATE.name] = this.salesOrder.date
-        directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : 'null'
+        directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : null
         directParams[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = this.isPartiallyPaidStatusSelected ? this.salesOrder.amountCollected : 0
-        directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = (!this.isReplacementStatusSelected && this.salesOrder.receiptType) ? this.salesOrder.receiptType[GlobalEntityIdentifier] : 'null'
-        directParams[OrderSalePropertiesReference.ORDER_SALE_STATUS.relationship_id_name] = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] : 'null'
-        directParams[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] = this.salesOrder.orderSaleCollectionStatus ? this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier] : 'null'
+        directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = (!this.isReplacementStatusSelected && this.salesOrder.receiptType) ? this.salesOrder.receiptType[GlobalEntityIdentifier] : null
+        directParams[OrderSalePropertiesReference.ORDER_SALE_STATUS.relationship_id_name] = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] : null
+        directParams[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] = this.salesOrder.orderSaleCollectionStatus ? this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier] : null
         let initialOrderSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderSalePropertiesReference.PRODUCTS.name], 'product_id')
         let filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialOrderSaleProducts, this.salesOrder.saleProducts, 'product_id')
         if (!this.initialObject) {
-          directParams[OrderSalePropertiesReference.ORDER_REQUEST.relationship_id_name] = this.orderRequest ? this.orderRequest[GlobalEntityIdentifier] : 'null'
+          directParams[OrderSalePropertiesReference.ORDER_REQUEST.relationship_id_name] = this.orderRequest ? this.orderRequest[GlobalEntityIdentifier] : null
           filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations([], this.salesOrder.saleProducts, 'product_id')
         }
         let relayObjects = [
