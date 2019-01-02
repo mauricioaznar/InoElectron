@@ -55,7 +55,22 @@
           {
             name: ProductionEventPropertiesReference.CHECKS.name,
             title: ProductionEventPropertiesReference.CHECKS.title,
-            callback: DisplayFunctions.getNameArray
+            callback: DisplayFunctions.getNameArray,
+            hidden: true
+          },
+          {
+            name: ProductionEventPropertiesReference.REPORT_EMPLOYEE.name,
+            title: ProductionEventPropertiesReference.REPORT_EMPLOYEE.title,
+            callback: DisplayFunctions.getPersona,
+            entity: EntityTypes.EMPLOYEE.name,
+            hidden: true
+          },
+          {
+            name: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name,
+            title: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title,
+            callback: DisplayFunctions.getPersona,
+            entity: EntityTypes.EMPLOYEE.name,
+            hidden: true
           }
         ],
         actions: [

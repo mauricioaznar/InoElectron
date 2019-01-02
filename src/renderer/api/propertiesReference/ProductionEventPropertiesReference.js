@@ -35,10 +35,24 @@ let propertiesReference = {
     defaultValue: MauInputDefaultValues.SELECT
   },
   CHECKS: {
-    title: 'To-do',
+    title: 'Por hacer',
     name: 'checks',
     display: DisplayFunctions.getNameArray,
     defaultValue: MauInputDefaultValues.MULTISELECT
+  },
+  REPORT_EMPLOYEE: {
+    title: 'Empleado que reporto',
+    name: 'report_employee',
+    relationship_id_name: 'report_employee_id',
+    display: DisplayFunctions.getPersona,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  MAINTENANCE_EMPLOYEE: {
+    title: 'Empleado que reparo',
+    name: 'maintenance_employee',
+    relationship_id_name: 'maintenance_employee_id',
+    display: DisplayFunctions.getPersona,
+    defaultValue: MauInputDefaultValues.SELECT
   }
 }
 

@@ -53,6 +53,16 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
+            title: ProductionEventPropertiesReference.REPORT_EMPLOYEE.title,
+            name: ProductionEventPropertiesReference.REPORT_EMPLOYEE.name,
+            display: DisplayFunctions.getPersona
+          },
+          {
+            title: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title,
+            name: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name,
+            display: DisplayFunctions.getPersona
+          },
+          {
             title: ProductionEventPropertiesReference.CHECKS.title,
             name: ProductionEventPropertiesReference.CHECKS.name,
             display: DisplayFunctions.getNameArray

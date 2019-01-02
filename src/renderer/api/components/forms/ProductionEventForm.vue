@@ -69,6 +69,35 @@
               {{ errors.first(ProductionEventPropertiesReference.CHECKS.name) }}
             </span>
         </div>
+        <div class="form-group">
+            <mau-form-input-select
+                    :initialObject="initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE.name]"
+                    :label="ProductionEventPropertiesReference.REPORT_EMPLOYEE.title"
+                    :displayProperty="'full_name'"
+                    v-model="productionEvent.reportEmployee"
+                    :name="ProductionEventPropertiesReference.REPORT_EMPLOYEE.name"
+                    :data-vv-as="ProductionEventPropertiesReference.REPORT_EMPLOYEE.title"
+                    :error="errors.first(ProductionEventPropertiesReference.REPORT_EMPLOYEE.name)"
+                    :entityType="employeeEntityType"
+                    :disabled="!userHasWritePrivileges"
+            >
+            </mau-form-input-select>
+        </div>
+        <div class="form-group">
+            <mau-form-input-select
+                    :initialObject="initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name]"
+                    :label="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title"
+                    :displayProperty="'full_name'"
+                    v-model="productionEvent.maintenanceEmployee"
+                    :name="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name"
+                    :data-vv-as="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title"
+                    :error="errors.first(ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name)"
+                    :entityType="employeeEntityType"
+                    :filter-exact="{employee_type_id: 3}"
+                    :disabled="!userHasWritePrivileges"
+            >
+            </mau-form-input-select>
+        </div>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -95,6 +124,8 @@
           startDateTime: '',
           endDateTime: '',
           machine: {},
+          reportEmployee: {},
+          maintenanceEmployee: {},
           productionEventType: {},
           description: '',
           checks: []
@@ -102,6 +133,7 @@
         initialValues: [],
         buttonDisabled: false,
         machineEntityType: EntityTypes.MACHINE,
+        employeeEntityType: EntityTypes.EMPLOYEE,
         productionEventTypeEntityType: EntityTypes.PRODUCTION_EVENT_TYPE
       }
     },
@@ -144,6 +176,8 @@
         this.initialValues[ProductionEventPropertiesReference.START_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.START_DATE_TIME.name)
         this.initialValues[ProductionEventPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.END_DATE_TIME.name)
         this.initialValues[ProductionEventPropertiesReference.MACHINE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.MACHINE.name)
+        this.initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.REPORT_EMPLOYEE.name)
+        this.initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name)
         this.initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name)
         this.initialValues[ProductionEventPropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.DESCRIPTION.name)
         this.initialValues[ProductionEventPropertiesReference.CHECKS.name] = DefaultValuesHelper.array(this.initialObject, ProductionEventPropertiesReference.CHECKS.name)
@@ -153,6 +187,8 @@
           [ProductionEventPropertiesReference.START_DATE_TIME.name]: this.productionEvent.startDateTime,
           [ProductionEventPropertiesReference.END_DATE_TIME.name]: this.productionEvent.endDateTime,
           [ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.relationship_id_name]: this.productionEvent.productionEventType ? this.productionEvent.productionEventType[GlobalEntityIdentifier] : null,
+          [ProductionEventPropertiesReference.REPORT_EMPLOYEE.relationship_id_name]: this.productionEvent.reportEmployee ? this.productionEvent.reportEmployee[GlobalEntityIdentifier] : null,
+          [ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.relationship_id_name]: this.productionEvent.maintenanceEmployee ? this.productionEvent.maintenanceEmployee[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.DESCRIPTION.name]: this.productionEvent.description
         }
         if (this.isMachineFailureTypeSelected) {
