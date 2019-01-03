@@ -1,0 +1,133 @@
+<template>
+  <div>
+      <div>
+          <mau-form-input-date-time
+                  :name="EmployeeAttendancePropertiesReference.DATE_TIME.name"
+                  :label="'de entrada/salida'"
+                  v-model="employeeAttendance.dateTime"
+                  :initialValue="initialValues[EmployeeAttendancePropertiesReference.DATE_TIME.name]"
+                  :error="errors.first(EmployeeAttendancePropertiesReference.DATE_TIME.name)"
+                  :disabled="!userHasWritePrivileges"
+                  v-validate="'required'"
+          >
+          </mau-form-input-date-time>
+          <div class="form-group"
+          >
+              <mau-form-input-select
+                      :initialObject="initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE.name]"
+                      :label="EmployeeAttendancePropertiesReference.EMPLOYEE.title"
+                      :displayProperty="'full_name'"
+                      v-model="employeeAttendance.employee"
+                      :name="EmployeeAttendancePropertiesReference.EMPLOYEE.name"
+                      :data-vv-as="EmployeeAttendancePropertiesReference.EMPLOYEE.title"
+                      :error="errors.first(EmployeeAttendancePropertiesReference.EMPLOYEE.name)"
+                      :entityType="employeeEntityType"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select>
+          </div>
+          <div class="form-group">
+              <mau-form-input-select
+                      :initialObject="initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name]"
+                      :label="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title"
+                      :displayProperty="'name'"
+                      v-model="employeeAttendance.employeeAttendanceType"
+                      :name="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name"
+                      :data-vv-as="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title"
+                      :error="errors.first(EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name)"
+                      :entityType="employeeAttendanceTypeEntityType"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select>
+          </div>
+          <div class="container mb-2 text-right">
+              <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
+          </div>
+      </div>
+  </div>
+</template>
+
+<script>
+  import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
+  import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
+  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
+  import EntityTypes from 'renderer/api/EntityTypes'
+  import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import EmployeeAttendancePropertiesReference from 'renderer/api/propertiesReference/EmployeeAttendancePropertiesReference'
+  export default {
+    name: 'MauSimpleOrderForm',
+    data () {
+      return {
+        getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
+        EmployeeAttendancePropertiesReference: EmployeeAttendancePropertiesReference,
+        employeeAttendance: {
+          dateTime: '',
+          employee: {},
+          employeeAttendanceType: {}
+        },
+        initialValues: {},
+        buttonDisabled: false,
+        employeeEntityType: EntityTypes.EMPLOYEE,
+        employeeAttendanceTypeEntityType: EntityTypes.EMPLOYEE_ATTENDANCE_TYPE
+      }
+    },
+    components: {
+      MauFormInputSelect,
+      MauFormInputDateTime
+    },
+    props: {
+      initialObject: {
+        type: Object
+      },
+      saveFunction: {
+        type: Function,
+        required: true
+      }
+    },
+    mounted () {
+      FormSubmitEventBus.onEvent(function (isSuccess) {
+        if (isSuccess === false) {
+          this.buttonDisabled = false
+        }
+      }.bind(this))
+    },
+    created () {
+      this.setInitialValues()
+    },
+    computed: {
+      userHasWritePrivileges: function () {
+        return true
+      }
+    },
+    methods: {
+      setInitialValues: function () {
+        this.initialValues[EmployeeAttendancePropertiesReference.DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, EmployeeAttendancePropertiesReference.DATE_TIME.name)
+        this.initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, EmployeeAttendancePropertiesReference.EMPLOYEE.name)
+        this.initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name] = DefaultValuesHelper.simple(this.initialObject, EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name)
+      },
+      save: function () {
+        let directParams = {
+          [EmployeeAttendancePropertiesReference.DATE_TIME.name]: this.employeeAttendance.dateTime
+        }
+        directParams[EmployeeAttendancePropertiesReference.EMPLOYEE.relationship_id_name] = this.employeeAttendance.employee ? this.employeeAttendance.employee[GlobalEntityIdentifier] : null
+        directParams[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.relationship_id_name] = this.employeeAttendance.employeeAttendanceType ? this.employeeAttendance.employeeAttendanceType[GlobalEntityIdentifier] : null
+        this.$validator.validateAll().then((result) => {
+          if (result) {
+            this.buttonDisabled = true
+            this.saveFunction(directParams, [])
+          }
+        })
+      }
+    },
+    watch: {
+      initialObject: function (initialObject) {
+        this.setInitialValues(initialObject)
+      }
+    }
+  }
+
+</script>

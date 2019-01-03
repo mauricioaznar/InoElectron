@@ -337,7 +337,7 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
   {
     componentName: 'Main',
-    category: Categories.PRODUCTION
+    category: Categories.HUMAN_RESOURCES
   },
   [
     RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
@@ -359,6 +359,45 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE_ATTENDANCE,
+  {
+    componentName: 'Main',
+    category: Categories.HUMAN_RESOURCES
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE_ATTENDANCE,
+      {
+        componentName: 'List'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE_ATTENDANCE,
+      {
+        componentName: 'BlockList',
+        groupDefault: true,
+        categoryDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE_ATTENDANCE,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE_ATTENDANCE,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE_ATTENDANCE,
       {
         componentName: 'View',
         params: [GlobalEntityIdentifier]

@@ -21,7 +21,11 @@ export function getWithFilterExactWithoutPagination (entityType, filterExactObje
   let filterExactQuery = FilterHelper.filterExactQueryCreator(filterExactObject)
   return Vue.http.get(ApiUrls.createListUrl(entityType) + '?paginate=false' + filterExactQuery, {headers: getHeaders()}).then(getServerResponseData)
 }
-
+export function getWithFilterExactWithoutPaginationWithStartDate (entityType, filterExactObject, startDateObject) {
+  let filterExactQuery = FilterHelper.filterExactQueryCreator(filterExactObject)
+  let startDateQuery = FilterHelper.filterStartDateQueryCreator(startDateObject)
+  return Vue.http.get(ApiUrls.createListUrl(entityType) + '?paginate=false' + filterExactQuery + startDateQuery, {headers: getHeaders()}).then(getServerResponseData)
+}
 export function getWithFilterLikeWithFilterExactWithoutPagination (entityType, filterLikeObject, filterExactObject) {
   let extraQuery = '?paginate=false'
   let filterExactQuery = FilterHelper.filterExactQueryCreator(filterExactObject)
@@ -93,6 +97,7 @@ export default {
   getWithoutPagination: getWithoutPagination,
   getWithFilterLikeWithoutPagination: getWithFilterLikeWithoutPagination,
   getWithFilterExactWithoutPagination: getWithFilterExactWithoutPagination,
+  getWithFilterExactWithoutPaginationWithStartDate: getWithFilterExactWithoutPaginationWithStartDate,
   getWithFilterLikeWithFilterExactWithoutPagination: getWithFilterLikeWithFilterExactWithoutPagination,
   getMe: getMe,
   generateToken: generateToken,

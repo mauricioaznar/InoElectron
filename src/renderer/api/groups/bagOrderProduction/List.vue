@@ -54,7 +54,7 @@
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
             callback: DisplayFunctions.getPersona,
             entity: EntityTypes.EMPLOYEE.name,
-            entityFieldName: 'name'
+            entityFieldName: 'last_name'
           },
           {
             name: OrderProductionPropertiesReference.MACHINES.name,

@@ -30,7 +30,22 @@ export function filterLikeQueryCreator (filterLikeObject) {
   return filterLikeQuery
 }
 
+export function filterStartDateQueryCreator (filterStartDateObject) {
+  let filterStartDateQuery = ''
+  let loopIndex = 1
+  for (let filterStartDateObjectKey in filterStartDateObject) {
+    if (filterStartDateObject.hasOwnProperty(filterStartDateObjectKey)) {
+      if (loopIndex === 1) {
+        filterStartDateQuery += '&start_date_property=' + filterStartDateObjectKey + '&start_date_value' + '=' + filterStartDateObject[filterStartDateObjectKey]
+      }
+      loopIndex++
+    }
+  }
+  return filterStartDateQuery
+}
+
 export default {
   filterExactQueryCreator: filterExactQueryCreator,
-  filterLikeQueryCreator: filterLikeQueryCreator
+  filterLikeQueryCreator: filterLikeQueryCreator,
+  filterStartDateQueryCreator: filterStartDateQueryCreator
 }

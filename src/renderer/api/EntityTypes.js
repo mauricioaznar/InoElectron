@@ -134,6 +134,15 @@ export default {
     name: 'employeeType',
     apiName: 'employeeType'
   },
+  EMPLOYEE_ATTENDANCE: {
+    name: 'employeeAttendance',
+    apiName: 'employeeAttendance',
+    title: 'Asistencia de empleados'
+  },
+  EMPLOYEE_ATTENDANCE_TYPE: {
+    name: 'employeeAttendanceType',
+    apiName: 'employeeAttendanceType'
+  },
   NOTIFICATION: {
     name: 'notification',
     apiName: 'notification',
