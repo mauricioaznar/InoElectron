@@ -6,30 +6,29 @@
       :entityType="entityType"
     >
       <template slot-scope="params">
-        <order-production-form
-                :bagMode="true"
+        <employee-attendance-form
                 :saveFunction="params.save"
                 :entityType="entityType"
-        ></order-production-form>
+        ></employee-attendance-form>
       </template>
     </mau-crud-create>
   </div>
 </template>
 
 <script>
-  import OrderProductionForm from 'renderer/api/components/forms/OrderProductionForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
+  import EmployeeAttendanceForm from 'renderer/api/components/forms/EmployeeAttendanceForm.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateBagOrderProduction',
+    name: 'CreateEmployeeAttendanceForm',
     data () {
       return {
-        hostRelationshipIdName: 'order_production_id',
-        entityType: EntityTypes.BAG_ORDER_PRODUCTION
+        hostRelationshipIdName: 'employee_attendance_id',
+        entityType: EntityTypes.EMPLOYEE_ATTENDANCE
       }
     },
     components: {
-      OrderProductionForm
+      EmployeeAttendanceForm
     },
     computed: {
       ...mapGetters(['groupDefaultRouteObject'])

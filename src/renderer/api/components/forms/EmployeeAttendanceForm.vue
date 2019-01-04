@@ -3,7 +3,7 @@
       <div>
           <mau-form-input-date-time
                   :name="EmployeeAttendancePropertiesReference.DATE_TIME.name"
-                  :label="'de entrada/salida'"
+                  :label="employeeAttendanceTypeLabel"
                   v-model="employeeAttendance.dateTime"
                   :initialValue="initialValues[EmployeeAttendancePropertiesReference.DATE_TIME.name]"
                   :error="errors.first(EmployeeAttendancePropertiesReference.DATE_TIME.name)"
@@ -11,6 +11,21 @@
                   v-validate="'required'"
           >
           </mau-form-input-date-time>
+          <div class="form-group">
+              <mau-form-input-select
+                      :initialObject="initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name]"
+                      :label="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title"
+                      :displayProperty="'name'"
+                      v-model="employeeAttendance.employeeAttendanceType"
+                      :name="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name"
+                      :data-vv-as="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title"
+                      :error="errors.first(EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name)"
+                      :entityType="employeeAttendanceTypeEntityType"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select>
+          </div>
           <div class="form-group"
           >
               <mau-form-input-select
@@ -22,21 +37,6 @@
                       :data-vv-as="EmployeeAttendancePropertiesReference.EMPLOYEE.title"
                       :error="errors.first(EmployeeAttendancePropertiesReference.EMPLOYEE.name)"
                       :entityType="employeeEntityType"
-                      :disabled="!userHasWritePrivileges"
-                      v-validate="'object_required'"
-              >
-              </mau-form-input-select>
-          </div>
-          <div class="form-group">
-              <mau-form-input-select
-                      :initialObject="initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name]"
-                      :label="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title"
-                      :displayProperty="'name'"
-                      v-model="employeeAttendance.employeeAttendanceType"
-                      :name="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name"
-                      :data-vv-as="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title"
-                      :error="errors.first(EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name)"
-                      :entityType="employeeAttendanceTypeEntityType"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
@@ -101,13 +101,16 @@
     computed: {
       userHasWritePrivileges: function () {
         return true
+      },
+      employeeAttendanceTypeLabel: function () {
+        return this.employeeAttendanceType ? (this.employeeAttendanceType[GlobalEntityIdentifier] === 1 ? 'de entrada' : 'de salida') : ''
       }
     },
     methods: {
       setInitialValues: function () {
         this.initialValues[EmployeeAttendancePropertiesReference.DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, EmployeeAttendancePropertiesReference.DATE_TIME.name)
         this.initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, EmployeeAttendancePropertiesReference.EMPLOYEE.name)
-        this.initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name] = DefaultValuesHelper.simple(this.initialObject, EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name)
+        this.initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name)
       },
       save: function () {
         let directParams = {

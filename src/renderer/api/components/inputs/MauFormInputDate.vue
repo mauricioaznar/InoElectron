@@ -92,8 +92,7 @@
       initialValue: String,
       name: String,
       error: {
-        type: String,
-        required: false
+        type: String
       },
       label: {
         type: String
