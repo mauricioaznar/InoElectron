@@ -16,11 +16,14 @@
             <b-tab title="Reporte de bolseo">
                 <bag-report v-if="tabIndex === 4" class="mt-4"></bag-report>
             </b-tab>
+            <b-tab title="Reporte de bolseo v2">
+                <product-report-2 v-if="tabIndex === 5" :bagMode="true" class="mt-4"></product-report-2>
+            </b-tab>
             <b-tab title="Reporte de extrusion">
-                <roll-report v-if="tabIndex === 5" class="mt-4"></roll-report>
+                <roll-report v-if="tabIndex === 6" class="mt-4"></roll-report>
             </b-tab>
             <b-tab title="Reporte de eventos de produccion">
-                <production-event-report v-if="tabIndex === 6" class="mt-4"></production-event-report>
+                <production-event-report v-if="tabIndex === 7" class="mt-4"></production-event-report>
             </b-tab>
         </b-tabs>
     </div>
@@ -31,6 +34,7 @@
     import InventoryReport from 'renderer/api/groups/home/components/InventoryReport.vue'
     import InventoryReport2 from 'renderer/api/groups/home/components/InventoryReport2.vue'
     import ProductionEventReport from 'renderer/api/groups/home/components/ProductionEventReport.vue'
+    import ProductReport2 from 'renderer/api/components/report/ProductReport2.vue'
     import BagReport from 'renderer/api/groups/home/components/BagReport.vue'
     import RollReport from 'renderer/api/groups/home/components/RollReport.vue'
     export default {
@@ -45,7 +49,8 @@
         SalesReport,
         ProductionEventReport,
         BagReport,
-        RollReport
+        RollReport,
+        ProductReport2
       },
       methods: {
         tabsUpdated: function (index) {
