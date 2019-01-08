@@ -81,6 +81,7 @@
               .concat({key: 'show_details', label: ''})
             this.dayTableFields = [{key: 'day', label: 'dia'}, {key: 'weekday', label: 'dia de la semana'}]
               .concat(machines.map(machineObj => { return {key: 'machine' + machineObj.id, label: machineObj.name} }))
+              .concat({key: 'total', label: 'total'})
             this.yearItems = []
             for (let year = 2018; year <= 2019; year++) {
               let yearItem = {}
