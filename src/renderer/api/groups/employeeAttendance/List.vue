@@ -45,6 +45,11 @@
             entity: EntityTypes.EMPLOYEE_ATTENDANCE_TYPE.name,
             entityFieldName: 'name',
             filter: true
+          },
+          {
+            name: EmployeeAttendancePropertiesReference.IMAGE.name,
+            title: EmployeeAttendancePropertiesReference.IMAGE.title,
+            callback: DisplayFunctions.getEmployeeAttendanceImage
           }
         ],
         actions: [

@@ -1,6 +1,7 @@
 import ConvertDateTimeTo from 'renderer/services/common/ConvertDateTimeTo'
 import moment from 'moment'
 import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+import ServerDomain from 'renderer/api/functions/ServerDomain'
 moment.locale('es')
 
 export default {
@@ -189,5 +190,8 @@ export default {
       htmlString += '</tr>'
     }
     return htmlString + '</table>'
+  },
+  getEmployeeAttendanceImage: function (imageName) {
+    return '<div><img src="></div>' + ServerDomain + 'attendances/' + imageName + '" width="500">'
   }
 }

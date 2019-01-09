@@ -1,3 +1,5 @@
-const ApiDomain = (process.env.NODE_ENV === 'development') ? 'http://inoserver.test/api/' : 'http://206.189.228.240/api/'
+import ServerDomain from 'renderer/api/functions/ServerDomain'
+
+const ApiDomain = ServerDomain + 'api/'
 
 export default ApiDomain

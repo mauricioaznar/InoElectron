@@ -20,5 +20,11 @@ export default {
     relationship_id_name: 'employee_attendance_type_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
+  },
+  IMAGE: {
+    title: 'Imagen',
+    name: 'image_name',
+    display: DisplayFunctions.getEmployeeAttendanceImage,
+    defaultValue: MauInputDefaultValues.TEXT
   }
 }

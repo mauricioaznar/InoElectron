@@ -243,7 +243,8 @@
       getPropertyFromObject: DisplayFunctions.getPropertyFromObject,
       getOrderSales: DisplayFunctions.getOrderSales,
       getOrderSalesProductsRequested: DisplayFunctions.getOrderSalesProductsRequested,
-      getOrderSalesProductsNotRequested: DisplayFunctions.getOrderSalesProductsNotRequested
+      getOrderSalesProductsNotRequested: DisplayFunctions.getOrderSalesProductsNotRequested,
+      getEmployeeAttendanceImage: DisplayFunctions.getEmployeeAttendanceImage
     }
   }
 </script>
