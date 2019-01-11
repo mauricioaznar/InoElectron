@@ -14,11 +14,11 @@
                 :entity-type="employeeEntityType"
             ></mau-form-input-select>
         </div>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end mb-4">
             <button class="btn btn-primary" @click="searchEmployeeAttendances">Buscar</button>
         </div>
         <div>
-            <table>
+            <table v-if="tableDateTimesHeaders.length">
                 <tr>
                     <th class="p-2">Hora</th>
                     <th v-for="dateTransformed in tableDateTimesHeaders" class="p-4">
@@ -26,12 +26,12 @@
                     </th>
                 </tr>
                 <tr v-for="(rowItem, rowIndex) in tableDateTimesColumns[0]">
-                    <td class="box mau-text-center" v-if="((rowIndex + 6) % 6) === 0" rowspan="6">{{(rowIndex / 6).toFixed(0)}}</td>
+                    <td class="box mau-text-center" v-if="((rowIndex + 4) % 4) === 0" rowspan="4">{{(rowIndex / 4).toFixed(0)}}</td>
                     <td v-for="(column, columnIndex) in tableDateTimesColumns" :class="'box ' + column[rowIndex]"></td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td v-for="coloredBlockCount in tableDateTimesColumnsColoredBlocks">{{Math.trunc(coloredBlockCount / 6) + ' ' + coloredBlockCount % 6}}</td>
+                    <td class="box mau-text-center">Totales</td>
+                    <td class="box p-2 mau-text-center" v-for="coloredBlockCount in tableDateTimesColumnsColoredBlocks">{{Math.trunc(coloredBlockCount / 4)}} <sup>{{coloredBlockCount % 4}}</sup>&frasl;<sub>4</sub></td>
                 </tr>
             </table>
         </div>
@@ -47,7 +47,7 @@
     import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
     import moment from 'moment'
     export default {
-      name: 'EmployeeAttendanceBlockList',
+      name: 'BlockListEmployeeAttendance',
       data () {
         return {
           dateSelected: '',
@@ -65,14 +65,15 @@
       methods: {
         searchEmployeeAttendances: function () {
           let employeeId = this.employeeSelected[GlobalEntityIdentifier]
-          let date = moment(this.dateSelected, 'YYYY-MM-DD hh:mm:ss').subtract(1, 'days').format('YYYY-MM-DD HH:mm:ss')
-          ApiOperations.getWithFilterExactWithoutPaginationWithStartDate(EntityTypes.EMPLOYEE_ATTENDANCE, {employee_id: employeeId}, {date_time: date}).then(response => {
+          let dateSelectedMinusOneDay = moment(this.dateSelected, 'YYYY-MM-DD hh:mm:ss').subtract(1, 'days').format('YYYY-MM-DD HH:mm:ss')
+          ApiOperations.getWithFilterExactWithoutPaginationWithStartDate(EntityTypes.EMPLOYEE_ATTENDANCE, {employee_id: employeeId}, {entrance_date_time: dateSelectedMinusOneDay}).then(response => {
             this.setTable(response)
           })
         },
         setTable: function (employeeAttendances) {
           this.tableDateTimesHeaders = []
           this.tableDateTimesColumns = []
+          this.tableDateTimesColumnsColoredBlocks = []
           let iterableDateTime = moment(this.dateSelected, 'YYYY-MM-DD').subtract(1, 'days')
           for (let i = 0; i < 9; i++) {
             this.tableDateTimesHeaders.push(DisplayFunctions.getDate(iterableDateTime))
@@ -84,29 +85,29 @@
         },
         setTableDateTimeColumn: function (employeeAttendances, currentDate) {
           let tableDateTimeColumn = []
-          let employeeIsWorking = false
+          for (let i = 0; i < 24; i++) {
+            for (let j = 0; j < 4; j++) {
+              tableDateTimeColumn.push('')
+            }
+          }
           for (let i = 0; i < 24; i++) {
             let hour = i < 10 ? '0' + i : i
-            for (let j = 0; j < 6; j++) {
-              let minute = j + '0'
+            for (let j = 0; j < 4; j++) {
+              let minute = (j === 0) ? '00' : j * 15
+              let index = (i * 4) + j
               let startDateTime = moment(currentDate.format('YYYY-MM-DD') + ' ' + hour + ':' + minute + ':' + '00', 'YYYY-MM-DD HH:mm:ss')
-              let endDateTime = startDateTime
-              let filteredEmployeeAttendances = employeeAttendances.filter(employeeAttendanceObj => {
-                return moment(employeeAttendanceObj.date_time, 'YYYY-MM-DD HH:mm:ss').isBetween(startDateTime.format('YYYY-MM-DD HH:mm:ss'), endDateTime.add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss'), null, '[)')
+              let foundEmployeeAttendanceObj = employeeAttendances.find(employeeAttendanceObj => {
+                return startDateTime.isBetween(moment(employeeAttendanceObj.entrance_date_time, 'YYYY-MM-DD HH:mm:ss'), moment(employeeAttendanceObj.exit_date_time, 'YYYY-MM-DD HH:mm:ss'), null, '[)')
               })
-              if (filteredEmployeeAttendances[0]) {
-                if (filteredEmployeeAttendances[0].employee_attendance_type_id === 1) {
-                  employeeIsWorking = true
-                  tableDateTimeColumn.push('E')
+              if (foundEmployeeAttendanceObj) {
+                let foundEmployeeAttendanceObjEntranceDateTime = moment(foundEmployeeAttendanceObj.entrance_date_time, 'YYYY-MM-DD HH:mm:ss')
+                let foundEmployeeAttendanceObjExitDateTime = moment(foundEmployeeAttendanceObj.exit_date_time, 'YYYY-MM-DD HH:mm:ss')
+                if (startDateTime.isBetween(foundEmployeeAttendanceObjEntranceDateTime.format('YYYY-MM-DD HH:mm:ss'), foundEmployeeAttendanceObjEntranceDateTime.add(15, 'minutes').format('YYYY-MM-DD HH:mm:ss'), null, '[)')) {
+                  tableDateTimeColumn[index] = 'E'
+                } else if (startDateTime.isBetween(foundEmployeeAttendanceObjExitDateTime.subtract(15, 'minutes').format('YYYY-MM-DD HH:mm:ss'), foundEmployeeAttendanceObjExitDateTime.format('YYYY-MM-DD HH:mm:ss'), null, '[]')) {
+                  tableDateTimeColumn[index] = 'S'
                 } else {
-                  employeeIsWorking = false
-                  tableDateTimeColumn.push('S')
-                }
-              } else {
-                if (employeeIsWorking) {
-                  tableDateTimeColumn.push('W')
-                } else {
-                  tableDateTimeColumn.push('')
+                  tableDateTimeColumn[index] = 'W'
                 }
               }
             }

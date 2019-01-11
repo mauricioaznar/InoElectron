@@ -20,7 +20,7 @@
   import EmployeeAttendanceForm from 'renderer/api/components/forms/EmployeeAttendanceForm.vue'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateEmployeeAttendanceForm',
+    name: 'CreateEmployeeAttendance',
     data () {
       return {
         hostRelationshipIdName: 'employee_attendance_id',

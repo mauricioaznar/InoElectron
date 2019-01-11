@@ -14,7 +14,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
-    name: 'ViewBagOrderProduction',
+    name: 'ViewEmployeeAttendance',
     components: {
       MauEntityPetitioner,
       MauSpinner,
@@ -24,8 +24,13 @@
       return {
         properties: [
           {
-            title: EmployeeAttendancePropertiesReference.DATE_TIME.title,
-            name: EmployeeAttendancePropertiesReference.DATE_TIME.name,
+            title: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.title,
+            name: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name,
+            display: DisplayFunctions.getDateTime
+          },
+          {
+            title: EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.title,
+            name: EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name,
             display: DisplayFunctions.getDateTime
           },
           {
@@ -34,9 +39,14 @@
             display: DisplayFunctions.getPersona
           },
           {
-            title: EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title,
-            name: EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name,
-            display: DisplayFunctions.getNameFromObject
+            title: EmployeeAttendancePropertiesReference.ENTRANCE_IMAGE_NAME.title,
+            name: EmployeeAttendancePropertiesReference.ENTRANCE_IMAGE_NAME.name,
+            display: DisplayFunctions.getEmployeeAttendanceImageForView
+          },
+          {
+            title: EmployeeAttendancePropertiesReference.EXIT_IMAGE_NAME.title,
+            name: EmployeeAttendancePropertiesReference.EXIT_IMAGE_NAME.name,
+            display: DisplayFunctions.getEmployeeAttendanceImageForView
           }
         ],
         entityType: EntityTypes.EMPLOYEE_ATTENDANCE,

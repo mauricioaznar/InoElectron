@@ -2,30 +2,24 @@
   <div>
       <div>
           <mau-form-input-date-time
-                  :name="EmployeeAttendancePropertiesReference.DATE_TIME.name"
-                  :label="employeeAttendanceTypeLabel"
-                  v-model="employeeAttendance.dateTime"
-                  :initialValue="initialValues[EmployeeAttendancePropertiesReference.DATE_TIME.name]"
-                  :error="errors.first(EmployeeAttendancePropertiesReference.DATE_TIME.name)"
+                  :name="EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name"
+                  :label="EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.title"
+                  v-model="employeeAttendance.entranceDateTime"
+                  :initialValue="initialValues[EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name]"
+                  :error="errors.first(EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name)"
                   :disabled="!userHasWritePrivileges"
                   v-validate="'required'"
           >
           </mau-form-input-date-time>
-          <div class="form-group">
-              <mau-form-input-select
-                      :initialObject="initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name]"
-                      :label="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title"
-                      :displayProperty="'name'"
-                      v-model="employeeAttendance.employeeAttendanceType"
-                      :name="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name"
-                      :data-vv-as="EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title"
-                      :error="errors.first(EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name)"
-                      :entityType="employeeAttendanceTypeEntityType"
-                      :disabled="!userHasWritePrivileges"
-                      v-validate="'object_required'"
-              >
-              </mau-form-input-select>
-          </div>
+          <mau-form-input-date-time
+                  :name="EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name"
+                  :label="EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.title"
+                  v-model="employeeAttendance.exitDateTime"
+                  :initialValue="initialValues[EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name]"
+                  :error="errors.first(EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name)"
+                  :disabled="!userHasWritePrivileges"
+          >
+          </mau-form-input-date-time>
           <div class="form-group"
           >
               <mau-form-input-select
@@ -65,14 +59,13 @@
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         EmployeeAttendancePropertiesReference: EmployeeAttendancePropertiesReference,
         employeeAttendance: {
-          dateTime: '',
-          employee: {},
-          employeeAttendanceType: {}
+          entranceDateTime: '',
+          exitDateTime: '',
+          employee: {}
         },
         initialValues: {},
         buttonDisabled: false,
-        employeeEntityType: EntityTypes.EMPLOYEE,
-        employeeAttendanceTypeEntityType: EntityTypes.EMPLOYEE_ATTENDANCE_TYPE
+        employeeEntityType: EntityTypes.EMPLOYEE
       }
     },
     components: {
@@ -101,23 +94,20 @@
     computed: {
       userHasWritePrivileges: function () {
         return true
-      },
-      employeeAttendanceTypeLabel: function () {
-        return this.employeeAttendanceType ? (this.employeeAttendanceType[GlobalEntityIdentifier] === 1 ? 'de entrada' : 'de salida') : ''
       }
     },
     methods: {
       setInitialValues: function () {
-        this.initialValues[EmployeeAttendancePropertiesReference.DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, EmployeeAttendancePropertiesReference.DATE_TIME.name)
+        this.initialValues[EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name)
+        this.initialValues[EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name)
         this.initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, EmployeeAttendancePropertiesReference.EMPLOYEE.name)
-        this.initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name)
       },
       save: function () {
         let directParams = {
-          [EmployeeAttendancePropertiesReference.DATE_TIME.name]: this.employeeAttendance.dateTime
+          [EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name]: this.employeeAttendance.exitDateTime,
+          [EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name]: this.employeeAttendance.entranceDateTime
         }
         directParams[EmployeeAttendancePropertiesReference.EMPLOYEE.relationship_id_name] = this.employeeAttendance.employee ? this.employeeAttendance.employee[GlobalEntityIdentifier] : null
-        directParams[EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.relationship_id_name] = this.employeeAttendance.employeeAttendanceType ? this.employeeAttendance.employeeAttendanceType[GlobalEntityIdentifier] : null
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true

@@ -191,7 +191,14 @@ export default {
     }
     return htmlString + '</table>'
   },
-  getEmployeeAttendanceImage: function (imageName) {
-    return '<div><img src="></div>' + ServerDomain + 'attendances/' + imageName + '" width="500">'
+  getEmployeeAttendanceImageForList: function (imageName) {
+    return '<div class="d-flex justify-content-center">' +
+             '<img src="' + ServerDomain + 'attendances/' + imageName + '" class="mau-image-small" alt=" no disponible">' +
+           '</div>'
+  },
+  getEmployeeAttendanceImageForView: function (imageName) {
+    return '<div class="d-flex justify-content-center">' +
+      '<img src="' + ServerDomain + 'attendances/' + imageName + '" class="mau-image-large" alt=" no disponible">' +
+      '</div>'
   }
 }

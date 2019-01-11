@@ -244,7 +244,8 @@
       getOrderSales: DisplayFunctions.getOrderSales,
       getOrderSalesProductsRequested: DisplayFunctions.getOrderSalesProductsRequested,
       getOrderSalesProductsNotRequested: DisplayFunctions.getOrderSalesProductsNotRequested,
-      getEmployeeAttendanceImage: DisplayFunctions.getEmployeeAttendanceImage
+      getEmployeeAttendanceImageForList: DisplayFunctions.getEmployeeAttendanceImageForList,
+      getEmployeeAttendanceImageForView: DisplayFunctions.getEmployeeAttendanceImageForView
     }
   }
 </script>

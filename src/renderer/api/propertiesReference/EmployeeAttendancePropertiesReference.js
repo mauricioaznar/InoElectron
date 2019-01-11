@@ -1,9 +1,15 @@
 import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
 import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
 export default {
-  DATE_TIME: {
-    title: 'Tiempo de entrada/salida',
-    name: 'date_time',
+  ENTRANCE_DATE_TIME: {
+    title: 'Fecha de entrada',
+    name: 'entrance_date_time',
+    display: DisplayFunctions.getDateTime,
+    defaultValue: MauInputDefaultValues.DATE
+  },
+  EXIT_DATE_TIME: {
+    title: 'Fecha de salida',
+    name: 'exit_date_time',
     display: DisplayFunctions.getDateTime,
     defaultValue: MauInputDefaultValues.DATE
   },
@@ -14,17 +20,16 @@ export default {
     display: DisplayFunctions.getPersona,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  EMPLOYEE_ATTENDANCE_TYPE: {
-    title: 'Tipo de asistencia',
-    name: 'employee_attendance_type',
-    relationship_id_name: 'employee_attendance_type_id',
-    display: DisplayFunctions.getNameFromObject,
-    defaultValue: MauInputDefaultValues.SELECT
+  ENTRANCE_IMAGE_NAME: {
+    title: 'Imagen de entrada',
+    name: 'entrance_image_name',
+    display: DisplayFunctions.getEmployeeAttendanceImageForList,
+    defaultValue: MauInputDefaultValues.TEXT
   },
-  IMAGE: {
-    title: 'Imagen',
-    name: 'image_name',
-    display: DisplayFunctions.getEmployeeAttendanceImage,
+  EXIT_IMAGE_NAME: {
+    title: 'Imagen de salida',
+    name: 'exit_image_name',
+    display: DisplayFunctions.getEmployeeAttendanceImageForList,
     defaultValue: MauInputDefaultValues.TEXT
   }
 }

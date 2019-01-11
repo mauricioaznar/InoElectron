@@ -24,9 +24,15 @@
         apiUrl: ApiUrls.createListUrl(EntityTypes.EMPLOYEE_ATTENDANCE),
         tableFields: [
           {
-            name: EmployeeAttendancePropertiesReference.DATE_TIME.name,
-            title: EmployeeAttendancePropertiesReference.DATE_TIME.title,
-            sortField: EmployeeAttendancePropertiesReference.DATE_TIME.name,
+            name: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name,
+            title: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.title,
+            sortField: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name,
+            filter: true
+          },
+          {
+            name: EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name,
+            title: EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.title,
+            sortField: EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name,
             filter: true
           },
           {
@@ -39,17 +45,14 @@
             filter: true
           },
           {
-            name: EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.name,
-            title: EmployeeAttendancePropertiesReference.EMPLOYEE_ATTENDANCE_TYPE.title,
-            callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.EMPLOYEE_ATTENDANCE_TYPE.name,
-            entityFieldName: 'name',
-            filter: true
+            name: EmployeeAttendancePropertiesReference.ENTRANCE_IMAGE_NAME.name,
+            title: EmployeeAttendancePropertiesReference.ENTRANCE_IMAGE_NAME.title,
+            callback: DisplayFunctions.getEmployeeAttendanceImageForList
           },
           {
-            name: EmployeeAttendancePropertiesReference.IMAGE.name,
-            title: EmployeeAttendancePropertiesReference.IMAGE.title,
-            callback: DisplayFunctions.getEmployeeAttendanceImage
+            name: EmployeeAttendancePropertiesReference.EXIT_IMAGE_NAME.name,
+            title: EmployeeAttendancePropertiesReference.EXIT_IMAGE_NAME.title,
+            callback: DisplayFunctions.getEmployeeAttendanceImageForList
           }
         ],
         actions: [
