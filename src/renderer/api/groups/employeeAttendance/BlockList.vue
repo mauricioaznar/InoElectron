@@ -14,7 +14,7 @@
                                         :label="'Empleado seleccionado'"
                                         :displayProperty="'full_name'"
                                         :entity-type="employeeEntityType"
-                                        :onChange="searchEmployeeAttendances"
+                                        :onChange="getEmployeeAttendances"
                                         :ref="'employee_select'"
                                 ></mau-form-input-select>
                             </div>
@@ -62,7 +62,7 @@
         MauFormInputSelect
       },
       methods: {
-        searchEmployeeAttendances: function () {
+        getEmployeeAttendances: function () {
           let employeeId = this.employeeSelected[GlobalEntityIdentifier]
           let dateTimeSelectedMinusOneDay = moment(this.dateTimeSelected, 'YYYY-MM-DD hh:mm:ss').subtract(1, 'days').format('YYYY-MM-DD HH:mm:ss')
           ApiOperations.getWithFilterExactWithoutPaginationWithStartDate(EntityTypes.EMPLOYEE_ATTENDANCE, {employee_id: employeeId}, {entrance_date_time: dateTimeSelectedMinusOneDay}).then(response => {
@@ -119,10 +119,10 @@
       },
       watch: {
         employeeSelected: function (employeeSelected) {
-          this.searchEmployeeAttendances()
+          this.getEmployeeAttendances()
         },
         dateTimeSelected: function (dateTimeSelected) {
-          this.searchEmployeeAttendances()
+          this.getEmployeeAttendances()
         }
       }
     }
