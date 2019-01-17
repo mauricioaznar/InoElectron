@@ -14,6 +14,8 @@
                                         :label="'Empleado seleccionado'"
                                         :displayProperty="'full_name'"
                                         :entity-type="employeeEntityType"
+                                        :onChange="searchEmployeeAttendances"
+                                        :ref="'employee_select'"
                                 ></mau-form-input-select>
                             </div>
                         </div>
@@ -21,13 +23,13 @@
                         <table v-if="tableDateTimesHeaders.length">
                             <tr>
                                 <th class="p-2">Hora</th>
-                                <th v-for="dateTransformed in tableDateTimesHeaders" class="py-2 px-4">
-                                    {{dateTransformed}}
+                                <th v-for="dateHeaderObj in tableDateTimesHeaders" class="py-2 px-4">
+                                    {{dateHeaderObj.formattedDate}}
                                 </th>
                             </tr>
-                            <tr v-for="(rowValue, rowIndex) in (0, 24 * hourIntervals)">
-                                <td class="box" v-if="((rowIndex + hourIntervals) % 2) === 0" :rowspan="hourIntervals">{{(rowIndex/ 2).toFixed(0)}}</td>
-                                <td class="box" v-for="day in (0, amountOfDaysToShow)"></td>
+                            <tr v-if="tableDateTimesData.length > 0" v-for="(rowValue, hourIntervalIndex) in (0, 24 * hourIntervals)">
+                                <td class="box" v-if="((hourIntervalIndex + hourIntervals) % hourIntervals) === 0" :rowspan="hourIntervals">{{(hourIntervalIndex/ hourIntervals).toFixed(0)}}</td>
+                                <td class="box" v-for="(dayValue, dayIndex) in (0, amountOfDaysToShow)" :class="getBoxClass(dayIndex, hourIntervalIndex)"></td>
                             </tr>
                         </table>
         </div>
@@ -72,20 +74,51 @@
           this.tableDateTimesData = []
           let iterableDate = moment(this.dateTimeSelected, 'YYYY-MM-DD').subtract(1, 'days')
           for (let day = 0; day < this.amountOfDaysToShow; day++) {
-            this.tableDateTimesHeaders.push(moment(iterableDate).format('ddd D MMM '))
+            this.tableDateTimesHeaders.push({date: moment(iterableDate).format('YYYY-MM-DD'), formattedDate: moment(iterableDate).format('ddd D MMM ')})
             iterableDate = moment(iterableDate, 'YYYY-MM-DD').add(1, 'days')
             this.tableDateTimesData[day] = []
             for (let hourInterval = 0; hourInterval < 24 * this.hourIntervals; hourInterval++) {
               this.tableDateTimesData[day][hourInterval] = ''
             }
           }
+          employeeAttendances.forEach((employeeAttendanceObj, eAIndex) => {
+            let entranceDateTime = moment(employeeAttendanceObj.entrance_date_time, 'YYYY-MM-DD HH:mm:ss')
+            let entranceDate = moment(employeeAttendanceObj.entrance_date_time, 'YYYY-MM-DD')
+            let exitDateTime = moment(employeeAttendanceObj.exit_date_time, 'YYYY-MM-DD HH:mm:ss')
+            let exitDate = moment(employeeAttendanceObj.exit_date_time, 'YYYY-MM-DD')
+            this.tableDateTimesHeaders.forEach((dateHeaderObj, dayIndex) => {
+              let iteratedDate = moment(dateHeaderObj.date, 'YYYY-MM-DD')
+              if (iteratedDate.isSame(entranceDate) || iteratedDate.isSame(exitDate)) {
+                for (let hourInterval = 0; hourInterval < 24 * this.hourIntervals; hourInterval++) {
+                  let hour = Math.floor(hourInterval / this.hourIntervals)
+                  hour = hour < 10 ? '0' + hour : hour.toString()
+                  let minutes = (hourInterval / this.hourIntervals) % this.hourIntervals === 0 ? '00' : '30'
+                  let iteratedStartInterval = moment(dateHeaderObj.date + ' ' + hour + ':' + minutes + ':' + '00', 'YYYY-MM-DD HH:mm:ss')
+                  let iteratedEndInterval = moment(iteratedStartInterval.format(), 'YYYY-MM-DD HH:mm:ss').add(30, 'minutes')
+                  if (entranceDateTime.isBetween(iteratedStartInterval, iteratedEndInterval, null, '[)')) {
+                    this.tableDateTimesData[dayIndex][hourInterval] = 'entrance'
+                  } else if (exitDateTime.isBetween(iteratedStartInterval, iteratedEndInterval, null, '[)')) {
+                    this.tableDateTimesData[dayIndex][hourInterval] = 'exit'
+                  } else if (iteratedStartInterval.isBetween(entranceDateTime, exitDateTime, null, '[)')) {
+                    this.tableDateTimesData[dayIndex][hourInterval] = 'worked'
+                  }
+                }
+              }
+            })
+          })
+        },
+        getBoxClass: function (dayIndex, hourIntervalIndex) {
+          if (this.tableDateTimesData.length > 0 && this.tableDateTimesData[dayIndex].length > 0) {
+            return this.tableDateTimesData[dayIndex][hourIntervalIndex]
+          }
+          return ''
         }
       },
       computed: {
 
       },
       watch: {
-        employeeSelected: function (employeeSelectedObj) {
+        employeeSelected: function (employeeSelected) {
           this.searchEmployeeAttendances()
         },
         dateTimeSelected: function (dateTimeSelected) {

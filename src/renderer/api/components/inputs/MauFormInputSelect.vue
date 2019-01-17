@@ -11,8 +11,10 @@
                 class="form-control override-form-control"
                 :onSearch="search"
                 :clearSearchOnSelect="hasClear"
+                :closeOnSelect="closeOnSelect"
                 :options="options"
                 :disabled="disabled"
+                :ref="'vue_select'"
                 :class="getBootstrapValidationClass(error)"
         >
             <template slot="option" slot-scope="option">
@@ -70,6 +72,10 @@
         displayProperty: {
           type: String,
           required: true
+        },
+        closeOnSelect: {
+          type: Boolean,
+          default: true
         },
         searchedProperties: {
           type: Array,
