@@ -35,6 +35,12 @@
                                     </div>
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="p-2 footer-box">Horas trabajadas</td>
+                                <td v-for="dateFooterObj in tableDateTimesFooter" class="py-2 px-4 footer-box">
+                                    {{Math.floor(dateFooterObj.intervalsWorked / hourIntervals)}} <sup>{{dateFooterObj.intervalsWorked % hourIntervals }}</sup>&frasl;<sub>{{hourIntervals}}</sub>
+                                </td>
+                            </tr>
                         </table>
         </div>
     </div>
@@ -57,6 +63,7 @@
           employeeEntityType: EntityTypes.EMPLOYEE,
           tableDateTimesHeaders: [],
           tableDateTimesData: [],
+          tableDateTimesFooter: [],
           amountOfDaysToShow: 10,
           hourIntervals: 2
         }
@@ -76,9 +83,11 @@
         setTable: function (employeeAttendances) {
           this.tableDateTimesHeaders = []
           this.tableDateTimesData = []
+          this.tableDateTimesFooter = []
           let iterableDate = moment(this.dateTimeSelected, 'YYYY-MM-DD').subtract(1, 'days')
           for (let day = 0; day < this.amountOfDaysToShow; day++) {
             this.tableDateTimesHeaders.push({date: moment(iterableDate).format('YYYY-MM-DD'), formattedDate: moment(iterableDate).format('ddd D MMM ')})
+            this.tableDateTimesFooter.push({intervalsWorked: 0})
             iterableDate = moment(iterableDate, 'YYYY-MM-DD').add(1, 'days')
             this.tableDateTimesData[day] = []
             for (let hourInterval = 0; hourInterval < 24 * this.hourIntervals; hourInterval++) {
@@ -101,10 +110,12 @@
                   let iteratedEndInterval = moment(iteratedStartInterval.format(), 'YYYY-MM-DD HH:mm:ss').add(30, 'minutes')
                   if (entranceDateTime.isBetween(iteratedStartInterval, iteratedEndInterval, null, '[)')) {
                     this.tableDateTimesData[dayIndex][hourInterval] += ' entrance'
+                    this.tableDateTimesFooter[dayIndex].intervalsWorked = this.tableDateTimesFooter[dayIndex].intervalsWorked + 1
                   } else if (exitDateTime.isBetween(iteratedStartInterval, iteratedEndInterval, null, '[)')) {
                     this.tableDateTimesData[dayIndex][hourInterval] += ' exit'
                   } else if (iteratedStartInterval.isBetween(entranceDateTime, exitDateTime, null, '[)')) {
                     this.tableDateTimesData[dayIndex][hourInterval] += 'worked'
+                    this.tableDateTimesFooter[dayIndex].intervalsWorked = this.tableDateTimesFooter[dayIndex].intervalsWorked + 1
                   }
                 }
               }
@@ -166,8 +177,8 @@
         height: 4px;
         border: 1px solid black;
     }
-    .box.total {
-        border: 3px solid black;
+    .footer-box {
+        border-bottom: 3px solid black;
         font-weight: bold;
     }
     .flex-grow {
