@@ -28,8 +28,12 @@
                                 </th>
                             </tr>
                             <tr v-if="tableDateTimesData.length > 0" v-for="(rowValue, hourIntervalIndex) in (0, 24 * hourIntervals)">
-                                <td class="box" v-if="((hourIntervalIndex + hourIntervals) % hourIntervals) === 0" :rowspan="hourIntervals">{{(hourIntervalIndex/ hourIntervals).toFixed(0)}}</td>
-                                <td class="box" v-for="(dayValue, dayIndex) in (0, amountOfDaysToShow)" :class="getBoxClass(dayIndex, hourIntervalIndex)"></td>
+                                <td class="box mau-text-center" v-if="((hourIntervalIndex + hourIntervals) % hourIntervals) === 0" :rowspan="hourIntervals">{{(hourIntervalIndex/ hourIntervals).toFixed(0)}}</td>
+                                <td class="box" v-for="(dayValue, dayIndex) in (0, amountOfDaysToShow)">
+                                    <div class="d-flex w-100 h-100">
+                                        <span class="flex-grow" :class="className" v-if="className !== ''" v-for="className in tableDateTimesData[dayIndex][hourIntervalIndex].split(' ')"></span>
+                                    </div>
+                                </td>
                             </tr>
                         </table>
         </div>
@@ -96,11 +100,11 @@
                   let iteratedStartInterval = moment(dateHeaderObj.date + ' ' + hour + ':' + minutes + ':' + '00', 'YYYY-MM-DD HH:mm:ss')
                   let iteratedEndInterval = moment(iteratedStartInterval.format(), 'YYYY-MM-DD HH:mm:ss').add(30, 'minutes')
                   if (entranceDateTime.isBetween(iteratedStartInterval, iteratedEndInterval, null, '[)')) {
-                    this.tableDateTimesData[dayIndex][hourInterval] = 'entrance'
+                    this.tableDateTimesData[dayIndex][hourInterval] += ' entrance'
                   } else if (exitDateTime.isBetween(iteratedStartInterval, iteratedEndInterval, null, '[)')) {
-                    this.tableDateTimesData[dayIndex][hourInterval] = 'exit'
+                    this.tableDateTimesData[dayIndex][hourInterval] += ' exit'
                   } else if (iteratedStartInterval.isBetween(entranceDateTime, exitDateTime, null, '[)')) {
-                    this.tableDateTimesData[dayIndex][hourInterval] = 'worked'
+                    this.tableDateTimesData[dayIndex][hourInterval] += 'worked'
                   }
                 }
               }
@@ -133,14 +137,15 @@
         border: 1px solid black;
         height: 6px;
         width: 100px;
+        padding: 0;
     }
-    .box.exit {
+    .box .exit {
         background-color: red;
     }
-    .box.entrance {
+    .box .entrance {
         background-color: green;
     }
-    .box.worked {
+    .box .worked {
         background-color: blue;
     }
     .box.opaque {
@@ -164,5 +169,8 @@
     .box.total {
         border: 3px solid black;
         font-weight: bold;
+    }
+    .flex-grow {
+        flex: 1 0 auto;
     }
 </style>
