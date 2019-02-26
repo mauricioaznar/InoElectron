@@ -131,7 +131,7 @@
           this.isLoading = true
           Promise.all([
             ApiOperations.getWithFilterExactWithoutPagination(EntityTypes.PRODUCT, {product_type_id: 1}),
-            ApiOperations.getStats('bagInventory2')
+            ApiOperations.getStats('bagInventory')
           ]).then(results => {
             let inventoryProductsItems = []
             let products = results[0]
@@ -302,7 +302,6 @@
                 })
               }
             })
-            console.log(inventoryProductsItems.length)
             this.inventoryProductsItems = inventoryProductsItems
             let vm = this
             this.timeout = setTimeout(function () {
