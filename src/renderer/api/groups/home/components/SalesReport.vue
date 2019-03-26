@@ -50,7 +50,7 @@
         </div>
         <div class="row" v-if="!isLoading">
             <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthByClientCostData">
-                <h6>Total de ventas por cliente por mes</h6>
+                <h6>Total de ventas por cliente por mes, {{index + 2018}}</h6>
                 <mau-line-chart
                         :chartData="chartData"
                         :options="chartOptions"
@@ -59,7 +59,7 @@
                 ></mau-line-chart>
             </div>
             <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthByClientKilosData">
-                <h6>Total de kilos de ventas por cliente por mes</h6>
+                <h6>Total de kilos de ventas por cliente por mes, {{index + 2018}}</h6>
                 <mau-line-chart
                         :chartData="chartData"
                         :options="chartOptions"
