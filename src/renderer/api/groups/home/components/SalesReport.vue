@@ -17,31 +17,31 @@
             <tbody>
                 <tr v-for="(company, index) in companies">
                     <td>{{company.name}}</td>
-                    <td>{{company.requests_total_year_1}}</td>
-                    <td>{{company.finalized_requests_total_year_1}}</td>
-                    <td>{{company.sales_total_year_1}}</td>
-                    <td>{{company.requests_total_cost_year_1}}</td>
-                    <td>{{company.sales_total_cost_year_1}}</td>
-                    <td v-if="company.finalized_requests_total_year_1 > 0">{{company.finalized_requests_total_days_difference_year_1 / company.finalized_requests_total_year_1}}</td>
+                    <td>{{company.calculations.requests_total}}</td>
+                    <td>{{company.calculations.finalized_requests_total}}</td>
+                    <td>{{company.calculations.sales_total}}</td>
+                    <td>{{company.calculations.requests_total_cost}}</td>
+                    <td>{{company.calculations.sales_total_cost}}</td>
+                    <td v-if="company.calculations.finalized_requests_total > 0">{{Math.round(company.calculations.finalized_requests_total_days_difference / company.calculations.finalized_requests_total * 100) / 100}}</td>
                     <td v-else>-</td>
                 </tr>
             </tbody>
         </table>
         <h2 v-if="!isLoading">Reporte de ventas</h2>
         <div class="row" v-if="!isLoading">
-            <div class="col-sm-12 py-2">
-                <h6>Comparativo de total de pedidos vs total de ventas (sin IVA) por mes</h6>
+            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthCostData">
+                <h6>Comparativo de total de pedidos vs total de ventas (sin IVA) por mes, {{index + 2018}}</h6>
                 <mau-bar-chart
-                        :chartData="salesByMonthCostData"
+                        :chartData="chartData"
                         :options="chartOptions"
                         :width="400"
                         :height="200"
                 ></mau-bar-chart>
             </div>
-            <div class="col-sm-12 py-2">
-                <h6>Comparativo de kilos de pedidos vs kilos vendidos de ventas por mes</h6>
+            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthCostData">
+                <h6>Comparativo de kilos de pedidos vs kilos vendidos de ventas por mes, {{index + 2018}}</h6>
                 <mau-bar-chart
-                        :chartData="salesByMonthKilosData"
+                        :chartData="chartData"
                         :options="chartOptions"
                         :width="400"
                         :height="200"
@@ -49,19 +49,19 @@
             </div>
         </div>
         <div class="row" v-if="!isLoading">
-            <div class="col-sm-12 py-2">
+            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthByClientCostData">
                 <h6>Total de ventas por cliente por mes</h6>
                 <mau-line-chart
-                        :chartData="salesByMonthByClientCostData"
+                        :chartData="chartData"
                         :options="chartOptions"
                         :width="400"
                         :height="400"
                 ></mau-line-chart>
             </div>
-            <div class="col-sm-12 py-2">
+            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthByClientKilosData">
                 <h6>Total de kilos de ventas por cliente por mes</h6>
                 <mau-line-chart
-                        :chartData="salesByMonthByClientKilosData"
+                        :chartData="chartData"
                         :options="chartOptions"
                         :width="400"
                         :height="400"
@@ -99,7 +99,6 @@
         salesByMonthByCompanyBalanceData: '',
         isLoading: true,
         timeout: '',
-        yearSelected: '2018',
         companies: [],
         interval: '',
         monthNames: '',
@@ -182,55 +181,55 @@
           let companies = result[1]
           for (let compIndex = 0; compIndex < companies.length; compIndex++) {
             let company = companies[compIndex]
-            company['requests_total_year_1'] = 0
-            company['requests_total_cost_year_1'] = 0
-            company['sales_total_year_1'] = 0
-            company['sales_total_cost_year_1'] = 0
-            company['finalized_requests_total_year_1'] = 0
-            company['finalized_requests_total_days_difference_year_1'] = 0
-            let companyYearData = []
-            for (let i = 0; i < this.monthNames.length; i++) {
-              let companyMonthData = {
-                total_kilos_sold: 0,
-                total_kilos_requested: 0,
-                total_cost_requested: 0,
-                total_cost_sold: 0,
-                total_cost_reached: 0
+            company['calculations'] = {}
+            company['years'] = []
+            company['calculations']['requests_total'] = 0
+            company['calculations']['requests_total_cost'] = 0
+            company['calculations']['sales_total'] = 0
+            company['calculations']['sales_total_cost'] = 0
+            company['calculations']['finalized_requests_total'] = 0
+            company['calculations']['finalized_requests_total_days_difference'] = 0
+            for(let i = 2018; i <= 2019; i++) {
+              let companyYearData = []
+              for (let j = 0; j < this.monthNames.length; j++) {
+                let companyMonthData = {
+                  total_kilos_sold: 0,
+                  total_kilos_requested: 0,
+                  total_cost_requested: 0,
+                  total_cost_sold: 0,
+                  total_cost_reached: 0
+                }
+                companyYearData.push(companyMonthData)
               }
-              companyYearData.push(companyMonthData)
+              company['years'][i - 2018] = companyYearData
             }
-            company['year_1_data'] = companyYearData
           }
           for (let reqIndex = 0; reqIndex < requests.length; reqIndex++) {
             let request = requests[reqIndex]
             let companyFound = companies.find(companyObj => { return companyObj['id'] === request['company_id'] })
             let requestMomentDate = moment(request['order_request_date'])
             let requestMonth = requestMomentDate.month()
-            let requestYear = requestMomentDate.year()
-            if (requestYear === 2018) {
-              companyFound['requests_total_year_1']++
-              companyFound['requests_total_cost_year_1'] = Math.round((companyFound['requests_total_cost_year_1'] + request['total_cost_requested']) * 100) / 100
-              companyFound['year_1_data'][requestMonth]['total_kilos_requested'] += request['total_kilos_requested']
-              companyFound['year_1_data'][requestMonth]['total_cost_requested'] += request['total_cost_requested']
-              if (request['order_request_status_id'] === 3) {
-                companyFound['finalized_requests_total_year_1']++
-                companyFound['finalized_requests_total_days_difference_year_1'] = Math.round((companyFound['finalized_requests_total_days_difference_year_1'] + request['days_difference']) * 100) / 100
-                companyFound['year_1_data'][requestMonth]['total_cost_reached'] += (Math.round((request['total_cost_requested'] - request['total_cost_sold']) * 100) / 100)
+            let requestYear = requestMomentDate.year() - 2018
+            companyFound['calculations']['requests_total']++
+            companyFound['calculations']['requests_total_cost'] = Math.round((companyFound['calculations']['requests_total_cost'] + request['total_cost_requested']) * 100) / 100
+            companyFound['years'][requestYear][requestMonth]['total_kilos_requested'] += request['total_kilos_requested']
+            companyFound['years'][requestYear][requestMonth]['total_cost_requested'] += request['total_cost_requested']
+            if (request['order_request_status_id'] === 3) {
+                companyFound['calculations']['finalized_requests_total']++
+                companyFound['calculations']['finalized_requests_total_days_difference'] = Math.round((companyFound['calculations']['finalized_requests_total_days_difference'] + request['days_difference']) * 100) / 100
+                companyFound['years'][requestYear][requestMonth]['total_cost_reached'] += (Math.round((request['total_cost_requested'] - request['total_cost_sold']) * 100) / 100)
               }
-            }
           }
           for (let saleIndex = 0; saleIndex < sales.length; saleIndex++) {
             let sale = sales[saleIndex]
             let companyFound = companies.find(companyObj => { return companyObj['id'] === sale['company_id'] })
             let saleMomentDate = moment(sale['order_sale_date'])
             let saleMonth = saleMomentDate.month()
-            let saleYear = saleMomentDate.year()
-            if (saleYear === 2018) {
-              companyFound['sales_total_year_1']++
-              companyFound['sales_total_cost_year_1'] = Math.round((companyFound['sales_total_cost_year_1'] + sale['total_cost_sold']) * 100) / 100
-              companyFound['year_1_data'][saleMonth]['total_kilos_sold'] += sale['total_kilos_sold']
-              companyFound['year_1_data'][saleMonth]['total_cost_sold'] += sale['total_cost_sold']
-            }
+            let saleYear = saleMomentDate.year() - 2018
+            companyFound['calculations']['sales_total']++
+            companyFound['calculations']['sales_total_cost'] = Math.round((companyFound['calculations']['sales_total_cost'] + sale['total_cost_sold']) * 100) / 100
+            companyFound['years'][saleYear][saleMonth]['total_kilos_sold'] += sale['total_kilos_sold']
+            companyFound['years'][saleYear][saleMonth]['total_cost_sold'] += sale['total_cost_sold']
           }
           this.companies = companies
           let vm = this
@@ -246,83 +245,99 @@
     },
     watch: {
       companies: function (companies) {
-        let totalKilosSoldYearData = []
-        let totalCostSoldYearData = []
-        let totalCostRequestedYearData = []
-        let totalKilosRequestedYearData = []
-        for (let i = 0; i < this.monthNames.length; i++) {
-          let kilosSoldMonthData = 0
-          let costSoldMonthData = 0
-          let costRequestedMonthData = 0
-          let kilosRequestedMonthTotal = 0
-          for (let j = 0; j < companies.length; j++) {
-            kilosSoldMonthData += companies[j]['year_1_data'][i]['total_kilos_sold']
-            costSoldMonthData += companies[j]['year_1_data'][i]['total_cost_sold']
-            costRequestedMonthData += companies[j]['year_1_data'][i]['total_cost_requested']
-            kilosRequestedMonthTotal += companies[j]['year_1_data'][i]['total_kilos_requested']
-          }
-          totalKilosSoldYearData.push(kilosSoldMonthData)
-          totalKilosRequestedYearData.push(kilosRequestedMonthTotal)
-          totalCostSoldYearData.push(costSoldMonthData)
-          totalCostRequestedYearData.push(costRequestedMonthData)
-        }
-        this.salesByMonthKilosData = {
-          labels: this.monthNames,
-          datasets: [
-            {
-              label: 'Kilos vendidos',
-              backgroundColor: '#E42',
-              data: totalKilosSoldYearData
-            },
-            {
-              label: 'Kilos solicitados',
-              backgroundColor: '#AA2',
-              data: totalKilosRequestedYearData
+        let totalKilosSoldYearsData = []
+        let totalCostSoldYearsData = []
+        let totalCostRequestedYearsData = []
+        let totalKilosRequestedYearsData = []
+        for (let yearIndex = 0; yearIndex <= 1; yearIndex++) {
+          let totalKilosSoldYearData = []
+          let totalCostSoldYearData = []
+          let totalCostRequestedYearData = []
+          let totalKilosRequestedYearData = []
+          for (let monthIndex = 0; monthIndex < this.monthNames.length; monthIndex++) {
+            let kilosSoldMonthData = 0
+            let costSoldMonthData = 0
+            let costRequestedMonthData = 0
+            let kilosRequestedMonthTotal = 0
+            for (let companyIndex = 0; companyIndex < companies.length; companyIndex++) {
+              kilosSoldMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_kilos_sold']
+              costSoldMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_cost_sold']
+              costRequestedMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_cost_requested']
+              kilosRequestedMonthTotal += companies[companyIndex]['years'][yearIndex][monthIndex]['total_kilos_requested']
             }
-          ]
+            totalKilosSoldYearData.push(kilosSoldMonthData)
+            totalKilosRequestedYearData.push(kilosRequestedMonthTotal)
+            totalCostSoldYearData.push(costSoldMonthData)
+            totalCostRequestedYearData.push(costRequestedMonthData)
+          }
+          totalKilosSoldYearsData.push(totalKilosSoldYearData)
+          totalKilosRequestedYearsData.push(totalKilosRequestedYearData)
+          totalCostSoldYearsData.push(totalCostSoldYearData)
+          totalCostRequestedYearsData.push(totalCostRequestedYearData)
         }
-        this.salesByMonthCostData = {
-          labels: this.monthNames,
-          datasets: [
-            {
-              label: 'Dinero obtenido en ventas (iva no incluido)',
-              backgroundColor: '#E42',
-              data: totalCostSoldYearData
-            },
-            {
-              label: 'Dinero en los pedidos',
-              backgroundColor: '#AA2',
-              data: totalCostRequestedYearData
+        this.salesByMonthKilosData = []
+        this.salesByMonthCostData = []
+        this.salesByMonthByClientKilosData = []
+        this.salesByMonthByClientCostData = []
+        for (let yearIndex = 0; yearIndex <= 1; yearIndex++) {
+          this.salesByMonthKilosData.push({
+            labels: this.monthNames,
+            datasets: [
+              {
+                label: 'Kilos vendidos',
+                backgroundColor: '#E42',
+                data: totalKilosSoldYearsData[yearIndex]
+              },
+              {
+                label: 'Kilos solicitados',
+                backgroundColor: '#AA2',
+                data: totalKilosRequestedYearsData[yearIndex]
+              }
+            ]
+          })
+          this.salesByMonthCostData.push({
+            labels: this.monthNames,
+            datasets: [
+              {
+                label: 'Dinero obtenido en ventas (iva no incluido)',
+                backgroundColor: '#E42',
+                data: totalCostSoldYearsData[yearIndex]
+              },
+              {
+                label: 'Dinero en los pedidos',
+                backgroundColor: '#AA2',
+                data: totalCostRequestedYearsData[yearIndex]
+              }
+            ]
+          })
+          let companiesTotalKilosSoldYear1DataSets = companies.map((companyObj, i) => {
+            return {
+              label: companyObj['name'],
+              borderColor: this.colors[i],
+              fill: false,
+              data: companyObj['years'][yearIndex].map(companyYear1DataObj => {
+                return companyYear1DataObj['total_kilos_sold']
+              })
             }
-          ]
-        }
-        let companiesTotalKilosSoldYear1DataSets = companies.map((companyObj, i) => {
-          return {
-            label: companyObj['name'],
-            borderColor: this.colors[i],
-            fill: false,
-            data: companyObj['year_1_data'].map(companyYear1DataObj => {
-              return companyYear1DataObj['total_kilos_sold']
-            })
-          }
-        })
-        this.salesByMonthByClientKilosData = {
-          labels: this.monthNames,
-          datasets: companiesTotalKilosSoldYear1DataSets
-        }
-        let companiesTotalCostSoldYear1DataSets = companies.map((companyObj, i) => {
-          return {
-            label: companyObj['name'],
-            borderColor: this.colors[i],
-            fill: false,
-            data: companyObj['year_1_data'].map(companyYear1DataObj => {
-              return companyYear1DataObj['total_cost_sold']
-            })
-          }
-        })
-        this.salesByMonthByClientCostData = {
-          labels: this.monthNames,
-          datasets: companiesTotalCostSoldYear1DataSets
+          })
+          this.salesByMonthByClientKilosData.push({
+            labels: this.monthNames,
+            datasets: companiesTotalKilosSoldYear1DataSets
+          })
+          let companiesTotalCostSoldYear1DataSets = companies.map((companyObj, i) => {
+            return {
+              label: companyObj['name'],
+              borderColor: this.colors[i],
+              fill: false,
+              data: companyObj['years'][yearIndex].map(companyYear1DataObj => {
+                return companyYear1DataObj['total_cost_sold']
+              })
+            }
+          })
+          this.salesByMonthByClientCostData.push({
+            labels: this.monthNames,
+            datasets: companiesTotalCostSoldYear1DataSets
+          })
         }
         let companiesTotalCostReachedYear1DataSets = companies.map((companyObj, i) => {
           return {
