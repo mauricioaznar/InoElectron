@@ -18,7 +18,7 @@
                   :initialValue="initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name]"
                   :error="errors.first(OrderProductionPropertiesReference.END_DATE_TIME.name)"
                   :disabled="!userHasWritePrivileges"
-                  v-validate="'required|date_format:yyyy-MM-DD HH:mm:ss|after:' + productionOrder.startDateTime"
+                  v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + productionOrder.startDateTime"
           >
           </mau-form-input-date-time>
           <div class="form-group" v-if="bagMode">
