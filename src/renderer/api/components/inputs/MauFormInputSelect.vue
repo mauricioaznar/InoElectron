@@ -151,7 +151,9 @@
         getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
         updateValue: function (newValue) {
           if (this.multi) {
-
+            if (newValue.length === 0) {
+              newValue = []
+            }
           } else {
             if (newValue === null) {
               newValue = {}

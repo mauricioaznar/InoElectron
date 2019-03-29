@@ -92,7 +92,7 @@
                             :entityType="productEntityType"
                             :multi="true"
                             :disabled="receiptMode || !userHasWritePrivileges"
-                            v-validate="'array_required'"
+                            v-validate="'required'"
                     >
                         <template slot-scope="params">
                             <order-sale-product-table

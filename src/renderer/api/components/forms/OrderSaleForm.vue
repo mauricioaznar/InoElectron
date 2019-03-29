@@ -135,7 +135,7 @@
                             :entityType="productEntityType"
                             :multi="true"
                             :disabled="!userHasWritePrivileges"
-                            v-validate="'array_required'"
+                            v-validate="'required'"
                     >
                         <template slot-scope="params">
                             <order-sale-product-table

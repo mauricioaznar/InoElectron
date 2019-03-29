@@ -26,7 +26,6 @@ Vue.use(MauPlugin)
 Vue.use(BootstrapVue)
 Vue.use(VueResource)
 Validator.extend('object_required', VeeValidateCustomRules.objectRequired)
-Validator.extend('array_required', VeeValidateCustomRules.arrayRequired)
 Validator.extend('remote_unique', VeeValidateCustomRules.remoteUnique, {immediate: false})
 Validator.extend('kilo_to_group', VeeValidateCustomRules.kiloToGroup)
 Vue.use(VeeValidate, {

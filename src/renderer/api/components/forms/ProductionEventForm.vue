@@ -60,7 +60,7 @@
             <production-event-check-table
                 :initialChecks="initialValues[ProductionEventPropertiesReference.CHECKS.name]"
                 :name="ProductionEventPropertiesReference.CHECKS.name"
-                v-validate="'array_required'"
+                v-validate="'required'"
                 v-model="productionEvent.checks"
             >
 

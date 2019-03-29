@@ -5,12 +5,6 @@ let objectRequired = {
   }
 }
 
-let arrayRequired = {
-  validate: value => {
-    return !(value.length === 0)
-  }
-}
-
 let remoteUnique = {
   validate: (value, params, data) => {
     let initialValue = params.initialValue
@@ -51,7 +45,6 @@ let kiloToGroup = {
 
 export default {
   objectRequired: objectRequired,
-  arrayRequired: arrayRequired,
   remoteUnique: remoteUnique,
   kiloToGroup: kiloToGroup
 }

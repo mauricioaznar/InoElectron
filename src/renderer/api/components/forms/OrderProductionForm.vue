@@ -65,6 +65,7 @@
                       :error="errors.first('_machine')"
                       :entityType="machineEntityType"
                       :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
               >
               </mau-form-input-select>
           </div>
@@ -81,6 +82,7 @@
                       :entityType="productEntityType"
                       :multi="true"
                       :disabled="!userHasWritePrivileges"
+                      v-validate="'required'"
               >
                   <order-production-product-table
                           :allowNegative="true"
@@ -133,7 +135,7 @@
                       :entityType="machineEntityType"
                       :multi="true"
                       :disabled="!userHasWritePrivileges"
-                      v-validate="'array_required'"
+                      v-validate="'required'"
               >
               </mau-form-input-select>
           </div>
@@ -151,7 +153,7 @@
                       :entityType="productEntityType"
                       :disabled="!userHasWritePrivileges"
                       :multi="true"
-                      v-validate="'array_required'"
+                      v-validate="'required'"
               >
                   <order-production-product-table
                           :machineId="machineObj['id']"
@@ -173,6 +175,7 @@
                       :error="errors.first(OrderProductionPropertiesReference.WASTE.name)"
                       :disabled="!userHasWritePrivileges"
                       :type="'float'"
+                      v-validate="'required'"
               >
               </mau-form-input-number>
           </div>
@@ -305,7 +308,7 @@
         }
         if (this.bagMode) {
           let initialMachine = {}
-          if (this.initialObject[OrderProductionPropertiesReference.MACHINES.name]) {
+          if (this.initialObject && this.initialObject[OrderProductionPropertiesReference.MACHINES.name]) {
             initialMachine = this.initialObject[OrderProductionPropertiesReference.MACHINES.name][0]
           }
           this.initialValues['_machine'] = initialMachine
@@ -333,7 +336,6 @@
             productionRolls,
             'id'
           )
-          console.log(filteredProductionRolls)
           let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionRolls, EntityTypes.ORDER_PRODUCTION_PRODUCT)
           relayObjects.push(productionProductRelayObject)
           directParams[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name] = 2

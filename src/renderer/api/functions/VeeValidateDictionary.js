@@ -2,7 +2,6 @@ export default {
   en: {
     messages: {
       object_required: field => `this ${field} is mandatory`,
-      array_required: field => `this ${field} is mandatory`,
       remote_unique: field => `this ${field} is mandatory`,
       kilo_to_group: field => `this ${field} is mandatory`,
       min_value: field => `this ${field} is mandatory`,
@@ -12,7 +11,6 @@ export default {
   es: {
     messages: {
       object_required: field => `El campo ${field} es obligatorio`,
-      array_required: field => `El campo ${field} es obligatorio`,
       remote_unique: field => `El campo ${field} no es unico`,
       kilo_to_group: field => `El campo ${field} no es valido`,
       min_value: field => `El campo ${field} no es valido`,

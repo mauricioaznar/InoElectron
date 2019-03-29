@@ -38,7 +38,7 @@
                         :height="200"
                 ></mau-bar-chart>
             </div>
-            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthCostData">
+            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthKilosData">
                 <h6>Comparativo de kilos de pedidos vs kilos vendidos de ventas por mes, {{index + 2018}}</h6>
                 <mau-bar-chart
                         :chartData="chartData"
@@ -167,10 +167,6 @@
       moment.locale('es')
       this.monthNames = moment.months()
       this.setSales()
-      // let vm = this
-      // this.interval = setInterval(function () {
-      // vm.setSales()
-      // }, 60000)
     },
     methods: {
       setSales: function () {
@@ -189,7 +185,7 @@
             company['calculations']['sales_total_cost'] = 0
             company['calculations']['finalized_requests_total'] = 0
             company['calculations']['finalized_requests_total_days_difference'] = 0
-            for(let i = 2018; i <= 2019; i++) {
+            for (let i = 2018; i <= 2019; i++) {
               let companyYearData = []
               for (let j = 0; j < this.monthNames.length; j++) {
                 let companyMonthData = {
@@ -215,10 +211,10 @@
             companyFound['years'][requestYear][requestMonth]['total_kilos_requested'] += request['total_kilos_requested']
             companyFound['years'][requestYear][requestMonth]['total_cost_requested'] += request['total_cost_requested']
             if (request['order_request_status_id'] === 3) {
-                companyFound['calculations']['finalized_requests_total']++
-                companyFound['calculations']['finalized_requests_total_days_difference'] = Math.round((companyFound['calculations']['finalized_requests_total_days_difference'] + request['days_difference']) * 100) / 100
-                companyFound['years'][requestYear][requestMonth]['total_cost_reached'] += (Math.round((request['total_cost_requested'] - request['total_cost_sold']) * 100) / 100)
-              }
+              companyFound['calculations']['finalized_requests_total']++
+              companyFound['calculations']['finalized_requests_total_days_difference'] = Math.round((companyFound['calculations']['finalized_requests_total_days_difference'] + request['days_difference']) * 100) / 100
+              companyFound['years'][requestYear][requestMonth]['total_cost_reached'] += (Math.round((request['total_cost_requested'] - request['total_cost_sold']) * 100) / 100)
+            }
           }
           for (let saleIndex = 0; saleIndex < sales.length; saleIndex++) {
             let sale = sales[saleIndex]
@@ -246,24 +242,24 @@
     watch: {
       companies: function (companies) {
         let totalKilosSoldYearsData = []
+        let totalKilosRequestedYearsData = []
         let totalCostSoldYearsData = []
         let totalCostRequestedYearsData = []
-        let totalKilosRequestedYearsData = []
         for (let yearIndex = 0; yearIndex <= 1; yearIndex++) {
           let totalKilosSoldYearData = []
+          let totalKilosRequestedYearData = []
           let totalCostSoldYearData = []
           let totalCostRequestedYearData = []
-          let totalKilosRequestedYearData = []
           for (let monthIndex = 0; monthIndex < this.monthNames.length; monthIndex++) {
             let kilosSoldMonthData = 0
+            let kilosRequestedMonthTotal = 0
             let costSoldMonthData = 0
             let costRequestedMonthData = 0
-            let kilosRequestedMonthTotal = 0
             for (let companyIndex = 0; companyIndex < companies.length; companyIndex++) {
               kilosSoldMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_kilos_sold']
+              kilosRequestedMonthTotal += companies[companyIndex]['years'][yearIndex][monthIndex]['total_kilos_requested']
               costSoldMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_cost_sold']
               costRequestedMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_cost_requested']
-              kilosRequestedMonthTotal += companies[companyIndex]['years'][yearIndex][monthIndex]['total_kilos_requested']
             }
             totalKilosSoldYearData.push(kilosSoldMonthData)
             totalKilosRequestedYearData.push(kilosRequestedMonthTotal)
