@@ -90,6 +90,4 @@ export default {
   createRelayObject: createRelayObject,
   getRelayObjectEntityType: getRelayObjectEntityType,
   getRelayObjectFilteredM2MObjects: getRelayObjectFilteredM2MObjects
-
-
 }
