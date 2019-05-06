@@ -32,7 +32,7 @@
                             <mau-form-input-text
                                     :name="'productionEventCheckTable_name' + index"
                                     :key="'productionEventCheckTable_name' + index"
-                                    :error="errors.first('productionEventCheckTable_name' + index)"
+                                    :error="errors.has('productionEventCheckTable_name' + index) ? errors.first('productionEventCheckTable_name' + index) : ''"
                                     v-model="item._name"
                                     :initialValue="getItemInitialName(item)"
                                     v-validate="'required'"
@@ -62,7 +62,6 @@
 </template>
 
 <script>
-    import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import cloneDeep from 'renderer/services/common/cloneDeep'
     export default {
@@ -106,7 +105,6 @@
         }
       },
       components: {
-        MauFormInputText
       },
       methods: {
         addItem: function () {

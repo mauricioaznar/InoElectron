@@ -8,7 +8,7 @@
                       v-model="salesOrder.orderCode"
                       :label="OrderSalePropertiesReference.ORDER_CODE.title"
                       :name="OrderSalePropertiesReference.ORDER_CODE.name"
-                      :error="errors.first(OrderSalePropertiesReference.ORDER_CODE.name)"
+                      :error="errors.has(OrderSalePropertiesReference.ORDER_CODE.name) ? errors.first(OrderSalePropertiesReference.ORDER_CODE.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       v-validate="{
                         required: true,
@@ -100,7 +100,7 @@
                       v-model="salesOrder.amountCollected"
                       :type="'float'"
                       :initialValue="initialValues[OrderSalePropertiesReference.AMOUNT_COLLECTED.name]"
-                      :error="errors.first(OrderSalePropertiesReference.AMOUNT_COLLECTED.name)"
+                      :error="errors.has(OrderSalePropertiesReference.AMOUNT_COLLECTED.name) ? errors.first(OrderSalePropertiesReference.AMOUNT_COLLECTED.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'required'"
               >
@@ -164,8 +164,6 @@
   import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
   import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
-  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -216,8 +214,6 @@
     components: {
       MauFormInputSelect,
       MauFormInputDate,
-      MauFormInputText,
-      MauFormInputNumber,
       OrderSaleProductTable
     },
     props: {

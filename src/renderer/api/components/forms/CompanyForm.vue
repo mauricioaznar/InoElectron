@@ -7,7 +7,7 @@
                         v-model="client.name"
                         :label="CompanyPropertiesReference.NAME.title"
                         :name="CompanyPropertiesReference.NAME.name"
-                        :error="errors.first(CompanyPropertiesReference.NAME.name)"
+                        :error="errors.has(CompanyPropertiesReference.NAME.name) ? errors.first(CompanyPropertiesReference.NAME.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -21,7 +21,7 @@
                         v-model="client.abbreviation"
                         :label="CompanyPropertiesReference.ABBREVIATION.title"
                         :name="CompanyPropertiesReference.ABBREVIATION.name"
-                        :error="errors.first(CompanyPropertiesReference.ABBREVIATION.name)"
+                        :error="errors.has(CompanyPropertiesReference.ABBREVIATION.name) ? errors.first(CompanyPropertiesReference.ABBREVIATION.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -36,7 +36,7 @@
                         :label="CompanyPropertiesReference.HOUSE_PHONE.title"
                         :name="CompanyPropertiesReference.HOUSE_PHONE.name"
                         :type="'house_phone'"
-                        :error="errors.first(CompanyPropertiesReference.HOUSE_PHONE.name)"
+                        :error="errors.has(CompanyPropertiesReference.HOUSE_PHONE.name) ? errors.first(CompanyPropertiesReference.HOUSE_PHONE.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -50,7 +50,7 @@
                         v-model="client.city"
                         :label="CompanyPropertiesReference.CITY.title"
                         :name="CompanyPropertiesReference.CITY.name"
-                        :error="errors.first(CompanyPropertiesReference.CITY.name)"
+                        :error="errors.has(CompanyPropertiesReference.CITY.name) ? errors.first(CompanyPropertiesReference.CITY.name) : ''"
                         :disabled="!userHasWritePrivileges"
                 >
                 </mau-form-input-text>
@@ -61,7 +61,7 @@
                         v-model="client.country"
                         :label="CompanyPropertiesReference.COUNTRY.title"
                         :name="CompanyPropertiesReference.COUNTRY.name"
-                        :error="errors.first(CompanyPropertiesReference.COUNTRY.name)"
+                        :error="errors.has(CompanyPropertiesReference.COUNTRY.name) ? errors.first(CompanyPropertiesReference.COUNTRY.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -73,7 +73,7 @@
                         :name="CompanyPropertiesReference.ZIP_CODE.name"
                         :initialValue="initialValues[CompanyPropertiesReference.ZIP_CODE.name]"
                         v-model="client.zip_code"
-                        :error="errors.first(CompanyPropertiesReference.ZIP_CODE.name)"
+                        :error="errors.has(CompanyPropertiesReference.ZIP_CODE.name) ? errors.first(CompanyPropertiesReference.ZIP_CODE.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required|min_value:1'"
                 >
@@ -87,7 +87,7 @@
                         v-model="client.address1"
                         :label="CompanyPropertiesReference.ADDRESS1.title"
                         :name="CompanyPropertiesReference.ADDRESS1.name"
-                        :error="errors.first(CompanyPropertiesReference.ADDRESS1.name)"
+                        :error="errors.has(CompanyPropertiesReference.ADDRESS1.name) ? errors.first(CompanyPropertiesReference.ADDRESS1.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -108,12 +108,9 @@
 </template>
 
 <script>
-  import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import CompanyPropertiesReference from 'renderer/api/propertiesReference/CompanyPropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
-  import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
-  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
     name: 'CompanyForm',
@@ -134,8 +131,6 @@
       }
     },
     components: {
-      MauFormInputText,
-      MauFormInputNumber
     },
     props: {
       initialObject: {
@@ -163,7 +158,6 @@
     },
     methods: {
       getPersonaArray: DisplayFunctions.getPersonaArray,
-      getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       setInitialValues: function () {
         this.initialValues[CompanyPropertiesReference.NAME.name] = DefaultValuesHelper.simple(this.initialObject, CompanyPropertiesReference.NAME.name)
         this.initialValues[CompanyPropertiesReference.ABBREVIATION.name] = DefaultValuesHelper.simple(this.initialObject, CompanyPropertiesReference.ABBREVIATION.name)

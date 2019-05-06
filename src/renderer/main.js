@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
+import MauVueComponents from 'mau-vue-components/src/main'
 import App from './App'
 import router from './router'
 import store from './store'
@@ -24,6 +25,7 @@ moment.locale('es', {
 })
 Vue.use(MauPlugin)
 Vue.use(BootstrapVue)
+Vue.use(MauVueComponents)
 Vue.use(VueResource)
 Validator.extend('object_required', VeeValidateCustomRules.objectRequired)
 Validator.extend('remote_unique', VeeValidateCustomRules.remoteUnique, {immediate: false})

@@ -172,7 +172,7 @@
                       :name="OrderProductionPropertiesReference.WASTE.name"
                       v-model="productionOrder.waste"
                       :initialValue="initialValues[OrderProductionPropertiesReference.WASTE.name]"
-                      :error="errors.first(OrderProductionPropertiesReference.WASTE.name)"
+                      :error="errors.has(OrderProductionPropertiesReference.WASTE.name) ? errors.first(OrderProductionPropertiesReference.WASTE.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       :type="'float'"
                       v-validate="'required'"
@@ -188,7 +188,6 @@
 
 <script>
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import MauFormInputBootstrapSelect from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
@@ -197,11 +196,9 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
-  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
   import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
-  import OrderProductionIndicatorSelector from 'renderer/api/components/m2m/OrderProductionIndicatorSelector.vue'
   import ApiOperations from 'renderer/api/functions/ApiOperations'
   export default {
     name: 'MauSimpleOrderForm',
@@ -238,10 +235,7 @@
       MauFormInputBootstrapSelect,
       MauFormInputDate,
       MauFormInputDateTime,
-      MauFormInputText,
-      MauFormInputNumber,
-      OrderProductionProductTable,
-      OrderProductionIndicatorSelector
+      OrderProductionProductTable
     },
     props: {
       initialObject: {

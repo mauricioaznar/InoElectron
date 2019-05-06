@@ -25,7 +25,7 @@
                                 :type="'float'"
                                 :negative="allowNegative"
                                 :key="'_quantity_kilo' + currentStructuredObj['product_id']"
-                                :error="errors.first('_quantity_kilo' + currentStructuredObj['product_id'])"
+                                :error="errors.has('_quantity_kilo' + currentStructuredObj['product_id']) ? errors.first('_quantity_kilo' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
@@ -45,7 +45,7 @@
                                 :type="'regular'"
                                 :negative="allowNegative"
                                 :key="'_quantity_group' + currentStructuredObj['product_id']"
-                                :error="errors.first('_quantity_group' + currentStructuredObj['product_id'])"
+                                :error="errors.has('_quantity_group' + currentStructuredObj['product_id']) ? errors.first('_quantity_group' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="'required'"
@@ -76,7 +76,7 @@
                                 :type="'float'"
                                 :negative="allowNegative"
                                 :key="'_manual_kilos' + currentStructuredObj['product_id']"
-                                :error="errors.first('_manual_kilos' + currentStructuredObj['product_id'])"
+                                :error="errors.has('_manual_kilos' + currentStructuredObj['product_id']) ? errors.first('_manual_kilos' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="'required'"
@@ -100,7 +100,7 @@
                                 :type="'regular'"
                                 :negative="allowNegative"
                                 :key="'_manual_groups' + currentStructuredObj['product_id']"
-                                :error="errors.first('_manual_groups' + currentStructuredObj['product_id'])"
+                                :error="errors.has('_manual_groups' + currentStructuredObj['product_id']) ? errors.first('_manual_groups' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="'required'"
@@ -116,7 +116,6 @@
 <script>
     import BagOrderProductPropertiesReference from 'renderer/api/propertiesReference/OrderProductionProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
-    import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
     import MauFormInputSelectBootstrap from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import {mapGetters} from 'vuex'
@@ -138,8 +137,7 @@
         ])
       },
       components: {
-        MauFormInputSelectBootstrap,
-        MauFormInputNumber
+        MauFormInputSelectBootstrap
       },
       props: {
         selectedProducts: {

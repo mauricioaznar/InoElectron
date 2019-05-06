@@ -7,7 +7,7 @@
                         v-model="machine.name"
                         :label="MachinePropertiesReference.NAME.title"
                         :name="MachinePropertiesReference.NAME.name"
-                        :error="errors.first(MachinePropertiesReference.NAME.name)"
+                        :error="errors.has(MachinePropertiesReference.NAME.name) ? errors.first(MachinePropertiesReference.NAME.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -42,7 +42,6 @@
   import MachinePropertiesReference from 'renderer/api/propertiesReference/MachinePropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
-  import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
@@ -60,7 +59,6 @@
       }
     },
     components: {
-      MauFormInputText,
       MauFormInputSelect
     },
     props: {

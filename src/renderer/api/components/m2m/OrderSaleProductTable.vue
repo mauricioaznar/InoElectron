@@ -27,7 +27,7 @@
                                 v-model="currentStructuredObj._quantity"
                                 :type="'float'"
                                 :key="'_quantity_kilo' + currentStructuredObj['product_id']"
-                                :error="errors.first('_quantity_kilo' + currentStructuredObj['product_id'])"
+                                :error="errors.has('_quantity_kilo' + currentStructuredObj['product_id']) ? errors.first('_quantity_kilo' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
@@ -46,7 +46,7 @@
                                 v-model="currentStructuredObj._quantity"
                                 :type="getProductGroupWeightStrict(currentStructuredObj) ? 'regular' : 'float'"
                                 :key="'_quantity_group' + currentStructuredObj['product_id']"
-                                :error="errors.first('_quantity_group' + currentStructuredObj['product_id'])"
+                                :error="errors.has('_quantity_group' + currentStructuredObj['product_id']) ? errors.first('_quantity_group' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
@@ -70,7 +70,7 @@
                     <td v-if="saleMode" class="mau-text-center">
                         <mau-form-input-number
                                 :name="'kilo_price' + currentStructuredObj['product_id']"
-                                :error="errors.first('kilo_price' + currentStructuredObj['product_id'])"
+                                :error="errors.has('kilo_price' + currentStructuredObj['product_id']) ? errors.first('kilo_price' + currentStructuredObj['product_id']) : ''"
                                 v-model="currentStructuredObj._kilo_price"
                                 :initialValue="getCurrentObjKiloPrice(currentStructuredObj)"
                                 :type="'float'"
@@ -91,7 +91,7 @@
                                 v-model="currentStructuredObj._manual_kilos"
                                 :type="'float'"
                                 :key="'_manual_kilos' + currentStructuredObj['product_id']"
-                                :error="errors.first('_manual_kilos' + currentStructuredObj['product_id'])"
+                                :error="errors.has('_manual_kilos' + currentStructuredObj['product_id']) ? errors.first('_manual_kilos' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="'required'"
@@ -112,7 +112,7 @@
                                 v-model="currentStructuredObj._manual_groups"
                                 :type="'regular'"
                                 :key="'_manual_groups' + currentStructuredObj['product_id']"
-                                :error="errors.first('_manual_groups' + currentStructuredObj['product_id'])"
+                                :error="errors.has('_manual_groups' + currentStructuredObj['product_id']) ? errors.first('_manual_groups' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="'required'"
@@ -154,7 +154,6 @@
     import OrderSaleProductPropertiesReference from 'renderer/api/propertiesReference/OrderSaleProductPropertiesReference'
     import OrderRequestProductPropertiesReference from 'renderer/api/propertiesReference/OrderRequestProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
-    import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
     import MauFormInputSelectBootstrap from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import {mapGetters} from 'vuex'
@@ -174,8 +173,7 @@
         }
       },
       components: {
-        MauFormInputSelectBootstrap,
-        MauFormInputNumber
+        MauFormInputSelectBootstrap
       },
       created () {
       },
