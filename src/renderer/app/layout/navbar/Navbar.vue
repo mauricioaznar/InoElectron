@@ -9,7 +9,7 @@
           <template slot="button-content">
             <span>{{navbarTitle}}</span>
           </template>
-          <b-dropdown-item v-for="(navbarRouteObj, index) in navbarRouteObjects" class="dropdown-item text-right" :to="navbarRouteObj.path" :key="index">
+          <b-dropdown-item v-for="(navbarRouteObj, index) in navbarRouteObjects" class="dropdown-item text-right" @click.prevent="dropdownClicked(navbarRouteObj.path)" :key="index">
             {{navbarRouteObj.meta.title}}
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -93,6 +93,9 @@
         }
         this.navbarTitle = navbarTitle
         this.navbarRouteObjects = navbarRouteObjects
+      },
+      dropdownClicked: function (path) {
+        this.$router.push({path: path})
       },
       ...mapActions([
         AppActions.TOGGLE_SIDEBAR
