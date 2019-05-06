@@ -67,7 +67,6 @@
 <script>
   import OrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/OrderAdjustmentPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
@@ -97,7 +96,6 @@
     components: {
       MauFormInputSelect,
       MauFormInputDate,
-      MauFormInputText,
       OrderProductionProductTable
     },
     props: {

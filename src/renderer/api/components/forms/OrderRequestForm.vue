@@ -8,7 +8,7 @@
                       v-model="requestOrder.orderCode"
                       :label="OrderRequestPropertiesReference.ORDER_CODE.title"
                       :name="OrderRequestPropertiesReference.ORDER_CODE.name"
-                      :error="errors.first(OrderRequestPropertiesReference.ORDER_CODE.name)"
+                      :error="errors.has(OrderRequestPropertiesReference.ORDER_CODE.name) ? errors.first(OrderRequestPropertiesReference.ORDER_CODE.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       v-validate="{
                         required: true,
@@ -117,8 +117,6 @@
 <script>
   import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
-  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -164,8 +162,6 @@
     components: {
       MauFormInputSelect,
       MauFormInputDate,
-      MauFormInputText,
-      MauFormInputNumber,
       OrderSaleProductTable
     },
     props: {

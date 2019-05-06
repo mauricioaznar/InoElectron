@@ -23,7 +23,7 @@
                 v-model="product.code"
                 :label="PropertiesReference.CODE.title"
                 :name="PropertiesReference.CODE.name"
-                :error="errors.first(PropertiesReference.CODE.name)"
+                :error="errors.has(PropertiesReference.CODE.name) ? errors.first(PropertiesReference.CODE.name) : ''"
                 :disabled="!userHasWritePrivileges"
                 v-validate="{
                             required: true,
@@ -44,7 +44,7 @@
           v-model="product.description"
           :label="PropertiesReference.DESCRIPTION.title"
           :name="PropertiesReference.DESCRIPTION.name"
-          :error="errors.first(PropertiesReference.DESCRIPTION.name)"
+          :error="errors.has(PropertiesReference.DESCRIPTION.name) ? errors.first(PropertiesReference.DESCRIPTION.name) : ''"
           :disabled="!userHasWritePrivileges"
           v-validate="'required'"
         >
@@ -66,7 +66,7 @@
               :name="PropertiesReference.CURRENT_GROUP_WEIGHT.name"
               :initialValue="initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name]"
               v-model="product.currentGroupWeight"
-              :error="errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name)"
+              :error="errors.has(PropertiesReference.CURRENT_GROUP_WEIGHT.name) ? errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name) : ''"
               :disabled="!userHasWritePrivileges"
               v-validate="'required|min_value:1'"
       >
@@ -87,7 +87,7 @@
                 :name="PropertiesReference.CURRENT_KILO_PRICE.name"
                 v-model="product.currentKiloPrice"
                 :initialValue="initialValues[PropertiesReference.CURRENT_KILO_PRICE.name]"
-                :error="errors.first(PropertiesReference.CURRENT_KILO_PRICE.name)"
+                :error="errors.has(PropertiesReference.CURRENT_KILO_PRICE.name) ? errors.first(PropertiesReference.CURRENT_KILO_PRICE.name) : ''"
                 :type="'float'"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'required|min_value:1'"
@@ -104,7 +104,7 @@
                 v-model="product.width"
                 :type="'float'"
                 :initialValue="initialValues[PropertiesReference.WIDTH.name]"
-                :error="errors.first(PropertiesReference.WIDTH.name)"
+                :error="errors.has(PropertiesReference.WIDTH.name) ? errors.first(PropertiesReference.WIDTH.name) : ''"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'required|min_value:1'"
         >
@@ -117,7 +117,7 @@
                 v-model="product.length"
                 :type="'float'"
                 :initialValue="initialValues[PropertiesReference.LENGTH.name]"
-                :error="errors.first(PropertiesReference.LENGTH.name)"
+                :error="errors.has(PropertiesReference.LENGTH.name) ? errors.first(PropertiesReference.LENGTH.name) : ''"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'required|min_value:1'"
         >
@@ -168,9 +168,6 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
-  import MaskedInput from 'vue-text-mask'
-  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
-  import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
@@ -209,10 +206,7 @@
       }
     },
     components: {
-      MauFormInputNumber,
-      MauFormInputSelect,
-      MauFormInputText,
-      MaskedInput
+      MauFormInputSelect
     },
     props: {
       initialObject: {

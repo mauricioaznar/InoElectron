@@ -7,8 +7,7 @@
                         v-model="persona.firstName"
                         :label="PersonaPropertiesReference.FIRST_NAME.title"
                         :name="PersonaPropertiesReference.FIRST_NAME.name"
-                        :type="'text'"
-                        :error="errors.first(PersonaPropertiesReference.FIRST_NAME.name)"
+                        :error="errors.has(PersonaPropertiesReference.FIRST_NAME.name) ? errors.first(PersonaPropertiesReference.FIRST_NAME.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -20,7 +19,7 @@
                         v-model="persona.lastName"
                         :label="PersonaPropertiesReference.LAST_NAME.title"
                         :name="PersonaPropertiesReference.LAST_NAME.name"
-                        :error="errors.first(PersonaPropertiesReference.LAST_NAME.name)"
+                        :error="errors.has(PersonaPropertiesReference.LAST_NAME.name) ? errors.first(PersonaPropertiesReference.LAST_NAME.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -35,24 +34,24 @@
                         :label="PersonaPropertiesReference.EMAIL.title"
                         :name="PersonaPropertiesReference.EMAIL.name"
                         :type="'email'"
-                        :error="errors.first(PersonaPropertiesReference.EMAIL.name)"
+                        :error="errors.has(PersonaPropertiesReference.EMAIL.name) ? errors.first(PersonaPropertiesReference.EMAIL.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
             </div>
             <div class="col-sm-12" :class="clientMode ? 'col-md-6' : ''">
-                    <mau-form-input-text
-                            :initialValue="initialValues[PersonaPropertiesReference.CELLPHONE.name]"
-                            v-model="persona.cellphone"
-                            :label="PersonaPropertiesReference.CELLPHONE.title"
-                            :name="PersonaPropertiesReference.CELLPHONE.name"
-                            :type="'cellphone'"
-                            :error="errors.first(PersonaPropertiesReference.CELLPHONE.name)"
-                            :disabled="!userHasWritePrivileges"
-                            v-validate="clientMode ? 'required' : ''"
-                    >
-                    </mau-form-input-text>
+                <mau-form-input-text
+                        :initialValue="initialValues[PersonaPropertiesReference.CELLPHONE.name]"
+                        v-model="persona.cellphone"
+                        :label="PersonaPropertiesReference.CELLPHONE.title"
+                        :name="PersonaPropertiesReference.CELLPHONE.name"
+                        :type="'cellphone'"
+                        :error="errors.has(PersonaPropertiesReference.CELLPHONE.name) ? errors.first(PersonaPropertiesReference.CELLPHONE.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="clientMode ? 'required' : ''"
+                >
+                </mau-form-input-text>
             </div>
         </div>
         <div class="form-group">
@@ -100,8 +99,6 @@
   import EmployeePropertiesReference from 'renderer/api/propertiesReference/EmployeePropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
-  import MauFormInputText from 'renderer/api/components/inputs/MauFormInputText.vue'
-  import MauFormInputNumber from 'renderer/api/components/inputs/MauFormInputNumber.vue'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import {mapGetters} from 'vuex'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -128,8 +125,6 @@
       }
     },
     components: {
-      MauFormInputText,
-      MauFormInputNumber,
       MauFormInputSelect
     },
     props: {
