@@ -6,6 +6,7 @@
                                         :label="' de entrada'"
                                         v-model="dateTimeSelected"
                                         :initialValue="initialDateTime"
+                                        :name="'entryDateTime'"
                                 ></mau-form-input-date-time>
                             </div>
                             <div class="form-group col-md-6">

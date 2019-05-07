@@ -6,6 +6,7 @@
               v-model="date"
               :initialValue="initialValues['date']"
               :inputType="'date'"
+              :name="name + 'date'"
               :error="error"
               :disabled="disabled"
               @input="dateChanged"
@@ -42,7 +43,6 @@
 <script>
   import moment from 'moment'
   import MauFormInputBootstrapSelect from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
-  import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   export default {
     name: 'MauFormInputDateTime',
     data () {
@@ -71,7 +71,10 @@
       label: {
         type: String
       },
-      name: String,
+      name: {
+        type: String,
+        required: true
+      },
       disabled: {
         type: Boolean,
         default: function () {
@@ -99,8 +102,7 @@
       }
     },
     components: {
-      MauFormInputBootstrapSelect,
-      MauFormInputDate
+      MauFormInputBootstrapSelect
     },
     methods: {
       updateValue: function (val) {

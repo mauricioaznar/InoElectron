@@ -194,7 +194,6 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
@@ -233,7 +232,6 @@
     components: {
       MauFormInputSelect,
       MauFormInputBootstrapSelect,
-      MauFormInputDate,
       MauFormInputDateTime,
       OrderProductionProductTable
     },

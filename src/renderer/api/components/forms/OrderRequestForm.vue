@@ -120,7 +120,6 @@
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauFormInputDate from 'renderer/api/components/inputs/MauFormInputDate.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
@@ -161,7 +160,6 @@
     },
     components: {
       MauFormInputSelect,
-      MauFormInputDate,
       OrderSaleProductTable
     },
     props: {
