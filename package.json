@@ -1,6 +1,6 @@
 {
   "name": "Industria",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "author": "Maguas Tupaguas <mauricioaznar94@gmail.com>",
   "description": "An electron-vue project",
   "license": null,
@@ -64,7 +64,15 @@
       ]
     },
     "linux": {
-      "icon": "build/icons"
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     }
   },
   "dependencies": {
