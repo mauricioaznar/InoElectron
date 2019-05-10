@@ -4,7 +4,7 @@
       <mau-form-input-date
               :label="'Fecha ' + label"
               v-model="date"
-              :initialValue="initialValues['date']"
+              :initialValue="initialDate"
               :inputType="'date'"
               :name="name + 'date'"
               :error="error"
@@ -14,35 +14,40 @@
       </mau-form-input-date>
     </div>
     <div class="form-group col-md-3">
-      <mau-form-input-bootstrap-select
+      <mau-form-input-select-static
               :label="'Hora ' + label"
-              :availableOptions="availableHours"
+              :availableObjects="availableHours"
               :error="error"
               v-model="hour"
-              :initialValue="initialValues['hour']"
+              :initialObject="initialHour"
+              :displayProperty="'value'"
+              :trackBy="'value'"
+              :name="name + 'hour'"
               :disabled="disabled"
               @input="dateChanged"
       >
-      </mau-form-input-bootstrap-select>
+      </mau-form-input-select-static>
     </div>
-    <div class="form-group col-md-3   ">
-      <mau-form-input-bootstrap-select
-              :label="'Minuto ' + label"
-              :availableOptions="availableMinutes"
+    <div class="form-group col-md-3">
+      <mau-form-input-select-static
+              :label="'Hora ' + label"
+              :availableObjects="availableMinutes"
               :error="error"
               v-model="minute"
-              :initialValue="initialValues['minute']"
+              :initialObject="initialMinute"
+              :displayProperty="'value'"
+              :trackBy="'value'"
+              :name="name + 'minute'"
               :disabled="disabled"
               @input="dateChanged"
       >
-      </mau-form-input-bootstrap-select>
+      </mau-form-input-select-static>
     </div>
   </div>
 </template>
 
 <script>
   import moment from 'moment'
-  import MauFormInputBootstrapSelect from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
   export default {
     name: 'MauFormInputDateTime',
     data () {
@@ -51,7 +56,9 @@
         date: '',
         hour: '',
         minute: '',
-        initialValues: {}
+        initialDate: '',
+        initialMinute: {},
+        initialHour: {}
       }
     },
     $_veeValidate: {
@@ -84,25 +91,102 @@
       availableHours: {
         type: Array,
         default: function () {
-          return ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
+          return [
+            { value: '00' },
+            { value: '01' },
+            { value: '02' },
+            { value: '03' },
+            { value: '04' },
+            { value: '05' },
+            { value: '06' },
+            { value: '07' },
+            { value: '08' },
+            { value: '09' },
+            { value: '10' },
+            { value: '11' },
+            { value: '12' },
+            { value: '13' },
+            { value: '14' },
+            { value: '15' },
+            { value: '16' },
+            { value: '17' },
+            { value: '18' },
+            { value: '19' },
+            { value: '20' },
+            { value: '21' },
+            { value: '22' },
+            { value: '23' }
+          ]
         }
       },
       availableMinutes: {
         type: Array,
         default: function () {
           return [
-            '00', '01', '02', '03', '04', '05', '06', '07', '08', '09',
-            '10', '11', '12', '13', '14', '15', '16', '17', '18', '19',
-            '20', '21', '22', '23', '24', '25', '26', '27', '28', '29',
-            '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
-            '40', '41', '42', '43', '44', '45', '46', '47', '48', '49',
-            '50', '51', '52', '53', '54', '55', '56', '57', '58', '59'
+            { value: '00' },
+            { value: '01' },
+            { value: '02' },
+            { value: '03' },
+            { value: '04' },
+            { value: '05' },
+            { value: '06' },
+            { value: '07' },
+            { value: '08' },
+            { value: '09' },
+            { value: '10' },
+            { value: '11' },
+            { value: '12' },
+            { value: '13' },
+            { value: '14' },
+            { value: '15' },
+            { value: '16' },
+            { value: '17' },
+            { value: '18' },
+            { value: '19' },
+            { value: '20' },
+            { value: '21' },
+            { value: '22' },
+            { value: '23' },
+            { value: '24' },
+            { value: '25' },
+            { value: '26' },
+            { value: '27' },
+            { value: '28' },
+            { value: '29' },
+            { value: '30' },
+            { value: '31' },
+            { value: '32' },
+            { value: '33' },
+            { value: '34' },
+            { value: '35' },
+            { value: '36' },
+            { value: '37' },
+            { value: '38' },
+            { value: '39' },
+            { value: '40' },
+            { value: '41' },
+            { value: '42' },
+            { value: '43' },
+            { value: '44' },
+            { value: '45' },
+            { value: '46' },
+            { value: '48' },
+            { value: '49' },
+            { value: '50' },
+            { value: '51' },
+            { value: '52' },
+            { value: '53' },
+            { value: '54' },
+            { value: '55' },
+            { value: '56' },
+            { value: '57' },
+            { value: '58' },
+            { value: '59' }
           ]
         }
       }
     },
     components: {
-      MauFormInputBootstrapSelect
     },
     methods: {
       updateValue: function (val) {
@@ -111,7 +195,7 @@
       },
       dateChanged: function () {
         if (this.date && this.hour && this.minute) {
-          this.updateValue(this.date + ' ' + this.hour + ':' + this.minute + ':00')
+          this.updateValue(this.date + ' ' + this.hour.value + ':' + this.minute.value + ':00')
         } else {
           this.updateValue('')
         }
@@ -120,13 +204,9 @@
     created () {
       let momentDate = moment(this.initialValue)
       if (momentDate.isValid()) {
-        this.initialValues['date'] = moment(this.initialValue).format('YYYY-MM-DD')
-        this.initialValues['hour'] = moment(this.initialValue).format('HH')
-        this.initialValues['minute'] = moment(this.initialValue).format('mm')
-      } else {
-        this.initialValues['date'] = ''
-        this.initialValues['hour'] = ''
-        this.initialValues['minute'] = ''
+        this.initialDate = moment(this.initialValue).format('YYYY-MM-DD')
+        this.initialHour = { value: moment(this.initialValue).format('HH') }
+        this.initialMinute = { value: moment(this.initialValue).format('mm') }
       }
     }
   }

@@ -5,7 +5,7 @@
                 :label="'de inicio'"
                 v-model="productionEvent.startDateTime"
                 :initialValue="initialValues[ProductionEventPropertiesReference.START_DATE_TIME.name]"
-                :error="errors.first(ProductionEventPropertiesReference.START_DATE_TIME.name)"
+                :error="errors.has(ProductionEventPropertiesReference.START_DATE_TIME.name) ? errors.first(ProductionEventPropertiesReference.START_DATE_TIME.name) : ''"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'required'"
         >
@@ -15,7 +15,7 @@
                 :label="'de fin'"
                 v-model="productionEvent.endDateTime"
                 :initialValue="initialValues[ProductionEventPropertiesReference.END_DATE_TIME.name]"
-                :error="errors.first(ProductionEventPropertiesReference.END_DATE_TIME.name)"
+                :error="errors.has(ProductionEventPropertiesReference.END_DATE_TIME.name) ? errors.first(ProductionEventPropertiesReference.END_DATE_TIME.name) : ''"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + productionEvent.startDateTime"
         >

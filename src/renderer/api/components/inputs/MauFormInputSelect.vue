@@ -8,7 +8,7 @@
                 :label="displayProperty"
                 :track-by="'id'"
                 :multiple="multi"
-                class="form-control override-form-control"
+                class="form-control p-0"
                 :onSearch="search"
                 :clearSearchOnSelect="hasClear"
                 :closeOnSelect="closeOnSelect"

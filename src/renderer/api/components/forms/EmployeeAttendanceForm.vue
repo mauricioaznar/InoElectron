@@ -6,7 +6,7 @@
                   :label="EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.title"
                   v-model="employeeAttendance.entranceDateTime"
                   :initialValue="initialValues[EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name]"
-                  :error="errors.first(EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name)"
+                  :error="errors.has(EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name) ? errors.first(EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name) : ''"
                   :disabled="!userHasWritePrivileges"
                   v-validate="'required'"
           >
@@ -16,7 +16,7 @@
                   :label="EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.title"
                   v-model="employeeAttendance.exitDateTime"
                   :initialValue="initialValues[EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name]"
-                  :error="errors.first(EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name)"
+                  :error="errors.has(EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name) ? errors.first(EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name) : ''"
                   :disabled="!userHasWritePrivileges"
           >
           </mau-form-input-date-time>

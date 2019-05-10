@@ -1,19 +1,26 @@
 <template>
   <div>
     <div class="form-group form-row">
-      <b-form-select
-              :options="options"
-              :label="'text'"
+      <mau-form-input-select-static
+              :availableObjects="options"
+              :displayProperty="'text'"
+              :trackBy="'value'"
+              :error="''"
+              :name="'selectStatic'"
               v-model="selectedOption"
-              class="col-sm-12 col-md-2 override-form-control form-control"
+              class="col-sm-12 col-md-2"
       >
-      </b-form-select>
-      <b-form-input v-model="filteredText"
-                    type="text"
-                    @keyup.enter.native="doFilter"
-                    class="col-sm-12 col-md-9 form-control"
-                    placeholder="Buscar...">
-      </b-form-input>
+      </mau-form-input-select-static>
+      <mau-form-input-text
+              v-model="filteredText"
+              type="text"
+              @keyup.enter.native="doFilter"
+              :error="''"
+              :name="'inputText'"
+              :initialValue="''"
+              class="col-sm-12 col-md-9"
+              placeholder="Buscar...">
+      </mau-form-input-text>
       <button class="btn-submit btn btn-primary col-md-1 col-sm-12" @click="doFilter">Buscar</button>
     </div>
     <div class="form-group">

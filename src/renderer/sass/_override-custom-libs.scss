@@ -166,46 +166,6 @@
   height: $chart-height;
 }
 
-.mau-text-left {
-  text-align: left;
-}
-
-.mau-text-center {
-  text-align: center;
-}
-
-.mau-image-small {
-  max-height: 200px;
-}
-
-.mau-image-large {
-  max-height: 600px;
-}
-
-.fa-disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.x-overflow {
-  overflow-x: auto;
-}
-
 .table td, .table th {
   border-top: none !important;
-}
-
-.v-select .dropdown-toggle .clear { visibility: hidden; }
-.v-select.disabled .dropdown-toggle,
-.v-select.disabled .dropdown-toggle .clear,
-.v-select.disabled .dropdown-toggle input,
-.v-select.disabled .open-indicator,
-.v-select.disabled .selected-tag .close {
-  background-color: #e9ecef;
-  cursor: default;
-}
-
-.form-control.v-select .selected-tag {
-  color: $body-color;
-}
-
+} 

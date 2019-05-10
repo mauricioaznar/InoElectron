@@ -6,7 +6,7 @@
                   :label="'de inicio'"
                   v-model="productionOrder.startDateTime"
                   :initialValue="initialValues[OrderProductionPropertiesReference.START_DATE_TIME.name]"
-                  :error="errors.first(OrderProductionPropertiesReference.START_DATE_TIME.name)"
+                  :error="errors.has(OrderProductionPropertiesReference.START_DATE_TIME.name) ? errors.first(OrderProductionPropertiesReference.START_DATE_TIME.name) : ''"
                   :disabled="!userHasWritePrivileges"
                   v-validate="'required'"
           >
@@ -16,7 +16,7 @@
                   :label="'de fin'"
                   v-model="productionOrder.endDateTime"
                   :initialValue="initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name]"
-                  :error="errors.first(OrderProductionPropertiesReference.END_DATE_TIME.name)"
+                  :error="errors.has(OrderProductionPropertiesReference.END_DATE_TIME.name) ? errors.first(OrderProductionPropertiesReference.END_DATE_TIME.name) : ''"
                   :disabled="!userHasWritePrivileges"
                   v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + productionOrder.startDateTime"
           >
@@ -190,7 +190,6 @@
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
-  import MauFormInputBootstrapSelect from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -231,7 +230,6 @@
     },
     components: {
       MauFormInputSelect,
-      MauFormInputBootstrapSelect,
       MauFormInputDateTime,
       OrderProductionProductTable
     },
