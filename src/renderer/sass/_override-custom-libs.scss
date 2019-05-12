@@ -168,4 +168,10 @@
 
 .table td, .table th {
   border-top: none !important;
-} 
+}
+
+.v-select .selected-tag {
+  font-family: "Open Sans", sans-serif;
+  font-weight: normal !important;
+  letter-spacing: normal !important;
+}

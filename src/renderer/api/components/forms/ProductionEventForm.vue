@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mau-form-input-date-time
+        <mau-form-group-date-time
                 :name="ProductionEventPropertiesReference.START_DATE_TIME.name"
                 :label="'de inicio'"
                 v-model="productionEvent.startDateTime"
@@ -9,8 +9,8 @@
                 :disabled="!userHasWritePrivileges"
                 v-validate="'required'"
         >
-        </mau-form-input-date-time>
-        <mau-form-input-date-time
+        </mau-form-group-date-time>
+        <mau-form-group-date-time
                 :name="ProductionEventPropertiesReference.END_DATE_TIME.name"
                 :label="'de fin'"
                 v-model="productionEvent.endDateTime"
@@ -19,7 +19,7 @@
                 :disabled="!userHasWritePrivileges"
                 v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + productionEvent.startDateTime"
         >
-        </mau-form-input-date-time>
+        </mau-form-group-date-time>
         <div class="form-group">
             <mau-form-input-select
                     :initialObject="initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name]"
@@ -105,7 +105,6 @@
 </template>
 
 <script>
-  import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauEditor from 'renderer/components/mau-components/mau-editor/MauEditor.vue'
@@ -147,7 +146,6 @@
       }
     },
     components: {
-      MauFormInputDateTime,
       MauFormInputSelect,
       MauEditor,
       ProductionEventCheckTable

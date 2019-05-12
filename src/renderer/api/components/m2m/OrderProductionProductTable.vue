@@ -9,7 +9,7 @@
                     <th class="mau-text-center" v-if="bagMode">Unidad</th>
                     <th class="mau-text-center">Kilos</th>
                     <th class="mau-text-center" v-if="bagMode">Peso del bulto</th>
-                    <th class="mau-text-center">Grupos</th>
+                    <th class="mau-text-center">Bultos</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,7 +26,7 @@
                                 :negative="allowNegative"
                                 :key="'_quantity_kilo' + currentStructuredObj['product_id']"
                                 :error="errors.has('_quantity_kilo' + currentStructuredObj['product_id']) ? errors.first('_quantity_kilo' + currentStructuredObj['product_id']) : ''"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                     required: true,
@@ -46,7 +46,7 @@
                                 :negative="allowNegative"
                                 :key="'_quantity_group' + currentStructuredObj['product_id']"
                                 :error="errors.has('_quantity_group' + currentStructuredObj['product_id']) ? errors.first('_quantity_group' + currentStructuredObj['product_id']) : ''"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="'required'"
                         >
@@ -57,14 +57,15 @@
                                 v-model="currentStructuredObj._calculation_type"
                                 v-if="!(!getCurrentObjGroupWeight(currentStructuredObj))"
                                 :initialObject="getCurrentObjInitialCalculationType(currentStructuredObj)"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                :availableObjects="[{value: 0, text: 'kilo'}, {value: 1, text: 'bulto'}]"
+                                :availableObjects="complexCalculationTypeObjects"
                                 :displayProperty="'text'"
                                 :trackBy="'value'"
                                 :hasClear="false"
                                 :name="'calculationType' + currentStructuredObj['product_id']"
                                 :v-validate="'required'"
+                                :multiselect="false"
                                 :error="errors.has('calculationType' + currentStructuredObj['product_id']) ? errors.first('calculationType' + currentStructuredObj['product_id']) : ''"
                         >
                         </mau-form-input-select-static>
@@ -72,12 +73,13 @@
                                 v-model="currentStructuredObj._calculation_type"
                                 v-if="!(getCurrentObjGroupWeight(currentStructuredObj))"
                                 :initialObject="getCurrentObjInitialCalculationType(currentStructuredObj)"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                :availableObjects="[{value: 0, text: 'kilo'}]"
+                                :availableObjects="simpleCalculationTypeObjects"
                                 :displayProperty="'text'"
                                 :trackBy="'value'"
                                 :hasClear="false"
+                                :multiselect="false"
                                 :name="'calculationType' + currentStructuredObj['product_id']"
                                 :v-validate="'required'"
                                 :error="errors.has('calculationType' + currentStructuredObj['product_id']) ? errors.first('calculationType' + currentStructuredObj['product_id']) : ''"
@@ -136,7 +138,6 @@
 <script>
     import BagOrderProductPropertiesReference from 'renderer/api/propertiesReference/OrderProductionProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
-    import MauFormInputSelectBootstrap from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import {mapGetters} from 'vuex'
     import cloneDeep from 'renderer/services/common/cloneDeep'
@@ -159,7 +160,6 @@
         ])
       },
       components: {
-        MauFormInputSelectBootstrap
       },
       props: {
         selectedProducts: {
@@ -275,7 +275,7 @@
           }
           return productSaleGroupWeight
         },
-        setCurrentObjProperties: function (currentStructuredObj) {
+        setCurrentObjCalculationProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[BagOrderProductPropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {

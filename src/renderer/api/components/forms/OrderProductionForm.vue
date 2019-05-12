@@ -1,7 +1,7 @@
 1<template>
   <div>
       <div>
-          <mau-form-input-date-time
+          <mau-form-group-date-time
                   :name="OrderProductionPropertiesReference.START_DATE_TIME.name"
                   :label="'de inicio'"
                   v-model="productionOrder.startDateTime"
@@ -10,8 +10,8 @@
                   :disabled="!userHasWritePrivileges"
                   v-validate="'required'"
           >
-          </mau-form-input-date-time>
-          <mau-form-input-date-time
+          </mau-form-group-date-time>
+          <mau-form-group-date-time
                   :name="OrderProductionPropertiesReference.END_DATE_TIME.name"
                   :label="'de fin'"
                   v-model="productionOrder.endDateTime"
@@ -20,7 +20,7 @@
                   :disabled="!userHasWritePrivileges"
                   v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + productionOrder.startDateTime"
           >
-          </mau-form-input-date-time>
+          </mau-form-group-date-time>
           <div class="form-group" v-if="bagMode">
               <mau-form-input-select
                       :initialObject="initialValues[OrderProductionPropertiesReference.EMPLOYEE.name]"
@@ -193,7 +193,6 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
   import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
@@ -230,7 +229,6 @@
     },
     components: {
       MauFormInputSelect,
-      MauFormInputDateTime,
       OrderProductionProductTable
     },
     props: {

@@ -21,14 +21,14 @@
                     <td class="mau-text-center">{{getProductDescription(currentStructuredObj)}}</td>
                     <td class="mau-text-center">
                         <mau-form-input-number
-                                v-if="currentStructuredObj['_calculation_type'] === 0 && getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)"
+                                v-if="getCurrentObjCalculationType(currentStructuredObj) === 0 && getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)"
                                 :name="'_quantity_kilo' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialKilos(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
                                 :type="'float'"
                                 :key="'_quantity_kilo' + currentStructuredObj['product_id']"
                                 :error="errors.has('_quantity_kilo' + currentStructuredObj['product_id']) ? errors.first('_quantity_kilo' + currentStructuredObj['product_id']) : ''"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                     required: true,
@@ -40,14 +40,14 @@
                         >
                         </mau-form-input-number>
                         <mau-form-input-number
-                                v-if="currentStructuredObj['_calculation_type'] === 1 && getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)"
+                                v-if="getCurrentObjCalculationType(currentStructuredObj) === 1 && getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)"
                                 :name="'_quantity_group' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialGroups(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
                                 :type="getProductGroupWeightStrict(currentStructuredObj) ? 'regular' : 'float'"
                                 :key="'_quantity_group' + currentStructuredObj['product_id']"
                                 :error="errors.has('_quantity_group' + currentStructuredObj['product_id']) ? errors.first('_quantity_group' + currentStructuredObj['product_id']) : ''"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                   required: true
@@ -56,16 +56,38 @@
                         </mau-form-input-number>
                     </td>
                     <td class="mau-text-center extra-select-width">
-                        <mau-form-input-select-bootstrap
+                        <mau-form-input-select-static
+                                v-if="!(!getCurrentObjGroupWeight(currentStructuredObj))"
                                 v-model="currentStructuredObj._calculation_type"
-                                v-if="getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)"
-                                :initialValue="getCurrentObjInitialCalculationType(currentStructuredObj)"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                :initialObject="getCurrentObjInitialCalculationType(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
+                                :availableObjects="complexCalculationTypeObjects"
+                                :displayProperty="'text'"
+                                :trackBy="'value'"
+                                :hasClear="false"
+                                :name="'calculationType' + currentStructuredObj['product_id']"
+                                :v-validate="'required'"
+                                :multiselect="false"
+                                :error="errors.has('calculationType' + currentStructuredObj['product_id']) ? errors.first('calculationType' + currentStructuredObj['product_id']) : ''"
                         >
-                            <option :value="0">Kilo</option>
-                            <option :value="1" v-if="getCurrentObjGroupWeight(currentStructuredObj)">Bulto</option>
-                        </mau-form-input-select-bootstrap>
+                        </mau-form-input-select-static>
+                        <mau-form-input-select-static
+                                v-if="!(getCurrentObjGroupWeight(currentStructuredObj))"
+                                v-model="currentStructuredObj._calculation_type"
+                                :initialObject="getCurrentObjInitialCalculationType(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
+                                :disabled="!userHasWritePrivileges"
+                                :availableObjects="simpleCalculationTypeObjects"
+                                :displayProperty="'text'"
+                                :trackBy="'value'"
+                                :hasClear="false"
+                                :multiselect="false"
+                                :name="'calculationType' + currentStructuredObj['product_id']"
+                                :v-validate="'required'"
+                                :error="errors.has('calculationType' + currentStructuredObj['product_id']) ? errors.first('calculationType' + currentStructuredObj['product_id']) : ''"
+                        >
+                        </mau-form-input-select-static>
                     </td>
                     <td v-if="saleMode" class="mau-text-center">
                         <mau-form-input-number
@@ -74,7 +96,7 @@
                                 v-model="currentStructuredObj._kilo_price"
                                 :initialValue="getCurrentObjKiloPrice(currentStructuredObj)"
                                 :type="'float'"
-                                @input="setCurrentObjProperties(currentStructuredObj)"
+                                @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="'required'"
                         >
@@ -154,7 +176,6 @@
     import OrderSaleProductPropertiesReference from 'renderer/api/propertiesReference/OrderSaleProductPropertiesReference'
     import OrderRequestProductPropertiesReference from 'renderer/api/propertiesReference/OrderRequestProductPropertiesReference'
     import ProductPropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
-    import MauFormInputSelectBootstrap from 'renderer/api/components/inputs/MauFormInputBootstrapSelect.vue'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import {mapGetters} from 'vuex'
     import cloneDeep from 'renderer/services/common/cloneDeep'
@@ -163,17 +184,14 @@
       inject: ['$validator'],
       data () {
         return {
-          calculationTypes: [
-            {value: 0, text: 'Kilo', name: 'KiloCalculationType'},
-            {value: 1, text: 'Bulto', name: 'GroupCalculationType'}
-          ],
+          simpleCalculationTypeObjects: [{value: 0, text: 'Kilo'}],
+          complexCalculationTypeObjects: [{value: 0, text: 'Kilo'}, {value: 1, text: 'Bulto'}],
           currentStructuredObjects: [],
           OrderSaleProductPropertiesReference: OrderSaleProductPropertiesReference,
           total: 0
         }
       },
       components: {
-        MauFormInputSelectBootstrap
       },
       created () {
       },
@@ -260,16 +278,19 @@
           return quantity
         },
         getCurrentObjInitialCalculationType: function (currentStructuredObj) {
-          let calculationType = currentStructuredObj['_calculation_type']
+          let calculationType = currentStructuredObj['_calculation_type'] ? currentStructuredObj['_calculation_type'] : ''
           let currentObjGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
-          if (calculationType !== 0 && calculationType !== 1) {
+          if (!calculationType) {
             if (currentObjGroupWeight) {
-              calculationType = 1
+              calculationType = this.complexCalculationTypeObjects[1]
             } else {
-              calculationType = 0
+              calculationType = this.simpleCalculationTypeObjects[0]
             }
           }
           return calculationType
+        },
+        getCurrentObjCalculationType: function (currentStructuredObj) {
+          return currentStructuredObj['_calculation_type'] ? currentStructuredObj['_calculation_type'].value : ''
         },
         getCurrentObjGroupWeight: function (currentStructuredObj) {
           let orderProductGroupWeight = null
@@ -304,7 +325,7 @@
           }
           return total
         },
-        setCurrentObjProperties: function (currentStructuredObj) {
+        setCurrentObjCalculationProperties: function (currentStructuredObj) {
           let quantity = currentStructuredObj['_quantity'] || 0
           let kiloPrice = (this.saleMode && currentStructuredObj['_kilo_price']) ? currentStructuredObj['_kilo_price'] : 0
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
@@ -312,13 +333,13 @@
             currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
           currentStructuredObj[OrderSaleProductPropertiesReference.KILO_PRICE.name] = kiloPrice
-          if (currentStructuredObj['_calculation_type'] === 0) {
+          if (this.getCurrentObjCalculationType(currentStructuredObj) === 0) {
             currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = quantity % 1 === 0 ? quantity : quantity
             if (productGroupWeight) {
               currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = (quantity % 1 === 0 ? quantity : quantity) / productGroupWeight
             }
           }
-          if (currentStructuredObj['_calculation_type'] === 1) {
+          if (this.getCurrentObjCalculationType(currentStructuredObj) === 1) {
             if (productGroupWeight) {
               currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = quantity % 1 === 0 ? quantity : quantity
               currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = (quantity % 1 === 0 ? quantity : quantity) * productGroupWeight

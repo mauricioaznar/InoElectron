@@ -2,12 +2,12 @@
                     <div class="container">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <mau-form-input-date-time
+                                <mau-form-group-date-time
                                         :label="' de entrada'"
                                         v-model="dateTimeSelected"
                                         :initialValue="initialDateTime"
                                         :name="'entryDateTime'"
-                                ></mau-form-input-date-time>
+                                ></mau-form-group-date-time>
                             </div>
                             <div class="form-group col-md-6">
                                 <mau-form-input-select
@@ -48,7 +48,6 @@
 </template>
 
 <script>
-    import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
     import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
     import EntityTypes from 'renderer/api/EntityTypes'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -70,7 +69,6 @@
         }
       },
       components: {
-        MauFormInputDateTime,
         MauFormInputSelect
       },
       methods: {

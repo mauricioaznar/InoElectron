@@ -1,7 +1,7 @@
 <template>
   <div>
       <div>
-          <mau-form-input-date-time
+          <mau-form-group-date-time
                   :name="EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name"
                   :label="EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.title"
                   v-model="employeeAttendance.entranceDateTime"
@@ -10,8 +10,8 @@
                   :disabled="!userHasWritePrivileges"
                   v-validate="'required'"
           >
-          </mau-form-input-date-time>
-          <mau-form-input-date-time
+          </mau-form-group-date-time>
+          <mau-form-group-date-time
                   :name="EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name"
                   :label="EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.title"
                   v-model="employeeAttendance.exitDateTime"
@@ -19,7 +19,7 @@
                   :error="errors.has(EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name) ? errors.first(EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name) : ''"
                   :disabled="!userHasWritePrivileges"
           >
-          </mau-form-input-date-time>
+          </mau-form-group-date-time>
           <div class="form-group"
           >
               <mau-form-input-select
@@ -49,7 +49,6 @@
   import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import MauFormInputDateTime from 'renderer/api/components/inputs/MauFormInputDateTime.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import EmployeeAttendancePropertiesReference from 'renderer/api/propertiesReference/EmployeeAttendancePropertiesReference'
   export default {
@@ -69,8 +68,7 @@
       }
     },
     components: {
-      MauFormInputSelect,
-      MauFormInputDateTime
+      MauFormInputSelect
     },
     props: {
       initialObject: {
