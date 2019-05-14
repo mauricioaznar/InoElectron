@@ -1,9 +1,11 @@
+import Vue from 'vue'
+
 export function createExcelDownloadsUrl (searchedString) {
-  return 'downloads/excel'
+  return Vue.http.options.root + '/downloads/excel'
 }
 
 export function createPdfDownloadUrl (searchedString) {
-  return 'downloads/pdf/' + searchedString
+  return Vue.http.options.root + '/downloads/pdf/' + searchedString
 }
 
 export default {
