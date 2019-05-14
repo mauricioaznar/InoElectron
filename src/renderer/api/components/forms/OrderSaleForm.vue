@@ -13,7 +13,7 @@
                       v-validate="{
                         required: true,
                         remote_unique: {
-                          entityType: orderSaleEntityType,
+                          endpointName: orderSaleEndpointName,
                           columnName: OrderSalePropertiesReference.ORDER_CODE.name,
                           initialValue: initialOrderCode
                         }
@@ -34,64 +34,64 @@
               </mau-form-input-date>
           </div>
           <div class="form-group">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
                       :initialObject="initialValues[OrderRequestPropertiesReference.COMPANY.name]"
                       :label="OrderRequestPropertiesReference.COMPANY.title"
                       :displayProperty="'name'"
-                      :entityType="companyEntityType"
+                      :endpointName="companyEndpointName"
                       v-model="salesOrder.company"
                       :name="OrderRequestPropertiesReference.COMPANY.name"
                       :error="errors.first(OrderRequestPropertiesReference.COMPANY.name)"
                       :disabled="true"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="clientEndpointName"
+                      :apiOperationOptions="clientApiOperationsOptions"
                       :initialObject="initialValues[OrderSalePropertiesReference.CLIENT.name]"
                       :label="OrderSalePropertiesReference.CLIENT.title"
                       :displayProperty="'full_name'"
                       :searchedProperties="['first_name', 'last_name']"
-                      :entityType="clientEntityType"
                       v-model="salesOrder.client"
-                      :filterExact="clientFilterExact"
                       :name="OrderSalePropertiesReference.CLIENT.name"
                       :error="errors.first(OrderSalePropertiesReference.CLIENT.name)"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="orderSaleStatusEndpointName"
                       :key="initialOrderSaleStatus ? initialOrderSaleStatus[GlobalEntityIdentifier] : 0"
                       :initialObject="initialOrderSaleStatus"
                       :label="OrderSalePropertiesReference.ORDER_SALE_STATUS.title"
                       :displayProperty="'name'"
-                      :entityType="orderSaleStatusEntityType"
                       v-model="salesOrder.orderSaleStatus"
                       :name="OrderSalePropertiesReference.ORDER_SALE_STATUS.name"
                       :error="errors.first(OrderSalePropertiesReference.ORDER_SALE_STATUS.name)"
                       :disabled="!isAdminUser"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="orderSaleCollectionStatusEndpointName"
                       :key="initialOrderSaleCollectionStatus ? initialOrderSaleCollectionStatus[GlobalEntityIdentifier] : 0"
                       :initialObject="initialOrderSaleCollectionStatus"
                       :label="OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.title"
                       :displayProperty="'name'"
-                      :entityType="orderSaleCollectionStatusEntityType"
                       v-model="salesOrder.orderSaleCollectionStatus"
                       :name="OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name"
                       :error="errors.first(OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name)"
                       :disabled="!isAdminUser"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group" v-if="isPartiallyPaidStatusSelected">
               <mau-form-input-number
@@ -107,23 +107,24 @@
               </mau-form-input-number>
           </div>
           <div class="form-group">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
                       v-if="!isReplacementStatusSelected"
+                      :endpointName="orderSaleReceiptTypeEndpointName"
                       :initialObject="initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name]"
                       :label="OrderSalePropertiesReference.RECEIPT_TYPE.title"
                       :displayProperty="'name'"
-                      :entityType="orderSaleReceiptTypeEntityType"
                       v-model="salesOrder.receiptType"
                       :name="OrderSalePropertiesReference.RECEIPT_TYPE.name"
                       :error="errors.first(OrderSalePropertiesReference.RECEIPT_TYPE.name)"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group">
               <div class="products">
-                    <mau-form-input-select
+                    <mau-form-input-select-dynamic
+                            :endpointName="productEndpointName"
                             :label="OrderSalePropertiesReference.PRODUCTS.title"
                             :initialObjects="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                             v-model="salesOrder.products"
@@ -132,8 +133,7 @@
                             :selectedPropertyName="'product_id'"
                             :data-vv-as="'Productos'"
                             :error="errors.first(OrderSalePropertiesReference.PRODUCTS.name)"
-                            :entityType="productEntityType"
-                            :multi="true"
+                            :multiselect="true"
                             :disabled="!userHasWritePrivileges"
                             v-validate="'required'"
                     >
@@ -149,7 +149,7 @@
                             >
                             </order-sale-product-table>
                         </template>
-                    </mau-form-input-select>
+                    </mau-form-input-select-dynamic>
               </div>
           </div>
           <div class="container mb-2 text-right">
@@ -165,11 +165,12 @@
   import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
+  import SpecificApiOperations from 'renderer/api/functions/SpecificApiOperations'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
@@ -198,20 +199,19 @@
         initialValues: {},
         buttonDisabled: false,
         requestedProducts: [],
-        clientFilterExact: {[ClientPropertiesReference.COMPANY.relationship_id_name]: this.orderRequest[OrderRequestPropertiesReference.COMPANY.relationship_id_name]},
-        clientEntityType: EntityTypes.CLIENT,
-        companyEntityType: EntityTypes.COMPANY,
-        orderSaleStatusEntityType: EntityTypes.ORDER_SALE_STATUS,
-        orderSaleCollectionStatusEntityType: EntityTypes.ORDER_SALE_COLLECTION_STATUS,
-        productEntityType: EntityTypes.PRODUCT,
-        orderSaleEntityType: EntityTypes.ORDER_SALE,
+        clientEndpointName: EntityTypes.CLIENT.apiName,
+        companyEndpointName: EntityTypes.COMPANY.apiName,
+        orderSaleStatusEndpointName: EntityTypes.ORDER_SALE_STATUS.apiName,
+        orderSaleCollectionStatusEndpointName: EntityTypes.ORDER_SALE_COLLECTION_STATUS.apiName,
+        productEndpointName: EntityTypes.PRODUCT.apiName,
+        orderSaleEndpointName: EntityTypes.ORDER_SALE.apiName,
+        orderSaleReceiptTypeEndpointName: EntityTypes.ORDER_SALE_RECEIPT_TYPE.apiName,
         initialOrderSaleStatus: {},
-        initialOrderSaleCollectionStatus: {},
-        orderSaleReceiptTypeEntityType: EntityTypes.ORDER_SALE_RECEIPT_TYPE
+        initialOrderSaleCollectionStatus: {}
       }
     },
     components: {
-      MauFormInputSelect,
+      MauFormInputSelectDynamic,
       OrderSaleProductTable
     },
     props: {
@@ -237,13 +237,13 @@
     created () {
       this.setInitialValues()
       if (!this.initialObject) {
-        ApiOperations.getMax(this.orderSaleEntityType, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
+        SpecificApiOperations.getMax(this.orderSaleEntityType.apiName, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
           this.initialOrderCode = result + 1
         })
-        ApiOperations.getById(this.orderSaleStatusEntityType, 1).then(result => {
+        GenericApiOperations.getById(this.orderSaleStatusEndpointName, 1).then(result => {
           this.initialOrderSaleStatus = result
         })
-        ApiOperations.getById(this.orderSaleCollectionStatusEntityType, 1).then(result => {
+        GenericApiOperations.getById(this.orderSaleCollectionStatusEndpointName, 1).then(result => {
           this.initialOrderSaleCollectionStatus = result
         })
         this.overrideInitialValuesWithOrderRequest()
@@ -287,6 +287,10 @@
           collectionStatusId = this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier]
         }
         return collectionStatusId === 4
+      },
+      clientApiOperationsOptions: function () {
+        let filterExacts = {[ClientPropertiesReference.COMPANY.relationship_id_name]: this.orderRequest[OrderRequestPropertiesReference.COMPANY.relationship_id_name]}
+        return {filterExacts: filterExacts}
       }
     },
     methods: {

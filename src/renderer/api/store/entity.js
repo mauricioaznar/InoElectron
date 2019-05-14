@@ -1,7 +1,7 @@
 import EntityTypes from 'renderer/api/EntityTypes'
 import RolesTypes from 'renderer/api/RoleTypes'
 import EntityActions from './entityActions'
-import ApiFunctions from 'renderer/api/functions/ApiOperations'
+import ApiFunctions from 'renderer/api/functions/GenericApiOperations'
 
 let roles = []
 Object.keys(RolesTypes).forEach(key => {
@@ -30,21 +30,21 @@ const mutations = {
 
 const actions = {
   [EntityActions.GET_PACKINGS]: function ({commit}) {
-    ApiFunctions.getWithFilterLikeWithoutPagination(EntityTypes.PACKING).then(data => {
+    ApiFunctions.list(EntityTypes.PACKING.apiName, {paginate: false}).then(data => {
       commit('SET_PACKINGS', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_PRODUCTS]: function ({commit}) {
-    ApiFunctions.getWithFilterLikeWithoutPagination(EntityTypes.PRODUCT).then(data => {
+    ApiFunctions.list(EntityTypes.PRODUCT.apiName, {paginate: false}).then(data => {
       commit('SET_PRODUCTS', data)
     }).catch(e => {
       console.log(e)
     })
   },
   [EntityActions.GET_USERS]: function ({commit}) {
-    ApiFunctions.getWithFilterLikeWithoutPagination(EntityTypes.USER).then(data => {
+    ApiFunctions.list(EntityTypes.USER.apiName, {paginate: false}).then(data => {
       commit('SET_USERS', data)
     }).catch(e => {
       console.log(e)

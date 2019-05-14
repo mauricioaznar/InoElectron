@@ -29,9 +29,9 @@
                 :no-data-template="''"
                 :css="css.table"
                 v-bind:paginationPath="paginationPath"
-                :http-options="httpOptions"
                 :appendParams="appendParams"
                 :perPage="perPage"
+                :httpOptions="httpOptions"
                 :row-class="newRowClassFunction"
                 :query-params="{sort: 'sort', page: 'page', perPage: 'per_page'}"
                 @vuetable:pagination-data="onPaginationData"
@@ -70,7 +70,6 @@
   import ItemsPerPageDefinition from './data/items-per-page-definition'
   import Vue from 'vue'
   import DataTableStyles from './data/data-table-styles'
-  import {getHeaders} from 'renderer/api/functions/ApiHTPPHeaders'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import isEntityEditable from 'renderer/api/functions/isEntityEditable'
   export default {
@@ -87,10 +86,8 @@
         isTableLoading: true,
         perPage: 50,
         colorClasses: {},
-        httpOptions: {
-          headers: getHeaders()
-        },
         apiMode: true,
+        httpOptions: '',
         appendParams: {},
         filterBarParams: {},
         paginationPath: 'links.pagination',
@@ -99,6 +96,7 @@
       }
     },
     created () {
+      this.httpOptions = {headers: Vue.http.headers['common']}
       if (this.actions.length > 0) {
         this.tableFields.push({
           name: '__slot:actions',

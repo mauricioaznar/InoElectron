@@ -13,7 +13,7 @@
                       v-validate="{
                         required: true,
                         remote_unique: {
-                          entityType: orderRequestEntityType,
+                          endpointName: orderRequestEndpointName,
                           columnName: OrderRequestPropertiesReference.ORDER_CODE.name,
                           initialValue: initialOrderCode
                         }
@@ -27,70 +27,70 @@
                       :label="OrderRequestPropertiesReference.DATE.title"
                       v-model="requestOrder.date"
                       :initialValue="initialValues[OrderRequestPropertiesReference.DATE.name]"
-                      :error="errors.first(OrderRequestPropertiesReference.DATE.name)"
+                      :error="errors.has(OrderRequestPropertiesReference.DATE.name) ? errors.first(OrderRequestPropertiesReference.DATE.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'required'"
               >
               </mau-form-input-date>
           </div>
           <div class="form-group">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
                       :initialObject="initialValues[OrderRequestPropertiesReference.COMPANY.name]"
                       :label="OrderRequestPropertiesReference.COMPANY.title"
                       :displayProperty="'name'"
-                      :entityType="companyEntityType"
+                      :endpointName="companyEndpointName"
                       v-model="requestOrder.company"
                       :name="OrderRequestPropertiesReference.COMPANY.name"
-                      :error="errors.first(OrderRequestPropertiesReference.COMPANY.name)"
+                      :error="errors.has(OrderRequestPropertiesReference.COMPANY.name) ? errors.first(OrderRequestPropertiesReference.COMPANY.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group">
-              <mau-form-input-select
-                      :key="companyId"
+              <mau-form-input-select-dynamic
+                      :key="requestOrder ? requestOrder.company['id'] : 0"
+                      :apiOperationOptions="clientApiOperationsOptions"
+                      :endpointName="clientEndpointName"
                       :initialObject="initialClient"
                       :label="OrderRequestPropertiesReference.CLIENT.title"
                       :displayProperty="'full_name'"
                       :searchedProperties="['first_name', 'last_name']"
-                      :entityType="clientEntityType"
-                      :filterExact="clientFilterExact"
                       v-model="requestOrder.client"
                       :name="OrderRequestPropertiesReference.CLIENT.name"
-                      :error="errors.first(OrderRequestPropertiesReference.CLIENT.name)"
+                      :error="errors.has(OrderRequestPropertiesReference.CLIENT.name) ? errors.first(OrderRequestPropertiesReference.CLIENT.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
                       :key="initialOrderRequestStatus ? initialOrderRequestStatus[GlobalEntityIdentifier] : 0"
+                      :endpointName="orderRequestStatusEndpointName"
                       :initialObject="initialOrderRequestStatus"
                       :label="OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.title"
                       :displayProperty="'name'"
-                      :entityType="orderRequestStatusEntityType"
                       v-model="requestOrder.orderRequestStatus"
                       :name="OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name"
-                      :error="errors.first(OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name)"
+                      :error="errors.has(OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name) ? errors.first(OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name) : ''"
                       :disabled="!isAdminUser"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group">
               <div class="products">
-                    <mau-form-input-select
+                    <mau-form-input-select-dynamic
                             :label="OrderRequestPropertiesReference.PRODUCTS.title"
                             :initialObjects="initialValues[OrderRequestPropertiesReference.PRODUCTS.name]"
                             v-model="requestOrder.products"
                             :displayProperty="'description'"
                             :name="OrderRequestPropertiesReference.PRODUCTS.name"
                             :data-vv-as="'Productos'"
-                            :error="errors.first(OrderRequestPropertiesReference.PRODUCTS.name)"
-                            :entityType="productEntityType"
-                            :multi="true"
+                            :error="errors.has(OrderRequestPropertiesReference.PRODUCTS.name) ? errors.first(OrderRequestPropertiesReference.PRODUCTS.name) : ''"
+                            :endpointName="productEndpointName"
+                            :multiselect="true"
                             :disabled="receiptMode || !userHasWritePrivileges"
                             v-validate="'required'"
                     >
@@ -104,7 +104,7 @@
                             >
                             </order-sale-product-table>
                         </template>
-                    </mau-form-input-select>
+                    </mau-form-input-select-dynamic>
               </div>
           </div>
           <div class="container mb-2 text-right">
@@ -118,13 +118,14 @@
   import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
+  import SpecificApiOperations from 'renderer/api/functions/SpecificApiOperations'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import {mapGetters} from 'vuex'
   export default {
@@ -150,16 +151,16 @@
         initialOrderRequestStatus: {},
         initialClient: {},
         clientFilterExact: {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: 0},
-        clientEntityType: EntityTypes.CLIENT,
-        companyEntityType: EntityTypes.COMPANY,
-        orderRequestStatusEntityType: EntityTypes.ORDER_REQUEST_STATUS,
-        productEntityType: EntityTypes.PRODUCT,
-        orderRequestEntityType: EntityTypes.ORDER_REQUEST,
-        orderSaleReceiptTypeEntityType: EntityTypes.ORDER_SALE_RECEIPT_TYPE
+        clientEndpointName: EntityTypes.CLIENT.apiName,
+        companyEndpointName: EntityTypes.COMPANY.apiName,
+        orderRequestStatusEndpointName: EntityTypes.ORDER_REQUEST_STATUS.apiName,
+        productEndpointName: EntityTypes.PRODUCT.apiName,
+        orderRequestEndpointName: EntityTypes.ORDER_REQUEST.apiName,
+        orderSaleReceiptTypeEndpointName: EntityTypes.ORDER_SALE_RECEIPT_TYPE.apiName
       }
     },
     components: {
-      MauFormInputSelect,
+      MauFormInputSelectDynamic,
       OrderSaleProductTable
     },
     props: {
@@ -197,10 +198,10 @@
     created () {
       this.setInitialValues()
       if (!this.initialObject) {
-        ApiOperations.getMax(this.orderRequestEntityType, OrderRequestPropertiesReference.ORDER_CODE.name).then(result => {
+        SpecificApiOperations.getMax(EntityTypes.ORDER_REQUEST.apiName, OrderRequestPropertiesReference.ORDER_CODE.name).then(result => {
           this.initialOrderCode = result + 1
         })
-        ApiOperations.getById(this.orderRequestStatusEntityType, 1).then(result => {
+        GenericApiOperations.getById(this.orderRequestStatusEndpointName, 1).then(result => {
           this.initialOrderRequestStatus = result
         })
       }
@@ -212,7 +213,12 @@
       },
       ...mapGetters([
         'isAdminUser'
-      ])
+      ]),
+      clientApiOperationsOptions: function () {
+        let companyId = this.requestOrder.company ? this.requestOrder.company[GlobalEntityIdentifier] : ''
+        let filterExacts = {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: companyId}
+        return {filterExacts: filterExacts}
+      }
     },
     methods: {
       getPersona: DisplayFunctions.getPersona,
@@ -258,8 +264,6 @@
         }
         this.initialClient = initialClientFound || {}
         this.requestOrder.client = initialClientFound || {}
-        this.companyId = company[GlobalEntityIdentifier]
-        this.clientFilterExact = {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: company[GlobalEntityIdentifier]}
       }
     }
   }

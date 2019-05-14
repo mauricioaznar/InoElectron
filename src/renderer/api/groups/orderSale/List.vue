@@ -12,7 +12,7 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -20,7 +20,7 @@
     name: 'ListBagOrderSale',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_SALE),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.ORDER_SALE.apiName, {paginate: true}),
         tableFields: [
           {
             name: OrderSalePropertiesReference.ORDER_CODE.name,

@@ -22,65 +22,65 @@
           >
           </mau-form-group-date-time>
           <div class="form-group" v-if="bagMode">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="employeeEndpointName"
+                      :apiOperationOptions="bagsEmployeeTypeApiOperationOptions"
                       :initialObject="initialValues[OrderProductionPropertiesReference.EMPLOYEE.name]"
                       :label="OrderProductionPropertiesReference.EMPLOYEE.title"
                       :displayProperty="'full_name'"
                       v-model="productionOrder.employee"
                       :name="OrderProductionPropertiesReference.EMPLOYEE.name"
-                      :filterExact="{employee_type_id: 1}"
                       :data-vv-as="OrderProductionPropertiesReference.EMPLOYEE.title"
                       :error="errors.first(OrderProductionPropertiesReference.EMPLOYEE.name)"
-                      :entityType="employeeEntityType"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group" v-if="extrusionMode">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="employeeEndpointName"
+                      :apiOperationOptions="rollsEmployeeTypeApiOperationOptions"
                       :initialObject="initialValues[OrderProductionPropertiesReference.EMPLOYEE.name]"
                       :label="'Extrusor'"
                       :displayProperty="'full_name'"
                       v-model="productionOrder.employee"
                       :name="OrderProductionPropertiesReference.EMPLOYEE.name"
-                      :filterExact="{employee_type_id: 2}"
                       :data-vv-as="OrderProductionPropertiesReference.EMPLOYEE.title"
                       :error="errors.first(OrderProductionPropertiesReference.EMPLOYEE.name)"
-                      :entityType="employeeEntityType"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group" v-if="bagMode">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="machineEndpointName"
+                      :apiOperationOptions="bagsMachineApiOperationOptions"
                       :initialObject="initialValues['_machine']"
                       :label="'Maquina'"
                       :displayProperty="'name'"
                       v-model="productionOrder.machine"
-                      :filterExact="{machine_type_id: 1}"
                       :name="'_machine'"
                       :data-vv-as="'Maquina'"
                       :error="errors.first('_machine')"
-                      :entityType="machineEntityType"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group" v-if="bagMode">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="productEndpointName"
+                      :apiOperationOptions="bagsApiOperationOptions"
                       :initialObjects="initialValues['bags']"
                       :label="'Bolsas'"
                       :displayProperty="'description'"
                       v-model="productionOrder.bags"
                       :name="'bags'"
-                      :filterExact="{product_type_id: 1}"
                       :data-vv-as="'Productos'"
                       :error="errors.first('bags')"
-                      :entityType="productEntityType"
-                      :multi="true"
+                      :multiselect="true"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'required'"
               >
@@ -94,20 +94,20 @@
                           :userHasWritePrivileges="userHasWritePrivileges"
                   >
                   </order-production-product-table>
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group" v-if="bagMode">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="productEndpointName"
+                      :apiOperationOptions="rollsApiOperationOptions"
                       :initialObjects="initialValues['rolls']"
                       :label="'Rollos'"
                       :displayProperty="'description'"
                       v-model="productionOrder.rolls"
                       :name="'rolls'"
-                      :filterExact="{product_type_id: 2}"
                       :data-vv-as="'Rollos'"
                       :error="errors.first('rolls')"
-                      :entityType="productEntityType"
-                      :multi="true"
+                      :multiselect="true"
                       :disabled="!userHasWritePrivileges"
               >
                   <order-production-product-table
@@ -119,29 +119,31 @@
                           :userHasWritePrivileges="userHasWritePrivileges"
                   >
                   </order-production-product-table>
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group" v-if="extrusionMode">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
                       :key="machinesKey"
+                      :endpointName="machineEndpointName"
+                      :apiOperationOptions="rollsMachineApiOperationOptions"
                       :initialObjects="initialValues['_machines']"
                       :label="'Maquinas'"
                       :displayProperty="'name'"
                       v-model="productionOrder.machines"
                       :name="'_machines'"
-                      :filterExact="{machine_type_id: 2}"
                       :data-vv-as="'maquinas'"
                       :error="errors.first('_machines')"
-                      :entityType="machineEntityType"
-                      :multi="true"
+                      :multiselect="true"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group" v-if="extrusionMode" v-for="(machineObj, index) in machineObjects">
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
                       v-if="machineObj.selected"
+                      :endpointName="productEndpointName"
+                      :apiOperationOptions="rollsApiOperationOptions"
                       :initialObjects="machineObj.initialRolls"
                       :label="machineObj.machineName"
                       :displayProperty="'description'"
@@ -149,10 +151,8 @@
                       :name="'_machine' + machineObj.id"
                       :data-vv-as="machineObj.id"
                       :error="errors.first('_machine' + machineObj.id)"
-                      :filterExact="{product_type_id: 2}"
-                      :entityType="productEntityType"
                       :disabled="!userHasWritePrivileges"
-                      :multi="true"
+                      :multiselect="true"
                       v-validate="'required'"
               >
                   <order-production-product-table
@@ -164,7 +164,7 @@
                           v-model="machineObj.productionRolls"
                   >
                   </order-production-product-table>
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="form-group">
               <mau-form-input-number
@@ -189,14 +189,14 @@
 <script>
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
   import OrderProductionProductTable from 'renderer/api/components/m2m/OrderProductionProductTable.vue'
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
   export default {
     name: 'MauSimpleOrderForm',
     data () {
@@ -221,14 +221,14 @@
         initialValues: {},
         machinesKey: 0,
         buttonDisabled: false,
-        machineEntityType: EntityTypes.MACHINE,
-        employeeEntityType: EntityTypes.EMPLOYEE,
-        productEntityType: EntityTypes.PRODUCT,
-        productionIndicatorEntityType: EntityTypes.PRODUCTION_INDICATOR
+        machineEndpointName: EntityTypes.MACHINE.apiName,
+        employeeEndpointName: EntityTypes.EMPLOYEE.apiName,
+        productEndpointName: EntityTypes.PRODUCT.apiName,
+        productionIndicatorEndpointName: EntityTypes.PRODUCTION_INDICATOR.apiName
       }
     },
     components: {
-      MauFormInputSelect,
+      MauFormInputSelectDynamic,
       OrderProductionProductTable
     },
     props: {
@@ -265,6 +265,24 @@
     computed: {
       userHasWritePrivileges: function () {
         return true
+      },
+      rollsApiOperationOptions: function () {
+        return {filterExacts: {product_type_id: 2}}
+      },
+      bagsApiOperationOptions: function () {
+        return {filterExacts: {product_type_id: 1}}
+      },
+      rollsEmployeeTypeApiOperationOptions: function () {
+        return {filterExacts: {employee_type_id: 2}}
+      },
+      bagsEmployeeTypeApiOperationOptions: function () {
+        return {filterExacts: {employee_type_id: 1}}
+      },
+      rollsMachineApiOperationOptions: function () {
+        return {filterExacts: {machine_type_id: 2}}
+      },
+      bagsMachineApiOperationOptions: function () {
+        return {filterExacts: {machine_type_id: 1}}
       }
     },
     methods: {
@@ -288,7 +306,7 @@
             })
             this.initialValues['_machines'] = initialMachines
           } else {
-            ApiOperations.getWithFilterExactWithoutPagination(EntityTypes.MACHINE, {machine_type_id: 2}).then(result => {
+            GenericApiOperations.list(EntityTypes.MACHINE.apiName, {filterExacts: {machine_type_id: 2}}).then(result => {
               this.initialValues['_machines'] = result
               this.machinesKey = 1
             })

@@ -12,7 +12,7 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import MachinePropertiesReference from 'renderer/api/propertiesReference/MachinePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
@@ -20,7 +20,7 @@
     name: 'ListMachine',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.MACHINE),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.MACHINE.apiName, {paginate: true}),
         actions: [
           {
             name: 'view',

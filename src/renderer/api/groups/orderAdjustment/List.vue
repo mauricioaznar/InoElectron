@@ -12,7 +12,7 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import BagOrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/OrderAdjustmentPropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
@@ -22,7 +22,7 @@
     },
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.ORDER_ADJUSTMENT),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.ORDER_ADJUSTMENT.apiName, {paginate: true}),
         canEdit: true,
         tableFields: [
           {

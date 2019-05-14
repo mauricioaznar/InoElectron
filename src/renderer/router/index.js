@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import store from 'renderer/store/index'
 import AuthActions from 'renderer/api/store/authActions'
 import AppActions from 'renderer/app/store/AppActions'
-import ApiOperations from 'renderer/api/functions/ApiOperations'
+import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
 import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
 import routeObjectStore from 'renderer/api/store/routeObject'
 
@@ -22,8 +22,15 @@ router.beforeEach(async (to, from, next) => {
   if (!toRequiresAuth) {
     next()
   }
+  if (!Vue.http.headers.common['Authorization']) {
+    let token = JSON.parse(window.localStorage.getItem('AccessToken'))
+    if (token) {
+      Vue.http.headers.common['Accept'] = 'Application/json'
+      Vue.http.headers.common['Authorization'] = 'Bearer ' + token
+    }
+  }
   try {
-    let user = await ApiOperations.getMe()
+    let user = await GenericApiOperations.getCurrentUser()
     store.dispatch(AuthActions.SET_USER, user)
   } catch (e) {
     console.log(e)

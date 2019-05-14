@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import ApiFunctions from 'renderer/api/functions/ApiOperations'
+  import ApiFunctions from 'renderer/api/functions/GenericApiOperations'
   import cloneDeep from 'renderer/services/common/cloneDeep'
   export default {
     name: 'MauCrudDel',
@@ -40,7 +40,7 @@
         this.$refs.confirmAction.show()
       },
       confirm: function () {
-        ApiFunctions.del(this.entityType, this.id, cloneDeep(this.entity))
+        ApiFunctions.del(this.entityType.apiName, this.id, cloneDeep(this.entity))
           .then(
             result => {
               this.$notify({

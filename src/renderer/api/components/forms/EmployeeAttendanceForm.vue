@@ -22,7 +22,8 @@
           </mau-form-group-date-time>
           <div class="form-group"
           >
-              <mau-form-input-select
+              <mau-form-input-select-dynamic
+                      :endpointName="employeeEndpointName"
                       :initialObject="initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE.name]"
                       :label="EmployeeAttendancePropertiesReference.EMPLOYEE.title"
                       :displayProperty="'full_name'"
@@ -30,11 +31,10 @@
                       :name="EmployeeAttendancePropertiesReference.EMPLOYEE.name"
                       :data-vv-as="EmployeeAttendancePropertiesReference.EMPLOYEE.title"
                       :error="errors.first(EmployeeAttendancePropertiesReference.EMPLOYEE.name)"
-                      :entityType="employeeEntityType"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
-              </mau-form-input-select>
+              </mau-form-input-select-dynamic>
           </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
@@ -46,7 +46,7 @@
 <script>
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -64,11 +64,11 @@
         },
         initialValues: {},
         buttonDisabled: false,
-        employeeEntityType: EntityTypes.EMPLOYEE
+        employeeEndpointName: EntityTypes.EMPLOYEE.apiName
       }
     },
     components: {
-      MauFormInputSelect
+      MauFormInputSelectDynamic
     },
     props: {
       initialObject: {

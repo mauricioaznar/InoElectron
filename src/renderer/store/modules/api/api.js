@@ -1,5 +1,5 @@
 // import Vue from 'vue'
-// import {getHeaders} from 'renderer/config'
+// import {getAuthorizationHeaders} from 'renderer/config'
 import auth from 'renderer/api/store/auth'
 import entity from 'renderer/api/store/entity'
 import routeObject from 'renderer/api/store/routeObject'

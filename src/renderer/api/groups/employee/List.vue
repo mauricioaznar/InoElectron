@@ -13,14 +13,14 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import PersonaDataTable from 'renderer/api/components/dataTables/PersonaDataTable.vue'
   export default {
     name: 'ListClient',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.EMPLOYEE),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.EMPLOYEE.apiName, {paginate: true}),
         actions: [
           {
             name: 'view',

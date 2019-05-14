@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
   import Notifications from 'renderer/api/functions/Notifications'
   export default {
     data () {
@@ -48,10 +48,9 @@
           return
         }
         this.isLoadingUser = true
-        let credentials = {email: this.email, password: this.password}
         let _this = this
         setTimeout(function () {
-          ApiOperations.generateToken(credentials).then(result => {
+          GenericApiOperations.generateToken(_this.email, _this.password).then(result => {
             let token = result.token
             window.localStorage.setItem('AccessToken', JSON.stringify(token))
             Notifications.info(_this, 'Bienvendio al sistema de industria')

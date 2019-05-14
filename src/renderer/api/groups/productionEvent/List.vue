@@ -13,7 +13,7 @@
 
 <script>
   import ProductionEventPropertiesReference from 'renderer/api/propertiesReference/ProductionEventPropertiesReference'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -21,7 +21,7 @@
     name: 'ListProductionEvent',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.PRODUCTION_EVENT),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.PRODUCTION_EVENT.apiName, {paginate: true}),
         tableFields: [
           {
             name: ProductionEventPropertiesReference.DESCRIPTION.name,

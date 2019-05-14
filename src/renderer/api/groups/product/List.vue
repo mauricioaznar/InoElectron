@@ -13,7 +13,7 @@
 
 <script>
   import PropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -21,7 +21,7 @@
     name: 'ListProduct',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.PRODUCT),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.PRODUCT.apiName, {paginate: true}),
         tableFields: [
           {
             name: PropertiesReference.PRODUCT_TYPE.name,

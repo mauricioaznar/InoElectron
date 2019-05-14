@@ -16,18 +16,18 @@
         </div>
         <div class="form-group form-row">
             <div class="col-sm-12">
-                <mau-form-input-select
+                <mau-form-input-select-dynamic
+                        :endpointName="machineTypeEndpointName"
                         :initialObject="initialValues[MachinePropertiesReference.MACHINE_TYPE.name]"
                         :label="MachinePropertiesReference.MACHINE_TYPE.title"
                         :displayProperty="'name'"
-                        :entityType="machineTypeEntityType"
                         v-model="machine.machineType"
                         :name="MachinePropertiesReference.MACHINE_TYPE.name"
                         :error="errors.first(MachinePropertiesReference.MACHINE_TYPE.name)"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'object_required'"
                 >
-                </mau-form-input-select>
+                </mau-form-input-select-dynamic>
             </div>
         </div>
         <div class="container mb-2 text-right">
@@ -42,7 +42,7 @@
   import MachinePropertiesReference from 'renderer/api/propertiesReference/MachinePropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'MachineForm',
@@ -54,12 +54,12 @@
           machineType: {}
         },
         initialValues: {},
-        machineTypeEntityType: EntityTypes.MACHINE_TYPE,
+        machineTypeEndpointName: EntityTypes.MACHINE_TYPE.apiName,
         buttonDisabled: false
       }
     },
     components: {
-      MauFormInputSelect
+      MauFormInputSelectDynamic
     },
     props: {
       initialObject: {

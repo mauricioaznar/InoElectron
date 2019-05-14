@@ -15,7 +15,7 @@
 
 <script>
   import FullCalendar from 'vue-fullcalendar'
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
   import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -40,7 +40,7 @@
       setCalendar: function () {
         this.isLoading = true
         Promise.all([
-          ApiOperations.getWithoutPagination(EntityTypes.ORDER_SALE)
+          GenericApiOperations.list(EntityTypes.ORDER_SALE.apiName, {paginate: false})
         ]).then(result => {
           this.calendarEvents = []
           let calendarItems = []

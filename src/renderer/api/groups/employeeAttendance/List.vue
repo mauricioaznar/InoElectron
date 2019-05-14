@@ -13,7 +13,7 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import EmployeeAttendancePropertiesReference from 'renderer/api/propertiesReference/EmployeeAttendancePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -21,7 +21,7 @@
     name: 'ListEmployeeAttendance',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.EMPLOYEE_ATTENDANCE),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.EMPLOYEE_ATTENDANCE.apiName, {paginate: true}),
         tableFields: [
           {
             name: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name,

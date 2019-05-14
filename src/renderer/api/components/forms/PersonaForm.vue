@@ -56,34 +56,34 @@
         </div>
         <div class="form-group">
             <div v-if="clientMode">
-                <mau-form-input-select
+                <mau-form-input-select-dynamic
                         :initialObject="initialValues[ClientPropertiesReference.COMPANY.name]"
                         :label="ClientPropertiesReference.COMPANY.title"
                         :displayProperty="'name'"
-                        :entityType="companyEntityType"
+                        :endpointName="companyEndpointName"
                         v-model="persona.company"
                         :name="ClientPropertiesReference.COMPANY.name"
                         :error="errors.first(ClientPropertiesReference.COMPANY.name)"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'object_required'"
                 >
-                </mau-form-input-select>
+                </mau-form-input-select-dynamic>
             </div>
         </div>
         <div class="form-group">
             <div v-if="employeeMode">
-                <mau-form-input-select
+                <mau-form-input-select-dynamic
                         :initialObject="initialValues[EmployeePropertiesReference.EMPLOYEE_TYPE.name]"
                         :label="EmployeePropertiesReference.EMPLOYEE_TYPE.title"
                         :displayProperty="'name'"
-                        :entityType="employeeTypeEntityType"
+                        :endpointName="employeeTypeEndpointName"
                         v-model="persona.employeeType"
                         :name="EmployeePropertiesReference.EMPLOYEE_TYPE.name"
                         :error="errors.first(EmployeePropertiesReference.EMPLOYEE_TYPE.name)"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'object_required'"
                 >
-                </mau-form-input-select>
+                </mau-form-input-select-dynamic>
             </div>
         </div>
         <div class="container mb-2 text-right">
@@ -99,7 +99,7 @@
   import EmployeePropertiesReference from 'renderer/api/propertiesReference/EmployeePropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import {mapGetters} from 'vuex'
   import EntityTypes from 'renderer/api/EntityTypes'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -120,12 +120,12 @@
         },
         initialValues: {},
         buttonDisabled: false,
-        companyEntityType: EntityTypes.COMPANY,
-        employeeTypeEntityType: EntityTypes.EMPLOYEE_TYPE
+        companyEndpointName: EntityTypes.COMPANY.apiName,
+        employeeTypeEndpointName: EntityTypes.EMPLOYEE_TYPE.apiName
       }
     },
     components: {
-      MauFormInputSelect
+      MauFormInputSelectDynamic
     },
     props: {
       initialObject: {

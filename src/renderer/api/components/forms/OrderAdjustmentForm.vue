@@ -17,7 +17,7 @@
           </div>
           <div class="form-group">
               <div class="expenseType">
-                  <mau-form-input-select
+                  <mau-form-input-select-dynamic
                           :initialObject="initialValues[OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name]"
                           :label="OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.title"
                           :displayProperty="'name'"
@@ -25,15 +25,15 @@
                           :name="OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name"
                           :data-vv-as="OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.title"
                           :error="errors.first(OrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name)"
-                          :entityType="adjustmentTypeEntityType"
+                          :endpointName="adjustmentTypeEndpointName"
                           :disabled="!userHasWritePrivileges"
                           v-validate="'object_required'"
                   >
-                  </mau-form-input-select>
+                  </mau-form-input-select-dynamic>
               </div>
           </div>
           <div class="form-group">
-                    <mau-form-input-select
+                    <mau-form-input-select-dynamic
                             :label="OrderAdjustmentPropertiesReference.PRODUCTS.title"
                             :initialObjects="initialValues[OrderAdjustmentPropertiesReference.PRODUCTS.name]"
                             v-model="productionOrder.products"
@@ -41,8 +41,8 @@
                             :name="OrderAdjustmentPropertiesReference.PRODUCTS.name"
                             :error="errors.first(OrderAdjustmentPropertiesReference.PRODUCTS.name)"
                             :data-vv-as="OrderAdjustmentPropertiesReference.PRODUCTS.title"
-                            :entityType="productEntityType"
-                            :multi="true"
+                            :endpointName="productEndpointName"
+                            :multiselect="true"
                             :disabled="!userHasWritePrivileges"
                             v-validate="'required'"
                     >
@@ -55,7 +55,7 @@
                             v-model="productionOrder.adjustmentProducts"
                         >
                         </order-production-product-table>
-                    </mau-form-input-select>
+                    </mau-form-input-select-dynamic>
           </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
@@ -68,7 +68,7 @@
   import OrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/OrderAdjustmentPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -88,12 +88,12 @@
         },
         initialValues: {},
         buttonDisabled: false,
-        adjustmentTypeEntityType: EntityTypes.ORDER_ADJUSTMENT_TYPE,
-        productEntityType: EntityTypes.PRODUCT
+        adjustmentTypeEndpointName: EntityTypes.ORDER_ADJUSTMENT_TYPE.apiName,
+        productEndpointName: EntityTypes.PRODUCT.apiName
       }
     },
     components: {
-      MauFormInputSelect,
+      MauFormInputSelectDynamic,
       OrderProductionProductTable
     },
     props: {

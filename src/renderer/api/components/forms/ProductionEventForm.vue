@@ -21,7 +21,7 @@
         >
         </mau-form-group-date-time>
         <div class="form-group">
-            <mau-form-input-select
+            <mau-form-input-select-dynamic
                     :initialObject="initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name]"
                     :label="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title"
                     :displayProperty="'name'"
@@ -29,13 +29,13 @@
                     :name="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name"
                     :data-vv-as="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title"
                     :error="errors.first(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name)"
-                    :entityType="productionEventTypeEntityType"
+                    :endpointName="productionEventTypeEndpointName"
                     :disabled="!userHasWritePrivileges"
             >
-            </mau-form-input-select>
+            </mau-form-input-select-dynamic>
         </div>
         <div class="form-group" v-if="isMachineFailureTypeSelected">
-            <mau-form-input-select
+            <mau-form-input-select-dynamic
                     :initialObject="initialValues[ProductionEventPropertiesReference.MACHINE.name]"
                     :label="ProductionEventPropertiesReference.MACHINE.title"
                     :displayProperty="'name'"
@@ -43,10 +43,10 @@
                     :name="ProductionEventPropertiesReference.MACHINE.name"
                     :data-vv-as="ProductionEventPropertiesReference.MACHINE.title"
                     :error="errors.first(ProductionEventPropertiesReference.MACHINE.name)"
-                    :entityType="machineEntityType"
+                    :endpointName="machineEndpointName"
                     :disabled="!userHasWritePrivileges"
             >
-            </mau-form-input-select>
+            </mau-form-input-select-dynamic>
         </div>
         <div class="form-group">
             <label>Descripcion</label>
@@ -70,7 +70,7 @@
             </span>
         </div>
         <div class="form-group">
-            <mau-form-input-select
+            <mau-form-input-select-dynamic
                     :initialObject="initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE.name]"
                     :label="ProductionEventPropertiesReference.REPORT_EMPLOYEE.title"
                     :displayProperty="'full_name'"
@@ -78,13 +78,15 @@
                     :name="ProductionEventPropertiesReference.REPORT_EMPLOYEE.name"
                     :data-vv-as="ProductionEventPropertiesReference.REPORT_EMPLOYEE.title"
                     :error="errors.first(ProductionEventPropertiesReference.REPORT_EMPLOYEE.name)"
-                    :entityType="employeeEntityType"
+                    :endpointName="employeeEndpointName"
                     :disabled="!userHasWritePrivileges"
             >
-            </mau-form-input-select>
+            </mau-form-input-select-dynamic>
         </div>
         <div class="form-group">
-            <mau-form-input-select
+            <mau-form-input-select-dynamic
+                    :endpointName="employeeEndpointName"
+                    :apiOperationOptions="maintenanceEmployeeApiOperationOptions"
                     :initialObject="initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name]"
                     :label="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title"
                     :displayProperty="'full_name'"
@@ -92,11 +94,9 @@
                     :name="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name"
                     :data-vv-as="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title"
                     :error="errors.first(ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name)"
-                    :entityType="employeeEntityType"
-                    :filter-exact="{employee_type_id: 3}"
                     :disabled="!userHasWritePrivileges"
             >
-            </mau-form-input-select>
+            </mau-form-input-select-dynamic>
         </div>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
@@ -105,7 +105,7 @@
 </template>
 
 <script>
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import MauEditor from 'renderer/components/mau-components/mau-editor/MauEditor.vue'
   import ProductionEventCheckTable from 'renderer/api/components/m2m/ProductionEventCheckTable.vue'
@@ -131,9 +131,9 @@
         },
         initialValues: [],
         buttonDisabled: false,
-        machineEntityType: EntityTypes.MACHINE,
-        employeeEntityType: EntityTypes.EMPLOYEE,
-        productionEventTypeEntityType: EntityTypes.PRODUCTION_EVENT_TYPE
+        machineEndpointName: EntityTypes.MACHINE.apiName,
+        employeeEndpointName: EntityTypes.EMPLOYEE.apiName,
+        productionEventTypeEndpointName: EntityTypes.PRODUCTION_EVENT_TYPE.apiName
       }
     },
     props: {
@@ -146,7 +146,7 @@
       }
     },
     components: {
-      MauFormInputSelect,
+      MauFormInputSelectDynamic,
       MauEditor,
       ProductionEventCheckTable
     },
@@ -163,6 +163,9 @@
     computed: {
       isMachineFailureTypeSelected: function () {
         return this.productionEvent.productionEventType ? this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 : false
+      },
+      maintenanceEmployeeApiOperationOptions: function () {
+        return {filterExacts: {employee_type_id: 3}}
       },
       userHasWritePrivileges: function () {
         return true

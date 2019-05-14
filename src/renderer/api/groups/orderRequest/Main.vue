@@ -22,7 +22,7 @@
   import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import Notifications from 'renderer/api/functions/Notifications'
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
   import {mapGetters} from 'vuex'
   export default {
     components: {ActionWidget},
@@ -74,7 +74,7 @@
       },
       confirmDelete: function () {
         let id = this.$route.params[GlobalEntityIdentifier]
-        ApiOperations.del(EntityTypes.ORDER_REQUEST, id).then(result => {
+        GenericApiOperations.del(EntityTypes.ORDER_REQUEST.apiName, id).then(result => {
           Notifications.success(this)
           this.$router.push({name: this.groupDefaultRouteObject(this.$route).name})
         })

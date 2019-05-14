@@ -13,7 +13,7 @@
 
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import OrderProductionPropertiesReference from 'renderer/api/propertiesReference/OrderProductionPropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -21,7 +21,7 @@
     name: 'ListRollOrderProduction',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.ROLL_ORDER_PRODUCTION),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.ROLL_ORDER_PRODUCTION.apiName, {paginate: true}),
         filterExact: {[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name]: 2},
         canEdit: true,
         tableFields: [

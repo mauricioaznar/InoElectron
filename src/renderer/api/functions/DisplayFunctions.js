@@ -1,7 +1,7 @@
+import Vue from 'vue'
 import ConvertDateTimeTo from 'renderer/services/common/ConvertDateTimeTo'
 import moment from 'moment'
 import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-import ServerDomain from 'renderer/api/functions/ServerDomain'
 moment.locale('es')
 
 export default {
@@ -193,12 +193,12 @@ export default {
   },
   getEmployeeAttendanceImageForList: function (imageName) {
     return '<div class="d-flex justify-content-center">' +
-             '<img src="' + ServerDomain + 'attendances/' + imageName + '" class="mau-image-small" alt=" no disponible">' +
+             '<img src="' + Vue.http.options.root + '/attendances/' + imageName + '" class="mau-image-small" alt=" no disponible">' +
            '</div>'
   },
   getEmployeeAttendanceImageForView: function (imageName) {
     return '<div class="d-flex justify-content-center">' +
-      '<img src="' + ServerDomain + 'attendances/' + imageName + '" class="mau-image-large" alt=" no disponible">' +
+      '<img src="' + Vue.http.options.root + '/attendances/' + imageName + '" class="mau-image-large" alt=" no disponible">' +
       '</div>'
   }
 }

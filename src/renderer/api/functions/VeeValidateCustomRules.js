@@ -1,4 +1,4 @@
-import ApiOperations from 'renderer/api/functions/ApiOperations'
+import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
 let objectRequired = {
   validate: value => {
     return !(Object.keys(value).length === 0 && value.constructor === Object)
@@ -8,6 +8,7 @@ let objectRequired = {
 let remoteUnique = {
   validate: (value, params, data) => {
     let initialValue = params.initialValue
+    let endpointName = params.endpointName
     return new Promise(resolve => {
       if (initialValue === value) {
         resolve({
@@ -15,7 +16,7 @@ let remoteUnique = {
         })
       } else {
         let filterExactObject = {[params.columnName]: value}
-        ApiOperations.getWithFilterExactWithoutPagination(params.entityType, filterExactObject).then(result => {
+        GenericApiOperations.list(endpointName, {filterExacts: filterExactObject}).then(result => {
           let isValueUsed = result.length > 0
           resolve({
             valid: !isValueUsed,

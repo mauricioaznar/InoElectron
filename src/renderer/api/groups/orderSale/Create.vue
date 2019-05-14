@@ -1,16 +1,17 @@
 <template>
   <div class="container">
     <div class="form-group">
-      <mau-form-input-select
+      <mau-form-input-select-dynamic
               :label="'Pedidos en produccion'"
-              displayProperty="order_code_string"
               v-model="orderRequestEntity"
-              :entityType="orderRequestEntityType"
-              :searchedProperties="['order_code']"
-              :filterExact="orderRequestFilterExact"
+              :endpointName="orderRequestEndpointName"
+              :displayProperty="'order_code_string'"
+              :searchProperty="'order_code'"
+              :apiOperationOptions="orderRequestApiOperationOptions"
               :name="'name'"
+              :error="''"
       >
-      </mau-form-input-select>
+      </mau-form-input-select-dynamic>
     </div>
     <mau-crud-create
       v-if="orderRequestEntity && orderRequestEntityId"
@@ -35,7 +36,7 @@
 <script>
   import EntityTypes from 'renderer/api/EntityTypes'
   import BagOrderSaleForm from 'renderer/api/components/forms/OrderSaleForm.vue'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
   import {mapGetters} from 'vuex'
@@ -45,15 +46,15 @@
       return {
         hostRelationshipIdName: 'order_sale_id',
         orderSaleEntityType: EntityTypes.ORDER_SALE,
-        orderRequestEntityType: EntityTypes.ORDER_REQUEST,
-        orderRequestFilterExact: {[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name]: 2},
+        orderRequestEndpointName: EntityTypes.ORDER_REQUEST.apiName,
+        orderRequestApiOperationOptions: {filterExacts: {[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name]: 2}},
         orderRequestEntity: null,
         orderRequestEntityId: null
       }
     },
     components: {
       BagOrderSaleForm,
-      MauFormInputSelect
+      MauFormInputSelectDynamic
     },
     computed: {
       ...mapGetters(['groupDefaultRouteObject'])

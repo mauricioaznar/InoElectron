@@ -7,7 +7,7 @@
 
 <script>
   import PropertiesReference from 'renderer/api/propertiesReference/UserPropertiesReference'
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
   export default {
     name: 'MyProfileAuth',
     data () {
@@ -17,7 +17,7 @@
       }
     },
     created () {
-      ApiOperations.getMe().then(result => {
+      GenericApiOperations.getCurrentUser().then(result => {
         this.entity = result
       })
     },

@@ -2,18 +2,18 @@
   <div>
     <div class="form-group form-row">
       <div class="col-sm-12">
-        <mau-form-input-select
+        <mau-form-input-select-dynamic
                 :initialObject="initialValues[PropertiesReference.PRODUCT_TYPE.name]"
                 :label="PropertiesReference.PRODUCT_TYPE.title"
                 :displayProperty="'name'"
-                :entityType="productTypeEntityType"
+                :endpointName="productTypeEndpointName"
                 v-model="product.productType"
                 :name="PropertiesReference.PRODUCT_TYPE.name"
                 :error="errors.first(PropertiesReference.PRODUCT_TYPE.name)"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
-        </mau-form-input-select>
+        </mau-form-input-select-dynamic>
       </div>
     </div>
     <div class="form-group form-row">
@@ -126,35 +126,35 @@
     </div>
     <div class="form-group form-row">
       <div class="col-sm-12">
-        <mau-form-input-select
+        <mau-form-input-select-dynamic
                 :initialObject="initialValues[PropertiesReference.MATERIAL.name]"
                 :label="PropertiesReference.MATERIAL.title"
                 :displayProperty="'name'"
-                :entityType="materialEntityType"
+                :endpointName="materialEndpointName"
                 v-model="product.material"
                 :name="PropertiesReference.MATERIAL.name"
                 :error="errors.first(PropertiesReference.MATERIAL.name)"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
-        </mau-form-input-select>
+        </mau-form-input-select-dynamic>
       </div>
     </div>
     <div class="form-group form-row">
       <div class="col-sm-12">
-        <mau-form-input-select
+        <mau-form-input-select-dynamic
                 v-if="isProductBag()"
                 :initialObject="initialValues[PropertiesReference.PACKING.name]"
                 :label="PropertiesReference.PACKING.title"
                 :displayProperty="'name'"
-                :entityType="packingEntityType"
+                :endpointName="packingEndpointName"
                 v-model="product.packing"
                 :name="PropertiesReference.PACKING.name"
                 :error="errors.first(PropertiesReference.PACKING.name)"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
-        </mau-form-input-select>
+        </mau-form-input-select-dynamic>
       </div>
     </div>
     <div class="container mb-2 text-right">
@@ -167,7 +167,7 @@
   import PropertiesReference from 'renderer/api/propertiesReference/ProductPropertiesReference'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
-  import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+  import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
@@ -190,10 +190,9 @@
         },
         buttonDisabled: false,
         initialValues: {},
-        materialEntityType: EntityTypes.MATERIAL,
-        productEntityType: EntityTypes.PRODUCT,
-        productTypeEntityType: EntityTypes.PRODUCT_TYPE,
-        packingEntityType: EntityTypes.PACKING,
+        materialEndpointName: EntityTypes.MATERIAL.apiName,
+        productTypeEndpointName: EntityTypes.PRODUCT_TYPE.apiName,
+        packingEndpointName: EntityTypes.PACKING.apiName,
         PropertiesReference: PropertiesReference
       }
     },
@@ -206,7 +205,7 @@
       }
     },
     components: {
-      MauFormInputSelect
+      MauFormInputSelectDynamic
     },
     props: {
       initialObject: {

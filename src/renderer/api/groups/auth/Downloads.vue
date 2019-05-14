@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import ApiUrls from 'renderer/api/functions/ApiUrls'
+    import SpecificApiUrls from 'renderer/api/functions/SpecificApiUrls'
     export default {
       name: 'OrderSalesDownloads',
       data () {
@@ -17,7 +17,7 @@
         }
       },
       created () {
-        this.excelRoute = ApiUrls.createExcelDownloadsUrl()
+        this.excelRoute = SpecificApiUrls.createExcelDownloadsUrl()
       },
       methods: {
       }

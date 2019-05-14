@@ -21,7 +21,9 @@
               class="col-sm-12 col-md-9"
               placeholder="Buscar...">
       </mau-form-input-text>
-      <button class="btn-submit btn btn-primary col-md-1 col-sm-12" @click="doFilter">Buscar</button>
+      <div class="col-md-1 col-sm-12">
+        <button class="btn-submit btn btn-primary w-100" @click="doFilter">Buscar</button>
+      </div>
     </div>
     <div class="form-group">
 

@@ -23,8 +23,8 @@
   import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import Notifications from 'renderer/api/functions/Notifications'
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
+  import SpecificApiUrls from 'renderer/api/functions/SpecificApiUrls'
   import {mapGetters} from 'vuex'
   export default {
     components: {ActionWidget},
@@ -83,7 +83,7 @@
             {
               name: 'PDF',
               icon: 'fa fa-file-pdf-o',
-              url: ApiUrls.createPdfDownloadUrl(this.$route.params[GlobalEntityIdentifier])
+              url: SpecificApiUrls.createPdfDownloadUrl(this.$route.params[GlobalEntityIdentifier])
             }
           ])
         } else {
@@ -92,7 +92,7 @@
       },
       confirmDelete: function () {
         let id = this.$route.params[GlobalEntityIdentifier]
-        ApiOperations.del(EntityTypes.ORDER_SALE, id).then(result => {
+        GenericApiOperations.del(EntityTypes.ORDER_SALE.apiName, id).then(result => {
           Notifications.success(this)
           this.$router.push({name: this.groupDefaultRouteObject(this.$route).name})
         })

@@ -46,7 +46,8 @@
 
 <script>
     import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-    import ApiOperations from 'renderer/api/functions/ApiOperations'
+    import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
+    import SpecificApiOperations from 'renderer/api/functions/SpecificApiOperations'
     import moment from 'moment'
     import cloneDeep from 'renderer/services/common/cloneDeep.js'
     import EntityTypes from 'renderer/api/EntityTypes'
@@ -106,10 +107,10 @@
             machineTypeId = 2
           }
           Promise.all([
-            ApiOperations.getWithFilterExactWithoutPagination(EntityTypes.MACHINE, {machine_type_id: machineTypeId}),
-            ApiOperations.getWithoutPagination(EntityTypes.MATERIAL),
-            ApiOperations.getStats(statsRoute),
-            ApiOperations.getStats(wasteRoute)
+            GenericApiOperations.list(EntityTypes.MACHINE.apiName, {filterExacts: {machine_type_id: machineTypeId}}),
+            GenericApiOperations.list(EntityTypes.MATERIAL.apiName, {paginate: false}),
+            SpecificApiOperations.getStats(statsRoute),
+            SpecificApiOperations.getStats(wasteRoute)
           ]).then(result => {
             let machines = result[0]
             let materials = result[1]

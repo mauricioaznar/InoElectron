@@ -13,7 +13,7 @@
 
 <script>
   import CompanyPropertiesReference from 'renderer/api/propertiesReference/CompanyPropertiesReference'
-  import ApiUrls from 'renderer/api/functions/ApiUrls'
+  import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
@@ -21,7 +21,7 @@
     name: 'ListCompany',
     data () {
       return {
-        apiUrl: ApiUrls.createListUrl(EntityTypes.COMPANY),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.COMPANY.apiName, {paginate: true}),
         tableFields: [
           {
             title: CompanyPropertiesReference.NAME.title,

@@ -35,7 +35,8 @@
 </template>
 
 <script>
-    import ApiOperations from 'renderer/api/functions/ApiOperations'
+    import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
+    import SpecificApiOperations from 'renderer/api/functions/SpecificApiOperations'
     import MauBarChart from 'renderer/components/mau-components/mau-chart/MauBarChart'
     import EntityTypes from 'renderer/api/EntityTypes'
     export default {
@@ -130,8 +131,8 @@
         setInventory: function () {
           this.isLoading = true
           Promise.all([
-            ApiOperations.getWithFilterExactWithoutPagination(EntityTypes.PRODUCT, {product_type_id: 1}),
-            ApiOperations.getStats('bagInventory')
+            GenericApiOperations.list(EntityTypes.PRODUCT.apiName, {filterExacts: {product_type_id: 1}}),
+            SpecificApiOperations.getStats('bagInventory')
           ]).then(results => {
             let inventoryProductsItems = []
             let products = results[0]

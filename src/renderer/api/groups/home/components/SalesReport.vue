@@ -83,7 +83,8 @@
 </template>
 
 <script>
-  import ApiOperations from 'renderer/api/functions/ApiOperations'
+  import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
+  import SpecificApiOperations from 'renderer/api/functions/SpecificApiOperations'
   import MauBarChart from 'renderer/components/mau-components/mau-chart/MauBarChart'
   import MauLineChart from 'renderer/components/mau-components/mau-chart/MauLineChart'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -171,7 +172,7 @@
     methods: {
       setSales: function () {
         this.isLoading = true
-        Promise.all([ApiOperations.getStats('sales'), ApiOperations.getWithoutPagination(EntityTypes.COMPANY)]).then(result => {
+        Promise.all([SpecificApiOperations.getStats('sales'), GenericApiOperations.list(EntityTypes.COMPANY.apiName, {paginate: false})]).then(result => {
           let requests = result[0]['requests']
           let sales = result[0]['sales']
           let companies = result[1]

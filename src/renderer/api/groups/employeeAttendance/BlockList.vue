@@ -10,14 +10,16 @@
                                 ></mau-form-group-date-time>
                             </div>
                             <div class="form-group col-md-6">
-                                <mau-form-input-select
+                                <mau-form-input-select-dynamic
                                         v-model="employeeSelected"
                                         :label="'Empleado seleccionado'"
                                         :displayProperty="'full_name'"
-                                        :entity-type="employeeEntityType"
+                                        :endpointName="employeeEndpointName"
+                                        :error="''"
+                                        :name="'employee'"
                                         :onChange="getEmployeeAttendances"
                                         :ref="'employee_select'"
-                                ></mau-form-input-select>
+                                ></mau-form-input-select-dynamic>
                             </div>
                         </div>
                         <div>
@@ -48,10 +50,10 @@
 </template>
 
 <script>
-    import MauFormInputSelect from 'renderer/api/components/inputs/MauFormInputSelect.vue'
+    import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
     import EntityTypes from 'renderer/api/EntityTypes'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-    import ApiOperations from 'renderer/api/functions/ApiOperations'
+    import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
     import moment from 'moment'
     export default {
       name: 'BlockListEmployeeAttendance',
@@ -60,7 +62,7 @@
           dateTimeSelected: '',
           initialDateTime: moment().minute(0).subtract(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
           employeeSelected: {},
-          employeeEntityType: EntityTypes.EMPLOYEE,
+          employeeEndpointName: EntityTypes.EMPLOYEE.apiName,
           tableDateTimesHeaders: [],
           tableDateTimesData: [],
           tableDateTimesFooter: [],
@@ -69,13 +71,13 @@
         }
       },
       components: {
-        MauFormInputSelect
+        MauFormInputSelectDynamic
       },
       methods: {
         getEmployeeAttendances: function () {
           let employeeId = this.employeeSelected[GlobalEntityIdentifier]
           let dateTimeSelectedMinusOneDay = moment(this.dateTimeSelected, 'YYYY-MM-DD hh:mm:ss').subtract(1, 'days').format('YYYY-MM-DD HH:mm:ss')
-          ApiOperations.getWithFilterExactWithoutPaginationWithStartDate(EntityTypes.EMPLOYEE_ATTENDANCE, {employee_id: employeeId}, {entrance_date_time: dateTimeSelectedMinusOneDay}).then(response => {
+          GenericApiOperations.list(EntityTypes.EMPLOYEE_ATTENDANCE.apiName, {filterExacts: {employee_id: employeeId}, filterStartDateTime: {entrance_date_time: dateTimeSelectedMinusOneDay}}).then(response => {
             this.setTable(response)
           })
         },

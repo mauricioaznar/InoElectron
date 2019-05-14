@@ -16,7 +16,7 @@
 
 <script>
     import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
-    import ApiOperations from 'renderer/api/functions/ApiOperations'
+    import SpecificApiOperations from 'renderer/api/functions/SpecificApiOperations'
     import moment from 'moment'
     moment.locale('es')
     export default {
@@ -46,7 +46,7 @@
           this.isLoading = true
           this.groupsData = []
           let groupsData = []
-          ApiOperations.getStats('productionEvent').then(result => {
+          SpecificApiOperations.getStats('productionEvent').then(result => {
             for (let i = 0; i < result.length; i++) {
               let itemObj = result[i]
               let groupedDataObjFound = groupsData.find(groupedDataObj => {
