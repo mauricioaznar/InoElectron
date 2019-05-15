@@ -237,7 +237,7 @@
     created () {
       this.setInitialValues()
       if (!this.initialObject) {
-        SpecificApiOperations.getMax(this.orderSaleEntityType.apiName, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
+        SpecificApiOperations.getMax(this.orderSaleEndpointName, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
           this.initialOrderCode = result + 1
         })
         GenericApiOperations.getById(this.orderSaleStatusEndpointName, 1).then(result => {
