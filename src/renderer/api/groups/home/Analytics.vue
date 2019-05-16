@@ -16,6 +16,9 @@
             <b-tab title="Reporte de eventos de produccion">
                 <production-event-report v-if="tabIndex === 4" class="mt-4"></production-event-report>
             </b-tab>
+            <b-tab title="Reporte de bolseo v2">
+                <production-report :reportType="'bag'" v-if="tabIndex === 5" class="mt-4"></production-report>
+            </b-tab>
         </b-tabs>
     </div>
 </template>
@@ -25,6 +28,7 @@
     import BagInventoryReport from 'renderer/api/groups/home/components/BagInventoryReport.vue'
     import ProductionEventReport from 'renderer/api/groups/home/components/ProductionEventReport.vue'
     import ProductByMachineReport from 'renderer/api/components/report/ProductByMachineReport.vue'
+    import ProductionReport from 'renderer/api/groups/home/components/ProductionReport.vue'
     export default {
       data () {
         return {
@@ -35,7 +39,8 @@
         BagInventoryReport,
         SalesReport,
         ProductionEventReport,
-        ProductByMachineReport
+        ProductByMachineReport,
+        ProductionReport
       },
       methods: {
         tabsUpdated: function (index) {

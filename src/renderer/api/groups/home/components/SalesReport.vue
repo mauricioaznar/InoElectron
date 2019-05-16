@@ -68,17 +68,6 @@
                 ></mau-line-chart>
             </div>
         </div>
-        <div class="row" v-if="!isLoading">
-            <div class="col-sm-12 py-2">
-                <h6>Total de pedidos finalizados - total de ventas de ventas finalizadas</h6>
-                <mau-line-chart
-                        :chartData="salesByMonthByCompanyBalanceData"
-                        :options="chartCostReachedOptions"
-                        :width="400"
-                        :height="400"
-                ></mau-line-chart>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -97,7 +86,6 @@
         salesByMonthKilosData: '',
         salesByMonthByClientKilosData: '',
         salesByMonthByClientCostData: '',
-        salesByMonthByCompanyBalanceData: '',
         isLoading: true,
         timeout: '',
         companies: [],
@@ -242,6 +230,9 @@
     },
     watch: {
       companies: function (companies) {
+        if (companies === undefined) {
+          return
+        }
         let totalKilosSoldYearsData = []
         let totalKilosRequestedYearsData = []
         let totalCostSoldYearsData = []
@@ -335,20 +326,6 @@
             labels: this.monthNames,
             datasets: companiesTotalCostSoldYear1DataSets
           })
-        }
-        let companiesTotalCostReachedYear1DataSets = companies.map((companyObj, i) => {
-          return {
-            label: companyObj['name'],
-            borderColor: this.colors[i],
-            fill: false,
-            data: companyObj['year_1_data'].map(companyYear1DataObj => {
-              return companyYear1DataObj['total_cost_reached']
-            })
-          }
-        })
-        this.salesByMonthByCompanyBalanceData = {
-          labels: this.monthNames,
-          datasets: companiesTotalCostReachedYear1DataSets
         }
       }
     }
