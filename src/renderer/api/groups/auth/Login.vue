@@ -33,6 +33,7 @@
 <script>
   import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
   import Notifications from 'renderer/api/functions/Notifications'
+  import Vue from 'vue'
   export default {
     data () {
       return {
@@ -52,6 +53,8 @@
         setTimeout(function () {
           GenericApiOperations.generateToken(_this.email, _this.password).then(result => {
             let token = result.token
+            Vue.http.headers.common['Accept'] = 'Application/json'
+            Vue.http.headers.common['Authorization'] = 'Bearer ' + token
             window.localStorage.setItem('AccessToken', JSON.stringify(token))
             Notifications.info(_this, 'Bienvendio al sistema de industria')
             _this.$router.push({path: '*'})
