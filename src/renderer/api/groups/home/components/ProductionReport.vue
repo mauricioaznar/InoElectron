@@ -1,6 +1,31 @@
 <template>
     <div>
-        Production Report
+        <mau-spinner
+            v-if="isLoading"
+            :size-type="'dataTable'"
+        >
+        </mau-spinner>
+        <div
+            v-if="!isLoading"
+            class="table table-hover"
+            v-for="(genericYear, yearIndex) in genericYears"
+        >
+            <div class="row-fluid">
+                <span v-for="(machineItem, index) in machineItems">
+                    {{machineItem.name}}
+                </span>
+            </div>
+            <div v-for="(genericMonth, monthIndex) in genericYears[yearIndex]">
+                <span v-for="(machineItem, index) in machineItems">
+                    {{calculateMonthTotalProduction(machineItem.productionItems[yearIndex][monthIndex])}}
+                </span>
+                <!--<tr class="table table-dark" v-for="(genericDays, dayIndex) in genericYears[0][monthIndex]">-->
+                    <!--<td v-for="(machineItem, index) in machineItems">-->
+                        <!--{{calculateDayTotalProduction(machineItem.productionItems[0][monthIndex][dayIndex])}}-->
+                    <!--</td>-->
+                <!--</tr>-->
+            </div>
+        </div>
     </div>
 </template>
 
@@ -13,6 +38,7 @@
     export default {
       data () {
         return {
+          isLoading: true,
           genericYears: [],
           machineItems: [],
           materialItems: []
@@ -27,13 +53,21 @@
           }
         }
       },
+      computed: {
+        isBagReportType: function () {
+          return this.reportType === 'bag'
+        },
+        isRollReportType: function () {
+          return this.reportType === 'roll'
+        }
+      },
       created () {
         this.setGenericDateArrays()
         let machineTypeId
-        if (this.reportType === 'bag') {
+        if (this.isBagReportType) {
           machineTypeId = 1
         }
-        if (this.reportType === 'roll') {
+        if (this.isRollReportType) {
           machineTypeId = 2
         }
         Promise.all([
@@ -64,8 +98,10 @@
           }
           for (let i = 0; i < productionRegistries.length; i++) {
             let productionRegistry = productionRegistries[i]
-            let machineItem = machineItems.find(machineItemObj => { return machineItemObj.id === productionRegistry.machine_id})
-            if (machineItem === undefined) {
+            if ((this.isBagReportType && productionRegistry.order_production_type_id !== 1) || (this.isBagReportType && productionRegistry.product_type_id !== 1)) {
+              continue
+            }
+            if ((this.isRollReportType && productionRegistry.order_production_type_id !== 2) || (this.isRollReportType && productionRegistry.product_type_id !== 2)) {
               continue
             }
             let startDateTime = moment(productionRegistry.start_date_time, 'YYYY-MM-DD HH:mm:ss')
@@ -73,24 +109,22 @@
             let hours = endDateTime.diff(startDateTime, 'hours')
             let kilosPerHour = (productionRegistry.kilos / hours).toFixed(2)
             let iterableDateTime = moment(productionRegistry.start_date_time, 'YYYY-MM-DD HH:mm:ss')
+            let machineItem = machineItems.find(machineItemObj => { return machineItemObj.id === productionRegistry.machine_id })
+            let materialItem = materialItems.find(materialItemObj => { return materialItemObj.id === productionRegistry.material_id })
             while (iterableDateTime.isBetween(startDateTime, endDateTime, 'hours', '[)')) {
               let yearIndex = Number(iterableDateTime.year() - 2018)
               let monthIndex = Number(iterableDateTime.month())
               let dayIndex = Number(iterableDateTime.date() - 1)
               let hoursIndex = Number(iterableDateTime.hours())
-              console.log(yearIndex)
-              console.log(monthIndex)
-              console.log(dayIndex)
-              console.log(hoursIndex)
-              if (machineItem.productionItems === undefined) {
-                console.log(machineItem)
-              }
-              machineItem.productionItems[yearIndex][monthIndex][dayIndex][hoursIndex] = kilosPerHour
+              machineItem.productionItems[yearIndex][monthIndex][dayIndex][hoursIndex] = (parseFloat(kilosPerHour) + parseFloat(machineItem.productionItems[yearIndex][monthIndex][dayIndex][hoursIndex])).toFixed(2)
+              materialItem.productionItems[yearIndex][monthIndex][dayIndex][hoursIndex] = (parseFloat(kilosPerHour) + parseFloat(materialItem.productionItems[yearIndex][monthIndex][dayIndex][hoursIndex])).toFixed(2)
               iterableDateTime.add(1, 'hours')
             }
           }
           this.machineItems = machineItems
           this.materialItems = materialItems
+        }).finally(() => {
+          this.isLoading = false
         })
       },
       methods: {
@@ -103,13 +137,31 @@
               let daysInMonth = moment(year + '-' + month, 'YYYY-MM').daysInMonth()
               let days = Array(daysInMonth)
               for (let day = 1; day <= days.length; day++) {
-                days[day - 1] = Array(24)
+                days[day - 1] = Array(24).fill(0)
               }
               months.push(days)
             }
             genericYears.push(months)
           }
           this.genericYears = genericYears
+        },
+        calculateMonthTotalProduction: function (monthProductionItems) {
+          let totalSum = 0
+
+          for (let dayIndex = 0; dayIndex < monthProductionItems.length; dayIndex++) {
+            let dayProductionItems = monthProductionItems[dayIndex]
+            for (let hourIndex = 0; hourIndex < dayProductionItems.length; hourIndex++) {
+              totalSum += Number(dayProductionItems[hourIndex])
+            }
+          }
+          return totalSum.toFixed(2)
+        },
+        calculateDayTotalProduction: function (dayProductionItems) {
+          let totalSum = 0
+          for (let hourIndex = 0; hourIndex < dayProductionItems.length; hourIndex++) {
+            totalSum += Number(dayProductionItems[hourIndex])
+          }
+          return totalSum.toFixed(2)
         }
       }
     }
