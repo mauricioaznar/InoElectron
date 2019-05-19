@@ -2,30 +2,66 @@
     <div>
         <mau-spinner
             v-if="isLoading"
-            :size-type="'dataTable'"
+            :sizeType="'dataTable'"
         >
         </mau-spinner>
-        <div
+        <mau-form-input-select-static
+            v-show="!isLoading"
+            :name="'mauSelectStaticYear'"
+            :multiselect="false"
+            v-model="yearSelected"
+            :availableObjects="yearObjects"
+            :error="''"
+            :initialObject="yearObjects[0]"
+            :hasClear="false"
+            :displayProperty="'text'"
+            :trackBy="'value'"
+        >
+        </mau-form-input-select-static>
+        <table
+            :key="yearSelected.value"
             v-if="!isLoading"
             class="table table-hover"
-            v-for="(genericYear, yearIndex) in genericYears"
         >
-            <div class="row-fluid">
-                <span v-for="(machineItem, index) in machineItems">
+            <tr class="row-fluid">
+                <td v-for="(machineItem, index) in machineItems">
                     {{machineItem.name}}
-                </span>
-            </div>
-            <div v-for="(genericMonth, monthIndex) in genericYears[yearIndex]">
-                <span v-for="(machineItem, index) in machineItems">
-                    {{calculateMonthTotalProduction(machineItem.productionItems[yearIndex][monthIndex])}}
-                </span>
-                <!--<tr class="table table-dark" v-for="(genericDays, dayIndex) in genericYears[0][monthIndex]">-->
-                    <!--<td v-for="(machineItem, index) in machineItems">-->
-                        <!--{{calculateDayTotalProduction(machineItem.productionItems[0][monthIndex][dayIndex])}}-->
-                    <!--</td>-->
-                <!--</tr>-->
-            </div>
-        </div>
+                </td>
+            </tr>
+            <tr v-for="(genericMonth, monthIndex) in genericYears[yearSelected.value]">
+                <td v-for="(machineItem, index) in machineItems">
+                    {{calculateMonthTotalProduction(machineItem.productionItems[yearSelected.value][monthIndex])}}
+                </td>
+            </tr>
+        </table>
+        <mau-form-input-select-static
+            v-show="!isLoading"
+            :name="'mauSelectStaticMonth'"
+            :multiselect="false"
+            v-model="monthSelected"
+            :availableObjects="monthObjects"
+            :error="''"
+            :initialObject="monthObjects[0]"
+            :hasClear="false"
+            :displayProperty="'text'"
+            :trackBy="'value'"
+                >
+        </mau-form-input-select-static>
+        <table
+            v-if="!isLoading"
+            class="table table-hover"
+        >
+            <tr class="row-fluid">
+                <td v-for="(machineItem, index) in machineItems">
+                    {{machineItem.name}}
+                </td>
+            </tr>
+            <tr v-for="(genericDay, dayIndex) in genericYears[yearSelected.value][monthSelected.value]">
+                <td v-for="(machineItem, index) in machineItems">
+                    {{calculateDayTotalProduction(machineItem.productionItems[yearSelected.value][monthSelected.value][dayIndex])}}
+                </td>
+            </tr>
+        </table>
     </div>
 </template>
 
@@ -35,13 +71,35 @@
     import EntityTypes from 'renderer/api/EntityTypes'
     import cloneDeep from 'renderer/services/common/cloneDeep'
     import moment from 'moment'
+    import MauFormInputSelectStatic from '../../../../../../node_modules/mau-vue-components/src/components/MauFormInputSelectStatic.vue'
     export default {
+      components: {MauFormInputSelectStatic},
       data () {
         return {
           isLoading: true,
           genericYears: [],
           machineItems: [],
-          materialItems: []
+          materialItems: [],
+          yearSelected: {},
+          monthSelected: {},
+          monthObjects: [
+            { value: 0, text: '01' },
+            { value: 1, text: '02' },
+            { value: 2, text: '03' },
+            { value: 3, text: '04' },
+            { value: 4, text: '05' },
+            { value: 5, text: '06' },
+            { value: 6, text: '07' },
+            { value: 7, text: '08' },
+            { value: 8, text: '09' },
+            { value: 9, text: '10' },
+            { value: 10, text: '11' },
+            { value: 11, text: '12' }
+          ],
+          yearObjects: [
+            { value: 0, text: '2018' },
+            { value: 1, text: '2019' }
+          ]
         }
       },
       props: {
