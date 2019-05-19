@@ -27,10 +27,16 @@
                 <td v-for="(machineItem, index) in machineItems">
                     {{machineItem.name}}
                 </td>
+                <td>
+                    Total
+                </td>
             </tr>
             <tr v-for="(genericMonth, monthIndex) in genericYears[yearSelected.value]">
                 <td v-for="(machineItem, index) in machineItems">
                     {{calculateMonthTotalProduction(machineItem.productionItems[yearSelected.value][monthIndex])}}
+                </td>
+                <td>
+                    {{getMachinesMonthTotalProduction(monthIndex)}}
                 </td>
             </tr>
         </table>
@@ -55,10 +61,16 @@
                 <td v-for="(machineItem, index) in machineItems">
                     {{machineItem.name}}
                 </td>
+                <td>
+                    Total
+                </td>
             </tr>
             <tr v-for="(genericDay, dayIndex) in genericYears[yearSelected.value][monthSelected.value]">
                 <td v-for="(machineItem, index) in machineItems">
                     {{calculateDayTotalProduction(machineItem.productionItems[yearSelected.value][monthSelected.value][dayIndex])}}
+                </td>
+                <td>
+                    {{getMachinesDayTotalProduction(dayIndex)}}
                 </td>
             </tr>
         </table>
@@ -71,9 +83,7 @@
     import EntityTypes from 'renderer/api/EntityTypes'
     import cloneDeep from 'renderer/services/common/cloneDeep'
     import moment from 'moment'
-    import MauFormInputSelectStatic from '../../../../../../node_modules/mau-vue-components/src/components/MauFormInputSelectStatic.vue'
     export default {
-      components: {MauFormInputSelectStatic},
       data () {
         return {
           isLoading: true,
@@ -205,7 +215,6 @@
         },
         calculateMonthTotalProduction: function (monthProductionItems) {
           let totalSum = 0
-
           for (let dayIndex = 0; dayIndex < monthProductionItems.length; dayIndex++) {
             let dayProductionItems = monthProductionItems[dayIndex]
             for (let hourIndex = 0; hourIndex < dayProductionItems.length; hourIndex++) {
@@ -218,6 +227,31 @@
           let totalSum = 0
           for (let hourIndex = 0; hourIndex < dayProductionItems.length; hourIndex++) {
             totalSum += Number(dayProductionItems[hourIndex])
+          }
+          return totalSum.toFixed(2)
+        },
+        getMachinesMonthTotalProduction: function (monthIndex) {
+          let totalSum = 0
+          for (let i = 0; i < this.machineItems.length; i++) {
+            let machineObj = this.machineItems[i]
+            let monthProductionItems = machineObj.productionItems[this.yearSelected.value][monthIndex]
+            for (let dayIndex = 0; dayIndex < monthProductionItems.length; dayIndex++) {
+              let dayProductionItems = monthProductionItems[dayIndex]
+              for (let hourIndex = 0; hourIndex < dayProductionItems.length; hourIndex++) {
+                totalSum += Number(dayProductionItems[hourIndex])
+              }
+            }
+          }
+          return totalSum.toFixed(2)
+        },
+        getMachinesDayTotalProduction: function (dayIndex) {
+          let totalSum = 0
+          for (let i = 0; i < this.machineItems.length; i++) {
+            let machineObj = this.machineItems[i]
+            let dayProductionItems = machineObj.productionItems[this.yearSelected.value][this.monthSelected.value][dayIndex]
+            for (let hourIndex = 0; hourIndex < dayProductionItems.length; hourIndex++) {
+              totalSum += Number(dayProductionItems[hourIndex])
+            }
           }
           return totalSum.toFixed(2)
         }
