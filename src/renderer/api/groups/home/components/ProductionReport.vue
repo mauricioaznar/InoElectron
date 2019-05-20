@@ -6,6 +6,48 @@
         >
         </mau-spinner>
         <mau-form-input-select-static
+                v-show="!isLoading"
+                :name="'mauSelectStaticReportType'"
+                :multiselect="false"
+                v-model="reportTypeSelected"
+                :availableObjects="reportTypes"
+                @input="function x(value) { setDataDependingOnProductionType() }"
+                :error="''"
+                :initialObject="reportTypes[0]"
+                :hasClear="false"
+                :displayProperty="'text'"
+                :trackBy="'value'"
+        >
+        </mau-form-input-select-static>
+        <mau-form-input-select-static
+                v-show="!isLoading"
+                :name="'mauSelectStaticCategory'"
+                :multiselect="false"
+                v-model="categorySelected"
+                :availableObjects="categories"
+                :error="''"
+                :initialObject="categories[0]"
+                :hasClear="false"
+                :displayProperty="'text'"
+                :trackBy="'value'"
+        >
+        </mau-form-input-select-static>
+        <mau-form-input-select-static
+            v-if="categorySelected.value && categorySelected.value.length"
+            :key="categorySelected.value.length"
+            v-show="!isLoading"
+            :name="'mauSelectStaticCategoryItems'"
+            :multiselect="true"
+            v-model="categoryItemsSelected"
+            :availableObjects="categorySelected.value"
+            :initialObjects="categorySelected.value"
+            :error="''"
+            :hasClear="false"
+            :displayProperty="'name'"
+            :trackBy="'id'"
+        >
+        </mau-form-input-select-static>
+        <mau-form-input-select-static
             v-show="!isLoading"
             :name="'mauSelectStaticYear'"
             :multiselect="false"
@@ -24,16 +66,16 @@
             class="table table-hover"
         >
             <tr class="row-fluid">
-                <td v-for="(machineItem, index) in machineItems">
-                    {{machineItem.name}}
+                <td v-for="(categoryItem, index) in categoryItemsSelected">
+                    {{categoryItem.name}}
                 </td>
                 <td>
                     Total
                 </td>
             </tr>
             <tr v-for="(genericMonth, monthIndex) in genericYears[yearSelected.value]">
-                <td v-for="(machineItem, index) in machineItems">
-                    {{calculateMonthTotalProduction(machineItem.productionItems[yearSelected.value][monthIndex])}}
+                <td v-for="(categoryItem, index) in categoryItemsSelected">
+                    {{calculateMonthTotalProduction(categoryItem.productionItems[yearSelected.value][monthIndex])}}
                 </td>
                 <td>
                     {{getMachinesMonthTotalProduction(monthIndex)}}
@@ -58,16 +100,16 @@
             class="table table-hover"
         >
             <tr class="row-fluid">
-                <td v-for="(machineItem, index) in machineItems">
-                    {{machineItem.name}}
+                <td v-for="(categoryItem, index) in categoryItemsSelected">
+                    {{categoryItem.name}}
                 </td>
                 <td>
                     Total
                 </td>
             </tr>
             <tr v-for="(genericDay, dayIndex) in genericYears[yearSelected.value][monthSelected.value]">
-                <td v-for="(machineItem, index) in machineItems">
-                    {{calculateDayTotalProduction(machineItem.productionItems[yearSelected.value][monthSelected.value][dayIndex])}}
+                <td v-for="(categoryItem, index) in categoryItemsSelected">
+                    {{calculateDayTotalProduction(categoryItem.productionItems[yearSelected.value][monthSelected.value][dayIndex])}}
                 </td>
                 <td>
                     {{getMachinesDayTotalProduction(dayIndex)}}
@@ -88,8 +130,15 @@
         return {
           isLoading: true,
           genericYears: [],
+          materials: [],
+          machines: [],
+          productionRegistries: [],
           machineItems: [],
           materialItems: [],
+          categorySelected: {},
+          categoryItemsSelected: [],
+          reportTypeSelected: {},
+          reportTypes: [{ value: 'roll', text: 'Extrusion' }, { value: 'bag', text: 'Bolseo' }],
           yearSelected: {},
           monthSelected: {},
           monthObjects: [
@@ -113,59 +162,75 @@
         }
       },
       props: {
-        reportType: {
-          type: String,
-          required: true,
-          validator: function (value) {
-            return ['roll', 'bag'].indexOf(value) !== -1
-          }
-        }
       },
       computed: {
         isBagReportType: function () {
-          return this.reportType === 'bag'
+          return this.reportTypeSelected.value === 'bag'
         },
         isRollReportType: function () {
-          return this.reportType === 'roll'
+          return this.reportTypeSelected.value === 'roll'
+        },
+        categories: function () {
+          return [{ value: this.materialItems, text: 'Material' }, { value: this.machineItems, text: 'Maquina' }]
         }
       },
       created () {
         this.setGenericDateArrays()
-        let machineTypeId
-        if (this.isBagReportType) {
-          machineTypeId = 1
-        }
-        if (this.isRollReportType) {
-          machineTypeId = 2
-        }
         Promise.all([
           GenericApiOperations.list(EntityTypes.MATERIAL.apiName, { paginate: false }),
-          GenericApiOperations.list(EntityTypes.MACHINE.apiName, { paginate: false, filterExacts: {machine_type_id: machineTypeId} }),
+          GenericApiOperations.list(EntityTypes.MACHINE.apiName, { paginate: false }),
           SpecificApiOperations.getStats('productionReport')
         ]).then(result => {
-          let materials = result[0]
-          let machines = result[1]
-          let productionRegistries = result[2]
+          this.materials = result[0]
+          this.machines = result[1]
+          this.productionRegistries = result[2]
+          this.setDataDependingOnProductionType()
+        }).finally(() => {
+          this.isLoading = false
+        })
+      },
+      methods: {
+        setGenericDateArrays: function () {
+          let genericYears = []
+          for (let year = 2018; year <= 2019; year++) {
+            let months = []
+            for (let month = 1; month <= 12; month++) {
+              month = month < 10 ? '0' + month : month
+              let daysInMonth = moment(year + '-' + month, 'YYYY-MM').daysInMonth()
+              let days = Array(daysInMonth)
+              for (let day = 1; day <= days.length; day++) {
+                days[day - 1] = Array(24).fill(0)
+              }
+              months.push(days)
+            }
+            genericYears.push(months)
+          }
+          this.genericYears = genericYears
+        },
+        setDataDependingOnProductionType: function () {
           let materialItems = []
           let machineItems = []
-          for (let i = 0; i < materials.length; i++) {
-            let material = materials[i]
+          for (let i = 0; i < this.materials.length; i++) {
+            let material = this.materials[i]
             materialItems.push({
               id: material.id,
               name: material.name,
               productionItems: cloneDeep(this.genericYears)
             })
           }
-          for (let i = 0; i < machines.length; i++) {
-            let machine = machines[i]
+          for (let i = 0; i < this.machines.length; i++) {
+            let machine = this.machines[i]
+            if ((this.isBagReportType && machine.machine_type_id !== 1) || (this.isRollReportType && machine.machine_type_id !== 2)) {
+              continue
+            }
             machineItems.push({
               id: machine.id,
               name: machine.name,
               productionItems: cloneDeep(this.genericYears)
             })
           }
-          for (let i = 0; i < productionRegistries.length; i++) {
-            let productionRegistry = productionRegistries[i]
+          for (let i = 0; i < this.productionRegistries.length; i++) {
+            let productionRegistry = this.productionRegistries[i]
             if ((this.isBagReportType && productionRegistry.order_production_type_id !== 1) || (this.isBagReportType && productionRegistry.product_type_id !== 1)) {
               continue
             }
@@ -191,27 +256,6 @@
           }
           this.machineItems = machineItems
           this.materialItems = materialItems
-        }).finally(() => {
-          this.isLoading = false
-        })
-      },
-      methods: {
-        setGenericDateArrays: function () {
-          let genericYears = []
-          for (let year = 2018; year <= 2019; year++) {
-            let months = []
-            for (let month = 1; month <= 12; month++) {
-              month = month < 10 ? '0' + month : month
-              let daysInMonth = moment(year + '-' + month, 'YYYY-MM').daysInMonth()
-              let days = Array(daysInMonth)
-              for (let day = 1; day <= days.length; day++) {
-                days[day - 1] = Array(24).fill(0)
-              }
-              months.push(days)
-            }
-            genericYears.push(months)
-          }
-          this.genericYears = genericYears
         },
         calculateMonthTotalProduction: function (monthProductionItems) {
           let totalSum = 0
@@ -232,26 +276,19 @@
         },
         getMachinesMonthTotalProduction: function (monthIndex) {
           let totalSum = 0
-          for (let i = 0; i < this.machineItems.length; i++) {
-            let machineObj = this.machineItems[i]
-            let monthProductionItems = machineObj.productionItems[this.yearSelected.value][monthIndex]
-            for (let dayIndex = 0; dayIndex < monthProductionItems.length; dayIndex++) {
-              let dayProductionItems = monthProductionItems[dayIndex]
-              for (let hourIndex = 0; hourIndex < dayProductionItems.length; hourIndex++) {
-                totalSum += Number(dayProductionItems[hourIndex])
-              }
-            }
+          for (let i = 0; i < this.categoryItemsSelected.length; i++) {
+            let categoryItemSelected = this.categoryItemsSelected[i]
+            let monthProductionItems = categoryItemSelected.productionItems[this.yearSelected.value][monthIndex]
+            totalSum += Number(this.calculateMonthTotalProduction(monthProductionItems))
           }
           return totalSum.toFixed(2)
         },
         getMachinesDayTotalProduction: function (dayIndex) {
           let totalSum = 0
-          for (let i = 0; i < this.machineItems.length; i++) {
-            let machineObj = this.machineItems[i]
-            let dayProductionItems = machineObj.productionItems[this.yearSelected.value][this.monthSelected.value][dayIndex]
-            for (let hourIndex = 0; hourIndex < dayProductionItems.length; hourIndex++) {
-              totalSum += Number(dayProductionItems[hourIndex])
-            }
+          for (let i = 0; i < this.categoryItemsSelected.length; i++) {
+            let categoryItemSelected = this.categoryItemsSelected[i]
+            let dayProductionItems = categoryItemSelected.productionItems[this.yearSelected.value][this.monthSelected.value][dayIndex]
+            totalSum += Number(this.calculateDayTotalProduction(dayProductionItems))
           }
           return totalSum.toFixed(2)
         }
