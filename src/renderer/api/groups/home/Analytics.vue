@@ -17,7 +17,10 @@
                 <production-event-report v-if="tabIndex === 4" class="mt-4"></production-event-report>
             </b-tab>
             <b-tab title="Reporte de bolseo v2">
-                <production-report v-if="tabIndex === 5" class="mt-4"></production-report>
+                <production-report :reportType="'bag'" v-if="tabIndex === 5" class="mt-4"></production-report>
+            </b-tab>
+            <b-tab title="Reporte de extrusion v2">
+                <production-report :reportType="'roll'" v-if="tabIndex === 6" class="mt-4"></production-report>
             </b-tab>
         </b-tabs>
     </div>
