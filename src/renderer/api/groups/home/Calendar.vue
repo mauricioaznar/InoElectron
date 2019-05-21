@@ -1,25 +1,46 @@
 <template>
     <div class="container">
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
-        <div class="form-row">
+        <div
+            v-if="!isLoading && isAdminUser"
+            class="form-row">
             <div class="col">
-                <mau-form-input-select-static
-                        v-if="!isLoading"
-                        :key="selectedEvent && selectedEvent.title ? selectedEvent.YOUR_DATA.id : 0"
-                        v-model="selectedOrderCollectionStatus"
-                        :name="'selectedOrderCollectionStatus'"
-                        :availableObjects="availableOrderSaleCollectionStatuses"
-                        :initialObject="selectedEvent.YOUR_DATA.saleObj.order_sale_collection_status"
-                        :displayProperty="'name'"
-                        :trackBy="'id'"
-                        :error="''"
-                >
-                </mau-form-input-select-static>
+                <div class="form-group">
+                    <mau-form-input-text
+                            :key="selectedEvent && selectedEvent.title ? selectedEvent.YOUR_DATA.id : 0"
+                            :name="'selectedEventTitle'"
+                            :initialValue="selectedEvent.title"
+                            :error="''"
+                            :disabled="true"
+                    >
+                    </mau-form-input-text>
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Actualizar</button>
+            <div class="col">
+                <div class="form-group">
+                    <mau-form-input-select-static
+                            :key="selectedEvent && selectedEvent.title ? selectedEvent.YOUR_DATA.id : 0"
+                            v-model="selectedOrderCollectionStatus"
+                            :name="'selectedEventCollectionStatus'"
+                            :availableObjects="availableOrderSaleCollectionStatuses"
+                            :initialObject="initialSelectedEventCollectionStatus"
+                            :displayProperty="'name'"
+                            :trackBy="'id'"
+                            :error="''"
+                    >
+                    </mau-form-input-select-static>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="form-group">
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        @click="updateEvent"
+                    >
+                        Actualizar
+                    </button>
+                </div>
             </div>
         </div>
         <full-calendar
@@ -40,6 +61,7 @@
   import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import EntityTypes from 'renderer/api/EntityTypes'
   import moment from 'moment'
+  import {mapGetters} from 'vuex'
   export default {
     data () {
       return {
@@ -58,6 +80,16 @@
       // this.interval = setInterval(function () {
       // vm.setCalendar()
       // }, 30000)
+    },
+    computed: {
+      initialSelectedEventCollectionStatus: function () {
+        return this.availableOrderSaleCollectionStatuses.find((orderSaleCollectionStatusObj) => {
+          return orderSaleCollectionStatusObj.id === this.selectedEvent.YOUR_DATA.saleObj.order_sale_collection_status_id
+        })
+      },
+      ...mapGetters([
+        'isAdminUser'
+      ])
     },
     methods: {
       setCalendar: function () {
@@ -88,7 +120,11 @@
       updateEvent: function () {
         let oldEvent = this.selectedEvent
         let oldEventId = oldEvent.YOUR_DATA.saleObj.id
-        GenericApiOperations.edit(EntityTypes.ORDER_SALE.apiName, oldEventId, {[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name]: 2}).then((result) => {
+        let newOrderSaleCollectionStatusId = this.selectedOrderCollectionStatus.id
+        GenericApiOperations.edit(EntityTypes.ORDER_SALE.apiName,
+          oldEventId,
+          {[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name]: newOrderSaleCollectionStatusId})
+        .then((result) => {
           let newEvent = this.createEvent(result)
           oldEvent.cssClass = newEvent.cssClass
           oldEvent.title = newEvent.title
