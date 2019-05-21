@@ -16,6 +16,7 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import BagOrderAdjustmentPropertiesReference from 'renderer/api/propertiesReference/OrderAdjustmentPropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
     name: 'ListBagOrderAdjustment',
     created () {
@@ -57,6 +58,7 @@
       }
     },
     components: {
+      MauDataTable
     },
     methods: {
       actionHandler: function (action, entityObj) {

@@ -17,6 +17,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
     name: 'ListProductionEvent',
     data () {
@@ -83,6 +84,7 @@
       }
     },
     components: {
+      MauDataTable
     },
     methods: {
       actionHandler: function (action, entityObj) {

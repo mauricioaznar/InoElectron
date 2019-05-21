@@ -17,6 +17,7 @@
   import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
     name: 'ListOrderRequest',
     data () {
@@ -87,6 +88,7 @@
       }
     },
     components: {
+      MauDataTable
     },
     methods: {
       actionHandler: function (action, entityObj) {

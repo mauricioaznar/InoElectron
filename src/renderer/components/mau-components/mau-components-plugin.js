@@ -7,7 +7,6 @@ import MauCrudCreate from 'renderer/api/components/crud/MauCrudCreate.vue'
 import MauCrudList from 'renderer/api/components/crud/MauCrudList.vue'
 import MauCrudEdit from 'renderer/api/components/crud/MauCrudEdit.vue'
 import MauCrudDel from 'renderer/api/components/crud/MauCrudDel.vue'
-import MauDataTable from 'renderer/components/mau-components/mau-data-table/MauDataTable.vue'
 import MauEditor from 'renderer/components/mau-components/mau-editor/MauEditor.vue'
 import MauSchedule from 'renderer/components/mau-components/mau-schedule/MauSchedule.vue'
 import MauCard from 'renderer/components/mau-components/mau-card/MauCard.vue'
@@ -24,7 +23,6 @@ const MauComponentsPlugin = {
     Vue.component(MauCrudList.name, MauCrudList)
     Vue.component(MauCrudEdit.name, MauCrudEdit)
     Vue.component(MauCrudDel.name, MauCrudDel)
-    Vue.component(MauDataTable.name, MauDataTable)
     Vue.component(MauEditor.name, MauEditor)
     Vue.component(MauCard.name, MauCard)
     Vue.component(MauSchedule.name, MauSchedule)

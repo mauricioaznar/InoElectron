@@ -1,6 +1,27 @@
 <template>
     <div class="container">
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
+        <div class="form-row">
+            <div class="col">
+                <mau-form-input-select-static
+                        v-if="!isLoading"
+                        :key="selectedEvent && selectedEvent.title ? selectedEvent.YOUR_DATA.id : 0"
+                        v-model="selectedOrderCollectionStatus"
+                        :name="'selectedOrderCollectionStatus'"
+                        :availableObjects="availableOrderSaleCollectionStatuses"
+                        :initialObject="selectedEvent.YOUR_DATA.saleObj.order_sale_collection_status"
+                        :displayProperty="'name'"
+                        :trackBy="'id'"
+                        :error="''"
+                >
+                </mau-form-input-select-static>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </div>
+        </div>
         <full-calendar
                 v-if="!isLoading"
                 class="custom-calendar"
@@ -16,7 +37,6 @@
 <script>
   import FullCalendar from 'vue-fullcalendar'
   import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
-  import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import EntityTypes from 'renderer/api/EntityTypes'
   import moment from 'moment'
@@ -26,7 +46,10 @@
         interval: '',
         timeout: '',
         isLoading: true,
-        calendarEvents: ''
+        selectedEvent: {},
+        selectedOrderCollectionStatus: {},
+        calendarEvents: [],
+        availableOrderSaleCollectionStatuses: []
       }
     },
     created () {
@@ -38,60 +61,65 @@
     },
     methods: {
       setCalendar: function () {
-        this.isLoading = true
         Promise.all([
-          GenericApiOperations.list(EntityTypes.ORDER_SALE.apiName, {paginate: false})
+          GenericApiOperations.list(EntityTypes.ORDER_SALE.apiName, {paginate: false, filterOrderBy: 'date'}),
+          GenericApiOperations.list(EntityTypes.ORDER_SALE_COLLECTION_STATUS.apiName, {paginate: false})
         ]).then(result => {
-          this.calendarEvents = []
-          let calendarItems = []
+          let calendarEvents = []
           let sales = result[0]
+          this.availableOrderSaleCollectionStatuses = result[1]
           for (let saleIndex = 0; saleIndex < sales.length; saleIndex++) {
             let saleObj = sales[saleIndex]
-            let totalCost = parseInt(saleObj.total_cost / 1000)
-            if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 1) {
-              calendarItems.push({
-                title: '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k p',
-                start: moment(saleObj.date),
-                cssClass: 'sale pending',
-                YOUR_DATA: {
-                  id: saleObj.id,
-                  sale: true
-                }
-              })
-            }
-            if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 2) {
-              calendarItems.push({
-                title: '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k pc',
-                start: moment(saleObj.date),
-                cssClass: 'sale partially-collected',
-                YOUR_DATA: {
-                  id: saleObj.id,
-                  sale: true
-                }
-              })
-            }
-            if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 3) {
-              calendarItems.push({
-                title: '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k c',
-                start: moment(saleObj.date),
-                cssClass: 'sale collected',
-                YOUR_DATA: {
-                  id: saleObj.id,
-                  sale: true
-                }
-              })
-            }
+            let saleEventObj = this.createEvent(saleObj)
+            // console.log(moment(saleObj.date, 'YYYY-MM-DD').format('YYYY-MMMM-dddd-DD'))
+            calendarEvents.push(saleEventObj)
           }
-          this.calendarEvents = calendarItems
+          this.selectedEvent = calendarEvents[0]
+          this.calendarEvents = calendarEvents
           let vm = this
           this.timeout = setTimeout(function () {
             vm.isLoading = false
           }, 2000)
         })
       },
-      eventClicked: function (obj) {
-        let id = obj.YOUR_DATA.id
-        this.$router.push({path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE, 'view') + '/' + id})
+      eventClicked: function (event) {
+        this.selectedEvent = event
+      },
+      updateEvent: function () {
+        let oldEvent = this.selectedEvent
+        let oldEventId = oldEvent.YOUR_DATA.saleObj.id
+        GenericApiOperations.edit(EntityTypes.ORDER_SALE.apiName, oldEventId, {[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name]: 2}).then((result) => {
+          let newEvent = this.createEvent(result)
+          oldEvent.cssClass = newEvent.cssClass
+          oldEvent.title = newEvent.title
+          oldEvent.YOUR_DATA.saleObj = newEvent.YOUR_DATA.saleObj
+        })
+      },
+      createEvent (saleObj) {
+        let title = ''
+        let cssClass = ''
+        let totalCost = parseInt(saleObj.total_cost / 1000)
+        if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 1) {
+          title = '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k p'
+          cssClass = 'sale pending'
+        }
+        if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 2) {
+          title = '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k pc'
+          cssClass = 'sale partially-collected'
+        }
+        if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 3) {
+          title = '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k c'
+          cssClass = 'sale collected'
+        }
+        return {
+          title: title,
+          start: moment(saleObj.date),
+          cssClass: cssClass,
+          YOUR_DATA: {
+            id: saleObj.id,
+            saleObj: saleObj
+          }
+        }
       }
     },
     beforeDestroy: function () {

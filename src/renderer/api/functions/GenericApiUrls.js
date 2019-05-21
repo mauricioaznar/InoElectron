@@ -6,7 +6,8 @@ function createListUrl (entityEndpointName, options) {
   let filterExactQuery = (options && options.filterExacts) !== undefined ? getFilterExactQuery(options.filterExacts) : ''
   let filterEntityQuery = (options && options.filterEntity) !== undefined ? getFilterEntityQuery(options.filterEntity) : ''
   let filterStartDateTimeQuery = (options && options.filterStartDateTime) !== undefined ? getFilterStartDateTimeQuery(options.filterStartDateTime) : ''
-  return Vue.http.options.root + '/' + entityEndpointName + '/list?' + paginateQuery + filterLikeQuery + filterExactQuery + filterEntityQuery + filterStartDateTimeQuery
+  let filterOrderByQuery = (options && options.filterOrderBy) !== undefined ? getFilterOrderByQuery(options.filterOrderBy) : ''
+  return Vue.http.options.root + '/' + entityEndpointName + '/list?' + paginateQuery + filterLikeQuery + filterExactQuery + filterEntityQuery + filterStartDateTimeQuery + filterOrderByQuery
   function getFilterLikeQuery (filterLikes) {
     let filterLikeQuery = ''
     let i = 0
@@ -58,6 +59,10 @@ function createListUrl (entityEndpointName, options) {
       }
     }
     return filterStartDateQuery
+  }
+  function getFilterOrderByQuery (filterOrderBy) {
+    let hasPipe = filterOrderBy.includes('|')
+    return '&sort=' + (hasPipe ? filterOrderBy : filterOrderBy + '|desc')
   }
 }
 

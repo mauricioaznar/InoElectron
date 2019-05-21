@@ -16,6 +16,7 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import MachinePropertiesReference from 'renderer/api/propertiesReference/MachinePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
     name: 'ListMachine',
     data () {
@@ -44,6 +45,7 @@
       }
     },
     components: {
+      MauDataTable
     },
     methods: {
       actionHandler: function (action, entityObj) {

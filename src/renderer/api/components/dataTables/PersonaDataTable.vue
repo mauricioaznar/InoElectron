@@ -15,6 +15,7 @@
   import EmployeePropertiesReference from 'renderer/api/propertiesReference/EmployeePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import EntityTypes from 'renderer/api/EntityTypes.js'
+  import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
     name: 'MauPersonaDataTable',
     data () {
@@ -89,6 +90,7 @@
       }
     },
     components: {
+      MauDataTable
     }
   }
 </script>

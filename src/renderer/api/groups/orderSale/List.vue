@@ -16,6 +16,7 @@
   import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
     name: 'ListBagOrderSale',
     data () {
@@ -94,6 +95,7 @@
       }
     },
     components: {
+      MauDataTable
     },
     methods: {
       actionHandler: function (action, entityObj) {

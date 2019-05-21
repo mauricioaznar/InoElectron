@@ -3,8 +3,8 @@
     <div class="form-group form-row">
       <mau-form-input-select-static
               :availableObjects="options"
-              :displayProperty="'text'"
-              :trackBy="'value'"
+              :displayProperty="'title'"
+              :trackBy="'title'"
               :error="''"
               :name="'selectStatic'"
               v-model="selectedOption"
@@ -59,15 +59,12 @@
         let options = []
         let tableFieldsLength = tableFields.length
         for (let i = 0; i < tableFieldsLength; i++) {
-          let option = {}
           let tableFieldObj = tableFields[i]
-          option.value = tableFieldObj
-          option.text = tableFieldObj.title
           if (tableFieldObj.default) {
-            this.selectedOption = option
+            this.selectedOption = tableFieldObj
           }
           if (!tableFieldObj.hidden) {
-            options.push(option)
+            options.push(tableFieldObj)
           }
         }
         this.options = options
