@@ -2,50 +2,58 @@ import Vue from 'vue'
 
 function createListUrl (entityEndpointName, options) {
   let paginateQuery = (options && options.paginate && options.paginate === true) ? 'paginate=true ' : 'paginate=false'
-  let filterLikeQuery = (options && options.filterLikes) !== undefined ? getFilterLikeQuery(options.filterLikes) : ''
-  let filterExactQuery = (options && options.filterExacts) !== undefined ? getFilterExactQuery(options.filterExacts) : ''
-  let filterEntityQuery = (options && options.filterEntity) !== undefined ? getFilterEntityQuery(options.filterEntity) : ''
+  let filterLikeQuery = (options && options.filterLikes) !== undefined ? getFilterLikesQuery(options.filterLikes) : ''
+  let filterExactQuery = (options && options.filterExacts) !== undefined ? getFilterExactsQuery(options.filterExacts) : ''
+  let filterEntityQuery = (options && options.filterEntities) !== undefined ? getFilterEntitiesQuery(options.filterEntities) : ''
   let filterStartDateTimeQuery = (options && options.filterStartDateTime) !== undefined ? getFilterStartDateTimeQuery(options.filterStartDateTime) : ''
   let filterOrderByQuery = (options && options.filterOrderBy) !== undefined ? getFilterOrderByQuery(options.filterOrderBy) : ''
   return Vue.http.options.root + '/' + entityEndpointName + '/list?' + paginateQuery + filterLikeQuery + filterExactQuery + filterEntityQuery + filterStartDateTimeQuery + filterOrderByQuery
-  function getFilterLikeQuery (filterLikes) {
+  function getFilterLikesQuery (filterLikes) {
     let filterLikeQuery = ''
-    let i = 0
+    let i = 1
     for (let filterLikeObjectKey in filterLikes) {
       if (filterLikes.hasOwnProperty(filterLikeObjectKey)) {
         let filterLikeObjectValue = filterLikes[filterLikeObjectKey]
-        if (i === 0) {
-          filterLikeQuery += '&filter=' + filterLikeObjectKey + '&filter_value=' + filterLikeObjectValue
-        } else if (i === 1) {
-          filterLikeQuery += '&filter_2=' + filterLikeObjectKey + '&value_2=' + filterLikeObjectValue
-        } else if (i === 2) {
-          filterLikeQuery += '&filter_3=' + filterLikeObjectKey + '&value_3=' + filterLikeObjectValue
+        if (i <= 5) {
+          filterLikeQuery += '&filter_like_' + i + '=' + filterLikeObjectKey + '&filter_like_value_' + i + '=' + filterLikeObjectValue
         }
         i++
       }
     }
     return filterLikeQuery
   }
-  function getFilterExactQuery (filterExacts) {
+  function getFilterExactsQuery (filterExacts) {
     let filterExactQuery = ''
-    let i = 0
+    let i = 1
     for (let filterExactObjectKey in filterExacts) {
       if (filterExacts.hasOwnProperty(filterExactObjectKey)) {
         let filterExactObjectValue = filterExacts[filterExactObjectKey]
-        if (i === 0) {
-          filterExactQuery += '&filter_exact=' + filterExactObjectKey + '&filter_exact_value=' + filterExactObjectValue
-        } else if (i === 1) {
-          filterExactQuery += '&filter_exact_2=' + filterExactObjectKey + '&filter_exact_value_2=' + filterExactObjectValue
-        } else if (i === 2) {
-          filterExactQuery += '&filter_exact_3=' + filterExactObjectKey + '&filter_exact_value_3=' + filterExactObjectValue
+        if (i <= 5) {
+          filterExactQuery += '&filter_exact_' + i + '=' + filterExactObjectKey + '&filter_exact_value_' + i + '=' + filterExactObjectValue
         }
         i++
       }
     }
     return filterExactQuery
   }
-  function getFilterEntityQuery (filterEntity) {
-    return filterEntity !== '' ? '&filter_entity=' + filterEntity : ''
+  function getFilterEntitiesQuery (filterEntities) {
+    let filterEntitiesQuery = ''
+    let i = 1
+    for (let entityName in filterEntities) {
+      if (filterEntities.hasOwnProperty(entityName)) {
+        let entityValues = filterEntities[entityName]
+        for (let entityPropertyName in entityValues) {
+          if (entityValues.hasOwnProperty(entityPropertyName)) {
+            let entityValue = entityValues[entityPropertyName]
+            if (i <= 5) {
+              filterEntitiesQuery += '&filter_entity_' + i + '=' + entityName + '&filter_entity_property_' + i + '=' + entityPropertyName + '&filter_entity_value_' + i + '=' + entityValue
+              i++
+            }
+          }
+        }
+      }
+    }
+    return filterEntitiesQuery
   }
   function getFilterStartDateTimeQuery (filterStartDateObject) {
     let filterStartDateQuery = ''

@@ -72,13 +72,13 @@
       doFilter () {
         let filterParams = {}
         if (!this.selectedOption.entity) {
-          filterParams['filter'] = this.selectedOption.name
-          filterParams['filter_value'] = this.filteredText
+          filterParams['filter_like_1'] = this.selectedOption.name
+          filterParams['filter_like_value_1'] = this.filteredText
         }
         if (this.selectedOption.entity) {
-          filterParams['filter'] = this.selectedOption.entityFieldName
-          filterParams['filter_value'] = this.filteredText
-          filterParams['filter_entity'] = this.selectedOption.entity
+          filterParams['filter_entity_1'] = this.selectedOption.entity
+          filterParams['filter_entity_property_1'] = this.selectedOption.entityFieldName
+          filterParams['filter_entity_value_1'] = this.filteredText
         }
         this.$emit('filter', filterParams)
       }

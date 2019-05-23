@@ -124,12 +124,12 @@
         GenericApiOperations.edit(EntityTypes.ORDER_SALE.apiName,
           oldEventId,
           {[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name]: newOrderSaleCollectionStatusId})
-        .then((result) => {
-          let newEvent = this.createEvent(result)
-          oldEvent.cssClass = newEvent.cssClass
-          oldEvent.title = newEvent.title
-          oldEvent.YOUR_DATA.saleObj = newEvent.YOUR_DATA.saleObj
-        })
+          .then((result) => {
+            let newEvent = this.createEvent(result)
+            oldEvent.cssClass = newEvent.cssClass
+            oldEvent.title = newEvent.title
+            oldEvent.YOUR_DATA.saleObj = newEvent.YOUR_DATA.saleObj
+          })
       },
       createEvent (saleObj) {
         let title = ''

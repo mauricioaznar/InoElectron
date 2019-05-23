@@ -4,7 +4,6 @@
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
                       :actions="actions"
-                      :filterExact="filterExact"
                       @actionClicked="actionHandler"
       ></mau-data-table>
     </mau-crud-list>

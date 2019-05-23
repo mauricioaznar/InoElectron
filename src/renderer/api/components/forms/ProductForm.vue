@@ -9,7 +9,7 @@
                 :endpointName="productTypeEndpointName"
                 v-model="product.productType"
                 :name="PropertiesReference.PRODUCT_TYPE.name"
-                :error="errors.first(PropertiesReference.PRODUCT_TYPE.name)"
+                :error="errors.has(PropertiesReference.PRODUCT_TYPE.name) ? errors.first(PropertiesReference.PRODUCT_TYPE.name) : ''"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
@@ -28,7 +28,7 @@
                 v-validate="{
                             required: true,
                             remote_unique: {
-                              entityType: productEntityType,
+                              endpointName: productEndpointName,
                               columnName: PropertiesReference.CODE.name,
                               initialValue: initialValues[PropertiesReference.CODE.name]
                             }
@@ -133,7 +133,7 @@
                 :endpointName="materialEndpointName"
                 v-model="product.material"
                 :name="PropertiesReference.MATERIAL.name"
-                :error="errors.first(PropertiesReference.MATERIAL.name)"
+                :error="errors.has(PropertiesReference.MATERIAL.name) ? errors.first(PropertiesReference.MATERIAL.name) : ''"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
@@ -150,7 +150,7 @@
                 :endpointName="packingEndpointName"
                 v-model="product.packing"
                 :name="PropertiesReference.PACKING.name"
-                :error="errors.first(PropertiesReference.PACKING.name)"
+                :error="errors.has(PropertiesReference.PACKING.name) ? errors.first(PropertiesReference.PACKING.name) : ''"
                 :disabled="!userHasWritePrivileges"
                 v-validate="'object_required'"
         >
@@ -193,6 +193,7 @@
         materialEndpointName: EntityTypes.MATERIAL.apiName,
         productTypeEndpointName: EntityTypes.PRODUCT_TYPE.apiName,
         packingEndpointName: EntityTypes.PACKING.apiName,
+        productEndpointName: EntityTypes.PRODUCT.apiName,
         PropertiesReference: PropertiesReference
       }
     },
