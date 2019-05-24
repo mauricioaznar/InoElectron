@@ -166,19 +166,6 @@
         default: function () {
           return []
         }
-      },
-      filterExact: {
-        type: Object,
-        validator: function (value) {
-          let size = 0
-          for (let key in value) {
-            if (value.hasOwnProperty(key)) {
-              size++
-            }
-          }
-          if (size !== 1) console.error('Filter Exact lenght is bigger than 1')
-          return (size === 1)
-        }
       }
     },
     methods: {
@@ -197,14 +184,7 @@
         this.setAppendParams()
       },
       setAppendParams: function () {
-        let appendParams = this.filterBarParams
-        for (let filterExactKey in this.filterExact) {
-          if (this.filterExact.hasOwnProperty(filterExactKey)) {
-            appendParams['filter_exact'] = filterExactKey
-            appendParams['filter_exact_value'] = this.filterExact[filterExactKey]
-          }
-        }
-        this.appendParams = appendParams
+        this.appendParams = this.filterBarParams
         Vue.nextTick(() => this.$refs.vuetable.refresh())
       },
       onPaginationData (paginationData) {

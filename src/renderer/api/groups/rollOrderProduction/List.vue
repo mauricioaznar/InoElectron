@@ -4,7 +4,6 @@
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
                       :actions="actions"
-                      :filterExact="filterExact"
                       @actionClicked="actionHandler"
       ></mau-data-table>
     </mau-crud-list>
@@ -22,8 +21,7 @@
     name: 'ListRollOrderProduction',
     data () {
       return {
-        apiUrl: GenericApiUrls.createListUrl(EntityTypes.ROLL_ORDER_PRODUCTION.apiName, {paginate: true}),
-        filterExact: {[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name]: 2},
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.ROLL_ORDER_PRODUCTION.apiName, {paginate: true, filterExacts: {[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name]: 2}}),
         canEdit: true,
         tableFields: [
           {
