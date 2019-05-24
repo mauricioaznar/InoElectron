@@ -28,54 +28,54 @@
             name: OrderRequestPropertiesReference.ORDER_CODE.name,
             title: OrderRequestPropertiesReference.ORDER_CODE.title,
             sortField: OrderRequestPropertiesReference.ORDER_CODE.name,
-            filter: true
+            filterType: 'text'
           },
           {
             name: OrderRequestPropertiesReference.DATE.name,
             title: OrderRequestPropertiesReference.DATE.title,
             sortField: OrderRequestPropertiesReference.DATE.name,
             callback: DisplayFunctions.getDateFromDateTime,
-            filter: true,
-            default: true
+            filterType: 'date'
           },
           {
             name: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_REQUESTED.name,
             title: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_REQUESTED.title,
-            callback: DisplayFunctions.getOrderSalesProductsRequested,
-            hidden: true
+            callback: DisplayFunctions.getOrderSalesProductsRequested
+
           },
           {
             name: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_NOT_REQUESTED.name,
             title: OrderRequestPropertiesReference.ORDER_SALES_PRODUCTS_NOT_REQUESTED.title,
-            callback: DisplayFunctions.getOrderSalesProductsNotRequested,
-            hidden: true
+            callback: DisplayFunctions.getOrderSalesProductsNotRequested
           },
           {
             name: OrderRequestPropertiesReference.CLIENT.name,
             title: OrderRequestPropertiesReference.CLIENT.title,
             callback: DisplayFunctions.getPersona,
-            entity: EntityTypes.CLIENT.name,
+            filterType: 'entity',
+            entityName: EntityTypes.CLIENT.name,
             entityFieldName: 'name'
           },
           {
             name: OrderRequestPropertiesReference.COMPANY.name,
             title: OrderRequestPropertiesReference.COMPANY.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.COMPANY.name,
+            filterType: 'entity',
+            entityName: EntityTypes.COMPANY.name,
             entityFieldName: 'name'
           },
           {
             name: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name,
             title: OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.ORDER_REQUEST_STATUS.name,
+            filterType: 'entity',
+            entityName: EntityTypes.ORDER_REQUEST_STATUS.name,
             entityFieldName: 'name'
           },
           {
             name: OrderRequestPropertiesReference.TOTAL_COST.name,
             title: OrderRequestPropertiesReference.TOTAL_COST.title,
-            callback: DisplayFunctions.getValue,
-            hidden: true
+            callback: DisplayFunctions.getValue
           }
         ],
         actions: [

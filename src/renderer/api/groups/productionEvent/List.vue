@@ -27,51 +27,60 @@
           {
             name: ProductionEventPropertiesReference.DESCRIPTION.name,
             title: ProductionEventPropertiesReference.DESCRIPTION.title,
-            callback: DisplayFunctions.getValue
+            callback: DisplayFunctions.getValue,
+            filterType: 'text'
           },
           {
             name: ProductionEventPropertiesReference.START_DATE_TIME.name,
             title: ProductionEventPropertiesReference.START_DATE_TIME.title,
-            callback: DisplayFunctions.getDateTime
+            callback: DisplayFunctions.getDateTime,
+            filterType: 'date'
           },
           {
             name: ProductionEventPropertiesReference.END_DATE_TIME.name,
             title: ProductionEventPropertiesReference.END_DATE_TIME.title,
-            callback: DisplayFunctions.getDateTime
+            callback: DisplayFunctions.getDateTime,
+            filterType: 'date'
           },
           {
             name: ProductionEventPropertiesReference.MACHINE.name,
             title: ProductionEventPropertiesReference.MACHINE.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.MACHINE.name,
+            filterType: 'entity',
+            entityName: EntityTypes.MACHINE.name,
             entityFieldName: 'name'
           },
           {
             name: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name,
             title: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.PRODUCTION_EVENT_TYPE.name,
+            filterType: 'entity',
+            entityName: EntityTypes.PRODUCTION_EVENT_TYPE.name,
             entityFieldName: 'name'
           },
           {
             name: ProductionEventPropertiesReference.CHECKS.name,
             title: ProductionEventPropertiesReference.CHECKS.title,
             callback: DisplayFunctions.getNameArray,
-            hidden: true
+            filterType: 'entity',
+            entityName: ProductionEventPropertiesReference.CHECKS.name,
+            entityFieldName: 'name'
           },
           {
             name: ProductionEventPropertiesReference.REPORT_EMPLOYEE.name,
             title: ProductionEventPropertiesReference.REPORT_EMPLOYEE.title,
             callback: DisplayFunctions.getPersona,
-            entity: EntityTypes.EMPLOYEE.name,
-            hidden: true
+            filterType: 'entity',
+            entityFieldName: 'fullname',
+            entityName: EntityTypes.EMPLOYEE.name
           },
           {
             name: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name,
             title: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title,
             callback: DisplayFunctions.getPersona,
-            entity: EntityTypes.EMPLOYEE.name,
-            hidden: true
+            filterType: 'entity',
+            entityFieldName: 'fullname',
+            entityName: EntityTypes.EMPLOYEE.name
           }
         ],
         actions: [

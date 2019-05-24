@@ -13,7 +13,7 @@
                                 <mau-form-input-select-dynamic
                                         v-model="employeeSelected"
                                         :label="'Empleado seleccionado'"
-                                        :displayProperty="'full_name'"
+                                        :displayProperty="'fullname'"
                                         :endpointName="employeeEndpointName"
                                         :error="''"
                                         :name="'employee'"

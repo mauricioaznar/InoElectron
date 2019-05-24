@@ -54,7 +54,7 @@
                       :endpointName="clientEndpointName"
                       :initialObject="initialClient"
                       :label="OrderRequestPropertiesReference.CLIENT.title"
-                      :displayProperty="'full_name'"
+                      :displayProperty="'fullname'"
                       :searchedProperties="['first_name', 'last_name']"
                       v-model="requestOrder.client"
                       :name="OrderRequestPropertiesReference.CLIENT.name"

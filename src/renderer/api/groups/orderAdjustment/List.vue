@@ -31,20 +31,22 @@
             title: BagOrderAdjustmentPropertiesReference.DATE.title,
             sortField: BagOrderAdjustmentPropertiesReference.DATE.name,
             callback: DisplayFunctions.getDateFromDateTime,
-            filter: true,
-            default: true
+            filterType: 'date'
           },
           {
             name: BagOrderAdjustmentPropertiesReference.PRODUCTS.name,
             title: BagOrderAdjustmentPropertiesReference.PRODUCTS.title,
-            hidden: true,
+            filterType: 'entity',
+            entityName: BagOrderAdjustmentPropertiesReference.PRODUCTS.name,
+            entityFieldName: 'description',
             callback: DisplayFunctions.getProducts
           },
           {
             name: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.name,
             title: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.title,
             callback: BagOrderAdjustmentPropertiesReference.ORDER_ADJUSTMENT_TYPE.display,
-            entity: EntityTypes.ORDER_ADJUSTMENT_TYPE.name,
+            filterEntity: 'entity',
+            entityName: EntityTypes.ORDER_ADJUSTMENT_TYPE.name,
             entityFieldName: 'name'
           }
         ],

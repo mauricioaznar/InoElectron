@@ -14,6 +14,12 @@ export default {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
+  FULLNAME: {
+    title: 'Nombre completo',
+    name: 'fullname',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
   EMAIL: {
     title: 'Correo Electronico',
     name: 'email',

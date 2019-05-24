@@ -28,48 +28,57 @@
             name: PropertiesReference.PRODUCT_TYPE.name,
             title: PropertiesReference.PRODUCT_TYPE.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.PRODUCT_TYPE.name,
+            filterType: 'entity',
+            entityName: EntityTypes.PRODUCT_TYPE.name,
             entityFieldName: 'name'
           },
           {
             name: PropertiesReference.CODE.name,
             title: PropertiesReference.CODE.title,
+            filterType: 'text',
             dataClass: 'text-center'
           },
           {
             name: PropertiesReference.DESCRIPTION.name,
             title: PropertiesReference.DESCRIPTION.title,
+            filterType: 'text',
             dataClass: 'text-center'
           },
           {
             name: PropertiesReference.MATERIAL.name,
             title: PropertiesReference.MATERIAL.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.MATERIAL.name,
+            filterType: 'entity',
+            entityName: EntityTypes.MATERIAL.name,
             entityFieldName: 'name'
           },
           {
             name: PropertiesReference.PACKING.name,
             title: PropertiesReference.PACKING.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.PACKING.name,
+            filterType: 'entity',
+            entityName: EntityTypes.PACKING.name,
             entityFieldName: 'name'
           },
           {
             name: PropertiesReference.CURRENT_KILO_PRICE.name,
-            title: PropertiesReference.CURRENT_KILO_PRICE.title
+            title: PropertiesReference.CURRENT_KILO_PRICE.title,
+            filterType: 'text'
           },
           {
             name: PropertiesReference.WIDTH.name,
-            title: PropertiesReference.WIDTH.title
+            title: PropertiesReference.WIDTH.title,
+            filterType: 'text'
           },
           {
             name: PropertiesReference.LENGTH.name,
-            title: PropertiesReference.LENGTH.title
+            title: PropertiesReference.LENGTH.title,
+            filterType: 'text'
           },
           {
             name: PropertiesReference.CURRENT_GROUP_WEIGHT.name,
-            title: PropertiesReference.CURRENT_GROUP_WEIGHT.title
+            title: PropertiesReference.CURRENT_GROUP_WEIGHT.title,
+            filterType: 'text'
           }
         ],
         actions: [

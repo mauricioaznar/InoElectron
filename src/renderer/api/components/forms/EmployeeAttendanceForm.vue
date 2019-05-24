@@ -26,7 +26,7 @@
                       :endpointName="employeeEndpointName"
                       :initialObject="initialValues[EmployeeAttendancePropertiesReference.EMPLOYEE.name]"
                       :label="EmployeeAttendancePropertiesReference.EMPLOYEE.title"
-                      :displayProperty="'full_name'"
+                      :displayProperty="'fullname'"
                       v-model="employeeAttendance.employee"
                       :name="EmployeeAttendancePropertiesReference.EMPLOYEE.name"
                       :data-vv-as="EmployeeAttendancePropertiesReference.EMPLOYEE.title"

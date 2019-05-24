@@ -28,40 +28,45 @@
         tableFields: [
           {
             name: OrderProductionPropertiesReference.PRODUCTS.name,
-            title: 'Productos',
+            title: 'Productos (descripcion)',
             callback: DisplayFunctions.getProducts,
-            hidden: true
+            filterType: 'entity',
+            entityName: OrderProductionPropertiesReference.PRODUCTS.name,
+            entityFieldName: 'description'
           },
           {
             name: OrderProductionPropertiesReference.START_DATE_TIME.name,
             title: OrderProductionPropertiesReference.START_DATE_TIME.title,
             sortField: OrderProductionPropertiesReference.START_DATE_TIME.name,
-            filter: true
+            filterType: 'date'
           },
           {
             name: OrderProductionPropertiesReference.WASTE.name,
             title: OrderProductionPropertiesReference.WASTE.title,
             sortField: OrderProductionPropertiesReference.WASTE.name,
-            filter: true
+            filterType: 'text'
           },
           {
             name: OrderProductionPropertiesReference.END_DATE_TIME.name,
             title: OrderProductionPropertiesReference.END_DATE_TIME.title,
             sortField: OrderProductionPropertiesReference.END_DATE_TIME.name,
-            filter: true
+            filterType: 'date'
           },
           {
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
             callback: DisplayFunctions.getPersona,
-            entity: EntityTypes.EMPLOYEE.name,
-            entityFieldName: 'last_name'
+            filterType: 'entity',
+            entityName: EntityTypes.EMPLOYEE.name,
+            entityFieldName: 'fullname'
           },
           {
             name: OrderProductionPropertiesReference.MACHINES.name,
             title: OrderProductionPropertiesReference.MACHINES.title,
             callback: DisplayFunctions.getFirstNameFromArray,
-            hidden: true
+            filterType: 'entity',
+            entityName: EntityTypes.MACHINE.name,
+            entityFieldName: 'name'
           }
         ],
         actions: [

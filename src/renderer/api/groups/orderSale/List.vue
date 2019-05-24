@@ -27,62 +27,67 @@
             name: OrderSalePropertiesReference.ORDER_CODE.name,
             title: OrderSalePropertiesReference.ORDER_CODE.title,
             sortField: OrderSalePropertiesReference.ORDER_CODE.name,
-            filter: true
+            filterType: 'text'
           },
           {
             name: OrderSalePropertiesReference.DATE.name,
             title: OrderSalePropertiesReference.DATE.title,
             sortField: OrderSalePropertiesReference.DATE.name,
             callback: DisplayFunctions.getDateFromDateTime,
-            filter: true,
-            default: true
+            filterType: 'date'
           },
           {
             name: OrderSalePropertiesReference.RECEIPT_TYPE.name,
             title: OrderSalePropertiesReference.RECEIPT_TYPE.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.ORDER_SALE_RECEIPT_TYPE.name,
+            filterType: 'entity',
+            entityName: EntityTypes.ORDER_SALE_RECEIPT_TYPE.name,
             entityFieldName: 'name'
           },
           {
             name: OrderSalePropertiesReference.PRODUCTS.name,
             title: 'Productos',
-            hidden: true,
-            callback: DisplayFunctions.getProducts
+            callback: DisplayFunctions.getProducts,
+            filterType: 'entity',
+            entityName: OrderSalePropertiesReference.PRODUCTS.name,
+            entityFieldName: 'description'
           },
           {
             name: OrderSalePropertiesReference.CLIENT.name,
             title: OrderSalePropertiesReference.CLIENT.title,
             callback: DisplayFunctions.getPersona,
-            entity: EntityTypes.CLIENT.name,
-            entityFieldName: 'last_name'
+            filterType: 'entity',
+            entityName: EntityTypes.CLIENT.name,
+            entityFieldName: 'fullname'
           },
           {
             name: OrderSalePropertiesReference.ORDER_SALE_STATUS.name,
             title: OrderSalePropertiesReference.ORDER_SALE_STATUS.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.ORDER_SALE_STATUS.name,
+            filterType: 'entity',
+            entityName: EntityTypes.ORDER_SALE_STATUS.name,
             entityFieldName: 'name'
           },
           {
             name: OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name,
             title: OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.title,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.ORDER_SALE_COLLECTION_STATUS.name,
+            filterType: 'entity',
+            entityName: EntityTypes.ORDER_SALE_COLLECTION_STATUS.name,
             entityFieldName: 'name'
           },
           {
             name: OrderSalePropertiesReference.ORDER_REQUEST.name,
             title: OrderSalePropertiesReference.ORDER_REQUEST.title,
             callback: DisplayFunctions.getPropertyFromObject.name + '|order_code',
-            entity: EntityTypes.ORDER_REQUEST.name,
+            filterType: 'entity',
+            entityName: EntityTypes.ORDER_REQUEST.name,
             entityFieldName: 'order_code'
           },
           {
             name: OrderSalePropertiesReference.TOTAL_COST.name,
             title: OrderSalePropertiesReference.TOTAL_COST.title,
-            callback: DisplayFunctions.getValue,
-            hidden: true
+            callback: DisplayFunctions.getValue
           }
         ],
         actions: [

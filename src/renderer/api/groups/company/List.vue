@@ -26,25 +26,31 @@
         tableFields: [
           {
             title: CompanyPropertiesReference.NAME.title,
-            name: CompanyPropertiesReference.NAME.name
+            name: CompanyPropertiesReference.NAME.name,
+            filterType: 'text'
           },
           {
             title: CompanyPropertiesReference.ABBREVIATION.title,
-            name: CompanyPropertiesReference.ABBREVIATION.name
+            name: CompanyPropertiesReference.ABBREVIATION.name,
+            filterType: 'text'
           },
           {
             title: CompanyPropertiesReference.CITY.title,
-            name: CompanyPropertiesReference.CITY.name
+            name: CompanyPropertiesReference.CITY.name,
+            filterType: 'text'
           },
           {
             title: CompanyPropertiesReference.ZIP_CODE.title,
-            name: CompanyPropertiesReference.ZIP_CODE.name
+            name: CompanyPropertiesReference.ZIP_CODE.name,
+            filterType: 'text'
           },
           {
             title: CompanyPropertiesReference.CLIENTS.title,
             name: CompanyPropertiesReference.CLIENTS.name,
             callback: DisplayFunctions.getPersonaArray,
-            hidden: true
+            filterType: 'entity',
+            entityName: CompanyPropertiesReference.CLIENTS.name,
+            entityFieldName: 'fullname'
           }
         ],
         actions: [

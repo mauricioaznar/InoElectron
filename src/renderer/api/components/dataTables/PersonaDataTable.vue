@@ -49,19 +49,25 @@
           name: PersonaPropertiesReference.FIRST_NAME.name,
           title: PersonaPropertiesReference.FIRST_NAME.title,
           sortField: PersonaPropertiesReference.FIRST_NAME.name,
-          filter: true
+          filterType: 'text'
         },
         {
           name: PersonaPropertiesReference.LAST_NAME.name,
           title: PersonaPropertiesReference.LAST_NAME.title,
           sortField: PersonaPropertiesReference.LAST_NAME.name,
-          filter: true
+          filterType: 'text'
+        },
+        {
+          name: PersonaPropertiesReference.FULLNAME.name,
+          title: PersonaPropertiesReference.FULLNAME.title,
+          sortField: PersonaPropertiesReference.FULLNAME.name,
+          filterType: 'text'
         },
         {
           name: PersonaPropertiesReference.CELLPHONE.name,
           title: PersonaPropertiesReference.CELLPHONE.title,
           sortField: PersonaPropertiesReference.CELLPHONE.name,
-          filter: true
+          filterType: 'text'
         }
       ]
       if (this.clientMode) {
@@ -69,14 +75,15 @@
           name: ClientPropertiesReference.COMPANY.name,
           title: ClientPropertiesReference.COMPANY.title,
           callback: DisplayFunctions.getNameFromObject,
-          entity: EntityTypes.COMPANY.name,
+          filterType: 'entity',
+          entityName: EntityTypes.COMPANY.name,
           entityFieldName: 'name'
         })
         this.tableFields.push({
           name: PersonaPropertiesReference.EMAIL.name,
           title: PersonaPropertiesReference.EMAIL.title,
           sortField: PersonaPropertiesReference.EMAIL.name,
-          filter: true
+          filterType: 'text'
         })
       }
       if (this.employeeMode) {
@@ -84,7 +91,8 @@
           name: EmployeePropertiesReference.EMPLOYEE_TYPE.name,
           title: EmployeePropertiesReference.EMPLOYEE_TYPE.title,
           callback: DisplayFunctions.getNameFromObject,
-          entity: EntityTypes.EMPLOYEE_TYPE.name,
+          filterType: 'entity',
+          entityName: EntityTypes.EMPLOYEE_TYPE.name,
           entityFieldName: 'name'
         })
       }

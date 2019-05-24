@@ -28,22 +28,22 @@
             name: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name,
             title: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.title,
             sortField: EmployeeAttendancePropertiesReference.ENTRANCE_DATE_TIME.name,
-            filter: true
+            filterType: 'date'
           },
           {
             name: EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name,
             title: EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.title,
             sortField: EmployeeAttendancePropertiesReference.EXIT_DATE_TIME.name,
-            filter: true
+            filterType: 'date'
           },
           {
             name: EmployeeAttendancePropertiesReference.EMPLOYEE.name,
             title: EmployeeAttendancePropertiesReference.EMPLOYEE.title,
             sortField: EmployeeAttendancePropertiesReference.EMPLOYEE.name,
-            entity: EntityTypes.EMPLOYEE.name,
-            entityFieldName: 'last_name',
             callback: DisplayFunctions.getPersona,
-            filter: true
+            filterType: 'entity',
+            entityName: EntityTypes.EMPLOYEE.name,
+            entityFieldName: 'last_name'
           },
           {
             name: EmployeeAttendancePropertiesReference.ENTRANCE_IMAGE_NAME.name,

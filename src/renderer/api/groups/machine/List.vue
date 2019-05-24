@@ -32,13 +32,15 @@
         tableFields: [
           {
             title: MachinePropertiesReference.NAME.title,
-            name: MachinePropertiesReference.NAME.name
+            name: MachinePropertiesReference.NAME.name,
+            filterType: 'text'
           },
           {
             title: MachinePropertiesReference.MACHINE_TYPE.title,
             name: MachinePropertiesReference.MACHINE_TYPE.name,
             callback: DisplayFunctions.getNameFromObject,
-            entity: EntityTypes.MACHINE_TYPE.name,
+            filterType: 'entity',
+            entityName: EntityTypes.MACHINE_TYPE.name,
             entityFieldName: 'name'
           }
         ]

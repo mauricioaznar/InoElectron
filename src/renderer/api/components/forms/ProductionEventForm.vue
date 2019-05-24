@@ -73,7 +73,7 @@
             <mau-form-input-select-dynamic
                     :initialObject="initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE.name]"
                     :label="ProductionEventPropertiesReference.REPORT_EMPLOYEE.title"
-                    :displayProperty="'full_name'"
+                    :displayProperty="'fullname'"
                     v-model="productionEvent.reportEmployee"
                     :name="ProductionEventPropertiesReference.REPORT_EMPLOYEE.name"
                     :data-vv-as="ProductionEventPropertiesReference.REPORT_EMPLOYEE.title"
@@ -89,7 +89,7 @@
                     :apiOperationOptions="maintenanceEmployeeApiOperationOptions"
                     :initialObject="initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name]"
                     :label="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title"
-                    :displayProperty="'full_name'"
+                    :displayProperty="'fullname'"
                     v-model="productionEvent.maintenanceEmployee"
                     :name="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name"
                     :data-vv-as="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title"

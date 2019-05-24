@@ -34,12 +34,12 @@ export default {
     return value
   },
   getPersona: function (value) {
-    return value ? value.full_name : ''
+    return value ? value.fullname : ''
   },
   getPersonaArray: function (array) {
     let htmlString = '<ul>'
     for (let i = 0; i < array.length; i++) {
-      htmlString += '<li>' + array[i].full_name + '</li>'
+      htmlString += '<li>' + array[i].fullname + '</li>'
     }
     return htmlString + '</ul>'
   },
