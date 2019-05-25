@@ -6,6 +6,7 @@
                       :rowClassFunction="rowClassFunction"
                       :actions="actions"
                       @actionClicked="actionHandler"
+                      :localStoragePrefix="'employeeAttendanceList'"
       ></mau-data-table>
     </mau-crud-list>
   </div>

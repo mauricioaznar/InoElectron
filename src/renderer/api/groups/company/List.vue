@@ -5,6 +5,7 @@
                       :tableFields="tableFields"
                       @actionClicked="actionHandler"
                       :actions="actions"
+                      :localStoragePrefix="'companyList'"
       >
       </mau-data-table>
     </mau-crud-list>

@@ -5,6 +5,7 @@
                       :actionClicked="actionHandler"
                       :actions="actions"
                       :clientMode="true"
+                      :localStoragePrefix="'clientList'"
       >
       </persona-data-table>
     </mau-crud-list>

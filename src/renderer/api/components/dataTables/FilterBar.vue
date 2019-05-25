@@ -3,6 +3,7 @@
     <div class="form-group form-row mb-3">
       <mau-form-input-select-static
               :availableObjects="filterControls"
+              :initialObjects="initialSelectedFilterControls"
               :displayProperty="'title'"
               :trackBy="'name'"
               :error="''"
@@ -25,7 +26,7 @@
           class="col-md-10"
           v-model="selectedFilterControl.value"
           :name="selectedFilterControl.name"
-          :initialValue="''"
+          :initialValue="selectedFilterControl.initialValue"
           v-validate="'required'"
           :error="errors.has(selectedFilterControl.name) ? errors.first(selectedFilterControl.name) : ''"
       >
@@ -49,7 +50,7 @@
           :class="{'col-md-4': selectedFilterControl.filterDateMode.value === 'range', 'col-md-8': selectedFilterControl.filterDateMode.value !== 'range'}"
           v-model="selectedFilterControl.startDate"
           :name="selectedFilterControl.name + 'startDate'"
-          :initialValue="''"
+          :initialValue="selectedFilterControl.initialStartDate"
           v-validate="'required'"
           :error="errors.has(selectedFilterControl.name + 'startDate') ? errors.first(selectedFilterControl.name + 'startDate') : ''"
       >
@@ -59,7 +60,7 @@
           class="col-sm-12 col-md-4"
           v-model="selectedFilterControl.endDate"
           :name="selectedFilterControl.name + 'endDate'"
-          :initialValue="''"
+          :initialValue="selectedFilterControl.initialEndDate"
           v-validate="'required'"
           :error="errors.has(selectedFilterControl.name + 'endDate') ? errors.first(selectedFilterControl.name + 'endDate') : ''"
       >
@@ -75,6 +76,7 @@
       return {
         buttonDisabled: false,
         selectedFilterControls: [],
+        initialSelectedFilterControls: [],
         filterControls: [],
         filterDateModes: [{ value: 'since', text: 'A partir de' }, { value: 'exact', text: 'Exacto' }, { value: 'range', text: 'Rango' }]
       }
@@ -83,6 +85,10 @@
       tableFields: {
         type: Array,
         required: true
+      },
+      localStoragePrefix: {
+        type: String,
+        required: true
       }
     },
     components: {
@@ -90,10 +96,16 @@
     created () {
       this.getFieldControls(this.tableFields)
     },
+    mounted () {
+      this.doFilter()
+    },
     methods: {
       getFieldControls: function (tableFields) {
-        this.selectedFilterControls = []
+        this.initialSelectedFilterControls = []
         this.filterControls = []
+        let initialSelectedFilterControls = []
+        let filterControls = []
+        let localStorageControls = JSON.parse(window.localStorage.getItem(this.localStoragePrefix)) || []
         let tableFieldsLength = tableFields.length
         for (let i = 0; i < tableFieldsLength; i++) {
           let tableFieldObj = tableFields[i]
@@ -101,28 +113,56 @@
             continue
           }
           let filterControl = {}
+          let savedFilterControl
           filterControl.filterType = tableFieldObj.filterType
           filterControl.name = tableFieldObj.name
           filterControl.title = tableFieldObj.title
-          filterControl.value = ''
+          if (filterControl.filterType === 'text') {
+            savedFilterControl = localStorageControls.find(localStorageControlObj => {
+              return tableFieldObj.name === localStorageControlObj.name && tableFieldObj.filterType === localStorageControlObj.filterType
+            })
+            filterControl.initialValue = savedFilterControl ? savedFilterControl.value : ''
+            filterControl.value = savedFilterControl ? savedFilterControl.value : ''
+          }
           if (filterControl.filterType === 'entity') {
+            savedFilterControl = localStorageControls.find(localStorageControlObj => {
+              return tableFieldObj.name === localStorageControlObj.name &&
+                      tableFieldObj.filterType === localStorageControlObj.filterType &&
+                      tableFieldObj.entityName === localStorageControlObj.entityName &&
+                      tableFieldObj.entityFieldName === localStorageControlObj.entityFieldName
+            })
+            filterControl.initialValue = savedFilterControl ? savedFilterControl.value : ''
             filterControl.entityName = tableFieldObj.entityName
             filterControl.entityFieldName = tableFieldObj.entityFieldName
+            filterControl.value = savedFilterControl ? savedFilterControl.value : ''
           }
           if (filterControl.filterType === 'date') {
-            filterControl.startDate = ''
-            filterControl.endDate = ''
-            filterControl.filterDateMode = {}
-            filterControl.initialFilterDateMode = this.filterDateModes[0]
+            console.log(savedFilterControl)
+            savedFilterControl = localStorageControls.find(localStorageControlObj => {
+              return tableFieldObj.name === localStorageControlObj.name &&
+                      tableFieldObj.filterType === localStorageControlObj.filterType
+            })
+            filterControl.initialStartDate = savedFilterControl ? savedFilterControl.startDateValue : ''
+            filterControl.startDate = filterControl.initialStartDate
+            filterControl.initialEndDate = savedFilterControl ? savedFilterControl.endDateValue : ''
+            filterControl.endDate = filterControl.initialEndDate
+            filterControl.initialFilterDateMode =
+              savedFilterControl && savedFilterControl.filterDateMode
+                ? this.filterDateModes.find(filterDateModeObj => { return filterDateModeObj.value === savedFilterControl.filterDateMode.value }) : this.filterDateModes[0]
+            filterControl.filterDateMode = filterControl.initialFilterDateMode
           }
-          if (tableFieldObj.default) {
-            this.selectedFilterControls.push(filterControl)
+          if (tableFieldObj.default || savedFilterControl) {
+            initialSelectedFilterControls.push(filterControl)
           }
-          this.filterControls.push(filterControl)
+          filterControls.push(filterControl)
         }
+        this.initialSelectedFilterControls = initialSelectedFilterControls
+        this.selectedFilterControls = initialSelectedFilterControls
+        this.filterControls = filterControls
       },
       doFilter () {
         let filterParams = {}
+        let localStorageControls = []
         let filterEntityCount = 0
         let filterDateCount = 0
         let filterTextCount = 0
@@ -131,6 +171,11 @@
             filterParams['filter_like_' + (filterTextCount + 1)] = selectedFilterControlObj.name
             filterParams['filter_like_value_' + (filterTextCount + 1)] = selectedFilterControlObj.value
             filterTextCount++
+            localStorageControls.push({
+              filterType: 'text',
+              value: selectedFilterControlObj.value,
+              name: selectedFilterControlObj.name
+            })
           } else if (selectedFilterControlObj.filterType === 'date') {
             if (selectedFilterControlObj.filterDateMode.value === 'since') {
               filterParams['start_date_' + (filterDateCount + 1)] = selectedFilterControlObj.name
@@ -147,15 +192,29 @@
               filterParams['end_date_value_' + (filterDateCount + 1)] = selectedFilterControlObj.endDate
               filterDateCount++
             }
+            localStorageControls.push({
+              filterType: 'date',
+              name: selectedFilterControlObj.name,
+              filterDateMode: selectedFilterControlObj.filterDateMode,
+              startDateValue: selectedFilterControlObj.startDate,
+              endDateValue: selectedFilterControlObj.endDate ? selectedFilterControlObj.endDate : ''
+            })
           } else if (selectedFilterControlObj.filterType === 'entity') {
             filterParams['filter_entity_' + (filterEntityCount + 1)] = selectedFilterControlObj.entityName
             filterParams['filter_entity_property_' + (filterEntityCount + 1)] = selectedFilterControlObj.entityFieldName
             filterParams['filter_entity_value_' + (filterEntityCount + 1)] = selectedFilterControlObj.value
             filterEntityCount++
+            localStorageControls.push({
+              filterType: 'entity',
+              entityName: selectedFilterControlObj.entityName,
+              entityFieldName: selectedFilterControlObj.entityFieldName,
+              value: selectedFilterControlObj.value
+            })
           }
         })
         this.$validator.validateAll().then((result) => {
           if (result) {
+            window.localStorage.setItem(this.localStoragePrefix, JSON.stringify(localStorageControls))
             this.$emit('filter', filterParams)
           }
         })

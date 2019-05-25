@@ -3,7 +3,10 @@
     <div v-if="hasSearchBar">
       <slot name="search" :onFilterSet="onFilterSet">
         <filter-bar
+                ref="filterBar"
                 :tableFields="tableFields"
+                :localStoragePrefix="localStoragePrefix"
+                @loaded="isFilterBarLoading = false"
                 @filter="onFilterSet">
         </filter-bar>
       </slot>
@@ -30,6 +33,7 @@
                 :css="css.table"
                 v-bind:paginationPath="paginationPath"
                 :appendParams="appendParams"
+                :loadOnStart="false"
                 :perPage="perPage"
                 :httpOptions="httpOptions"
                 :row-class="newRowClassFunction"
@@ -84,6 +88,7 @@
     data () {
       return {
         isTableLoading: true,
+        isFilterBarLoading: true,
         perPage: 50,
         colorClasses: {},
         apiMode: true,
@@ -104,7 +109,6 @@
           hidden: true
         })
       }
-      this.setAppendParams()
     },
     props: {
       apiUrl: {
@@ -137,6 +141,10 @@
         default: function () {
           return true
         }
+      },
+      localStoragePrefix: {
+        type: String,
+        required: true
       },
       actions: {
         type: Array,
@@ -180,12 +188,10 @@
         this.$emit('actionClicked', action, data)
       },
       onFilterSet (filterBarParams) {
-        this.filterBarParams = filterBarParams
-        this.setAppendParams()
-      },
-      setAppendParams: function () {
-        this.appendParams = this.filterBarParams
-        Vue.nextTick(() => this.$refs.vuetable.refresh())
+        this.appendParams = filterBarParams
+        this.$nextTick(() => {
+          this.$refs.vuetable.refresh()
+        })
       },
       onPaginationData (paginationData) {
         this.$refs.pagination.setPaginationData(paginationData)

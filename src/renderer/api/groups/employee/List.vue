@@ -5,6 +5,7 @@
                       :actionClicked="actionHandler"
                       :actions="actions"
                       :employeeMode="true"
+                      :localStoragePrefix="'employeeList'"
       >
       </persona-data-table>
     </mau-crud-list>

@@ -4,7 +4,8 @@
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
                       :actions="actions"
-                      @actionClicked="actionHandler"
+                      @actionClicked="actionHandler",
+                      :localStoragePrefix="'orderSaleList'"
       ></mau-data-table>
     </mau-crud-list>
   </div>

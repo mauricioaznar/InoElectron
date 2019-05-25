@@ -5,6 +5,7 @@
                       :tableFields="tableFields"
                       :actions="actions"
                       @actionClicked="actionHandler"
+                      :localStoragePrefix="'productionEventList'"
       >
       </mau-data-table>
     </mau-crud-list>
