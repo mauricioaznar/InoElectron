@@ -6,15 +6,32 @@
           <form method="post" action="/auth/login" name="login">
             <div class="form-group">
               <label class="control-label">Email</label><i class="bar"></i>
-              <b-form-input v-model="email"
-                            type="email"
-              ></b-form-input>
+              <mau-form-input-text
+                  v-model="email"
+                  :type="'email'"
+                  :initialValue="initialEmail"
+                  :error="''"
+                  :name="'email'"
+              ></mau-form-input-text>
             </div>
             <div class="form-group">
               <label class="control-label">Contraseña</label><i class="bar"></i>
-              <b-form-input v-model="password"
-                            type="password"
-              ></b-form-input>
+              <mau-form-input-text
+                  v-model="password"
+                  :type="'password'"
+                  :initialValue="initialPassword"
+                  :error="''"
+                  :name="'password'"
+              ></mau-form-input-text>
+            </div>
+            <div class="d-flex justify-content-start align-content-center align-items-center">
+              <mau-form-input-check-box
+                      class="mr-2"
+                      v-model="rememberCredentials"
+                      :initialValue="initialRememberCredentials"
+              >
+              </mau-form-input-check-box>
+              <label>Recordar</label>
             </div>
             <div class="d-flex flex-row flex-lg-row justify-content-center align-items-center down-container">
               <button class="btn btn-primary" type="submit" v-on:click.prevent="submit">
@@ -39,10 +56,25 @@
       return {
         isLoadingUser: false,
         email: '',
-        password: ''
+        initialEmail: '',
+        password: '',
+        initialPassword: '',
+        rememberCredentials: '',
+        initialRememberCredentials: ''
       }
     },
     name: 'login',
+    created () {
+      let password = JSON.parse(window.localStorage.getItem('Password'))
+      let email = JSON.parse(window.localStorage.getItem('Email'))
+      if (password !== null && email !== null) {
+        this.initialEmail = email
+        this.initialPassword = password
+        this.initialRememberCredentials = 1
+      } else {
+        this.initialRememberCredentials = 0
+      }
+    },
     methods: {
       submit () {
         if (!this.email || !this.password) {
@@ -56,7 +88,14 @@
             Vue.http.headers.common['Accept'] = 'Application/json'
             Vue.http.headers.common['Authorization'] = 'Bearer ' + token
             window.localStorage.setItem('AccessToken', JSON.stringify(token))
-            Notifications.info(_this, 'Bienvendio al sistema de industria')
+            if (_this.rememberCredentials === 1) {
+              window.localStorage.setItem('Email', JSON.stringify(_this.email))
+              window.localStorage.setItem('Password', JSON.stringify(_this.password))
+            } else {
+              window.localStorage.removeItem('Email')
+              window.localStorage.removeItem('Password')
+            }
+            Notifications.info(_this, 'Bienvendio al sistema notarial')
             _this.$router.push({path: '*'})
           }).catch(e => {
             console.log(e)
@@ -65,6 +104,8 @@
           })
         }, 3000)
       }
+    },
+    components: {
     }
   }
 </script>
