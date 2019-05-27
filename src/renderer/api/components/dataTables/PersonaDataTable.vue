@@ -4,6 +4,7 @@
                         :tableFields="tableFields"
                         :actions="actions"
                         @actionClicked="actionClicked"
+                        :localStoragePrefix="localStoragePrefix"
         >
         </mau-data-table>
     </div>
@@ -41,7 +42,11 @@
         }
       },
       actions: Array,
-      actionClicked: Function
+      actionClicked: Function,
+      localStoragePrefix: {
+        type: String,
+        required: true
+      }
     },
     created () {
       this.tableFields = [
