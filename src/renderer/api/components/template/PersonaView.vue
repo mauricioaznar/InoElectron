@@ -25,7 +25,7 @@
           type: Object,
           required: true
         },
-        clientMode: {
+        clientContactMode: {
           type: Boolean,
           default: function () {
             return false
@@ -55,7 +55,7 @@
           title: PersonaPropertiesReference.CELLPHONE.title,
           display: DisplayFunctions.getValue
         })
-        if (this.clientMode) {
+        if (this.clientContactMode) {
           this.properties.push({
             name: ClientContactPropertiesReference.CLIENT.name,
             title: ClientContactPropertiesReference.CLIENT.title,

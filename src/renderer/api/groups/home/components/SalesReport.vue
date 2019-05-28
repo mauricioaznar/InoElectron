@@ -1,7 +1,7 @@
 <template>
     <div>
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
-        <h2 v-if="!isLoading">Reporte de empresas</h2>
+        <h2 v-if="!isLoading">Reporte de clientes</h2>
         <table v-if="!isLoading" class="table">
             <thead>
                 <tr>
@@ -15,14 +15,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(company, index) in companies">
-                    <td>{{company.name}}</td>
-                    <td>{{company.calculations.requests_total}}</td>
-                    <td>{{company.calculations.finalized_requests_total}}</td>
-                    <td>{{company.calculations.sales_total}}</td>
-                    <td>{{company.calculations.requests_total_cost}}</td>
-                    <td>{{company.calculations.sales_total_cost}}</td>
-                    <td v-if="company.calculations.finalized_requests_total > 0">{{Math.round(company.calculations.finalized_requests_total_days_difference / company.calculations.finalized_requests_total * 100) / 100}}</td>
+                <tr v-for="(client, index) in clients">
+                    <td>{{client.name}}</td>
+                    <td>{{client.calculations.requests_total}}</td>
+                    <td>{{client.calculations.finalized_requests_total}}</td>
+                    <td>{{client.calculations.sales_total}}</td>
+                    <td>{{client.calculations.requests_total_cost}}</td>
+                    <td>{{client.calculations.sales_total_cost}}</td>
+                    <td v-if="client.calculations.finalized_requests_total > 0">{{Math.round(client.calculations.finalized_requests_total_days_difference / client.calculations.finalized_requests_total * 100) / 100}}</td>
                     <td v-else>-</td>
                 </tr>
             </tbody>
@@ -88,7 +88,7 @@
         salesByMonthByClientCostData: '',
         isLoading: true,
         timeout: '',
-        companies: [],
+        clients: [],
         interval: '',
         monthNames: '',
         colors: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
@@ -163,60 +163,60 @@
         Promise.all([SpecificApiOperations.getStats('sales'), GenericApiOperations.list(EntityTypes.CLIENT.apiName, {paginate: false})]).then(result => {
           let requests = result[0]['requests']
           let sales = result[0]['sales']
-          let companies = result[1]
-          for (let compIndex = 0; compIndex < companies.length; compIndex++) {
-            let company = companies[compIndex]
-            company['calculations'] = {}
-            company['years'] = []
-            company['calculations']['requests_total'] = 0
-            company['calculations']['requests_total_cost'] = 0
-            company['calculations']['sales_total'] = 0
-            company['calculations']['sales_total_cost'] = 0
-            company['calculations']['finalized_requests_total'] = 0
-            company['calculations']['finalized_requests_total_days_difference'] = 0
+          let clients = result[1]
+          for (let clientIndex = 0; clientIndex < clients.length; clientIndex++) {
+            let client = clients[clientIndex]
+            client['calculations'] = {}
+            client['years'] = []
+            client['calculations']['requests_total'] = 0
+            client['calculations']['requests_total_cost'] = 0
+            client['calculations']['sales_total'] = 0
+            client['calculations']['sales_total_cost'] = 0
+            client['calculations']['finalized_requests_total'] = 0
+            client['calculations']['finalized_requests_total_days_difference'] = 0
             for (let i = 2018; i <= 2019; i++) {
-              let companyYearData = []
+              let clientYearData = []
               for (let j = 0; j < this.monthNames.length; j++) {
-                let companyMonthData = {
+                let clientMonthData = {
                   total_kilos_sold: 0,
                   total_kilos_requested: 0,
                   total_cost_requested: 0,
                   total_cost_sold: 0,
                   total_cost_reached: 0
                 }
-                companyYearData.push(companyMonthData)
+                clientYearData.push(clientMonthData)
               }
-              company['years'][i - 2018] = companyYearData
+              client['years'][i - 2018] = clientYearData
             }
           }
           for (let reqIndex = 0; reqIndex < requests.length; reqIndex++) {
             let request = requests[reqIndex]
-            let companyFound = companies.find(companyObj => { return companyObj['id'] === request['company_id'] })
+            let clientFound = clients.find(clientObj => { return clientObj['id'] === request['client_id'] })
             let requestMomentDate = moment(request['order_request_date'])
             let requestMonth = requestMomentDate.month()
             let requestYear = requestMomentDate.year() - 2018
-            companyFound['calculations']['requests_total']++
-            companyFound['calculations']['requests_total_cost'] = Math.round((companyFound['calculations']['requests_total_cost'] + request['total_cost_requested']) * 100) / 100
-            companyFound['years'][requestYear][requestMonth]['total_kilos_requested'] += request['total_kilos_requested']
-            companyFound['years'][requestYear][requestMonth]['total_cost_requested'] += request['total_cost_requested']
+            clientFound['calculations']['requests_total']++
+            clientFound['calculations']['requests_total_cost'] = Math.round((clientFound['calculations']['requests_total_cost'] + request['total_cost_requested']) * 100) / 100
+            clientFound['years'][requestYear][requestMonth]['total_kilos_requested'] += request['total_kilos_requested']
+            clientFound['years'][requestYear][requestMonth]['total_cost_requested'] += request['total_cost_requested']
             if (request['order_request_status_id'] === 3) {
-              companyFound['calculations']['finalized_requests_total']++
-              companyFound['calculations']['finalized_requests_total_days_difference'] = Math.round((companyFound['calculations']['finalized_requests_total_days_difference'] + request['days_difference']) * 100) / 100
-              companyFound['years'][requestYear][requestMonth]['total_cost_reached'] += (Math.round((request['total_cost_requested'] - request['total_cost_sold']) * 100) / 100)
+              clientFound['calculations']['finalized_requests_total']++
+              clientFound['calculations']['finalized_requests_total_days_difference'] = Math.round((clientFound['calculations']['finalized_requests_total_days_difference'] + request['days_difference']) * 100) / 100
+              clientFound['years'][requestYear][requestMonth]['total_cost_reached'] += (Math.round((request['total_cost_requested'] - request['total_cost_sold']) * 100) / 100)
             }
           }
           for (let saleIndex = 0; saleIndex < sales.length; saleIndex++) {
             let sale = sales[saleIndex]
-            let companyFound = companies.find(companyObj => { return companyObj['id'] === sale['company_id'] })
+            let clientFound = clients.find(clientObj => { return clientObj['id'] === sale['client_id'] })
             let saleMomentDate = moment(sale['order_sale_date'])
             let saleMonth = saleMomentDate.month()
             let saleYear = saleMomentDate.year() - 2018
-            companyFound['calculations']['sales_total']++
-            companyFound['calculations']['sales_total_cost'] = Math.round((companyFound['calculations']['sales_total_cost'] + sale['total_cost_sold']) * 100) / 100
-            companyFound['years'][saleYear][saleMonth]['total_kilos_sold'] += sale['total_kilos_sold']
-            companyFound['years'][saleYear][saleMonth]['total_cost_sold'] += sale['total_cost_sold']
+            clientFound['calculations']['sales_total']++
+            clientFound['calculations']['sales_total_cost'] = Math.round((clientFound['calculations']['sales_total_cost'] + sale['total_cost_sold']) * 100) / 100
+            clientFound['years'][saleYear][saleMonth]['total_kilos_sold'] += sale['total_kilos_sold']
+            clientFound['years'][saleYear][saleMonth]['total_cost_sold'] += sale['total_cost_sold']
           }
-          this.companies = companies
+          this.clients = clients
           let vm = this
           this.timeout = setTimeout(function () {
             vm.isLoading = false
@@ -229,8 +229,8 @@
       // clearInterval(this.interval)
     },
     watch: {
-      companies: function (companies) {
-        if (companies === undefined) {
+      clients: function (clients) {
+        if (clients === undefined) {
           return
         }
         let totalKilosSoldYearsData = []
@@ -247,11 +247,11 @@
             let kilosRequestedMonthTotal = 0
             let costSoldMonthData = 0
             let costRequestedMonthData = 0
-            for (let companyIndex = 0; companyIndex < companies.length; companyIndex++) {
-              kilosSoldMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_kilos_sold']
-              kilosRequestedMonthTotal += companies[companyIndex]['years'][yearIndex][monthIndex]['total_kilos_requested']
-              costSoldMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_cost_sold']
-              costRequestedMonthData += companies[companyIndex]['years'][yearIndex][monthIndex]['total_cost_requested']
+            for (let clientIndex = 0; clientIndex < clients.length; clientIndex++) {
+              kilosSoldMonthData += clients[clientIndex]['years'][yearIndex][monthIndex]['total_kilos_sold']
+              kilosRequestedMonthTotal += clients[clientIndex]['years'][yearIndex][monthIndex]['total_kilos_requested']
+              costSoldMonthData += clients[clientIndex]['years'][yearIndex][monthIndex]['total_cost_sold']
+              costRequestedMonthData += clients[clientIndex]['years'][yearIndex][monthIndex]['total_cost_requested']
             }
             totalKilosSoldYearData.push(kilosSoldMonthData)
             totalKilosRequestedYearData.push(kilosRequestedMonthTotal)
@@ -298,33 +298,33 @@
               }
             ]
           })
-          let companiesTotalKilosSoldYear1DataSets = companies.map((companyObj, i) => {
+          let clientsTotalKilosSoldYear1DataSets = clients.map((clientObj, i) => {
             return {
-              label: companyObj['name'],
+              label: clientObj['name'],
               borderColor: this.colors[i],
               fill: false,
-              data: companyObj['years'][yearIndex].map(companyYear1DataObj => {
-                return companyYear1DataObj['total_kilos_sold']
+              data: clientObj['years'][yearIndex].map(clientYear1DataObj => {
+                return clientYear1DataObj['total_kilos_sold']
               })
             }
           })
           this.salesByMonthByClientKilosData.push({
             labels: this.monthNames,
-            datasets: companiesTotalKilosSoldYear1DataSets
+            datasets: clientsTotalKilosSoldYear1DataSets
           })
-          let companiesTotalCostSoldYear1DataSets = companies.map((companyObj, i) => {
+          let clientsTotalCostSoldYear1DataSets = clients.map((clientObj, i) => {
             return {
-              label: companyObj['name'],
+              label: clientObj['name'],
               borderColor: this.colors[i],
               fill: false,
-              data: companyObj['years'][yearIndex].map(companyYear1DataObj => {
-                return companyYear1DataObj['total_cost_sold']
+              data: clientObj['years'][yearIndex].map(clientYear1DataObj => {
+                return clientYear1DataObj['total_cost_sold']
               })
             }
           })
           this.salesByMonthByClientCostData.push({
             labels: this.monthNames,
-            datasets: companiesTotalCostSoldYear1DataSets
+            datasets: clientsTotalCostSoldYear1DataSets
           })
         }
       }

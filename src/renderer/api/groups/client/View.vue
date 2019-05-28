@@ -20,7 +20,7 @@
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
   export default {
-    name: 'ViewCompany',
+    name: 'ViewClient',
     data () {
       return {
         entity: null,
@@ -62,8 +62,8 @@
             display: DisplayFunctions.getValue
           },
           {
-            title: ClientPropertiesReference.CLIENTS.title,
-            name: ClientPropertiesReference.CLIENTS.name,
+            title: ClientPropertiesReference.CONTACTS.title,
+            name: ClientPropertiesReference.CONTACTS.name,
             display: DisplayFunctions.getPersonaArray
           }
         ]

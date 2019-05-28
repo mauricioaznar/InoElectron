@@ -67,12 +67,6 @@ export default {
   getDateFromDateTime: function (date) {
     return ConvertDateTimeTo.date(date)
   },
-  getDateYear: function (date) {
-    return moment(date).format('Y')
-  },
-  getPersonaInformation: function (persona) {
-    return persona.companyname
-  },
   getProducts: function (array) {
     let htmlString = '<table class="w-100">'
     htmlString += '<tr><th>Producto</th><th>Kilos</th><th>Grupos</th>'

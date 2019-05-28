@@ -113,7 +113,7 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
-    name: 'CompanyForm',
+    name: 'ClientForm',
     data () {
       return {
         ClientPropertiesReference: ClientPropertiesReference,

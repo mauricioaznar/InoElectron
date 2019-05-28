@@ -29,7 +29,7 @@
         type: String,
         required: true
       },
-      clientMode: {
+      clientContactMode: {
         type: Boolean,
         default: function () {
           return false
@@ -75,7 +75,7 @@
           filterType: 'text'
         }
       ]
-      if (this.clientMode) {
+      if (this.clientContactMode) {
         this.tableFields.push({
           name: ClientContactPropertiesReference.CLIENT.name,
           title: ClientContactPropertiesReference.CLIENT.title,

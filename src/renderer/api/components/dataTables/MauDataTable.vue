@@ -220,7 +220,6 @@
       getProducts: DisplayFunctions.getProducts,
       getOrderSaleProducts: DisplayFunctions.getOrderSaleProducts,
       getPersonaArray: DisplayFunctions.getPersonaArray,
-      getPersonaInformation: DisplayFunctions.getPersonaInformation,
       getOrderSaleTotalCost: DisplayFunctions.getOrderSaleTotalCost,
       getMachineNames: DisplayFunctions.getMachineNames,
       getDateTime: DisplayFunctions.getDateTime,

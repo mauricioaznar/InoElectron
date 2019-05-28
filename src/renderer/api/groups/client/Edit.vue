@@ -14,25 +14,25 @@
       :callback="callback"
     >
       <template slot-scope="params">
-        <company-form
+        <client-form
           :initialObject="entity"
           :saveFunction="params.saveFunction"
           :userHasWritePrivileges="true"
         >
-        </company-form>
+        </client-form>
       </template>
     </mau-crud-edit>
   </div>
 </template>
 
 <script>
-  import CompanyForm from 'renderer/api/components/forms/ClientForm.vue'
+  import ClientForm from 'renderer/api/components/forms/ClientForm.vue'
   import MauEntityPetitioner from 'renderer/api/components/crud/MauEntityPetitioner.vue'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'EditCompany',
+    name: 'EditClient',
     data () {
       return {
         entityType: EntityTypes.CLIENT,
@@ -47,7 +47,7 @@
     },
     components: {
       MauEntityPetitioner,
-      CompanyForm,
+      ClientForm,
       MauSpinner
     },
     methods: {

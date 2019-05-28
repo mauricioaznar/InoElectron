@@ -5,7 +5,7 @@
                       :tableFields="tableFields"
                       @actionClicked="actionHandler"
                       :actions="actions"
-                      :localStoragePrefix="'companyList'"
+                      :localStoragePrefix="'clientList'"
       >
       </mau-data-table>
     </mau-crud-list>
@@ -20,7 +20,7 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
-    name: 'ListCompany',
+    name: 'ListClient',
     data () {
       return {
         apiUrl: GenericApiUrls.createListUrl(EntityTypes.CLIENT.apiName, {paginate: true}),
@@ -70,7 +70,7 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewCompany',
+            name: 'ViewClient',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }

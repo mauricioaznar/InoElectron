@@ -18,7 +18,7 @@
           :initialObject="entity"
           :saveFunction="params.saveFunction"
           :userHasWritePrivileges="true"
-          :clientMode="true"
+          :clientContactMode="true"
         >
         </persona-form>
       </template>

@@ -136,15 +136,15 @@
         let cssClass = ''
         let totalCost = parseInt(saleObj.total_cost / 1000)
         if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 1) {
-          title = '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k p'
+          title = '#' + saleObj.order_code + ' ' + saleObj.client.abbreviation + ' ' + totalCost + 'k p'
           cssClass = 'sale pending'
         }
         if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 2) {
-          title = '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k pc'
+          title = '#' + saleObj.order_code + ' ' + saleObj.client.abbreviation + ' ' + totalCost + 'k pc'
           cssClass = 'sale partially-collected'
         }
         if (saleObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] === 3) {
-          title = '#' + saleObj.order_code + ' ' + saleObj.company.abbreviation + ' ' + totalCost + 'k c'
+          title = '#' + saleObj.order_code + ' ' + saleObj.client.abbreviation + ' ' + totalCost + 'k c'
           cssClass = 'sale collected'
         }
         return {

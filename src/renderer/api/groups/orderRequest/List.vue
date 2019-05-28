@@ -55,7 +55,7 @@
             callback: DisplayFunctions.getPersona,
             filterType: 'entity',
             entityName: EntityTypes.CLIENT_CONTACT.name,
-            entityFieldName: 'name'
+            entityFieldName: 'fullname'
           },
           {
             name: OrderRequestPropertiesReference.CLIENT.name,

@@ -5,7 +5,7 @@
       :callback="callback"
     >
       <template slot-scope="params">
-        <persona-form :saveFunction="params.save" :clientMode="true"></persona-form>
+        <persona-form :saveFunction="params.save" :clientContactMode="true"></persona-form>
       </template>
     </mau-crud-create>
   </div>

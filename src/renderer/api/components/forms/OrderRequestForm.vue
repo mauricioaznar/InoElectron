@@ -51,7 +51,7 @@
               <mau-form-input-select-dynamic
                       :key="requestOrder ? requestOrder.client['id'] : 0"
                       :apiOperationOptions="clientContactApiOperationsOptions"
-                      :endpointName="clientEndpointName"
+                      :endpointName="clientContactEndpointName"
                       :initialObject="initialClientContact"
                       :label="OrderRequestPropertiesReference.CLIENT_CONTACT.title"
                       :displayProperty="'fullname'"
@@ -148,8 +148,8 @@
         initialOrderCode: '',
         initialOrderRequestStatus: {},
         initialClientContact: {},
-        clientContactEndpointName: EntityTypes.CLIENT_CONTACT.apiName,
         clientEndpointName: EntityTypes.CLIENT.apiName,
+        clientContactEndpointName: EntityTypes.CLIENT_CONTACT.apiName,
         orderRequestStatusEndpointName: EntityTypes.ORDER_REQUEST_STATUS.apiName,
         productEndpointName: EntityTypes.PRODUCT.apiName,
         orderRequestEndpointName: EntityTypes.ORDER_REQUEST.apiName,
@@ -213,7 +213,7 @@
       ]),
       clientContactApiOperationsOptions: function () {
         let clientId = this.requestOrder.client ? this.requestOrder.client[GlobalEntityIdentifier] : ''
-        let filterExacts = {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: clientId}
+        let filterExacts = {[OrderRequestPropertiesReference.CLIENT.relationship_id_name]: clientId}
         return {filterExacts: filterExacts}
       }
     },

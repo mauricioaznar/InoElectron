@@ -4,7 +4,7 @@
       <persona-data-table :apiUrl="apiUrl"
                       :actionClicked="actionHandler"
                       :actions="actions"
-                      :clientMode="true"
+                      :clientContactMode="true"
                       :localStoragePrefix="'clientList'"
       >
       </persona-data-table>

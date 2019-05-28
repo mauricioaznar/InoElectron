@@ -18,7 +18,7 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import PersonaDataTable from 'renderer/api/components/dataTables/PersonaDataTable.vue'
   export default {
-    name: 'ListClient',
+    name: 'ListEmployee',
     data () {
       return {
         apiUrl: GenericApiUrls.createListUrl(EntityTypes.EMPLOYEE.apiName, {paginate: true}),

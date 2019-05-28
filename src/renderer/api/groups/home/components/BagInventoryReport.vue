@@ -22,7 +22,7 @@
                     </tr>
                     <tr v-for="orderItem in row.item['order_items_not_finalized']">
                         <td class="mau-text-center">{{ orderItem['order_request_order_code']}}</td>
-                        <td>{{ orderItem['company_name']}}</td>
+                        <td>{{ orderItem['client_name']}}</td>
                         <td class="mau-text-center">{{ orderItem['total_kilos_requested_not_finalized']}}</td>
                         <td class="mau-text-center">{{ orderItem['total_kilos_sold_given']}}</td>
                         <td class="mau-text-center">{{ orderItem['total_groups_requested_not_finalized']}}</td>
@@ -181,7 +181,7 @@
                       'order_request_order_code': saleProductObj['order_request_order_code'],
                       'total_kilos_sold_given': saleProductObj['kilos'],
                       'total_groups_sold_given': saleProductObj['groups'],
-                      'company_name': saleProductObj['company_name']
+                      'client_name': saleProductObj['client_name']
                     })
                   }
                 }
@@ -225,7 +225,7 @@
                       'order_request_order_code': requestProductObj['order_request_order_code'],
                       'total_kilos_requested_not_finalized': requestProductObj['kilos'],
                       'total_groups_requested_not_finalized': requestProductObj['groups'],
-                      'company_name': requestProductObj['company_name']
+                      'client_name': requestProductObj['client_name']
                     })
                   }
                 }

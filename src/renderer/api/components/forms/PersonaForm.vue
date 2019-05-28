@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="form-group form-row">
-            <div class="col-md-6 col-sm-12" v-if="clientMode">
+            <div class="col-md-6 col-sm-12" v-if="clientContactMode">
                 <mau-form-input-text
                         :initialValue="initialValues[PersonaPropertiesReference.EMAIL.name]"
                         v-model="persona.email"
@@ -40,7 +40,7 @@
                 >
                 </mau-form-input-text>
             </div>
-            <div class="col-sm-12" :class="clientMode ? 'col-md-6' : ''">
+            <div class="col-sm-12" :class="clientContactMode ? 'col-md-6' : ''">
                 <mau-form-input-text
                         :initialValue="initialValues[PersonaPropertiesReference.CELLPHONE.name]"
                         v-model="persona.cellphone"
@@ -49,13 +49,13 @@
                         :type="'cellphone'"
                         :error="errors.has(PersonaPropertiesReference.CELLPHONE.name) ? errors.first(PersonaPropertiesReference.CELLPHONE.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="clientMode ? 'required' : ''"
+                        v-validate="clientContactMode ? 'required' : ''"
                 >
                 </mau-form-input-text>
             </div>
         </div>
         <div class="form-group">
-            <div v-if="clientMode">
+            <div v-if="clientContactMode">
                 <mau-form-input-select-dynamic
                         :initialObject="initialValues[ClientContactPropertiesReference.CLIENT.name]"
                         :label="ClientContactPropertiesReference.CLIENT.title"
@@ -135,7 +135,7 @@
         type: Function,
         required: true
       },
-      clientMode: {
+      clientContactMode: {
         type: Boolean,
         default: function () {
           return false
@@ -172,7 +172,7 @@
         this.initialValues[PersonaPropertiesReference.FIRST_NAME.name] = DefaultValuesHelper.simple(this.initialObject, PersonaPropertiesReference.FIRST_NAME.name)
         this.initialValues[PersonaPropertiesReference.LAST_NAME.name] = DefaultValuesHelper.simple(this.initialObject, PersonaPropertiesReference.LAST_NAME.name)
         this.initialValues[PersonaPropertiesReference.CELLPHONE.name] = DefaultValuesHelper.simple(this.initialObject, PersonaPropertiesReference.CELLPHONE.name)
-        if (this.clientMode) {
+        if (this.clientContactMode) {
           this.initialValues[PersonaPropertiesReference.EMAIL.name] = DefaultValuesHelper.simple(this.initialObject, PersonaPropertiesReference.EMAIL.name)
           this.initialValues[ClientContactPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, ClientContactPropertiesReference.CLIENT.name)
         }
@@ -186,7 +186,7 @@
           [PersonaPropertiesReference.LAST_NAME.name]: this.persona.lastName,
           [PersonaPropertiesReference.CELLPHONE.name]: this.persona.cellphone ? this.persona.cellphone.replace(/\D+/g, '') : ''
         }
-        if (this.clientMode) {
+        if (this.clientContactMode) {
           directParams[ClientContactPropertiesReference.CLIENT.relationship_id_name] = this.persona.client ? this.persona.client[GlobalEntityIdentifier] : null
           directParams[ClientContactPropertiesReference.EMAIL.name] = this.persona.email
         }

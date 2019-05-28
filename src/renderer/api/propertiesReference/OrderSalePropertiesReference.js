@@ -24,7 +24,7 @@ let OrderSalePropertiesReference = {
     name: 'client_contact',
     title: 'Contacto',
     relationship_id_name: 'client_contact_id',
-    display: DisplayFunctions.getPersonaInformation,
+    display: DisplayFunctions.getPersona,
     defaultValue: MauInputDefaultValues.SELECT
   },
   CLIENT: {

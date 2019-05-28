@@ -5,18 +5,18 @@
       :callback="callback"
     >
       <template slot-scope="params">
-        <company-form :saveFunction="params.save"></company-form>
+        <client-form :saveFunction="params.save"></client-form>
       </template>
     </mau-crud-create>
   </div>
 </template>
 
 <script>
-  import CompanyForm from 'renderer/api/components/forms/ClientForm.vue'
+  import ClientForm from 'renderer/api/components/forms/ClientForm.vue'
   import EntityTypes from 'renderer/api/EntityTypes'
   import {mapGetters} from 'vuex'
   export default {
-    name: 'CreateCompany',
+    name: 'CreateClient',
     data () {
       return {
         entityType: EntityTypes.CLIENT
@@ -28,7 +28,7 @@
       }
     },
     components: {
-      CompanyForm
+      ClientForm
     },
     computed: {
       ...mapGetters(['groupDefaultRouteObject'])
