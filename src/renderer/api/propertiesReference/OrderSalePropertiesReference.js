@@ -20,18 +20,17 @@ let OrderSalePropertiesReference = {
     display: DisplayFunctions.getOrderSaleProducts,
     defaultValue: MauInputDefaultValues.MULTISELECT
   },
+  CLIENT_CONTACT: {
+    name: 'client_contact',
+    title: 'Contacto',
+    relationship_id_name: 'client_contact_id',
+    display: DisplayFunctions.getPersonaInformation,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
   CLIENT: {
     name: 'client',
     title: 'Cliente',
     relationship_id_name: 'client_id',
-    display: DisplayFunctions.getPersonaInformation,
-    required: false,
-    defaultValue: MauInputDefaultValues.SELECT
-  },
-  COMPANY: {
-    name: 'company',
-    title: 'Empresa',
-    relationship_id_name: 'company_id',
     display: DisplayFunctions.getNameFromObject,
     required: false,
     defaultValue: MauInputDefaultValues.SELECT

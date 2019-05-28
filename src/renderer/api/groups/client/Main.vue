@@ -1,7 +1,6 @@
 <template>
     <div>
         <action-widget
-                :title="'Client'"
                 :actions="actions"
                 :buttons="buttons"
                 @buttonClicked="buttonClicked"
@@ -36,8 +35,7 @@
             icon: 'fa fa-plus',
             path: RouteObjectHelper.createPath(EntityTypes.CLIENT, 'create')
           }
-        ],
-        buttons: []
+        ]
       }
     },
     computed: {

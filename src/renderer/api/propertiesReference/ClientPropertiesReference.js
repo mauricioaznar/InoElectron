@@ -2,21 +2,15 @@ import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
 import Masks from 'renderer/api/functions/Masks'
 import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaultValues'
 export default {
-  FIRST_NAME: {
-    title: 'Nombre',
-    name: 'first_name',
+  NAME: {
+    title: 'Nombre de la empresa',
+    name: 'name',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
-  LAST_NAME: {
-    title: 'Apellidos',
-    name: 'last_name',
-    display: DisplayFunctions.getValue,
-    defaultValue: MauInputDefaultValues.TEXT
-  },
-  EMAIL: {
-    title: 'Correo Electronico',
-    name: 'email',
+  ABBREVIATION: {
+    title: 'Abreviacion',
+    name: 'abbreviation',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
@@ -26,18 +20,36 @@ export default {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
-  CELLPHONE: {
-    title: 'Telefono del contacto',
-    name: 'cellphone',
+  HOUSE_PHONE: {
+    title: 'Telefono de la empresa',
+    name: 'house_phone',
     display: DisplayFunctions.getValue,
-    mask: Masks.cellphone,
+    mask: Masks.house_phone,
     defaultValue: MauInputDefaultValues.NUMBER
   },
-  COMPANY: {
-    title: 'Empresa',
-    name: 'company',
-    relationship_id_name: 'company_id',
-    display: DisplayFunctions.getNameFromObject,
-    defaultValue: MauInputDefaultValues.SELECT
+  COUNTRY: {
+    title: 'Pais',
+    name: 'country',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
+  CITY: {
+    title: 'Ciudad',
+    name: 'city',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
+  ZIP_CODE: {
+    title: 'Codigo Postal',
+    name: 'zip_code',
+    display: DisplayFunctions.getValue,
+    mask: Masks.regularNumber,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
+  CONTACTS: {
+    title: 'Contactos',
+    name: 'client_contacts',
+    display: DisplayFunctions.getPersonaArray,
+    defaultValue: MauInputDefaultValues.MULTISELECT
   }
 }

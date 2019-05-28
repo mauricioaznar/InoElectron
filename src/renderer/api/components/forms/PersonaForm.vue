@@ -57,13 +57,13 @@
         <div class="form-group">
             <div v-if="clientMode">
                 <mau-form-input-select-dynamic
-                        :initialObject="initialValues[ClientPropertiesReference.COMPANY.name]"
-                        :label="ClientPropertiesReference.COMPANY.title"
+                        :initialObject="initialValues[ClientContactPropertiesReference.CLIENT.name]"
+                        :label="ClientContactPropertiesReference.CLIENT.title"
                         :displayProperty="'name'"
-                        :endpointName="companyEndpointName"
-                        v-model="persona.company"
-                        :name="ClientPropertiesReference.COMPANY.name"
-                        :error="errors.first(ClientPropertiesReference.COMPANY.name)"
+                        :endpointName="clientEndpointName"
+                        v-model="persona.client"
+                        :name="ClientContactPropertiesReference.CLIENT.name"
+                        :error="errors.first(ClientContactPropertiesReference.CLIENT.name)"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'object_required'"
                 >
@@ -95,7 +95,7 @@
 <script>
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import PersonaPropertiesReference from 'renderer/api/propertiesReference/PersonaPropertiesReference'
-  import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
+  import ClientContactPropertiesReference from 'renderer/api/propertiesReference/ClientContactPropertiesReference'
   import EmployeePropertiesReference from 'renderer/api/propertiesReference/EmployeePropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
@@ -108,19 +108,19 @@
     data () {
       return {
         PersonaPropertiesReference: PersonaPropertiesReference,
-        ClientPropertiesReference: ClientPropertiesReference,
+        ClientContactPropertiesReference: ClientContactPropertiesReference,
         EmployeePropertiesReference: EmployeePropertiesReference,
         persona: {
           lastName: '',
           firstName: '',
           email: '',
           cellphone: '',
-          company: {},
+          client: {},
           employeeType: {}
         },
         initialValues: {},
         buttonDisabled: false,
-        companyEndpointName: EntityTypes.COMPANY.apiName,
+        clientEndpointName: EntityTypes.CLIENT.apiName,
         employeeTypeEndpointName: EntityTypes.EMPLOYEE_TYPE.apiName
       }
     },
@@ -174,7 +174,7 @@
         this.initialValues[PersonaPropertiesReference.CELLPHONE.name] = DefaultValuesHelper.simple(this.initialObject, PersonaPropertiesReference.CELLPHONE.name)
         if (this.clientMode) {
           this.initialValues[PersonaPropertiesReference.EMAIL.name] = DefaultValuesHelper.simple(this.initialObject, PersonaPropertiesReference.EMAIL.name)
-          this.initialValues[ClientPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.initialObject, ClientPropertiesReference.COMPANY.name)
+          this.initialValues[ClientContactPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, ClientContactPropertiesReference.CLIENT.name)
         }
         if (this.employeeMode) {
           this.initialValues[EmployeePropertiesReference.EMPLOYEE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, EmployeePropertiesReference.EMPLOYEE_TYPE.name)
@@ -187,8 +187,8 @@
           [PersonaPropertiesReference.CELLPHONE.name]: this.persona.cellphone ? this.persona.cellphone.replace(/\D+/g, '') : ''
         }
         if (this.clientMode) {
-          directParams[ClientPropertiesReference.COMPANY.relationship_id_name] = this.persona.company ? this.persona.company[GlobalEntityIdentifier] : null
-          directParams[ClientPropertiesReference.EMAIL.name] = this.persona.email
+          directParams[ClientContactPropertiesReference.CLIENT.relationship_id_name] = this.persona.client ? this.persona.client[GlobalEntityIdentifier] : null
+          directParams[ClientContactPropertiesReference.EMAIL.name] = this.persona.email
         }
         if (this.employeeMode) {
           directParams[EmployeePropertiesReference.EMPLOYEE_TYPE.relationship_id_name] = this.persona.employeeType ? this.persona.employeeType[GlobalEntityIdentifier] : null

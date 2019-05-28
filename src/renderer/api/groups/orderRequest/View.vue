@@ -30,13 +30,13 @@
             display: DisplayFunctions.getDate
           },
           {
-            title: OrderRequestPropertiesReference.CLIENT.title,
-            name: OrderRequestPropertiesReference.CLIENT.name,
+            title: OrderRequestPropertiesReference.CLIENT_CONTACT.title,
+            name: OrderRequestPropertiesReference.CLIENT_CONTACT.name,
             display: DisplayFunctions.getPersona
           },
           {
-            title: OrderRequestPropertiesReference.COMPANY.title,
-            name: OrderRequestPropertiesReference.COMPANY.name,
+            title: OrderRequestPropertiesReference.CLIENT.title,
+            name: OrderRequestPropertiesReference.CLIENT.name,
             display: DisplayFunctions.getNameFromObject
           },
           {

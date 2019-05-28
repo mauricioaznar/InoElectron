@@ -7,7 +7,7 @@
               @entityResult="entityResultHandler"
       >
       </mau-entity-petitioner>
-      <persona-view v-if="entity" :persona="entity" :clientMode="true"></persona-view>
+      <mau-property-viewer v-if="entity" :entity="entity" :properties="properties"></mau-property-viewer>
   </div>
 </template>
 
@@ -17,12 +17,56 @@
   import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer'
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import EntityType from 'renderer/api/EntityTypes'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
   export default {
-    name: 'ViewClient',
+    name: 'ViewCompany',
     data () {
       return {
         entity: null,
-        entityType: EntityType.CLIENT
+        entityType: EntityType.CLIENT,
+        properties: [
+          {
+            title: ClientPropertiesReference.NAME.title,
+            name: ClientPropertiesReference.NAME.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: ClientPropertiesReference.ABBREVIATION.title,
+            name: ClientPropertiesReference.ABBREVIATION.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: ClientPropertiesReference.ADDRESS1.title,
+            name: ClientPropertiesReference.ADDRESS1.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: ClientPropertiesReference.HOUSE_PHONE.title,
+            name: ClientPropertiesReference.HOUSE_PHONE.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: ClientPropertiesReference.COUNTRY.title,
+            name: ClientPropertiesReference.COUNTRY.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: ClientPropertiesReference.CITY.title,
+            name: ClientPropertiesReference.CITY.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: ClientPropertiesReference.ZIP_CODE.title,
+            name: ClientPropertiesReference.ZIP_CODE.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: ClientPropertiesReference.CLIENTS.title,
+            name: ClientPropertiesReference.CLIENTS.name,
+            display: DisplayFunctions.getPersonaArray
+          }
+        ]
       }
     },
     components: {

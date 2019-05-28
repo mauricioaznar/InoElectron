@@ -9,15 +9,15 @@ export default {
     name: 'productType',
     apiName: 'productType'
   },
+  CLIENT_CONTACT: {
+    name: 'clientContact',
+    apiName: 'clientContact',
+    title: 'Contactos del cliente'
+  },
   CLIENT: {
     name: 'client',
     apiName: 'client',
     title: 'Clientes'
-  },
-  COMPANY: {
-    name: 'company',
-    apiName: 'company',
-    title: 'Companias'
   },
   USER: {
     name: 'user',

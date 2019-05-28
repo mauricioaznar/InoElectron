@@ -1,27 +1,59 @@
 <template>
   <div>
     <mau-crud-list>
-      <persona-data-table :apiUrl="apiUrl"
-                      :actionClicked="actionHandler"
+      <mau-data-table :apiUrl="apiUrl"
+                      :tableFields="tableFields"
+                      @actionClicked="actionHandler"
                       :actions="actions"
-                      :clientMode="true"
-                      :localStoragePrefix="'clientList'"
+                      :localStoragePrefix="'companyList'"
       >
-      </persona-data-table>
+      </mau-data-table>
     </mau-crud-list>
   </div>
 </template>
 
 <script>
-  import EntityTypes from 'renderer/api/EntityTypes'
+  import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
   import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
+  import EntityTypes from 'renderer/api/EntityTypes'
+  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import PersonaDataTable from 'renderer/api/components/dataTables/PersonaDataTable.vue'
+  import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
-    name: 'ListClient',
+    name: 'ListCompany',
     data () {
       return {
         apiUrl: GenericApiUrls.createListUrl(EntityTypes.CLIENT.apiName, {paginate: true}),
+        tableFields: [
+          {
+            title: ClientPropertiesReference.NAME.title,
+            name: ClientPropertiesReference.NAME.name,
+            filterType: 'text'
+          },
+          {
+            title: ClientPropertiesReference.ABBREVIATION.title,
+            name: ClientPropertiesReference.ABBREVIATION.name,
+            filterType: 'text'
+          },
+          {
+            title: ClientPropertiesReference.CITY.title,
+            name: ClientPropertiesReference.CITY.name,
+            filterType: 'text'
+          },
+          {
+            title: ClientPropertiesReference.ZIP_CODE.title,
+            name: ClientPropertiesReference.ZIP_CODE.name,
+            filterType: 'text'
+          },
+          {
+            title: ClientPropertiesReference.CONTACTS.title,
+            name: ClientPropertiesReference.CONTACTS.name,
+            callback: DisplayFunctions.getPersonaArray,
+            filterType: 'entity',
+            entityName: ClientPropertiesReference.CONTACTS.name,
+            entityFieldName: 'fullname'
+          }
+        ],
         actions: [
           {
             name: 'view',
@@ -32,13 +64,13 @@
       }
     },
     components: {
-      PersonaDataTable
+      MauDataTable
     },
     methods: {
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewClient',
+            name: 'ViewCompany',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }

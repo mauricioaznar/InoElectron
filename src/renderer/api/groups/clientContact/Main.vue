@@ -1,6 +1,7 @@
 <template>
     <div>
         <action-widget
+                :title="'ClientContact'"
                 :actions="actions"
                 :buttons="buttons"
                 @buttonClicked="buttonClicked"
@@ -33,9 +34,10 @@
           {
             name: 'Create',
             icon: 'fa fa-plus',
-            path: RouteObjectHelper.createPath(EntityTypes.COMPANY, 'create')
+            path: RouteObjectHelper.createPath(EntityTypes.CLIENT_CONTACT, 'create')
           }
-        ]
+        ],
+        buttons: []
       }
     },
     computed: {
@@ -54,12 +56,12 @@
             {
               name: 'Edit',
               icon: 'fa fa-edit',
-              path: RouteObjectHelper.createPath(EntityTypes.COMPANY, 'edit') + '/' + id
+              path: RouteObjectHelper.createPath(EntityTypes.CLIENT_CONTACT, 'edit') + '/' + id
             },
             {
               name: 'View',
               icon: 'fa fa-eye',
-              path: RouteObjectHelper.createPath(EntityTypes.COMPANY, 'view') + '/' + id
+              path: RouteObjectHelper.createPath(EntityTypes.CLIENT_CONTACT, 'view') + '/' + id
             }
           ])
           this.buttons = [{
@@ -73,7 +75,7 @@
       },
       confirmDelete: function () {
         let id = this.$route.params[GlobalEntityIdentifier]
-        GenericApiOperations.del(EntityTypes.COMPANY.apiName, id).then(result => {
+        GenericApiOperations.del(EntityTypes.CLIENT_CONTACT.apiName, id).then(result => {
           Notifications.success(this)
           this.$router.push({name: this.groupDefaultRouteObject(this.$route).name})
         })

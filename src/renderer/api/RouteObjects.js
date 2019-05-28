@@ -300,13 +300,13 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRO
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
   {
     componentName: 'Main',
     category: Categories.SALES
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
       {
         componentName: 'List',
         groupDefault: true,
@@ -314,18 +314,18 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
         navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
       {
         componentName: 'Create'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
       {
         componentName: 'Edit',
         params: [GlobalEntityIdentifier]
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
       {
         componentName: 'View',
         params: [GlobalEntityIdentifier]
@@ -439,38 +439,38 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.MACHINE,
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
   {
     componentName: 'Main',
     category: Categories.SALES
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
         componentName: 'List',
         groupDefault: true,
-        title: 'Empresas',
+        title: 'Clientes',
         navbar: true
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
         componentName: 'Create',
-        title: 'Empresas'
+        title: 'Clientes'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
         componentName: 'Edit',
         params: [GlobalEntityIdentifier],
-        title: 'Empresas'
+        title: 'Clientes'
       }
     ),
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPANY,
+    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
       {
         componentName: 'View',
         params: [GlobalEntityIdentifier],
-        title: 'Empresas'
+        title: 'Clientes'
       }
     )
   ]

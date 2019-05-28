@@ -12,7 +12,7 @@
 
 <script>
   import PersonaPropertiesReference from 'renderer/api/propertiesReference/PersonaPropertiesReference'
-  import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
+  import ClientContactPropertiesReference from 'renderer/api/propertiesReference/ClientContactPropertiesReference'
   import EmployeePropertiesReference from 'renderer/api/propertiesReference/EmployeePropertiesReference'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import EntityTypes from 'renderer/api/EntityTypes.js'
@@ -77,11 +77,11 @@
       ]
       if (this.clientMode) {
         this.tableFields.push({
-          name: ClientPropertiesReference.COMPANY.name,
-          title: ClientPropertiesReference.COMPANY.title,
+          name: ClientContactPropertiesReference.CLIENT.name,
+          title: ClientContactPropertiesReference.CLIENT.title,
           callback: DisplayFunctions.getNameFromObject,
           filterType: 'entity',
-          entityName: EntityTypes.COMPANY.name,
+          entityName: EntityTypes.CLIENT.name,
           entityFieldName: 'name'
         })
         this.tableFields.push({

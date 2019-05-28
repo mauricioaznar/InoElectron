@@ -35,13 +35,13 @@
           </div>
           <div class="form-group">
               <mau-form-input-select-dynamic
-                      :initialObject="initialValues[OrderRequestPropertiesReference.COMPANY.name]"
-                      :label="OrderRequestPropertiesReference.COMPANY.title"
+                      :initialObject="initialValues[OrderRequestPropertiesReference.CLIENT.name]"
+                      :label="OrderRequestPropertiesReference.CLIENT.title"
                       :displayProperty="'name'"
-                      :endpointName="companyEndpointName"
-                      v-model="salesOrder.company"
-                      :name="OrderRequestPropertiesReference.COMPANY.name"
-                      :error="errors.first(OrderRequestPropertiesReference.COMPANY.name)"
+                      :endpointName="clientEndpointName"
+                      v-model="salesOrder.client"
+                      :name="OrderRequestPropertiesReference.CLIENT.name"
+                      :error="errors.first(OrderRequestPropertiesReference.CLIENT.name)"
                       :disabled="true"
                       v-validate="'object_required'"
               >
@@ -49,14 +49,14 @@
           </div>
           <div class="form-group">
               <mau-form-input-select-dynamic
-                      :endpointName="clientEndpointName"
-                      :apiOperationOptions="clientApiOperationsOptions"
-                      :initialObject="initialValues[OrderSalePropertiesReference.CLIENT.name]"
-                      :label="OrderSalePropertiesReference.CLIENT.title"
+                      :endpointName="clientContactEndpointName"
+                      :apiOperationOptions="clientContactApiOperationsOptions"
+                      :initialObject="initialValues[OrderSalePropertiesReference.CLIENT_CONTACT.name]"
+                      :label="OrderSalePropertiesReference.CLIENT_CONTACT.title"
                       :displayProperty="'fullname'"
-                      v-model="salesOrder.client"
-                      :name="OrderSalePropertiesReference.CLIENT.name"
-                      :error="errors.first(OrderSalePropertiesReference.CLIENT.name)"
+                      v-model="salesOrder.clientContact"
+                      :name="OrderSalePropertiesReference.CLIENT_CONTACT.name"
+                      :error="errors.first(OrderSalePropertiesReference.CLIENT_CONTACT.name)"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
@@ -161,7 +161,7 @@
 <script>
   import OrderSalePropertiesReference from 'renderer/api/propertiesReference/OrderSalePropertiesReference'
   import OrderRequestPropertiesReference from 'renderer/api/propertiesReference/OrderRequestPropertiesReference'
-  import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
+  import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientContactPropertiesReference'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
@@ -188,8 +188,8 @@
           saleProducts: [],
           date: '',
           amountCollected: '',
+          clientContact: {},
           client: {},
-          company: {},
           orderSaleStatus: {},
           orderSaleCollectionStatus: {},
           receiptType: {}
@@ -198,8 +198,8 @@
         initialValues: {},
         buttonDisabled: false,
         requestedProducts: [],
+        clientContactEndpointName: EntityTypes.CLIENT_CONTACT.apiName,
         clientEndpointName: EntityTypes.CLIENT.apiName,
-        companyEndpointName: EntityTypes.COMPANY.apiName,
         orderSaleStatusEndpointName: EntityTypes.ORDER_SALE_STATUS.apiName,
         orderSaleCollectionStatusEndpointName: EntityTypes.ORDER_SALE_COLLECTION_STATUS.apiName,
         productEndpointName: EntityTypes.PRODUCT.apiName,
@@ -287,8 +287,8 @@
         }
         return collectionStatusId === 4
       },
-      clientApiOperationsOptions: function () {
-        let filterExacts = {[ClientPropertiesReference.COMPANY.relationship_id_name]: this.orderRequest[OrderRequestPropertiesReference.COMPANY.relationship_id_name]}
+      clientContactApiOperationsOptions: function () {
+        let filterExacts = {[ClientPropertiesReference.CLIENT.relationship_id_name]: this.orderRequest[OrderRequestPropertiesReference.CLIENT.relationship_id_name]}
         return {filterExacts: filterExacts}
       }
     },
@@ -298,8 +298,8 @@
         this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.ORDER_CODE.name)
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.PRODUCTS.name)
         this.initialValues[OrderSalePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.DATE.name)
-        this.initialValues[OrderSalePropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT.name)
-        this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.COMPANY.name)
+        this.initialValues[OrderSalePropertiesReference.CLIENT_CONTACT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT_CONTACT.name)
+        this.initialValues[OrderRequestPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.CLIENT.name)
         this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
         this.initialValues[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.AMOUNT_COLLECTED.name)
         this.initialOrderSaleCollectionStatus = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name)
@@ -308,14 +308,14 @@
       },
       overrideInitialValuesWithOrderRequest: function () {
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]
+        this.initialValues[OrderSalePropertiesReference.CLIENT_CONTACT.name] = this.orderRequest[OrderRequestPropertiesReference.CLIENT_CONTACT.name]
         this.initialValues[OrderSalePropertiesReference.CLIENT.name] = this.orderRequest[OrderRequestPropertiesReference.CLIENT.name]
-        this.initialValues[OrderSalePropertiesReference.COMPANY.name] = this.orderRequest[OrderRequestPropertiesReference.COMPANY.name]
       },
       save: function () {
         let directParams = {}
         directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
         directParams[OrderSalePropertiesReference.DATE.name] = this.salesOrder.date
-        directParams[OrderSalePropertiesReference.CLIENT.relationship_id_name] = this.salesOrder.client ? this.salesOrder.client[GlobalEntityIdentifier] : null
+        directParams[OrderSalePropertiesReference.CLIENT_CONTACT.relationship_id_name] = this.salesOrder.clientContact ? this.salesOrder.clientContact[GlobalEntityIdentifier] : null
         directParams[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = this.isPartiallyPaidStatusSelected ? this.salesOrder.amountCollected : 0
         directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = (!this.isReplacementStatusSelected && this.salesOrder.receiptType) ? this.salesOrder.receiptType[GlobalEntityIdentifier] : null
         directParams[OrderSalePropertiesReference.ORDER_SALE_STATUS.relationship_id_name] = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] : null

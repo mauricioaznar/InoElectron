@@ -44,13 +44,13 @@
             display: DisplayFunctions.getProducts
           },
           {
-            title: OrderSalePropertiesReference.CLIENT.title,
-            name: OrderSalePropertiesReference.CLIENT.name,
+            title: OrderSalePropertiesReference.CLIENT_CONTACT.title,
+            name: OrderSalePropertiesReference.CLIENT_CONTACT.name,
             display: DisplayFunctions.getPersona
           },
           {
-            title: OrderSalePropertiesReference.COMPANY.title,
-            name: OrderSalePropertiesReference.COMPANY.name,
+            title: OrderSalePropertiesReference.CLIENT.title,
+            name: OrderSalePropertiesReference.CLIENT.name,
             display: DisplayFunctions.getNameFromObject
           },
           {

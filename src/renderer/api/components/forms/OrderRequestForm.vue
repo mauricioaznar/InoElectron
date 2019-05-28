@@ -35,13 +35,13 @@
           </div>
           <div class="form-group">
               <mau-form-input-select-dynamic
-                      :initialObject="initialValues[OrderRequestPropertiesReference.COMPANY.name]"
-                      :label="OrderRequestPropertiesReference.COMPANY.title"
+                      :initialObject="initialValues[OrderRequestPropertiesReference.CLIENT.name]"
+                      :label="OrderRequestPropertiesReference.CLIENT.title"
                       :displayProperty="'name'"
-                      :endpointName="companyEndpointName"
-                      v-model="requestOrder.company"
-                      :name="OrderRequestPropertiesReference.COMPANY.name"
-                      :error="errors.has(OrderRequestPropertiesReference.COMPANY.name) ? errors.first(OrderRequestPropertiesReference.COMPANY.name) : ''"
+                      :endpointName="clientEndpointName"
+                      v-model="requestOrder.client"
+                      :name="OrderRequestPropertiesReference.CLIENT.name"
+                      :error="errors.has(OrderRequestPropertiesReference.CLIENT.name) ? errors.first(OrderRequestPropertiesReference.CLIENT.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
@@ -49,16 +49,15 @@
           </div>
           <div class="form-group">
               <mau-form-input-select-dynamic
-                      :key="requestOrder ? requestOrder.company['id'] : 0"
-                      :apiOperationOptions="clientApiOperationsOptions"
+                      :key="requestOrder ? requestOrder.client['id'] : 0"
+                      :apiOperationOptions="clientContactApiOperationsOptions"
                       :endpointName="clientEndpointName"
-                      :initialObject="initialClient"
-                      :label="OrderRequestPropertiesReference.CLIENT.title"
+                      :initialObject="initialClientContact"
+                      :label="OrderRequestPropertiesReference.CLIENT_CONTACT.title"
                       :displayProperty="'fullname'"
-                      :searchedProperties="['first_name', 'last_name']"
-                      v-model="requestOrder.client"
-                      :name="OrderRequestPropertiesReference.CLIENT.name"
-                      :error="errors.has(OrderRequestPropertiesReference.CLIENT.name) ? errors.first(OrderRequestPropertiesReference.CLIENT.name) : ''"
+                      v-model="requestOrder.clientContact"
+                      :name="OrderRequestPropertiesReference.CLIENT_CONTACT.name"
+                      :error="errors.has(OrderRequestPropertiesReference.CLIENT_CONTACT.name) ? errors.first(OrderRequestPropertiesReference.CLIENT_CONTACT.name) : ''"
                       :disabled="!userHasWritePrivileges"
                       v-validate="'object_required'"
               >
@@ -140,19 +139,17 @@
           products: [],
           requestProducts: [],
           date: '',
+          clientContact: {},
           client: {},
-          company: {},
           orderRequestStatus: {}
         },
         initialValues: {},
         buttonDisabled: false,
         initialOrderCode: '',
-        companyId: '',
         initialOrderRequestStatus: {},
-        initialClient: {},
-        clientFilterExact: {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: 0},
+        initialClientContact: {},
+        clientContactEndpointName: EntityTypes.CLIENT_CONTACT.apiName,
         clientEndpointName: EntityTypes.CLIENT.apiName,
-        companyEndpointName: EntityTypes.COMPANY.apiName,
         orderRequestStatusEndpointName: EntityTypes.ORDER_REQUEST_STATUS.apiName,
         productEndpointName: EntityTypes.PRODUCT.apiName,
         orderRequestEndpointName: EntityTypes.ORDER_REQUEST.apiName,
@@ -214,9 +211,9 @@
       ...mapGetters([
         'isAdminUser'
       ]),
-      clientApiOperationsOptions: function () {
-        let companyId = this.requestOrder.company ? this.requestOrder.company[GlobalEntityIdentifier] : ''
-        let filterExacts = {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: companyId}
+      clientContactApiOperationsOptions: function () {
+        let clientId = this.requestOrder.client ? this.requestOrder.client[GlobalEntityIdentifier] : ''
+        let filterExacts = {[OrderRequestPropertiesReference.COMPANY.relationship_id_name]: clientId}
         return {filterExacts: filterExacts}
       }
     },
@@ -225,8 +222,8 @@
       setInitialValues: function () {
         this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.ORDER_CODE.name)
         this.initialOrderRequestStatus = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name)
-        this.initialClient = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.CLIENT.name)
-        this.initialValues[OrderRequestPropertiesReference.COMPANY.name] = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.COMPANY.name)
+        this.initialClientContact = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.CLIENT_CONTACT.name)
+        this.initialValues[OrderRequestPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.CLIENT.name)
         this.initialValues[OrderRequestPropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderRequestPropertiesReference.PRODUCTS.name)
         this.initialValues[OrderRequestPropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.DATE.name)
       },
@@ -234,8 +231,8 @@
         let directParams = {}
         directParams[OrderRequestPropertiesReference.ORDER_CODE.name] = this.requestOrder.orderCode
         directParams[OrderRequestPropertiesReference.DATE.name] = this.requestOrder.date
+        directParams[OrderRequestPropertiesReference.CLIENT_CONTACT.relationship_id_name] = this.requestOrder.clientContact ? this.requestOrder.clientContact[GlobalEntityIdentifier] : null
         directParams[OrderRequestPropertiesReference.CLIENT.relationship_id_name] = this.requestOrder.client ? this.requestOrder.client[GlobalEntityIdentifier] : null
-        directParams[OrderRequestPropertiesReference.COMPANY.relationship_id_name] = this.requestOrder.company ? this.requestOrder.company[GlobalEntityIdentifier] : null
         directParams[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] : null
         let initialOrderRequestProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderRequestPropertiesReference.PRODUCTS.name], 'product_id')
         let filteredOrderRequestProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialOrderRequestProducts, this.requestOrder.requestProducts, 'product_id')
@@ -254,16 +251,16 @@
       initialObject: function (initialObject) {
         this.setInitialValues(initialObject)
       },
-      'requestOrder.company': function (company) {
-        let initialClientFound
-        if (company && this.initialObject) {
-          let initialClient = this.initialObject[OrderRequestPropertiesReference.CLIENT.name]
-          if (company[GlobalEntityIdentifier] === initialClient['company_id']) {
-            initialClientFound = initialClient
+      'requestOrder.client': function (client) {
+        let initialClientContactFound
+        if (client && this.initialObject) {
+          let initialClientContact = this.initialObject[OrderRequestPropertiesReference.CLIENT_CONTACT.name]
+          if (client[GlobalEntityIdentifier] === initialClientContact['client_id']) {
+            initialClientContactFound = initialClientContact
           }
         }
-        this.initialClient = initialClientFound || {}
-        this.requestOrder.client = initialClientFound || {}
+        this.initialClientContact = initialClientContactFound || {}
+        this.requestOrder.clientContact = initialClientContactFound || {}
       }
     }
   }

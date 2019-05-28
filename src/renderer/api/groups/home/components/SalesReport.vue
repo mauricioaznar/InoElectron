@@ -160,7 +160,7 @@
     methods: {
       setSales: function () {
         this.isLoading = true
-        Promise.all([SpecificApiOperations.getStats('sales'), GenericApiOperations.list(EntityTypes.COMPANY.apiName, {paginate: false})]).then(result => {
+        Promise.all([SpecificApiOperations.getStats('sales'), GenericApiOperations.list(EntityTypes.CLIENT.apiName, {paginate: false})]).then(result => {
           let requests = result[0]['requests']
           let sales = result[0]['sales']
           let companies = result[1]

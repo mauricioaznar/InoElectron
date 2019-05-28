@@ -50,19 +50,19 @@
             callback: DisplayFunctions.getOrderSalesProductsNotRequested
           },
           {
-            name: OrderRequestPropertiesReference.CLIENT.name,
-            title: OrderRequestPropertiesReference.CLIENT.title,
+            name: OrderRequestPropertiesReference.CLIENT_CONTACT.name,
+            title: OrderRequestPropertiesReference.CLIENT_CONTACT.title,
             callback: DisplayFunctions.getPersona,
             filterType: 'entity',
-            entityName: EntityTypes.CLIENT.name,
+            entityName: EntityTypes.CLIENT_CONTACT.name,
             entityFieldName: 'name'
           },
           {
-            name: OrderRequestPropertiesReference.COMPANY.name,
-            title: OrderRequestPropertiesReference.COMPANY.title,
+            name: OrderRequestPropertiesReference.CLIENT.name,
+            title: OrderRequestPropertiesReference.CLIENT.title,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.COMPANY.name,
+            entityName: EntityTypes.CLIENT.name,
             entityFieldName: 'name'
           },
           {

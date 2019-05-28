@@ -4,7 +4,7 @@
       <mau-data-table :apiUrl="apiUrl"
                       :tableFields="tableFields"
                       :actions="actions"
-                      @actionClicked="actionHandler",
+                      @actionClicked="actionHandler"
                       :localStoragePrefix="'orderSaleList'"
       ></mau-data-table>
     </mau-crud-list>
@@ -54,11 +54,11 @@
             entityFieldName: 'description'
           },
           {
-            name: OrderSalePropertiesReference.CLIENT.name,
-            title: OrderSalePropertiesReference.CLIENT.title,
+            name: OrderSalePropertiesReference.CLIENT_CONTACT.name,
+            title: OrderSalePropertiesReference.CLIENT_CONTACT.title,
             callback: DisplayFunctions.getPersona,
             filterType: 'entity',
-            entityName: EntityTypes.CLIENT.name,
+            entityName: EntityTypes.CLIENT_CONTACT.name,
             entityFieldName: 'fullname'
           },
           {

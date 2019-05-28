@@ -4,7 +4,7 @@
 
 <script>
     import PersonaPropertiesReference from 'renderer/api/propertiesReference/PersonaPropertiesReference'
-    import ClientPropertiesReference from 'renderer/api/propertiesReference/ClientPropertiesReference'
+    import ClientContactPropertiesReference from 'renderer/api/propertiesReference/ClientContactPropertiesReference'
     import EmployeePropertiesReference from 'renderer/api/propertiesReference/EmployeePropertiesReference'
     import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer.vue'
     import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
@@ -57,8 +57,8 @@
         })
         if (this.clientMode) {
           this.properties.push({
-            name: ClientPropertiesReference.COMPANY.name,
-            title: ClientPropertiesReference.COMPANY.title,
+            name: ClientContactPropertiesReference.CLIENT.name,
+            title: ClientContactPropertiesReference.CLIENT.title,
             display: DisplayFunctions.getNameFromObject
           })
           this.properties.push({
