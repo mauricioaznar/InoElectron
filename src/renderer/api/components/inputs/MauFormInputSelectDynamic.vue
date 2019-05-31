@@ -4,7 +4,7 @@
             {{label}}
         </label>
         <vue-select
-                class="form-control p-0"
+                class="mau-form-input-select-dynamic form-control p-0"
                 :class="getBootstrapValidationClass(error)"
                 v-model="selected"
                 :multiple="multiselect"
@@ -154,4 +154,7 @@
 </script>
 
 <style lang="scss">
+    .mau-form-input-select-dynamic {
+        height: 38px;
+    }
 </style>
