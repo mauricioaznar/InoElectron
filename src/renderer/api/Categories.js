@@ -19,6 +19,11 @@ export default {
     title: 'Recursos humanos',
     iconClass: 'fa fa-user'
   },
+  ADMINISTRATION: {
+    name: 'administration',
+    title: 'Administracion',
+    iconClass: 'fa fa-user'
+  },
   AUTH: {
     name: 'auth',
     title: 'Otros',

@@ -476,6 +476,73 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
+  {
+    componentName: 'Main',
+    category: Categories.ADMINISTRATION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true,
+        categoryDefault: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
+  {
+    componentName: 'Main',
+    category: Categories.ADMINISTRATION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
+      {
+        componentName: 'List',
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
+
 export default routeObjects
 
 

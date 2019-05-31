@@ -174,6 +174,31 @@ export default {
   EXCEL: {
     name: 'excel',
     title: 'Excel'
+  },
+  EXPENSE: {
+    name: 'expense',
+    apiName: 'expense',
+    title: 'Gastos'
+  },
+  EXPENSE_TYPE: {
+    name: 'expenseType',
+    apiName: 'expenseType',
+    title: 'Tipo de gasto'
+  },
+  EXPENSE_CATEGORY: {
+    name: 'expenseCategory',
+    apiName: 'expenseCategory',
+    title: 'Categoria'
+  },
+  EXPENSE_BRANCH: {
+    name: 'expenseBranch',
+    apiName: 'expenseBranch',
+    title: 'Sucursal'
+  },
+  SUPPLIER: {
+    name: 'supplier',
+    apiName: 'supplier',
+    title: 'Proveedor'
   }
 }
 
