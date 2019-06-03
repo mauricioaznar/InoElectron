@@ -32,9 +32,20 @@
         ],
         tableFields: [
           {
-            title: ExpensePropertiesReference.NAME.title,
-            name: ExpensePropertiesReference.NAME.name,
-            callback: DisplayFunctions.getValue,
+            title: ExpensePropertiesReference.DESCRIPTION.title,
+            name: ExpensePropertiesReference.DESCRIPTION.name,
+            filterType: 'text'
+          },
+          {
+            name: ExpensePropertiesReference.DATE.name,
+            title: ExpensePropertiesReference.DATE.title,
+            sortField: ExpensePropertiesReference.DATE.name,
+            callback: DisplayFunctions.getDate,
+            filterType: 'date'
+          },
+          {
+            title: ExpensePropertiesReference.TOTAL.title,
+            name: ExpensePropertiesReference.TOTAL.name,
             filterType: 'text'
           },
           {
@@ -43,7 +54,7 @@
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
             entityName: EntityTypes.EXPENSE_TYPE,
-            entityFieldName: 'name'
+            entityFieldName: 'expense_type'
           },
           {
             title: ExpensePropertiesReference.EXPENSE_CATEGORY.title,
@@ -51,7 +62,7 @@
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
             entityName: EntityTypes.EXPENSE_CATEGORY,
-            entityFieldName: 'name'
+            entityFieldName: 'expense_category'
           },
           {
             title: ExpensePropertiesReference.EXPENSE_BRANCH.title,
@@ -59,7 +70,7 @@
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
             entityName: EntityTypes.EXPENSE_BRANCH,
-            entityFieldName: 'name'
+            entityFieldName: 'expense_branch'
           },
           {
             title: ExpensePropertiesReference.SUPPLIER.title,

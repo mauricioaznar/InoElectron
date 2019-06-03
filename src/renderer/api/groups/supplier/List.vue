@@ -42,7 +42,7 @@
             name: SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_TYPE,
+            entityName: 'defaultExpenseType',
             entityFieldName: 'name'
           },
           {
@@ -50,7 +50,7 @@
             name: SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_BRANCH,
+            entityName: 'defaultExpenseBranch',
             entityFieldName: 'name'
           },
           {
@@ -58,7 +58,7 @@
             name: SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_CATEGORY,
+            entityName: 'defaultExpenseCategory',
             entityFieldName: 'name'
           }
         ]

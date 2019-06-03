@@ -26,8 +26,18 @@
         entityType: EntityType.EXPENSE,
         properties: [
           {
-            title: ExpensePropertiesReference.NAME.title,
-            name: ExpensePropertiesReference.NAME.name,
+            title: ExpensePropertiesReference.DATE.title,
+            name: ExpensePropertiesReference.DATE.name,
+            display: DisplayFunctions.getDate
+          },
+          {
+            title: ExpensePropertiesReference.TOTAL.title,
+            name: ExpensePropertiesReference.TOTAL.name,
+            display: DisplayFunctions.getValue
+          },
+          {
+            title: ExpensePropertiesReference.DESCRIPTION.title,
+            name: ExpensePropertiesReference.DESCRIPTION.name,
             display: DisplayFunctions.getValue
           },
           {

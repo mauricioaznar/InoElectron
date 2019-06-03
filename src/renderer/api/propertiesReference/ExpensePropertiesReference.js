@@ -7,6 +7,24 @@ export default {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
+  DESCRIPTION: {
+    title: 'Descripcion',
+    name: 'description',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
+  DATE: {
+    title: 'Fecha',
+    name: 'date',
+    display: DisplayFunctions.getDate,
+    defaultValue: MauInputDefaultValues.DATE
+  },
+  TOTAL: {
+    title: 'Total',
+    name: 'total',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
   EXPENSE_TYPE: {
     title: 'Tipo de gasto',
     name: 'expense_type',

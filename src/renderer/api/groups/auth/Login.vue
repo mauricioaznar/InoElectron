@@ -95,7 +95,7 @@
               window.localStorage.removeItem('Email')
               window.localStorage.removeItem('Password')
             }
-            Notifications.info(_this, 'Bienvendio al sistema notarial')
+            Notifications.info(_this, 'Bienvendio!')
             _this.$router.push({path: '*'})
           }).catch(e => {
             console.log(e)
