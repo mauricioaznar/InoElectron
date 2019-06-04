@@ -96,6 +96,24 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
+                        :key="(expense.supplier && expense.supplier.id ? String(expense.supplier.id) : '0') + (expense.expenseCategory && expense.expenseCategory.id ? String(expense.expenseCategory.id) : '0') + 'expenseSubcategory'"
+                        :endpointName="expenseSubcategoryEndpointName"
+                        :apiOperationOptions="expenseSubcategoryApiOperations"
+                        :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name]"
+                        :label="ExpensePropertiesReference.EXPENSE_SUBCATEGORY.title"
+                        :displayProperty="'name'"
+                        v-model="expense.expenseSubcategory"
+                        :name="ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name"
+                        :error="errors.has(ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name) ? errors.first(ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'object_required'"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
+        </div>
+        <div class="form-group form-row">
+            <div class="col-sm-12">
+                <mau-form-input-select-dynamic
                         :key="(expense.supplier && expense.supplier.id ? expense.supplier.id : 0) + 'expenseBranch'"
                         :endpointName="expenseBranchEndpointName"
                         :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_BRANCH.name]"
@@ -136,12 +154,14 @@
           date: '',
           expenseType: {},
           expenseCategory: {},
+          expenseSubcategory: {},
           expenseBranch: {},
           supplier: {}
         },
         initialValues: {},
         expenseTypeEndpointName: EntityTypes.EXPENSE_TYPE.apiName,
         expenseCategoryEndpointName: EntityTypes.EXPENSE_CATEGORY.apiName,
+        expenseSubcategoryEndpointName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
         expenseBranchEndpointName: EntityTypes.EXPENSE_BRANCH.apiName,
         supplierEndpointName: EntityTypes.SUPPLIER.apiName,
         buttonDisabled: false
@@ -172,6 +192,12 @@
     computed: {
       userHasWritePrivileges: function () {
         return true
+      },
+      expenseSubcategoryApiOperations: function () {
+        if (this.expense.expenseCategory && this.expense.expenseCategory.id) {
+          return {filterExacts: {expense_category_id: this.expense.expenseCategory.id}}
+        }
+        return {}
       }
     },
     methods: {
@@ -182,6 +208,7 @@
         this.initialValues[ExpensePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE.name)
         this.initialValues[ExpensePropertiesReference.TOTAL.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.TOTAL.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_CATEGORY.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_CATEGORY.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_BRANCH.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_BRANCH.name)
         this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
       },
@@ -194,6 +221,22 @@
         let initialExpenseBranch = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_BRANCH.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_BRANCH.name] = isObjectEmpty(initialExpenseBranch) && !isObjectEmpty(supplier) ? supplier.default_expense_branch : initialExpenseBranch
       },
+      setInitialExpenseSubcategory: function (expenseCategory) {
+        let expenseSubcategory = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name)
+        let initialSubcategory = {}
+        if (!isObjectEmpty(expenseSubcategory)) {
+          if (expenseSubcategory.expense_category_id === expenseCategory.id) {
+            initialSubcategory = expenseSubcategory
+          } else {
+            this.expense.expenseSubcategory = {}
+          }
+        } else {
+          if (!isObjectEmpty(this.expense.supplier)) {
+            initialSubcategory = this.expense.supplier.default_expense_subcategory
+          }
+        }
+        this.initialValues[ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name] = initialSubcategory
+      },
       save: function () {
         let directParams = {
           [ExpensePropertiesReference.EXPENSE_TYPE.relationship_id_name]: this.expense.expenseType ? this.expense.expenseType[GlobalEntityIdentifier] : null,
@@ -202,6 +245,7 @@
           [ExpensePropertiesReference.DATE.name]: this.expense.date,
           [ExpensePropertiesReference.EXPENSE_CATEGORY.relationship_id_name]: this.expense.expenseCategory ? this.expense.expenseCategory[GlobalEntityIdentifier] : null,
           [ExpensePropertiesReference.EXPENSE_BRANCH.relationship_id_name]: this.expense.expenseBranch ? this.expense.expenseBranch[GlobalEntityIdentifier] : null,
+          [ExpensePropertiesReference.EXPENSE_SUBCATEGORY.relationship_id_name]: this.expense.expenseSubcategory ? this.expense.expenseSubcategory[GlobalEntityIdentifier] : null,
           [ExpensePropertiesReference.SUPPLIER.relationship_id_name]: this.expense.supplier ? this.expense.supplier[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
@@ -220,6 +264,9 @@
       },
       'expense.supplier': function (supplier) {
         this.setSupplierInitialValues()
+      },
+      'expense.expenseCategory': function (expenseCategory) {
+        this.setInitialExpenseSubcategory(expenseCategory)
       }
     }
   }

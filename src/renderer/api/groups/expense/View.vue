@@ -51,6 +51,11 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
+            title: ExpensePropertiesReference.EXPENSE_SUBCATEGORY.title,
+            name: ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
             title: ExpensePropertiesReference.EXPENSE_BRANCH.title,
             name: ExpensePropertiesReference.EXPENSE_BRANCH.name,
             display: DisplayFunctions.getNameFromObject

@@ -21,6 +21,13 @@ export default {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
+  DEFAULT_EXPENSE_SUBCATEGORY: {
+    title: 'Subcategoria por defecto',
+    name: 'default_expense_subcategory',
+    relationship_id_name: 'default_expense_subcategory_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
   DEFAULT_EXPENSE_BRANCH: {
     title: 'Sucursal por defecto',
     name: 'default_expense_branch',

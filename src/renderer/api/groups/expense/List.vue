@@ -53,31 +53,39 @@
             name: ExpensePropertiesReference.EXPENSE_TYPE.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_TYPE,
-            entityFieldName: 'expense_type'
+            entityName: EntityTypes.EXPENSE_TYPE.apiName,
+            entityFieldName: 'name'
           },
           {
             title: ExpensePropertiesReference.EXPENSE_CATEGORY.title,
             name: ExpensePropertiesReference.EXPENSE_CATEGORY.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_CATEGORY,
-            entityFieldName: 'expense_category'
+            entityName: EntityTypes.EXPENSE_CATEGORY.apiName,
+            entityFieldName: 'name'
+          },
+          {
+            title: ExpensePropertiesReference.EXPENSE_SUBCATEGORY.title,
+            name: ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name,
+            callback: DisplayFunctions.getNameFromObject,
+            filterType: 'entity',
+            entityName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
+            entityFieldName: 'name'
           },
           {
             title: ExpensePropertiesReference.EXPENSE_BRANCH.title,
             name: ExpensePropertiesReference.EXPENSE_BRANCH.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_BRANCH,
-            entityFieldName: 'expense_branch'
+            entityName: EntityTypes.EXPENSE_BRANCH.apiName,
+            entityFieldName: 'name'
           },
           {
             title: ExpensePropertiesReference.SUPPLIER.title,
             name: ExpensePropertiesReference.SUPPLIER.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.SUPPLIER,
+            entityName: EntityTypes.SUPPLIER.apiName,
             entityFieldName: 'name'
           }
         ]

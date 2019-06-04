@@ -46,6 +46,13 @@ export default {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
+  EXPENSE_SUBCATEGORY: {
+    title: 'Subcategoria',
+    name: 'expense_subcategory',
+    relationship_id_name: 'expense_subcategory_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
   SUPPLIER: {
     title: 'Proveedor',
     name: 'supplier',

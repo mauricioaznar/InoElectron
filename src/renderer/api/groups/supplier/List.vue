@@ -60,6 +60,14 @@
             filterType: 'entity',
             entityName: 'defaultExpenseCategory',
             entityFieldName: 'name'
+          },
+          {
+            title: SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.title,
+            name: SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name,
+            callback: DisplayFunctions.getNameFromObject,
+            filterType: 'entity',
+            entityName: 'defaultExpenseSubcategory',
+            entityFieldName: 'name'
           }
         ]
       }

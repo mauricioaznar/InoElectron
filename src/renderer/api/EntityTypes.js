@@ -190,6 +190,11 @@ export default {
     apiName: 'expenseCategory',
     title: 'Categoria'
   },
+  EXPENSE_SUBCATEGORY: {
+    name: 'expenseSubcategory',
+    apiName: 'expenseSubcategory',
+    title: 'Subcategoria'
+  },
   EXPENSE_BRANCH: {
     name: 'expenseBranch',
     apiName: 'expenseBranch',

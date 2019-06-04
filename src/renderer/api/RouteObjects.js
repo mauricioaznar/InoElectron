@@ -519,6 +519,7 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
     RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
       {
         componentName: 'List',
+        groupDefault: true,
         navbar: true
       }
     ),
