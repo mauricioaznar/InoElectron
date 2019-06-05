@@ -56,6 +56,11 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
+            title: ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.title,
+            name: ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
             title: ExpensePropertiesReference.EXPENSE_BRANCH.title,
             name: ExpensePropertiesReference.EXPENSE_BRANCH.name,
             display: DisplayFunctions.getNameFromObject

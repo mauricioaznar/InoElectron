@@ -81,6 +81,14 @@
             entityFieldName: 'name'
           },
           {
+            title: ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.title,
+            name: ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name,
+            callback: DisplayFunctions.getNameFromObject,
+            filterType: 'entity',
+            entityName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
+            entityFieldName: 'name'
+          },
+          {
             title: ExpensePropertiesReference.SUPPLIER.title,
             name: ExpensePropertiesReference.SUPPLIER.name,
             callback: DisplayFunctions.getNameFromObject,

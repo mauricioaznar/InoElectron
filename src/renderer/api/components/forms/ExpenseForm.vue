@@ -79,6 +79,22 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
+                        :key="(expense.supplier && expense.supplier.id ? expense.supplier.id : 0) + 'expenseMoneySource'"
+                        :endpointName="expenseMoneySourceEndpointName"
+                        :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name]"
+                        :label="ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.title"
+                        :displayProperty="'name'"
+                        v-model="expense.expenseMoneySource"
+                        :name="ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name"
+                        :error="errors.has(ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name) ? errors.first(ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
+        </div>
+        <div class="form-group form-row">
+            <div class="col-sm-12">
+                <mau-form-input-select-dynamic
                         :key="(expense.supplier && expense.supplier.id ? expense.supplier.id : 0) + 'expenseCategory'"
                         :endpointName="expenseCategoryEndpointName"
                         :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_CATEGORY.name]"
@@ -153,6 +169,7 @@
           total: '',
           date: '',
           expenseType: {},
+          expenseMoneySource: {},
           expenseCategory: {},
           expenseSubcategory: {},
           expenseBranch: {},
@@ -160,6 +177,7 @@
         },
         initialValues: {},
         expenseTypeEndpointName: EntityTypes.EXPENSE_TYPE.apiName,
+        expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
         expenseCategoryEndpointName: EntityTypes.EXPENSE_CATEGORY.apiName,
         expenseSubcategoryEndpointName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
         expenseBranchEndpointName: EntityTypes.EXPENSE_BRANCH.apiName,
@@ -204,6 +222,7 @@
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       setInitialValues: function () {
         this.initialValues[ExpensePropertiesReference.EXPENSE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_TYPE.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name)
         this.initialValues[ExpensePropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DESCRIPTION.name)
         this.initialValues[ExpensePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE.name)
         this.initialValues[ExpensePropertiesReference.TOTAL.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.TOTAL.name)
@@ -240,6 +259,7 @@
       save: function () {
         let directParams = {
           [ExpensePropertiesReference.EXPENSE_TYPE.relationship_id_name]: this.expense.expenseType ? this.expense.expenseType[GlobalEntityIdentifier] : null,
+          [ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.relationship_id_name]: this.expense.expenseMoneySource ? this.expense.expenseMoneySource[GlobalEntityIdentifier] : 'null',
           [ExpensePropertiesReference.DESCRIPTION.name]: this.expense.description,
           [ExpensePropertiesReference.TOTAL.name]: this.expense.total,
           [ExpensePropertiesReference.DATE.name]: this.expense.date,

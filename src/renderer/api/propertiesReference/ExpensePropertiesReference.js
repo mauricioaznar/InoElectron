@@ -32,6 +32,13 @@ export default {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
+  EXPENSE_MONEY_SOURCE: {
+    title: 'Origen del dinero',
+    name: 'expense_money_source',
+    relationship_id_name: 'expense_money_source_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
   EXPENSE_BRANCH: {
     title: 'Sucursal',
     name: 'expense_branch',

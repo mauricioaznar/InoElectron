@@ -185,6 +185,11 @@ export default {
     apiName: 'expenseType',
     title: 'Tipo de gasto'
   },
+  EXPENSE_MONEY_SOURCE: {
+    name: 'expenseMoneySource',
+    apiName: 'expenseMoneySource',
+    title: 'Origen del dinero'
+  },
   EXPENSE_CATEGORY: {
     name: 'expenseCategory',
     apiName: 'expenseCategory',
