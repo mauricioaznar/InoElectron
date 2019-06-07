@@ -10,6 +10,7 @@
               :multiselect="true"
               :name="'selectFilterControls'"
               v-model="selectedFilterControls"
+              @keyup.enter.native="doFilter"
               class="col-md-10 col-sm-12"
       >
       </mau-form-input-select-static>
@@ -28,6 +29,7 @@
           :name="selectedFilterControl.name"
           :initialValue="selectedFilterControl.initialValue"
           v-validate="'required'"
+          @keyup.enter.native="doFilter"
           :error="errors.has(selectedFilterControl.name) ? errors.first(selectedFilterControl.name) : ''"
       >
       </mau-form-input-text>
@@ -41,6 +43,7 @@
           :trackBy="'value'"
           :name="selectedFilterControl.name + 'filterDateModes'"
           v-validate="'required'"
+          @keyup.enter.native="doFilter"
           :error="errors.has(selectedFilterControl.name + 'filterDateModes') ? errors.first(selectedFilterControl.name + 'filterDateModes') : ''"
       >
       </mau-form-input-select-static>
@@ -52,6 +55,7 @@
           :name="selectedFilterControl.name + 'startDate'"
           :initialValue="selectedFilterControl.initialStartDate"
           v-validate="'required'"
+          @keyup.enter.native="doFilter"
           :error="errors.has(selectedFilterControl.name + 'startDate') ? errors.first(selectedFilterControl.name + 'startDate') : ''"
       >
       </mau-form-input-date>
@@ -62,6 +66,7 @@
           :name="selectedFilterControl.name + 'endDate'"
           :initialValue="selectedFilterControl.initialEndDate"
           v-validate="'required'"
+          @keyup.enter.native="doFilter"
           :error="errors.has(selectedFilterControl.name + 'endDate') ? errors.first(selectedFilterControl.name + 'endDate') : ''"
       >
       </mau-form-input-date>
@@ -206,6 +211,7 @@
             filterEntityCount++
             localStorageControls.push({
               filterType: 'entity',
+              name: selectedFilterControlObj.name,
               entityName: selectedFilterControlObj.entityName,
               entityFieldName: selectedFilterControlObj.entityFieldName,
               value: selectedFilterControlObj.value

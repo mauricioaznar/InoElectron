@@ -131,7 +131,7 @@
                     {{dayIndex + 1}}
                 </td>
                 <td>
-                    {{getDayName(dayIndex)}}
+                    {{getDayName(dayIndex + 1)}}
                 </td>
                 <td v-for="(categoryItem, index) in categoryItemsSelected">
                     {{calculateDayTotal(categoryItem.productionItems[yearSelected.value][monthSelected.value][dayIndex])}}
