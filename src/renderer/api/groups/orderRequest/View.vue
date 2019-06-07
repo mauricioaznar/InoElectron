@@ -30,6 +30,11 @@
             display: DisplayFunctions.getDate
           },
           {
+            title: OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.title,
+            name: OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name,
+            display: DisplayFunctions.getDate
+          },
+          {
             title: OrderRequestPropertiesReference.CLIENT_CONTACT.title,
             name: OrderRequestPropertiesReference.CLIENT_CONTACT.name,
             display: DisplayFunctions.getPersona

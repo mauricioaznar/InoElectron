@@ -34,6 +34,17 @@
               </mau-form-input-date>
           </div>
           <div class="form-group">
+              <mau-form-input-date
+                      :name="OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name"
+                      :label="OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.title"
+                      v-model="requestOrder.estimatedDeliveryDate"
+                      :initialValue="initialValues[OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name]"
+                      :error="errors.has(OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name) ? errors.first(OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name) : ''"
+                      :disabled="!userHasWritePrivileges"
+              >
+              </mau-form-input-date>
+          </div>
+          <div class="form-group">
               <mau-form-input-select-dynamic
                       :initialObject="initialValues[OrderRequestPropertiesReference.CLIENT.name]"
                       :label="OrderRequestPropertiesReference.CLIENT.title"
@@ -139,6 +150,7 @@
           products: [],
           requestProducts: [],
           date: '',
+          estimatedDeliveryDate: '',
           clientContact: {},
           client: {},
           orderRequestStatus: {}
@@ -226,11 +238,13 @@
         this.initialValues[OrderRequestPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.CLIENT.name)
         this.initialValues[OrderRequestPropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderRequestPropertiesReference.PRODUCTS.name)
         this.initialValues[OrderRequestPropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.DATE.name)
+        this.initialValues[OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name)
       },
       save: function () {
         let directParams = {}
         directParams[OrderRequestPropertiesReference.ORDER_CODE.name] = this.requestOrder.orderCode
         directParams[OrderRequestPropertiesReference.DATE.name] = this.requestOrder.date
+        directParams[OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name] = this.requestOrder.estimatedDeliveryDate
         directParams[OrderRequestPropertiesReference.CLIENT_CONTACT.relationship_id_name] = this.requestOrder.clientContact ? this.requestOrder.clientContact[GlobalEntityIdentifier] : null
         directParams[OrderRequestPropertiesReference.CLIENT.relationship_id_name] = this.requestOrder.client ? this.requestOrder.client[GlobalEntityIdentifier] : null
         directParams[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] = this.requestOrder.orderRequestStatus ? this.requestOrder.orderRequestStatus[GlobalEntityIdentifier] : null

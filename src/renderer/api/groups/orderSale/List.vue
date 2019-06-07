@@ -34,7 +34,7 @@
             name: OrderSalePropertiesReference.DATE.name,
             title: OrderSalePropertiesReference.DATE.title,
             sortField: OrderSalePropertiesReference.DATE.name,
-            callback: DisplayFunctions.getDateFromDateTime,
+            callback: DisplayFunctions.getDate,
             filterType: 'date'
           },
           {

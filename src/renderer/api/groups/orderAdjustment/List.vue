@@ -31,7 +31,7 @@
             name: BagOrderAdjustmentPropertiesReference.DATE.name,
             title: BagOrderAdjustmentPropertiesReference.DATE.title,
             sortField: BagOrderAdjustmentPropertiesReference.DATE.name,
-            callback: DisplayFunctions.getDateFromDateTime,
+            callback: DisplayFunctions.getDate,
             filterType: 'date'
           },
           {

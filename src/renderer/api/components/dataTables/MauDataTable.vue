@@ -213,7 +213,6 @@
       getValue: DisplayFunctions.getValue,
       getPersona: DisplayFunctions.getPersona,
       getTimeFromDateTime: DisplayFunctions.getTimeFromDateTime,
-      getDateFromDateTime: DisplayFunctions.getDateFromDateTime,
       getDate: DisplayFunctions.getDate,
       getNameArray: DisplayFunctions.getNameArray,
       getFirstNameFromArray: DisplayFunctions.getFirstNameFromArray,

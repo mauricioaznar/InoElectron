@@ -35,7 +35,14 @@
             name: OrderRequestPropertiesReference.DATE.name,
             title: OrderRequestPropertiesReference.DATE.title,
             sortField: OrderRequestPropertiesReference.DATE.name,
-            callback: DisplayFunctions.getDateFromDateTime,
+            callback: DisplayFunctions.getDate,
+            filterType: 'date'
+          },
+          {
+            name: OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name,
+            title: OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.title,
+            sortField: OrderRequestPropertiesReference.ESTIMATED_DELIVERY_DATE.name,
+            callback: DisplayFunctions.getDate,
             filterType: 'date'
           },
           {

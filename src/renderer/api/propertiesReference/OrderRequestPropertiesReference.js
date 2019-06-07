@@ -14,6 +14,12 @@ let OrderRequestPropertiesReference = {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
+  ESTIMATED_DELIVERY_DATE: {
+    title: 'Fecha de entrega estimada',
+    name: 'estimated_delivery_date',
+    display: DisplayFunctions.getDate,
+    defaultValue: MauInputDefaultValues.DATE
+  },
   PRODUCTS: {
     title: 'Productos',
     name: 'products',

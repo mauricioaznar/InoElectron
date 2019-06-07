@@ -64,9 +64,6 @@ export default {
   getTimeFromDateTime: function (date) {
     return ConvertDateTimeTo.time(date)
   },
-  getDateFromDateTime: function (date) {
-    return ConvertDateTimeTo.date(date)
-  },
   getProducts: function (array) {
     let htmlString = '<table class="w-100">'
     htmlString += '<tr><th>Producto</th><th>Kilos</th><th>Grupos</th>'
