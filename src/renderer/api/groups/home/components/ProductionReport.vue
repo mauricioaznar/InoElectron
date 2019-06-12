@@ -131,7 +131,7 @@
                     {{dayIndex + 1}}
                 </td>
                 <td>
-                    {{getDayName(dayIndex + 1)}}
+                    {{getDayName(dayIndex)}}
                 </td>
                 <td v-for="(categoryItem, index) in categoryItemsSelected">
                     {{calculateDayTotal(categoryItem.productionItems[yearSelected.value][monthSelected.value][dayIndex])}}
@@ -354,7 +354,7 @@
           return totalSum.toFixed(2)
         },
         getDayName: function (dayIndex) {
-          return moment(this.yearSelected.value + '-' + (this.monthSelected.value + 1) + '-' + (dayIndex + 1), 'YYYY-M-D').format('ddd')
+          return moment((this.yearSelected.value + 2018) + '-' + (this.monthSelected.value + 1) + '-' + (dayIndex + 1), 'YYYY-M-D').format('ddd')
         }
       }
     }

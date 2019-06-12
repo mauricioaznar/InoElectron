@@ -31,6 +31,11 @@
             display: DisplayFunctions.getDate
           },
           {
+            title: ExpensePropertiesReference.SUBTOTAL.title,
+            name: ExpensePropertiesReference.SUBTOTAL.name,
+            display: DisplayFunctions.getValue
+          },
+          {
             title: ExpensePropertiesReference.TOTAL.title,
             name: ExpensePropertiesReference.TOTAL.name,
             display: DisplayFunctions.getValue
@@ -69,6 +74,46 @@
             title: ExpensePropertiesReference.SUPPLIER.title,
             name: ExpensePropertiesReference.SUPPLIER.name,
             display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: ExpensePropertiesReference.EXPENSE_STATUS.title,
+            name: ExpensePropertiesReference.EXPENSE_STATUS.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.title,
+            name: ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.title,
+            name: ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.title,
+            name: ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.title,
+            name: ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.title,
+            name: ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: ExpensePropertiesReference.INVOICE_PAID_DATE.title,
+            name: ExpensePropertiesReference.INVOICE_PAID_DATE.name,
+            display: DisplayFunctions.getDate
+          },
+          {
+            title: ExpensePropertiesReference.INVOICE_CODE.title,
+            name: ExpensePropertiesReference.INVOICE_CODE.name,
+            display: DisplayFunctions.getValue
           }
         ]
       }

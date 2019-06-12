@@ -205,6 +205,36 @@ export default {
     apiName: 'expenseBranch',
     title: 'Sucursal'
   },
+  EXPENSE_STATUS: {
+    name: 'expenseStatus',
+    apiName: 'expenseStatus',
+    title: 'Estado del gasto'
+  },
+  EXPENSE_INVOICE_STATUS: {
+    name: 'expenseInvoiceStatus',
+    apiName: 'expenseInvoiceStatus',
+    title: 'Estado de la factura'
+  },
+  EXPENSE_INVOICE_TYPE: {
+    name: 'expenseInvoiceType',
+    apiName: 'expenseInvoiceType',
+    title: 'Tipo de factura'
+  },
+  EXPENSE_INVOICE_PAYMENT_METHOD: {
+    name: 'expenseInvoicePaymentMethod',
+    apiName: 'expenseInvoicePaymentMethod',
+    title: 'Tipo de pago'
+  },
+  EXPENSE_INVOICE_PAYMENT_FORM: {
+    name: 'expenseInvoicePaymentForm',
+    apiName: 'expenseInvoicePaymentForm',
+    title: 'Tipo de pago'
+  },
+  EXPENSE_INVOICE_CDFI_USE: {
+    name: 'expenseInvoiceCdfiUse',
+    apiName: 'expenseInvoiceCdfiUse',
+    title: 'Uso del cdfi'
+  },
   SUPPLIER: {
     name: 'supplier',
     apiName: 'supplier',

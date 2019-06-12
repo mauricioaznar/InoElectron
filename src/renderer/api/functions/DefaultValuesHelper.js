@@ -27,7 +27,7 @@ function array (initialObject, propertyName) {
 }
 
 function object (initialObject, propertyName) {
-  if (initialObject === undefined) {
+  if (initialObject === undefined || initialObject[propertyName] === null || initialObject[propertyName] === 'null') {
     return {}
   }
   return initialObject[propertyName]

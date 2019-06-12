@@ -19,10 +19,10 @@
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
   export default {
-    name: 'ListExpense',
+    name: 'InvoiceList',
     data () {
       return {
-        apiUrl: GenericApiUrls.createListUrl(EntityTypes.EXPENSE.apiName, {paginate: true}),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.EXPENSE.apiName, {paginate: true, filterExacts: {expense_type_id: 2}}),
         actions: [
           {
             name: 'view',
@@ -54,48 +54,14 @@
             filterType: 'text'
           },
           {
+            title: ExpensePropertiesReference.IEPS.title,
+            name: ExpensePropertiesReference.IEPS.name,
+            filterType: 'text'
+          },
+          {
             title: ExpensePropertiesReference.TOTAL.title,
-            name: ExpensePropertiesReference.TOTAL.name
-          },
-          {
-            title: ExpensePropertiesReference.EXPENSE_TYPE.title,
-            name: ExpensePropertiesReference.EXPENSE_TYPE.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_TYPE.apiName,
-            entityFieldName: 'name'
-          },
-          {
-            title: ExpensePropertiesReference.EXPENSE_CATEGORY.title,
-            name: ExpensePropertiesReference.EXPENSE_CATEGORY.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_CATEGORY.apiName,
-            entityFieldName: 'name'
-          },
-          {
-            title: ExpensePropertiesReference.EXPENSE_SUBCATEGORY.title,
-            name: ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
-            entityFieldName: 'name'
-          },
-          {
-            title: ExpensePropertiesReference.EXPENSE_BRANCH.title,
-            name: ExpensePropertiesReference.EXPENSE_BRANCH.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_BRANCH.apiName,
-            entityFieldName: 'name'
-          },
-          {
-            title: ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.title,
-            name: ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
-            entityFieldName: 'name'
+            name: ExpensePropertiesReference.TOTAL.name,
+            filterType: 'text'
           },
           {
             title: ExpensePropertiesReference.SUPPLIER.title,
@@ -127,14 +93,6 @@
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
             entityName: EntityTypes.EXPENSE_INVOICE_TYPE.apiName,
-            entityFieldName: 'name'
-          },
-          {
-            title: ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.title,
-            name: ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_INVOICE_PAYMENT_FORM.apiName,
             entityFieldName: 'name'
           },
           {

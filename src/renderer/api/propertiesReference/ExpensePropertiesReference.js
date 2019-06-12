@@ -25,6 +25,24 @@ export default {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
+  SUBTOTAL: {
+    title: 'Subtotal',
+    name: 'subtotal',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
+  TAX: {
+    title: 'IVA',
+    name: 'tax',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
+  IEPS: {
+    title: 'IEPS',
+    name: 'ieps',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
   EXPENSE_TYPE: {
     title: 'Tipo de gasto',
     name: 'expense_type',
@@ -64,6 +82,79 @@ export default {
     title: 'Proveedor',
     name: 'supplier',
     relationship_id_name: 'supplier_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  EXPENSE_STATUS: {
+    title: 'Estado del gasto',
+    name: 'expense_status',
+    relationship_id_name: 'expense_status_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  EXPENSE_INVOICE_TYPE: {
+    title: 'Tipo de factura',
+    name: 'expense_invoice_type',
+    relationship_id_name: 'expense_invoice_type_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  EXPENSE_INVOICE_STATUS: {
+    title: 'Estado de la factura',
+    name: 'expense_invoice_status',
+    relationship_id_name: 'expense_invoice_status_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  EXPENSE_INVOICE_PAYMENT_FORM: {
+    title: 'Forma de pago',
+    name: 'expense_invoice_payment_form',
+    relationship_id_name: 'expense_invoice_payment_form_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  EXPENSE_INVOICE_PAYMENT_METHOD: {
+    title: 'Metodo de pago',
+    name: 'expense_invoice_payment_method',
+    relationship_id_name: 'expense_invoice_payment_method_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  EXPENSE_INVOICE_CDFI_USE: {
+    title: 'Uso del cdfi',
+    name: 'expense_invoice_cdfi_use',
+    relationship_id_name: 'expense_invoice_cdfi_use_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  INVOICE_CODE: {
+    title: 'Codigo de la factura',
+    name: 'invoice_code',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
+  INVOICE_PAID_DATE: {
+    title: 'Fecha del pago de la factura',
+    name: 'invoice_paid_date',
+    display: DisplayFunctions.getDate,
+    defaultValue: MauInputDefaultValues.DATE
+  },
+  INVOICE_TAX_RETAINED: {
+    title: 'Iva retenido',
+    name: 'invoice_tax_retained',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.FLOAT
+  },
+  INVOICE_ISR_RETAINED: {
+    title: 'Isr retenido',
+    name: 'invoice_isr_retained',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.FLOAT
+  },
+  COMPLEMENT_EXPENSE_INVOICE: {
+    title: 'Factura complemento',
+    name: 'complement_expense_invoice',
+    relationship_id_name: 'complement_expense_invoice_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   }

@@ -492,6 +492,13 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
       {
+        componentName: 'InvoiceList',
+        title: 'Facturas',
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
+      {
         componentName: 'Create'
       }
     ),
