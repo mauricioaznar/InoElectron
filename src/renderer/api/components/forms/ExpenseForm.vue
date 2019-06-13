@@ -384,6 +384,7 @@
         >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
+                        :key="(expense.expenseType && expense.expenseType['id'] ? expense.expenseType['id'] : '0') + 'complementExpense' "
                         :endpointName="expenseEndpointName"
                         :apiOperationOptions="complementExpenseInvoiceApiOperations"
                         :initialObject="initialValues[ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.name]"
