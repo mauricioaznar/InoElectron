@@ -217,7 +217,9 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group form-row">
+        <div class="form-group form-row"
+             v-if="isExpenseTypeInvoice || isExpenseTypeNote"
+        >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
                         :key="(expense.supplier && expense.supplier.id ? expense.supplier.id : 0) + 'expenseCategory'"
@@ -234,7 +236,9 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group form-row">
+        <div class="form-group form-row"
+             v-if="isExpenseTypeInvoice || isExpenseTypeNote"
+        >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
                         :key="(expense.supplier && expense.supplier.id ? String(expense.supplier.id) : '0') + (expense.expenseCategory && expense.expenseCategory.id ? String(expense.expenseCategory.id) : '0') + 'expenseSubcategory'"
@@ -252,7 +256,9 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group form-row">
+        <div class="form-group form-row"
+             v-if="isExpenseTypeInvoice || isExpenseTypeNote"
+        >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
                         :key="(expense.supplier && expense.supplier.id ? expense.supplier.id : 0) + 'expenseBranch'"
@@ -374,7 +380,7 @@
             </div>
         </div>
         <div class="form-group form-row"
-             v-if="isExpenseTypeInvoice && isExpenseInvoiceTypeComplement"
+             v-if="isExpenseTypeComplement"
         >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
@@ -501,6 +507,14 @@
         return this.expense && this.expense.expenseType && this.expense.expenseType[GlobalEntityIdentifier]
           ? this.expense.expenseType[GlobalEntityIdentifier] === 1 : false
       },
+      isExpenseTypeComplement: function () {
+        return this.expense && this.expense.expenseType && this.expense.expenseType[GlobalEntityIdentifier]
+          ? this.expense.expenseType[GlobalEntityIdentifier] === 3 : false
+      },
+      isExpenseTypeTaxDeclaration: function () {
+        return this.expense && this.expense.expenseType && this.expense.expenseType[GlobalEntityIdentifier]
+          ? this.expense.expenseType[GlobalEntityIdentifier] === 4 : false
+      },
       isExpenseInvoiceStatusPaid: function () {
         return this.expense && this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
           ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 3 : false
@@ -512,10 +526,6 @@
       isExpenseInvoiceTypeWithIeps: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
           ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 3 : false
-      },
-      isExpenseInvoiceTypeComplement: function () {
-        return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
-          ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 4 : false
       },
       total: function () {
         let subtotal = (this.expense.subtotal && this.expense.subtotal > 0) ? this.expense.subtotal : 0
@@ -610,8 +620,6 @@
           directParams[ExpensePropertiesReference.INVOICE_CODE.name] = this.expense.invoiceCode
           directParams[ExpensePropertiesReference.IEPS.name] = this.isExpenseInvoiceTypeWithIeps ? this.expense.ieps : 0
           directParams[ExpensePropertiesReference.TAX.name] = this.expense.tax
-          directParams[ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.relationship_id_name] = this.expense.complementExpenseInvoice && this.isExpenseInvoiceTypeComplement
-            ? this.expense.complementExpenseInvoice[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = this.isExpenseInvoiceTypeRetained ? this.expense.invoiceIsrRetained : ''
           directParams[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name] = this.isExpenseInvoiceTypeRetained ? this.expense.invoiceTaxRetained : ''
           directParams[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = this.isExpenseInvoiceStatusPaid ? this.expense.invoicePaidDate : '0000-00-00'
@@ -621,12 +629,17 @@
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
-          directParams[ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.INVOICE_CODE.name] = ''
           directParams[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = '0000-00-00'
           directParams[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = ''
           directParams[ExpensePropertiesReference.IEPS.name] = 0
           directParams[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name] = ''
+        }
+        if (this.isExpenseTypeComplement) {
+          directParams[ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.relationship_id_name] = this.expense.complementExpenseInvoice && this.isExpenseTypeComplement
+            ? this.expense.complementExpenseInvoice[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
+        } else {
+          directParams[ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
         }
         let indirectParams = {
         }
