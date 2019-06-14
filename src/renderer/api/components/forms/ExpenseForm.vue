@@ -500,7 +500,7 @@
         return {}
       },
       complementExpenseInvoiceApiOperations: function () {
-        return {filterExacts: {expense_invoice_payment_method_id: 1}}
+        return {filterExacts: {expense_invoice_payment_method_id: 1, expense_type_id: 2}}
       },
       isExpenseTypeInvoice: function () {
         return this.expense && this.expense.expenseType && this.expense.expenseType[GlobalEntityIdentifier]
