@@ -635,7 +635,7 @@
             ? this.expense.expenseInvoicePaymentMethod[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name] = this.expense.expenseInvoicePaymentForm
             ? this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
-          directParams[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = this.isExpenseInvoiceStatusPaid ? this.expense.invoicePaidDate : '0000-00-00'
+          directParams[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = (this.isExpenseTypeInvoice && this.isExpenseInvoiceStatusPaid) || this.isExpenseTypeComplement ? this.expense.invoicePaidDate : '0000-00-00'
         } else {
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
