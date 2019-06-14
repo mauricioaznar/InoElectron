@@ -310,7 +310,7 @@
             </div>
         </div>
         <div class="form-group form-row"
-             v-if="isExpenseTypeInvoice && isExpenseInvoiceStatusPaid"
+             v-if="(isExpenseTypeInvoice && isExpenseInvoiceStatusPaid) || isExpenseTypeComplement"
         >
             <div class="col-sm-12">
                 <mau-form-input-date
@@ -344,10 +344,11 @@
             </div>
         </div>
         <div class="form-group form-row"
-             v-if="isExpenseTypeInvoice"
+             v-if="isExpenseTypeInvoice || isExpenseTypeComplement"
         >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
+                        :key="(expense.expenseType && expense.expenseType['id'] ? expense.expenseType['id'] : '0') + 'expenseInvoicePaymentForm' "
                         :endpointName="expenseInvoicePaymentFormEndpointName"
                         :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name]"
                         :label="ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.title"
@@ -362,10 +363,11 @@
             </div>
         </div>
         <div class="form-group form-row"
-             v-if="isExpenseTypeInvoice"
+             v-if="isExpenseTypeInvoice || isExpenseTypeComplement"
         >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
+                        :key="(expense.expenseType && expense.expenseType['id'] ? expense.expenseType['id'] : '0') + 'expenseInvoicePaymentMethod' "
                         :endpointName="expenseInvoicePaymentMethodEndpointName"
                         :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name]"
                         :label="ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.title"
@@ -614,27 +616,30 @@
             ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.relationship_id_name] = this.expense.expenseInvoiceStatus
             ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
-          directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name] = this.expense.expenseInvoicePaymentMethod
-            ? this.expense.expenseInvoicePaymentMethod[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
-          directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name] = this.expense.expenseInvoicePaymentForm
-            ? this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.INVOICE_CODE.name] = this.expense.invoiceCode
           directParams[ExpensePropertiesReference.IEPS.name] = this.isExpenseInvoiceTypeWithIeps ? this.expense.ieps : 0
           directParams[ExpensePropertiesReference.TAX.name] = this.expense.tax
           directParams[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = this.isExpenseInvoiceTypeRetained ? this.expense.invoiceIsrRetained : ''
           directParams[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name] = this.isExpenseInvoiceTypeRetained ? this.expense.invoiceTaxRetained : ''
-          directParams[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = this.isExpenseInvoiceStatusPaid ? this.expense.invoicePaidDate : '0000-00-00'
         } else {
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
-          directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
-          directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.INVOICE_CODE.name] = ''
-          directParams[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = '0000-00-00'
           directParams[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = ''
           directParams[ExpensePropertiesReference.IEPS.name] = 0
           directParams[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name] = ''
+        }
+        if (this.isExpenseTypeComplement || this.isExpenseTypeInvoice) {
+          directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name] = this.expense.expenseInvoicePaymentMethod
+            ? this.expense.expenseInvoicePaymentMethod[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
+          directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name] = this.expense.expenseInvoicePaymentForm
+            ? this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
+          directParams[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = this.isExpenseInvoiceStatusPaid ? this.expense.invoicePaidDate : '0000-00-00'
+        } else {
+          directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
+          directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
+          directParams[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = '0000-00-00'
         }
         if (this.isExpenseTypeComplement) {
           directParams[ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.relationship_id_name] = this.expense.complementExpenseInvoice && this.isExpenseTypeComplement
