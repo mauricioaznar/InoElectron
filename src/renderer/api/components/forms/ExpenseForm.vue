@@ -310,6 +310,37 @@
             </div>
         </div>
         <div class="form-group form-row"
+             v-if="isExpenseTypeInvoice && !isExpenseInvoiceStatusProvisioned"
+        >
+            <div class="col-sm-12">
+                <label>
+                    Esta o fue provisionada?
+                </label>
+                <mau-form-input-check-box
+                        :initialValue="initialHasProvisionDate"
+                        v-model="hasProvisionDate"
+                >
+
+                </mau-form-input-check-box>
+            </div>
+        </div>
+        <div class="form-group form-row"
+            v-if="hasProvisionDate === 1 || isExpenseInvoiceStatusProvisioned"
+        >
+            <div class="col-sm-12">
+                <mau-form-input-date
+                        :name="ExpensePropertiesReference.INVOICE_PROVISION_DATE.name"
+                        :label="ExpensePropertiesReference.INVOICE_PROVISION_DATE.title"
+                        v-model="expense.invoiceProvisionDate"
+                        :initialValue="initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name]"
+                        :error="errors.has(ExpensePropertiesReference.INVOICE_PROVISION_DATE.name) ? errors.first(ExpensePropertiesReference.INVOICE_PROVISION_DATE.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                </mau-form-input-date>
+            </div>
+        </div>
+        <div class="form-group form-row"
              v-if="(isExpenseTypeInvoice && isExpenseInvoiceStatusPaid) || isExpenseTypeComplement"
         >
             <div class="col-sm-12">
@@ -416,6 +447,7 @@
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
+  import moment from 'moment'
   export default {
     name: 'ExpenseForm',
     data () {
@@ -443,11 +475,14 @@
           invoiceTaxRetained: '',
           invoiceIsrRetained: '',
           invoiceCode: '',
-          invoicePaidDate: ''
+          invoicePaidDate: '',
+          invoiceProvisionDate: ''
         },
         initialValues: {},
         hasNoteTax: 0,
         initialHasNoteTax: 0,
+        initialHasProvisionDate: 0,
+        hasProvisionDate: 0,
         expenseEndpointName: EntityTypes.EXPENSE.apiName,
         expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
         expenseCategoryEndpointName: EntityTypes.EXPENSE_CATEGORY.apiName,
@@ -514,13 +549,13 @@
         return this.expense && this.expense.expenseType && this.expense.expenseType[GlobalEntityIdentifier]
           ? this.expense.expenseType[GlobalEntityIdentifier] === 3 : false
       },
-      isExpenseTypeTaxDeclaration: function () {
-        return this.expense && this.expense.expenseType && this.expense.expenseType[GlobalEntityIdentifier]
-          ? this.expense.expenseType[GlobalEntityIdentifier] === 4 : false
-      },
       isExpenseInvoiceStatusPaid: function () {
         return this.expense && this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
           ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 3 : false
+      },
+      isExpenseInvoiceStatusProvisioned: function () {
+        return this.expense && this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 2 : false
       },
       isExpenseInvoiceTypeRetained: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
@@ -565,6 +600,10 @@
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_CODE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_CODE.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_PAID_DATE.name)
+        this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_PROVISION_DATE.name)
+        if (moment(this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name], 'YYYY-MM-DD').isValid()) {
+          this.initialHasProvisionDate = 1
+        }
       },
       setSupplierInitialValues: function () {
         let supplier = this.expense.supplier
@@ -621,6 +660,8 @@
           directParams[ExpensePropertiesReference.TAX.name] = this.expense.tax
           directParams[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = this.isExpenseInvoiceTypeRetained ? this.expense.invoiceIsrRetained : ''
           directParams[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name] = this.isExpenseInvoiceTypeRetained ? this.expense.invoiceTaxRetained : ''
+          directParams[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name] = this.isExpenseInvoiceStatusProvisioned || this.hasProvisionDate
+            ? this.expense.invoiceProvisionDate : '0000-00-00'
         } else {
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
@@ -629,6 +670,7 @@
           directParams[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = ''
           directParams[ExpensePropertiesReference.IEPS.name] = 0
           directParams[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name] = ''
+          directParams[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name] = '0000-00-00'
         }
         if (this.isExpenseTypeComplement || this.isExpenseTypeInvoice) {
           directParams[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name] = this.expense.expenseInvoicePaymentMethod

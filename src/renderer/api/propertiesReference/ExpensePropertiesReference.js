@@ -139,6 +139,12 @@ export default {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
+  INVOICE_PROVISION_DATE: {
+    title: 'Fecha de provision de la factura',
+    name: 'invoice_provision_date',
+    display: DisplayFunctions.getDate,
+    defaultValue: MauInputDefaultValues.DATE
+  },
   INVOICE_TAX_RETAINED: {
     title: 'Iva retenido',
     name: 'invoice_tax_retained',
