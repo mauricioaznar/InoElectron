@@ -1,6 +1,6 @@
 {
   "name": "Industria",
-  "version": "1.0.57",
+  "version": "1.0.58",
   "author": "Maguas Tupaguas <mauricioaznar94@gmail.com>",
   "description": "An electron-vue project",
   "license": null,
@@ -84,7 +84,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "lodash": "^4.17.10",
-    "mau-vue-components": "^0.21.18",
+    "mau-vue-components": "^0.21.19",
     "moment": "^2.22.2",
     "node-sass": "^4.9.0",
     "normalize.css": "^8.0.0",
