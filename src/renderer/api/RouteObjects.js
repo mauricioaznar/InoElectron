@@ -166,6 +166,39 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_ADJUSTME
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_RETURN,
+  {
+    componentName: 'Main',
+    category: Categories.PRODUCTION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_RETURN,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_RETURN,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_RETURN,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.ORDER_RETURN,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ORDER_REQUEST,
   {
     componentName: 'Main',

@@ -108,6 +108,16 @@ export default {
     apiName: 'orderRequest',
     title: 'Pedidos'
   },
+  ORDER_RETURN: {
+    name: 'orderReturn',
+    apiName: 'orderReturn',
+    title: 'Orden de regreso'
+  },
+  ORDER_RETURN_TYPE: {
+    name: 'orderReturnType',
+    apiName: 'orderReturnType',
+    title: 'Tipo de orden de regreso'
+  },
   ORDER_REQUEST_STATUS: {
     name: 'orderRequestStatus',
     apiName: 'orderRequestStatus'
