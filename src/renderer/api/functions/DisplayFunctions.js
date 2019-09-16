@@ -50,6 +50,13 @@ export default {
     }
     return htmlString + '</ul>'
   },
+  getDescriptionArray: function (array) {
+    let htmlString = '<ul>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<li>' + array[i].description + '</li>'
+    }
+    return htmlString + '</ul>'
+  },
   getFirstNameFromArray: function (array) {
     return array[0].name
   },

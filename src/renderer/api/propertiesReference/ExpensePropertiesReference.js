@@ -78,6 +78,12 @@ export default {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
+  EXPENSE_ITEMS: {
+    title: 'ELementos del gasto',
+    name: 'expense_items',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
   SUPPLIER: {
     title: 'Proveedor',
     name: 'supplier',

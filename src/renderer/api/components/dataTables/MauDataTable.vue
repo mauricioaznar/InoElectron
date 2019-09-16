@@ -215,6 +215,7 @@
       getTimeFromDateTime: DisplayFunctions.getTimeFromDateTime,
       getDate: DisplayFunctions.getDate,
       getNameArray: DisplayFunctions.getNameArray,
+      getDescriptionArray: DisplayFunctions.getDescriptionArray,
       getFirstNameFromArray: DisplayFunctions.getFirstNameFromArray,
       getProducts: DisplayFunctions.getProducts,
       getOrderSaleProducts: DisplayFunctions.getOrderSaleProducts,

@@ -190,6 +190,11 @@ export default {
     apiName: 'expense',
     title: 'Gastos'
   },
+  EXPENSE_ITEM: {
+    name: 'expenseItem',
+    apiName: 'expenseItem',
+    title: 'Elementos del gasto'
+  },
   EXPENSE_TYPE: {
     name: 'expenseType',
     apiName: 'expenseType',

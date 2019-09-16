@@ -256,6 +256,11 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+
+        <expense-item-table
+            :initialExpenseItems="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
+        >
+        </expense-item-table>
         <div class="form-group form-row"
              v-if="isExpenseTypeInvoice || isExpenseTypeNote"
         >
@@ -446,6 +451,7 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import ExpenseItemTable from 'renderer/api/components/m2m/ExpenseItemTable'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   import moment from 'moment'
   export default {
@@ -472,6 +478,7 @@
           expenseInvoicePaymentMethod: {},
           expenseInvoiceCdfiUse: {},
           complementExpenseInvoice: {},
+          expenseItems: [],
           invoiceTaxRetained: '',
           invoiceIsrRetained: '',
           invoiceCode: '',
@@ -490,6 +497,7 @@
         expenseBranchEndpointName: EntityTypes.EXPENSE_BRANCH.apiName,
         supplierEndpointName: EntityTypes.SUPPLIER.apiName,
         expenseTypeEndpointName: EntityTypes.EXPENSE_TYPE.apiName,
+        expenseItemEndpointName: EntityTypes.EXPENSE_ITEM.apiName,
         expenseStatusEndpointName: EntityTypes.EXPENSE_STATUS.apiName,
         expenseInvoiceStatusEndpointName: EntityTypes.EXPENSE_INVOICE_STATUS.apiName,
         expenseInvoiceTypeEndpointName: EntityTypes.EXPENSE_INVOICE_TYPE.apiName,
@@ -500,7 +508,8 @@
       }
     },
     components: {
-      MauFormInputSelectDynamic
+      MauFormInputSelectDynamic,
+      ExpenseItemTable
     },
     props: {
       initialObject: {
@@ -587,6 +596,7 @@
         this.initialValues[ExpensePropertiesReference.SUBTOTAL.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.SUBTOTAL.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_CATEGORY.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_CATEGORY.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_BRANCH.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_BRANCH.name)
         this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
         this.initialValues[ExpensePropertiesReference.TAX.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.TAX.name)
