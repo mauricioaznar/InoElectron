@@ -10,6 +10,7 @@
     <mau-crud-edit
       v-if="entity"
       :id="id"
+      :relationshipIdName="'expense_id'"
       :entityType="entityType"
       :callback="callback"
     >

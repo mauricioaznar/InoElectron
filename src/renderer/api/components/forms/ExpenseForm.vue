@@ -258,7 +258,8 @@
         </div>
 
         <expense-item-table
-            :initialExpenseItems="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
+            v-model="expense.expenseItems"
+            :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
         >
         </expense-item-table>
         <div class="form-group form-row"
@@ -453,6 +454,7 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import ExpenseItemTable from 'renderer/api/components/m2m/ExpenseItemTable'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
+  import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import moment from 'moment'
   export default {
     name: 'ExpenseForm',
@@ -699,12 +701,18 @@
         } else {
           directParams[ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
         }
-        let indirectParams = {
-        }
+        let expenseItemsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name],
+          this.expense.expenseItems,
+          'id'
+        )
+        let relayObjects = []
+        let expenseItemsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.EXPENSE_ITEM)
+        relayObjects.push(expenseItemsRelayObjects)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true
-            this.saveFunction(directParams, indirectParams)
+            this.saveFunction(directParams, relayObjects)
           }
         })
       }
