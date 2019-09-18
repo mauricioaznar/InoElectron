@@ -445,7 +445,6 @@
 </template>
 
 <script>
-  import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   import ExpensePropertiesReference from 'renderer/api/propertiesReference/ExpensePropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
@@ -586,7 +585,6 @@
       }
     },
     methods: {
-      getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       setInitialValues: function () {
         this.initialValues[ExpensePropertiesReference.EXPENSE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_TYPE.name)
         this.initialValues[ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.COMPLEMENT_EXPENSE_INVOICE.name)

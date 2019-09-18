@@ -525,13 +525,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
       {
-        componentName: 'InvoiceList',
-        title: 'Facturas',
-        navbar: true
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
-      {
         componentName: 'Create'
       }
     ),
@@ -542,6 +535,39 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.NOTE_EXPENSE,
+  {
+    componentName: 'Main',
+    category: Categories.ADMINISTRATION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.NOTE_EXPENSE,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.NOTE_EXPENSE,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.NOTE_EXPENSE,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.NOTE_EXPENSE,
       {
         componentName: 'View',
         params: [GlobalEntityIdentifier]
