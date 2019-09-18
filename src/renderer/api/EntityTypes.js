@@ -195,6 +195,11 @@ export default {
     apiName: 'expense',
     title: 'Notas'
   },
+  INVOICE_EXPENSE: {
+    name: 'invoiceExpense',
+    apiName: 'expense',
+    title: 'Facturas'
+  },
   EXPENSE_ITEM: {
     name: 'expenseItem',
     apiName: 'expenseItem',
