@@ -200,6 +200,11 @@ export default {
     apiName: 'expense',
     title: 'Facturas'
   },
+  COMPLEMENT_EXPENSE: {
+    name: 'complementExpense',
+    apiName: 'expense',
+    title: 'Complementos'
+  },
   EXPENSE_ITEM: {
     name: 'expenseItem',
     apiName: 'expenseItem',

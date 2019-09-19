@@ -609,6 +609,39 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.INVOICE_EXPENS
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
+  {
+    componentName: 'Main',
+    category: Categories.ADMINISTRATION
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
   {
     componentName: 'Main',
