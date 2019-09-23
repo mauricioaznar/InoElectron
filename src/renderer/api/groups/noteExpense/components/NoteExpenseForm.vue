@@ -59,6 +59,11 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+        <expense-items
+                v-model="expense.expenseItems"
+                :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
+        >
+        </expense-items>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -71,7 +76,9 @@
     import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
     import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
     import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic'
+    import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
     import EntityTypes from 'renderer/api/EntityTypes'
+    import ExpenseItems from 'renderer/api/components/m2m/ExpenseItems'
     export default {
       data () {
         return {
@@ -80,7 +87,8 @@
             date: '',
             expenseMoneySource: {},
             supplier: {},
-            expenseStatus: {}
+            expenseStatus: {},
+            expenseItems: []
           },
           buttonDisabled: false,
           initialValues: {},
@@ -111,7 +119,8 @@
         this.setInitialValues()
       },
       components: {
-        MauFormInputSelectDynamic
+        MauFormInputSelectDynamic,
+        ExpenseItems
       },
       mounted () {
         FormSubmitEventBus.onEvent(function (isSuccess) {
@@ -126,6 +135,7 @@
           this.initialValues[ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name)
           this.initialValues[ExpensePropertiesReference.EXPENSE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_STATUS.name)
           this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
+          this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
         },
         save: function () {
           let directParams = {
@@ -136,6 +146,13 @@
             [ExpensePropertiesReference.EXPENSE_STATUS.relationship_id_name]: this.expense.expenseStatus ? this.expense.expenseStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
           }
           let relayObjects = []
+          let expenseItemsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+            this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name],
+            this.expense.expenseItems,
+            'id'
+          )
+          let expenseItemsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.EXPENSE_ITEM)
+          relayObjects.push(expenseItemsRelayObjects)
           this.$validator.validateAll().then((result) => {
             if (result) {
               this.buttonDisabled = true

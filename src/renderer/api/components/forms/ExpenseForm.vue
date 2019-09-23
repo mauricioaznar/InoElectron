@@ -451,7 +451,7 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import ExpenseItemTable from 'renderer/api/components/m2m/ExpenseItemTable'
+  import ExpenseItemTable from 'renderer/api/components/m2m/ExpenseItems'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import moment from 'moment'
