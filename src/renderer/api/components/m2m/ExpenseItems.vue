@@ -22,7 +22,7 @@
                         :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).description : ''"
                         :error="errors.has('Description' + index) ? errors.first('Description' + index) : ''"
                         :v-validate="'required'"
-                        @change="refreshInput"
+                        @input="refreshInput"
                         v-validate="'required'"
                 >
 
@@ -35,7 +35,7 @@
                         :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).subtotal : ''"
                         :error="errors.has('Subtotal' + index) ? errors.first('Subtotal' + index) : ''"
                         :type="'float'"
-                        @change="refreshInput"
+                        @input="refreshInput"
                         v-validate="'required'"
                 >
                 </mau-form-input-number>
@@ -48,7 +48,7 @@
                         :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).tax : ''"
                         :error="errors.has('Tax' + index) ? errors.first('Tax' + index) : ''"
                         :type="'float'"
-                        @change="refreshInput"
+                        @input="refreshInput"
                         v-validate="'required'"
                 >
 
@@ -75,7 +75,7 @@
                         :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).quantity : ''"
                         :error="errors.has('ItemExpenseQuantity' + index) ? errors.first('ItemExpenseQuantity' + index) : ''"
                         :type="'float'"
-                        @change="refreshInput"
+                        @input="refreshInput"
                         v-validate="'required'"
                 >
                 </mau-form-input-number>
@@ -192,6 +192,7 @@
           expenseItem[propertyName] = selectedObject && selectedObject.id ? selectedObject.id : (initialExpenseItem && initialExpenseItem[propertyName] > 0 ? 'null' : null)
         },
         refreshInput: function () {
+          console.log('asdf')
           this.$emit('input', this.expenseItems)
         },
         isExpenseItemQuantityRequired: function (expenseItem) {
