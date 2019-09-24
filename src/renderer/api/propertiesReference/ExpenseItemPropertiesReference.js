@@ -22,5 +22,10 @@ export default {
     relationship_id_name: 'machine_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
+  },
+  QUANTITY: {
+    title: 'Cantidad',
+    name: 'quantity',
+    defaultValue: MauInputDefaultValues.NUMBER
   }
 }

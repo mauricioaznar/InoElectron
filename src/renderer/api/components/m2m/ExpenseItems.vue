@@ -38,7 +38,6 @@
                         @change="refreshInput"
                         v-validate="'required'"
                 >
-
                 </mau-form-input-number>
                 <mau-form-input-number
                         v-if="hasTax"
@@ -67,9 +66,23 @@
                         v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
-                <mau-form-input-select-dynamic
+                <mau-form-input-number
                         class="mb-2"
-                        v-if="expenseItem.expenseSubcategory && expenseItem.expenseCategory.id === 2"
+                        v-if="isExpenseItemQuantityRequired(expenseItem)"
+                        :name="'ItemExpenseQuantity' + index"
+                        :label="'Cantidad'"
+                        v-model="expenseItem.quantity"
+                        :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).quantity : ''"
+                        :error="errors.has('ItemExpenseQuantity' + index) ? errors.first('ItemExpenseQuantity' + index) : ''"
+                        :type="'float'"
+                        @change="refreshInput"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+                <mau-form-input-select-dynamic
+                        :key="'ItemExpenseMachine' + index"
+                        class="mb-2"
+                        v-if="expenseItem.expenseCategory && expenseItem.expenseCategory.id === 2"
                         :label="'Maquina'"
                         :initialObject="expenseItem.id ? getInitialExpenseItem(expenseItem).machine : {}"
                         :displayProperty="'name'"
@@ -78,7 +91,6 @@
                         @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'machine_id') }"
                         :name="'Machine' + index"
                         :error="errors.has('Machine' + index) ? errors.first('Machine' + index) : ''"
-                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
                 <mau-form-input-select-dynamic
@@ -181,6 +193,9 @@
         },
         refreshInput: function () {
           this.$emit('input', this.expenseItems)
+        },
+        isExpenseItemQuantityRequired: function (expenseItem) {
+          return expenseItem.expenseSubcategory && (expenseItem.expenseSubcategory.id === 12 || expenseItem.expenseSubcategory.id === 13 || expenseItem.expenseSubcategory.id === 29)
         },
         addExpenseItem: function () {
           this.expenseItems.push({description: ''})
