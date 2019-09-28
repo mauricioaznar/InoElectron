@@ -13,13 +13,29 @@
                 Pago {{index + 1}}
                 <span v-if="index !== 0" class="icon-button float-right font-weight-bold" @click="removeExpensePayment(index)">x</span>
             </h5>
+            <div class="form-group form-row">
+                <div class="col-sm-12">
+                    <mau-form-input-date
+                            :key="'Date' + index  + 'a' + (isFirstExpensePayment(index) ? getFirstExpensePayment().date : 0)"
+                            class="mb-2"
+                            :name="'Date' + index"
+                            :label="'Fecha'"
+                            v-model="expensePayment.date"
+                            :initialValue="isFirstExpensePayment(index) ? getFirstExpensePayment().date : (expensePayment.id ? getInitialExpensePayment(expensePayment).date : '')"
+                            :error="errors.has('Date' + index) ? errors.first('Date' + index) : ''"
+                            v-validate="'required'"
+                    >
+                    </mau-form-input-date>
+                </div>
+            </div>
             <div>
                 <mau-form-input-number
+                        :key="'Subtotal' + index + 'a' + (isFirstExpensePayment(index) ? getFirstExpensePayment().subtotal : 0)"
                         class="mb-2"
                         :name="'Subtotal' + index"
                         :label="'Subtotal'"
                         v-model="expensePayment.subtotal"
-                        :initialValue="expensePayment.id ? getInitialExpensePayment(expensePayment).subtotal : ''"
+                        :initialValue="isFirstExpensePayment(index) ? getFirstExpensePayment().subtotal : (expensePayment.id ? getInitialExpensePayment(expensePayment).subtotal : '')"
                         :error="errors.has('Subtotal' + index) ? errors.first('Subtotal' + index) : ''"
                         :type="'float'"
                         @input="refreshInput"
@@ -35,6 +51,7 @@
     import EntityTypes from 'renderer/api/EntityTypes'
     import cloneDeep from 'renderer/services/common/cloneDeep'
     import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
+    import moment from 'moment'
     export default {
       inject: ['$validator'],
       data () {
@@ -48,13 +65,21 @@
         MauFormInputSelectDynamic
       },
       created () {
-        this.initialExpensePayments = cloneDeep(this.initialValues)
-        this.expensePayments = cloneDeep(this.initialValues)
+        if (this.initialValues.length !== 0) {
+          this.initialExpensePayments = cloneDeep(this.initialValues)
+          this.expensePayments = cloneDeep(this.initialValues)
+        }
       },
       props: {
         initialValues: {
           type: Array,
           required: true
+        },
+        initialFirstExpensePayment: {
+          type: Object,
+          default: function () {
+            return {subtotal: 0}
+          }
         },
         hasTax: {
           type: Boolean,
@@ -69,7 +94,6 @@
           expensePayment[propertyName] = selectedObject && selectedObject.id ? selectedObject.id : (initialExpensePayment && initialExpensePayment[propertyName] > 0 ? 'null' : null)
         },
         refreshInput: function () {
-          console.log('fasdfasdfasdfasdf')
           this.$emit('input', this.expensePayments)
         },
         addExpensePayment: function () {
@@ -87,6 +111,16 @@
             return ''
           }
           return initialExpensePayment
+        },
+        isFirstExpensePayment: function (index) {
+          return index === 0 && this.initialValues.length === 0
+        },
+        getFirstExpensePayment: function () {
+          let {subtotal, date} = this.initialFirstExpensePayment
+          return {
+            subtotal: subtotal && subtotal > 0 ? subtotal : 0,
+            date: moment(date).isValid() ? date : ''
+          }
         }
       }
     }

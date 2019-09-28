@@ -192,7 +192,10 @@
           expenseItem[propertyName] = selectedObject && selectedObject.id ? selectedObject.id : (initialExpenseItem && initialExpenseItem[propertyName] > 0 ? 'null' : null)
         },
         refreshInput: function () {
-          console.log('asdf')
+          let total = this.expenseItems.reduce((acc, expenseItem) => {
+            return acc + ((expenseItem && expenseItem.subtotal) ? expenseItem.subtotal : 0)
+          }, 0)
+          this.$emit('total', total)
           this.$emit('input', this.expenseItems)
         },
         isExpenseItemQuantityRequired: function (expenseItem) {
@@ -200,9 +203,11 @@
         },
         addExpenseItem: function () {
           this.expenseItems.push({description: ''})
+          this.refreshInput()
         },
         removeExpenseItem: function (index) {
           this.expenseItems.splice(index, 1)
+          this.refreshInput()
         },
         getInitialExpenseItem: function (expenseItem) {
           if (!expenseItem.id) {

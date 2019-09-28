@@ -62,11 +62,13 @@
         <expense-items
                 v-model="expense.expenseItems"
                 :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
+                @total="setTotal"
         >
         </expense-items>
         <expense-payments
                 v-model="expense.expensePayments"
                 :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name]"
+                :initialFirstExpensePayment="{subtotal: total, date: expense.date}"
         >
 
         </expense-payments>
@@ -102,7 +104,8 @@
           initialValues: {},
           expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
           expenseStatusEndpointName: EntityTypes.EXPENSE_STATUS.apiName,
-          supplierEndpointName: EntityTypes.SUPPLIER.apiName
+          supplierEndpointName: EntityTypes.SUPPLIER.apiName,
+          total: 0
         }
       },
       computed: {
@@ -115,7 +118,6 @@
       },
       props: {
         initialObject: {
-          required: true,
           type: Object
         },
         saveFunction: {
@@ -178,6 +180,9 @@
               this.saveFunction(directParams, relayObjects)
             }
           })
+        },
+        setTotal: function (total) {
+          this.total = total
         }
       }
     }

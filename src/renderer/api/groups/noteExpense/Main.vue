@@ -34,7 +34,7 @@
           {
             name: 'Create',
             icon: 'fa fa-plus',
-            path: RouteObjectHelper.createPath(EntityTypes.EXPENSE, 'create')
+            path: RouteObjectHelper.createPath(EntityTypes.NOTE_EXPENSE, 'create')
           }
         ],
         buttons: []
