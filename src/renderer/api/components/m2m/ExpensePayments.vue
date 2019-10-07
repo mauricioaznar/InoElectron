@@ -43,6 +43,77 @@
                 >
                 </mau-form-input-number>
             </div>
+            <div v-if="hasTax">
+                <mau-form-input-number
+                        class="mb-2"
+                        :name="'Tax' + index"
+                        :label="'IVA'"
+                        v-model="expensePayment.tax"
+                        :initialValue="expensePayment.id ? getInitialExpensePayment(expensePayment).tax : ''"
+                        :error="errors.has('Tax' + index) ? errors.first('Tax' + index) : ''"
+                        :type="'float'"
+                        @input="refreshInput"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+            <div v-if="hasRetentions">
+                <mau-form-input-number
+                        class="mb-2"
+                        :name="'TaxRetained' + index"
+                        :label="'IVA retenido'"
+                        v-model="expensePayment.tax_retained"
+                        :initialValue="expensePayment.id ? getInitialExpensePayment(expensePayment).tax_retained : ''"
+                        :error="errors.has('TaxRetained' + index) ? errors.first('TaxRetained' + index) : ''"
+                        :type="'float'"
+                        @input="refreshInput"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+            <div v-if="hasRetentions">
+                <mau-form-input-number
+                        class="mb-2"
+                        :name="'IsrRetained' + index"
+                        :label="'ISR retenido'"
+                        v-model="expensePayment.isr_retained"
+                        :initialValue="expensePayment.id ? getInitialExpensePayment(expensePayment).isr_retained : ''"
+                        :error="errors.has('IsrRetained' + index) ? errors.first('IsrRetained' + index) : ''"
+                        :type="'float'"
+                        @input="refreshInput"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+            <div v-if="hasIeps">
+                <mau-form-input-number
+                        class="mb-2"
+                        :name="'Ieps' + index"
+                        :label="'Ieps'"
+                        v-model="expensePayment.ieps"
+                        :initialValue="expensePayment.id ? getInitialExpensePayment(expensePayment).ieps : ''"
+                        :error="errors.has('Ieps' + index) ? errors.first('Ieps' + index) : ''"
+                        :type="'float'"
+                        @input="refreshInput"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+            <div>
+                <mau-form-input-select-dynamic
+                        :key="'ExpensePaymentMoneySource' + index"
+                        class="mb-2"
+                        :label="'Origen del dinero'"
+                        :initialObject="expensePayment.id ? getInitialExpensePayment(expensePayment).expenseMoneySource : {}"
+                        :displayProperty="'name'"
+                        :endpointName="expenseMoneySourceEndpointName"
+                        v-model="expensePayment.expenseMoneySource"
+                        @input="function x(result) { updateExpensePaymentProperty(result, expensePayment, 'expense_money_source_id') }"
+                        :name="'ExpensePaymentMoneySource' + index"
+                        :error="errors.has('ExpensePaymentMoneySource' + index) ? errors.first('ExpensePaymentMoneySource' + index) : ''"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
         </div>
     </div>
 </template>
@@ -52,12 +123,14 @@
     import cloneDeep from 'renderer/services/common/cloneDeep'
     import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
     import moment from 'moment'
+    import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
     export default {
       inject: ['$validator'],
       data () {
         return {
           expensePayments: [],
           initialExpensePayments: [],
+          expenseMoneySources: [],
           expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName
         }
       },
@@ -65,10 +138,19 @@
         MauFormInputSelectDynamic
       },
       created () {
-        if (this.initialValues.length !== 0) {
-          this.initialExpensePayments = cloneDeep(this.initialValues)
-          this.expensePayments = cloneDeep(this.initialValues)
-        }
+        Promise.all([
+          GenericApiOperations.list(EntityTypes.EXPENSE_MONEY_SOURCE.apiName, {paginate: false})
+        ])
+          .then(result => {
+            this.expenseMoneySources = result[0]
+            for (let i = 0; i < this.initialValues.length; i++) {
+              let initialExpensePayment = cloneDeep(this.initialValues[i])
+              initialExpensePayment.expenseMoneySource = this.expenseMoneySources.find(expenseMoneySourceObj => expenseMoneySourceObj.id === initialExpensePayment.expense_money_source_id)
+              this.initialExpensePayments.push(initialExpensePayment)
+            }
+            this.expensePayments = cloneDeep(this.initialExpensePayments)
+            this.refreshInput()
+          })
       },
       props: {
         initialValues: {
@@ -82,6 +164,18 @@
           }
         },
         hasTax: {
+          type: Boolean,
+          default: function () {
+            return false
+          }
+        },
+        hasRetentions: {
+          type: Boolean,
+          default: function () {
+            return false
+          }
+        },
+        hasIeps: {
           type: Boolean,
           default: function () {
             return false

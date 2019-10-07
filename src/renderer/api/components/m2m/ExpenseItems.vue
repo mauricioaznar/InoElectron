@@ -72,7 +72,7 @@
                         :name="'ItemExpenseQuantity' + index"
                         :label="'Cantidad'"
                         v-model="expenseItem.quantity"
-                        :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).quantity : ''"
+                        :initialValue="expenseItem.id ? (getInitialExpenseItem(expenseItem).quantity >= 0 && getInitialExpenseItem(expenseItem).quantity !== null? getInitialExpenseItem(expenseItem).quantity : 0) : ''"
                         :error="errors.has('ItemExpenseQuantity' + index) ? errors.first('ItemExpenseQuantity' + index) : ''"
                         :type="'float'"
                         @input="refreshInput"

@@ -22,7 +22,7 @@
     name: 'ListNoteExpense',
     data () {
       return {
-        apiUrl: GenericApiUrls.createListUrl(EntityTypes.COMPLEMENT_EXPENSE.apiName, {paginate: true, filterExacts: {expense_type_id: 1}}),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.COMPLEMENT_EXPENSE.apiName, {paginate: true, filterExacts: {expense_type_id: 3}}),
         actions: [
           {
             name: 'view',

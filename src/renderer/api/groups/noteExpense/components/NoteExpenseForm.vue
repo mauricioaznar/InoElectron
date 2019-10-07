@@ -168,12 +168,10 @@
             this.expense.expensePayments,
             'id'
           )
-          console.log(expensePaymentsM2mFilteredObject)
           let expenseItemsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.EXPENSE_ITEM)
           let expensePaymentsRelayObjects = ManyToManyHelper.createRelayObject(expensePaymentsM2mFilteredObject, EntityTypes.EXPENSE_PAYMENT)
           relayObjects.push(expenseItemsRelayObjects)
           relayObjects.push(expensePaymentsRelayObjects)
-          console.log(relayObjects)
           this.$validator.validateAll().then((result) => {
             if (result) {
               this.buttonDisabled = true

@@ -256,6 +256,20 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+        <expense-items
+                v-model="expense.expenseItems"
+                :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
+        >
+        </expense-items>
+        <expense-payments
+                v-model="expense.expensePayments"
+                :hasTax="true"
+                :hasIeps="isExpenseInvoiceTypeWithIeps"
+                :hasRetentions="isExpenseInvoiceTypeRetained"
+                :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name]"
+        >
+
+        </expense-payments>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -269,6 +283,9 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import ExpenseItems from 'renderer/api/components/m2m/ExpenseItems'
+  import ExpensePayments from 'renderer/api/components/m2m/ExpensePayments'
+  import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import moment from 'moment'
   export default {
     name: 'ExpenseForm',
@@ -287,6 +304,7 @@
           expenseInvoiceCdfiUse: {},
           complementExpenseInvoice: {},
           expenseItems: [],
+          expensePayments: [],
           invoiceTaxRetained: '',
           invoiceIsrRetained: '',
           invoiceCode: '',
@@ -309,7 +327,9 @@
       }
     },
     components: {
-      MauFormInputSelectDynamic
+      MauFormInputSelectDynamic,
+      ExpenseItems,
+      ExpensePayments
     },
     props: {
       initialObject: {
@@ -372,6 +392,8 @@
         this.initialValues[ExpensePropertiesReference.INVOICE_CODE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_CODE.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_PAID_DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_PAID_DATE.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_PROVISION_DATE.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_PAYMENTS.name)
         if (moment(this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name], 'YYYY-MM-DD').isValid()) {
           this.initialHasProvisionDate = 1
         }
@@ -410,6 +432,20 @@
           [ExpensePropertiesReference.INVOICE_PAID_DATE.name]: this.isExpenseInvoiceStatusPaid ? this.expense.invoicePaidDate : '0000-00-00'
         }
         let relayObjects = []
+        let expenseItemsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name],
+          this.expense.expenseItems,
+          'id'
+        )
+        let expensePaymentsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          this.initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name],
+          this.expense.expensePayments,
+          'id'
+        )
+        let expenseItemsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.EXPENSE_ITEM)
+        let expensePaymentsRelayObjects = ManyToManyHelper.createRelayObject(expensePaymentsM2mFilteredObject, EntityTypes.EXPENSE_PAYMENT)
+        relayObjects.push(expenseItemsRelayObjects)
+        relayObjects.push(expensePaymentsRelayObjects)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true
