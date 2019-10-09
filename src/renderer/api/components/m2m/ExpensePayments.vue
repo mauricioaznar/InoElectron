@@ -13,20 +13,18 @@
                 Pago {{index + 1}}
                 <span v-if="index !== 0" class="icon-button float-right font-weight-bold" @click="removeExpensePayment(index)">x</span>
             </h5>
-            <div class="form-group form-row">
-                <div class="col-sm-12">
-                    <mau-form-input-date
-                            :key="'Date' + index  + 'a' + (isFirstExpensePayment(index) ? getFirstExpensePayment().date : 0)"
-                            class="mb-2"
-                            :name="'Date' + index"
-                            :label="'Fecha'"
-                            v-model="expensePayment.date"
-                            :initialValue="isFirstExpensePayment(index) ? getFirstExpensePayment().date : (expensePayment.id ? getInitialExpensePayment(expensePayment).date : '')"
-                            :error="errors.has('Date' + index) ? errors.first('Date' + index) : ''"
-                            v-validate="'required'"
-                    >
-                    </mau-form-input-date>
-                </div>
+            <div>
+                <mau-form-input-date
+                        :key="'Date' + index  + 'a' + (isFirstExpensePayment(index) ? getFirstExpensePayment().date : 0)"
+                        class="mb-2"
+                        :name="'Date' + index"
+                        :label="'Fecha'"
+                        v-model="expensePayment.date"
+                        :initialValue="isFirstExpensePayment(index) ? getFirstExpensePayment().date : (expensePayment.id ? getInitialExpensePayment(expensePayment).date : '')"
+                        :error="errors.has('Date' + index) ? errors.first('Date' + index) : ''"
+                        v-validate="'required'"
+                >
+                </mau-form-input-date>
             </div>
             <div>
                 <mau-form-input-number
@@ -45,11 +43,12 @@
             </div>
             <div v-if="hasTax">
                 <mau-form-input-number
+                        :key="'Tax' + index + 'a' + (isFirstExpensePayment(index) ? getFirstExpensePayment().tax : 0)"
                         class="mb-2"
                         :name="'Tax' + index"
                         :label="'IVA'"
                         v-model="expensePayment.tax"
-                        :initialValue="expensePayment.id ? getInitialExpensePayment(expensePayment).tax : ''"
+                        :initialValue="isFirstExpensePayment(index) ? getFirstExpensePayment().tax : (expensePayment.id ? getInitialExpensePayment(expensePayment).tax : '')"
                         :error="errors.has('Tax' + index) ? errors.first('Tax' + index) : ''"
                         :type="'float'"
                         @input="refreshInput"
@@ -148,7 +147,7 @@
               initialExpensePayment.expenseMoneySource = this.expenseMoneySources.find(expenseMoneySourceObj => expenseMoneySourceObj.id === initialExpensePayment.expense_money_source_id)
               this.initialExpensePayments.push(initialExpensePayment)
             }
-            this.expensePayments = cloneDeep(this.initialExpensePayments)
+            this.expensePayments = this.initialExpensePayments.length === 0 ? [{}] : cloneDeep(this.initialExpensePayments)
             this.refreshInput()
           })
       },
@@ -212,7 +211,8 @@
         getFirstExpensePayment: function () {
           let {subtotal, date} = this.initialFirstExpensePayment
           return {
-            subtotal: subtotal && subtotal > 0 ? subtotal : 0,
+            subtotal: subtotal && subtotal > 0 ? (this.hasTax ? (Math.round((subtotal / 1.16) * 100) / 100) : subtotal) : 0,
+            tax: (this.hasTax && subtotal && subtotal > 0 ? (subtotal - (Math.round((subtotal / 1.16) * 100) / 100)) : 0),
             date: moment(date).isValid() ? date : ''
           }
         }

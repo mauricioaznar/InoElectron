@@ -13,7 +13,8 @@
         <bag-inventory-report v-if="tabIndex.value === 1" class="mt-4"></bag-inventory-report>
         <production-report :key="tabIndex.value + 'bag'" :reportType="'bag'" v-if="tabIndex.value === 2" class="mt-4"></production-report>
         <production-report :key="tabIndex.value + 'roll'" :reportType="'roll'" v-if="tabIndex.value === 3" class="mt-4"></production-report>
-        <expense-report :key="tabIndex.value + 'roll'" v-if="tabIndex.value === 4" class="mt-4"></expense-report>
+        <expense-report :key="tabIndex.value + 'expenseReport'" v-if="tabIndex.value === 4" class="mt-4"></expense-report>
+        <expense-report-two :key="tabIndex.value + 'expenseReport2'" v-if="tabIndex.value === 5" class="mt-4"></expense-report-two>
     </div>
 </template>
 
@@ -23,6 +24,7 @@
     import ProductionEventReport from 'renderer/api/groups/home/components/ProductionEventReport.vue'
     import ProductionReport from 'renderer/api/groups/home/components/ProductionReport.vue'
     import ExpenseReport from 'renderer/api/groups/home/components/ExpenseReport'
+    import ExpenseReportTwo from 'renderer/api/groups/home/components/ExpenseReportTwo'
     export default {
       data () {
         return {
@@ -33,7 +35,8 @@
             {value: 1, text: 'Inventario de bolsas'},
             {value: 2, text: 'Reporte de bolseo'},
             {value: 3, text: 'Reporte de extrusion'},
-            {value: 4, text: 'Reporte de gastos'}
+            {value: 4, text: 'Reporte de gastos'},
+            {value: 5, text: 'Reporte de gastos 2'}
           ]
         }
       },
@@ -42,7 +45,8 @@
         SalesReport,
         ProductionEventReport,
         ProductionReport,
-        ExpenseReport
+        ExpenseReport,
+        ExpenseReportTwo
       },
       methods: {
       }

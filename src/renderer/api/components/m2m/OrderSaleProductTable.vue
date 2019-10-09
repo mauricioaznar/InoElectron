@@ -248,7 +248,7 @@
         },
         getCurrentObjKiloPrice: function (structuredObject) {
           let currentKiloPrice = this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CURRENT_KILO_PRICE.name]
-          if (structuredObject[OrderRequestProductPropertiesReference.KILO_PRICE.name]) {
+          if (structuredObject[OrderRequestProductPropertiesReference.KILO_PRICE.name] >= 0) {
             currentKiloPrice = structuredObject[OrderRequestProductPropertiesReference.KILO_PRICE.name]
           }
           return currentKiloPrice

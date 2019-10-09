@@ -259,6 +259,7 @@
         <expense-items
                 v-model="expense.expenseItems"
                 :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
+                @total="setTotal"
         >
         </expense-items>
         <expense-payments
@@ -267,6 +268,7 @@
                 :hasIeps="isExpenseInvoiceTypeWithIeps"
                 :hasRetentions="isExpenseInvoiceTypeRetained"
                 :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name]"
+                :initialFirstExpensePayment="{subtotal: total, date: expense.date}"
         >
 
         </expense-payments>
@@ -323,7 +325,8 @@
         expenseInvoicePaymentMethodEndpointName: EntityTypes.EXPENSE_INVOICE_PAYMENT_METHOD.apiName,
         expenseInvoicePaymentFormEndpointName: EntityTypes.EXPENSE_INVOICE_PAYMENT_FORM.apiName,
         expenseInvoiceCdfiUseEndpointName: EntityTypes.EXPENSE_INVOICE_CDFI_USE.apiName,
-        buttonDisabled: false
+        buttonDisabled: false,
+        total: 0
       }
     },
     components: {
@@ -400,6 +403,7 @@
       },
       save: function () {
         let directParams = {
+          [ExpensePropertiesReference.EXPENSE_TYPE.relationship_id_name]: 2,
           [ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.relationship_id_name]: this.expense.expenseMoneySource
             ? this.expense.expenseMoneySource[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.DATE.name]: this.expense.date,
@@ -452,6 +456,9 @@
             this.saveFunction(directParams, relayObjects)
           }
         })
+      },
+      setTotal: function (total) {
+        this.total = total
       }
     },
     watch: {

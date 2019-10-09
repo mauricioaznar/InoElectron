@@ -82,7 +82,7 @@
                       :error="errors.first('bags')"
                       :multiselect="true"
                       :disabled="!userHasWritePrivileges"
-                      v-validate="'required'"
+                      v-validate="productionOrder.rolls.length === 0 ? 'required' : ''"
               >
                   <order-production-product-table
                           :allowNegative="true"
@@ -109,6 +109,7 @@
                       :error="errors.first('rolls')"
                       :multiselect="true"
                       :disabled="!userHasWritePrivileges"
+                      v-validate="productionOrder.bags.length === 0 ? 'required' : ''"
               >
                   <order-production-product-table
                           :allowNegative="true"

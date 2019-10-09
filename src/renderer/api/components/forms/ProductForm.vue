@@ -69,6 +69,7 @@
               :error="errors.has(PropertiesReference.CURRENT_GROUP_WEIGHT.name) ? errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name) : ''"
               :disabled="!userHasWritePrivileges"
               v-validate="'required|min_value:1'"
+              :type="'float'"
       >
       </mau-form-input-number>
     </div>

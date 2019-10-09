@@ -33,7 +33,8 @@
                                     kilo_to_group: {
                                         groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
                                         isGroupWeightStrict: getProductGroupWeightStrict(currentStructuredObj)
-                                    }
+                                    },
+                                    min_value: 1
                                 }"
                         >
                         </mau-form-input-number>
@@ -48,7 +49,7 @@
                                 :error="errors.has('_quantity_group' + currentStructuredObj['product_id']) ? errors.first('_quantity_group' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required'"
+                                v-validate="'required|min_value:1'"
                         >
                         </mau-form-input-number>
                     </td>
@@ -101,7 +102,7 @@
                                 :error="errors.has('_manual_kilos' + currentStructuredObj['product_id']) ? errors.first('_manual_kilos' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required'"
+                                v-validate="'required|min_value:1'"
                         >
                         </mau-form-input-number>
                     </td>
@@ -125,7 +126,7 @@
                                 :error="errors.has('_manual_groups' + currentStructuredObj['product_id']) ? errors.first('_manual_groups' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required'"
+                                v-validate="'required|min_value:1'"
                         >
                         </mau-form-input-number>
                     </td>

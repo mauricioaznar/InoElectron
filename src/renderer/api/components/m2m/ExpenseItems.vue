@@ -170,7 +170,7 @@
               initialExpenseItem.expenseCategory = this.expenseCategories.find(expenseCategoryObj => expenseCategoryObj.id === initialExpenseItem.expense_category_id)
               this.initialExpenseItems.push(initialExpenseItem)
             }
-            this.expenseItems = this.initialExpenseItems
+            this.expenseItems = this.initialExpenseItems.length === 0 ? [{}] : cloneDeep(this.initialExpenseItems)
             this.refreshInput()
           })
       },

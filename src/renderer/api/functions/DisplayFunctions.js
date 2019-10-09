@@ -58,7 +58,7 @@ export default {
     return htmlString + '</ul>'
   },
   getFirstNameFromArray: function (array) {
-    return array[0].name
+    return array.length === 0 ? '' : array[0].name
   },
   getDate: function (date) {
     let momentDate = moment(date)
