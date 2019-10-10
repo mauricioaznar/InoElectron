@@ -17,21 +17,6 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
-                        :endpointName="expenseMoneySourceEndpointName"
-                        :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name]"
-                        :label="ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.title"
-                        :displayProperty="'name'"
-                        v-model="expense.expenseMoneySource"
-                        :name="ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name"
-                        :error="errors.has(ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name) ? errors.first(ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name) : ''"
-                        :disabled="!userHasWritePrivileges"
-                >
-                </mau-form-input-select-dynamic>
-            </div>
-        </div>
-        <div class="form-group form-row">
-            <div class="col-sm-12">
-                <mau-form-input-select-dynamic
                         :endpointName="supplierEndpointName"
                         :initialObject="initialValues[ExpensePropertiesReference.SUPPLIER.name]"
                         :label="ExpensePropertiesReference.SUPPLIER.title"
@@ -94,7 +79,6 @@
           ExpensePropertiesReference: ExpensePropertiesReference,
           expense: {
             date: '',
-            expenseMoneySource: {},
             supplier: {},
             expenseStatus: {},
             expenseItems: [],
@@ -143,7 +127,6 @@
       methods: {
         setInitialValues: function () {
           this.initialValues[ExpensePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE.name)
-          this.initialValues[ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name)
           this.initialValues[ExpensePropertiesReference.EXPENSE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_STATUS.name)
           this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
           this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
@@ -152,7 +135,6 @@
         save: function () {
           let directParams = {
             [ExpensePropertiesReference.EXPENSE_TYPE.relationship_id_name]: 1,
-            [ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.relationship_id_name]: this.expense.expenseMoneySource ? this.expense.expenseMoneySource[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
             [ExpensePropertiesReference.DATE.name]: this.expense.date,
             [ExpensePropertiesReference.SUPPLIER.relationship_id_name]: this.expense.supplier ? this.expense.supplier[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
             [ExpensePropertiesReference.EXPENSE_STATUS.relationship_id_name]: this.expense.expenseStatus ? this.expense.expenseStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
