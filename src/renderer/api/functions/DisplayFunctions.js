@@ -198,5 +198,33 @@ export default {
     return '<div class="d-flex justify-content-center">' +
       '<img src="' + Vue.http.options.root + '/attendances/' + imageName + '" class="mau-image-large" alt=" no disponible">' +
       '</div>'
+  },
+  getExpenseItems: function (array) {
+    let htmlString = '<table class="w-100">'
+    htmlString += '<tr>'
+    htmlString += '<th>Descripcion</th>'
+    htmlString += '<th>Subtotal</th>'
+    htmlString += '</tr>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].description + '</td>'
+      htmlString += '<td class="mau-text-center">' + array[i].subtotal + '</td>'
+      htmlString += '</tr>'
+    }
+    return htmlString + '</table>'
+  },
+  getExpensePayments: function (array) {
+    let htmlString = '<table class="w-100">'
+    htmlString += '<tr>'
+    htmlString += '<th>Fecha del pago</th>'
+    htmlString += '<th>Subtotal</th>'
+    htmlString += '</tr>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].date + '</td>'
+      htmlString += '<td class="mau-text-center">' + array[i].subtotal + '</td>'
+      htmlString += '</tr>'
+    }
+    return htmlString + '</table>'
   }
 }
