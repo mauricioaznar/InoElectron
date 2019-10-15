@@ -103,7 +103,7 @@
                         :key="'ExpensePaymentMoneySource' + index"
                         class="mb-2"
                         :label="'Origen del dinero'"
-                        :initialObject="expensePayment.id ? getInitialExpensePayment(expensePayment).expenseMoneySource : {}"
+                        :initialObject="expensePayment.id && getInitialExpensePayment(expensePayment).expense_money_source ? getInitialExpensePayment(expensePayment).expense_money_source : {}"
                         :displayProperty="'name'"
                         :endpointName="expenseMoneySourceEndpointName"
                         v-model="expensePayment.expenseMoneySource"
@@ -122,7 +122,6 @@
     import cloneDeep from 'renderer/services/common/cloneDeep'
     import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
     import moment from 'moment'
-    import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
     export default {
       inject: ['$validator'],
       data () {
@@ -137,19 +136,9 @@
         MauFormInputSelectDynamic
       },
       created () {
-        Promise.all([
-          GenericApiOperations.list(EntityTypes.EXPENSE_MONEY_SOURCE.apiName, {paginate: false})
-        ])
-          .then(result => {
-            this.expenseMoneySources = result[0]
-            for (let i = 0; i < this.initialValues.length; i++) {
-              let initialExpensePayment = cloneDeep(this.initialValues[i])
-              initialExpensePayment.expenseMoneySource = this.expenseMoneySources.find(expenseMoneySourceObj => expenseMoneySourceObj.id === initialExpensePayment.expense_money_source_id)
-              this.initialExpensePayments.push(initialExpensePayment)
-            }
-            this.expensePayments = this.initialExpensePayments.length === 0 ? [{}] : cloneDeep(this.initialExpensePayments)
-            this.refreshInput()
-          })
+        this.expensePayments = this.initialValues.length === 0 ? [{}] : cloneDeep(this.initialValues)
+        this.initialExpensePayments = cloneDeep(this.initialValues)
+        this.refreshInput()
       },
       props: {
         initialValues: {

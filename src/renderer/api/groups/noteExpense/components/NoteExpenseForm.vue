@@ -48,6 +48,11 @@
                 v-model="expense.expenseItems"
                 :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
                 @total="setTotal"
+                :initialFirstExpenseItem="{
+                expenseCategory: expense.supplier && expense.supplier.id ? expense.supplier.default_expense_category : {},
+                expenseBranch: expense.supplier && expense.supplier.id ? expense.supplier.default_expense_branch : {},
+                expenseSubcategory: expense.supplier && expense.supplier.id ? expense.supplier.default_expense_subcategory : {}
+                }"
         >
         </expense-items>
         <expense-payments

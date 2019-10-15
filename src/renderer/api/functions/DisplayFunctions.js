@@ -204,11 +204,19 @@ export default {
     htmlString += '<tr>'
     htmlString += '<th>Descripcion</th>'
     htmlString += '<th>Subtotal</th>'
+    htmlString += '<th>Subcategoria</th>'
+    htmlString += '<th>Categoria</th>'
+    htmlString += '<th>Maquina</th>'
+    htmlString += '<th>Sucursal</th>'
     htmlString += '</tr>'
     for (let i = 0; i < array.length; i++) {
       htmlString += '<tr>'
       htmlString += '<td class="mau-text-left">' + array[i].description + '</td>'
       htmlString += '<td class="mau-text-center">' + array[i].subtotal + '</td>'
+      htmlString += '<td class="mau-text-left">' + (array[i].expense_subcategory && array[i].expense_subcategory.id ? array[i].expense_subcategory.name : '') + '</td>'
+      htmlString += '<td class="mau-text-left">' + (array[i].expense_category && array[i].expense_category.id ? array[i].expense_category.name : '') + '</td>'
+      htmlString += '<td class="mau-text-left">' + (array[i].machine && array[i].machine.id ? array[i].machine.name : '') + '</td>'
+      htmlString += '<td class="mau-text-left">' + (array[i].expense_branch && array[i].expense_branch.id ? array[i].expense_branch.name : '') + '</td>'
       htmlString += '</tr>'
     }
     return htmlString + '</table>'
@@ -218,11 +226,13 @@ export default {
     htmlString += '<tr>'
     htmlString += '<th>Fecha del pago</th>'
     htmlString += '<th>Subtotal</th>'
+    htmlString += '<th>Origen del dinero</th>'
     htmlString += '</tr>'
     for (let i = 0; i < array.length; i++) {
       htmlString += '<tr>'
       htmlString += '<td class="mau-text-left">' + array[i].date + '</td>'
       htmlString += '<td class="mau-text-center">' + array[i].subtotal + '</td>'
+      htmlString += '<td class="mau-text-center">' + (array[i].expense_money_source && array[i].expense_money_source.id ? array[i].expense_money_source.name : '') + '</td>'
       htmlString += '</tr>'
     }
     return htmlString + '</table>'
