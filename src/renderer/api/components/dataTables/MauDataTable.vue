@@ -76,7 +76,7 @@
   import DataTableStyles from 'renderer/components/mau-components/mau-data-table/data/data-table-styles'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   import isEntityEditable from 'renderer/api/functions/isEntityEditable'
-  export default {
+  let MauDataTableComponent = {
     name: 'MauDataTable',
     components: {
       FilterBar,
@@ -205,32 +205,15 @@
       },
       onChangePage (page) {
         this.$refs.vuetable.changePage(page)
-      },
-      getThreeStateBoolean: DisplayFunctions.getThreeStateBoolean,
-      getTwoStateBoolean: DisplayFunctions.getTwoStateBoolean,
-      getNameFromObject: DisplayFunctions.getNameFromObject,
-      getArrayLength: DisplayFunctions.getArrayLength,
-      getValue: DisplayFunctions.getValue,
-      getPersona: DisplayFunctions.getPersona,
-      getTimeFromDateTime: DisplayFunctions.getTimeFromDateTime,
-      getDate: DisplayFunctions.getDate,
-      getNameArray: DisplayFunctions.getNameArray,
-      getDescriptionArray: DisplayFunctions.getDescriptionArray,
-      getFirstNameFromArray: DisplayFunctions.getFirstNameFromArray,
-      getProducts: DisplayFunctions.getProducts,
-      getOrderSaleProducts: DisplayFunctions.getOrderSaleProducts,
-      getPersonaArray: DisplayFunctions.getPersonaArray,
-      getOrderSaleTotalCost: DisplayFunctions.getOrderSaleTotalCost,
-      getMachineNames: DisplayFunctions.getMachineNames,
-      getDateTime: DisplayFunctions.getDateTime,
-      getPropertyFromObject: DisplayFunctions.getPropertyFromObject,
-      getOrderSales: DisplayFunctions.getOrderSales,
-      getOrderSalesProductsRequested: DisplayFunctions.getOrderSalesProductsRequested,
-      getOrderSalesProductsNotRequested: DisplayFunctions.getOrderSalesProductsNotRequested,
-      getEmployeeAttendanceImageForList: DisplayFunctions.getEmployeeAttendanceImageForList,
-      getEmployeeAttendanceImageForView: DisplayFunctions.getEmployeeAttendanceImageForView
+      }
     }
   }
+  for (let key in DisplayFunctions) {
+    if (DisplayFunctions.hasOwnProperty(key)) {
+      MauDataTableComponent.methods[key] = DisplayFunctions[key]
+    }
+  }
+  export default MauDataTableComponent
 </script>
 
 <style lang="scss">

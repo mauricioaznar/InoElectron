@@ -54,15 +54,56 @@
 
                 </mau-form-input-number>
                 <mau-form-input-select-dynamic
+                        :key="'ItemExpenseCategory' + index + 'a' +
+                        (isFirstExpenseItem(index) ?
+                        (getFirstExpenseItem().expenseCategory && getFirstExpenseItem().expenseCategory.id ? getFirstExpenseItem().expenseCategory.id : 0) : 0)"
                         class="mb-2"
                         :label="'Categoria'"
-                        :initialObject="expenseItem.id ? getInitialExpenseItem(expenseItem).expenseCategory : {}"
+                        :initialObject="isFirstExpenseItem(index) ? getFirstExpenseItem().expenseCategory : (expenseItem.id ? getInitialExpenseItem(expenseItem).expense_category : '')"
                         :displayProperty="'name'"
                         :endpointName="expenseCategoryEndpointName"
                         v-model="expenseItem.expenseCategory"
                         @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'expense_category_id') }"
                         :name="'ExpenseCategory' + index"
                         :error="errors.has('ExpenseCategory' + index) ? errors.first('ExpenseCategory' + index) : ''"
+                        v-validate="'required'"
+                >
+                </mau-form-input-select-dynamic>
+                <mau-form-input-select-dynamic
+                        :key="'ItemExpenseSubcategory' + index + 'a' +
+                            (expenseItem.expenseCategory && expenseItem.expenseCategory.id > 0 ? expenseItem.expenseCategory.id : '') +
+                            (isFirstExpenseItem(index) ?
+                            (getFirstExpenseItem().expenseSubcategory && getFirstExpenseItem().expenseSubcategory.id ? getFirstExpenseItem().expenseSubcategory.id : '') : '')"
+                        class="mb-2"
+                        :label="'Subcategoria'"
+                        :initialObject="
+                            (isFirstExpenseItem(index) && doesExpenseSubcategoryBelongsToExpenseCategory(expenseItem.expenseCategory, getFirstExpenseItem().expenseSubcategory))
+                            ? getFirstExpenseItem().expenseSubcategory :
+                            (expenseItem.id && doesExpenseSubcategoryBelongsToExpenseCategory(expenseItem.expenseCategory, getInitialExpenseItem(expenseItem).expense_subcategory)?
+                             getInitialExpenseItem(expenseItem).expense_subcategory : {})"
+                        :apiOperationOptions="expenseItem.expense_category_id ? {filterExacts: {expense_category_id: expenseItem.expense_category_id}} : {}"
+                        :displayProperty="'name'"
+                        :endpointName="expenseSubcategoryEndpointName"
+                        v-model="expenseItem.expenseSubcategory"
+                        @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'expense_subcategory_id') }"
+                        :name="'ExpenseSubcategory' + index"
+                        :error="errors.has('ExpenseSubcategory' + index) ? errors.first('ExpenseSubcategory' + index) : ''"
+                        v-validate="'required'"
+                >
+                </mau-form-input-select-dynamic>
+                <mau-form-input-select-dynamic
+                        :key="'ItemExpenseBranch' + index + 'a' +
+                        (isFirstExpenseItem(index) ?
+                        (getFirstExpenseItem().expenseBranch && getFirstExpenseItem().expenseBranch.id ? getFirstExpenseItem().expenseBranch.id : 0) : 0)"
+                        class="mb-2"
+                        :label="'Sucursal'"
+                        :initialObject="isFirstExpenseItem(index) ? getFirstExpenseItem().expenseBranch : (expenseItem.id ? getInitialExpenseItem(expenseItem).expense_branch : {})"
+                        :displayProperty="'name'"
+                        :endpointName="expenseBranchEndpointName"
+                        v-model="expenseItem.expenseBranch"
+                        @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'expense_branch_id') }"
+                        :name="'ExpenseBranch' + index"
+                        :error="errors.has('ExpenseBranch' + index) ? errors.first('ExpenseBranch' + index) : ''"
                         v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
@@ -93,34 +134,6 @@
                         :error="errors.has('Machine' + index) ? errors.first('Machine' + index) : ''"
                 >
                 </mau-form-input-select-dynamic>
-                <mau-form-input-select-dynamic
-                        class="mb-2"
-                        :label="'Sucursal'"
-                        :initialObject="expenseItem.id ? getInitialExpenseItem(expenseItem).expenseBranch : {}"
-                        :displayProperty="'name'"
-                        :endpointName="expenseBranchEndpointName"
-                        v-model="expenseItem.expenseBranch"
-                        @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'expense_branch_id') }"
-                        :name="'ExpenseBranch' + index"
-                        :error="errors.has('ExpenseBranch' + index) ? errors.first('ExpenseBranch' + index) : ''"
-                        v-validate="'required'"
-                >
-                </mau-form-input-select-dynamic>
-                <mau-form-input-select-dynamic
-                        :key="'ItemExpenseSubcategory' + index + (expenseItem.expenseCategory && expenseItem.expenseCategory.id ? expenseItem.expenseCategory.id : 0)"
-                        class="mb-2"
-                        :label="'Subcategoria'"
-                        :initialObject="expenseItem.id ? getInitialExpenseItem(expenseItem).expenseSubcategory : {}"
-                        :apiOperationOptions="expenseItem.expense_category_id ? {filterExacts: {expense_category_id: expenseItem.expense_category_id}} : {}"
-                        :displayProperty="'name'"
-                        :endpointName="expenseSubcategoryEndpointName"
-                        v-model="expenseItem.expenseSubcategory"
-                        @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'expense_subcategory_id') }"
-                        :name="'ExpenseSubcategory' + index"
-                        :error="errors.has('ExpenseSubcategory' + index) ? errors.first('ExpenseSubcategory' + index) : ''"
-                        v-validate="'required'"
-                >
-                </mau-form-input-select-dynamic>
             </div>
         </div>
     </div>
@@ -128,7 +141,6 @@
 
 <script>
     import cloneDeep from 'renderer/services/common/cloneDeep'
-    import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
     import EntityTypes from 'renderer/api/EntityTypes'
     import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
     export default {
@@ -151,28 +163,9 @@
         MauFormInputSelectDynamic
       },
       created () {
-        Promise.all([
-          GenericApiOperations.list(EntityTypes.MACHINE.apiName, {paginate: false}),
-          GenericApiOperations.list(EntityTypes.EXPENSE_BRANCH.apiName, {paginate: false}),
-          GenericApiOperations.list(EntityTypes.EXPENSE_SUBCATEGORY.apiName, {paginate: false}),
-          GenericApiOperations.list(EntityTypes.EXPENSE_CATEGORY.apiName, {paginate: false})
-        ])
-          .then(result => {
-            this.machines = result[0]
-            this.expenseBranches = result[1]
-            this.expenseSubcategories = result[2]
-            this.expenseCategories = result[3]
-            for (let i = 0; i < this.initialValues.length; i++) {
-              let initialExpenseItem = cloneDeep(this.initialValues[i])
-              initialExpenseItem.machine = this.machines.find(machineObj => machineObj.id === initialExpenseItem.machine_id)
-              initialExpenseItem.expenseBranch = this.expenseBranches.find(expenseBranchObj => expenseBranchObj.id === initialExpenseItem.expense_branch_id)
-              initialExpenseItem.expenseSubcategory = this.expenseSubcategories.find(expenseSubcategoryObj => expenseSubcategoryObj.id === initialExpenseItem.expense_subcategory_id)
-              initialExpenseItem.expenseCategory = this.expenseCategories.find(expenseCategoryObj => expenseCategoryObj.id === initialExpenseItem.expense_category_id)
-              this.initialExpenseItems.push(initialExpenseItem)
-            }
-            this.expenseItems = this.initialExpenseItems.length === 0 ? [{}] : cloneDeep(this.initialExpenseItems)
-            this.refreshInput()
-          })
+        this.expenseItems = this.initialValues.length === 0 ? [{}] : cloneDeep(this.initialValues)
+        this.initialExpenseItems = cloneDeep(this.initialValues)
+        this.refreshInput()
       },
       props: {
         initialValues: {
@@ -184,6 +177,9 @@
           default: function () {
             return false
           }
+        },
+        initialFirstExpenseItem: {
+          type: Object
         }
       },
       methods: {
@@ -218,6 +214,23 @@
             return ''
           }
           return initialExpenseItem
+        },
+        isFirstExpenseItem: function (index) {
+          return index === 0 && this.initialValues.length === 0
+        },
+        getFirstExpenseItem: function () {
+          let {expenseCategory, expenseSubcategory, expenseBranch} = this.initialFirstExpenseItem
+          return {
+            expenseCategory: (expenseCategory && expenseCategory.id) ? expenseCategory : {},
+            expenseBranch: (expenseBranch && expenseBranch.id) ? expenseBranch : {},
+            expenseSubcategory: (expenseSubcategory && expenseSubcategory.id) ? expenseSubcategory : {}
+          }
+        },
+        doesExpenseSubcategoryBelongsToExpenseCategory: function (expenseCategory, expenseSubcategory) {
+          if (!expenseCategory) {
+            return true
+          }
+          return expenseSubcategory && expenseCategory && expenseSubcategory.id && expenseCategory.id && expenseSubcategory.expense_category_id === expenseCategory.id
         }
       }
     }
