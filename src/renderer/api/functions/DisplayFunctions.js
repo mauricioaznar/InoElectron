@@ -212,7 +212,10 @@ export default {
     for (let i = 0; i < array.length; i++) {
       htmlString += '<tr>'
       htmlString += '<td class="mau-text-left">' + array[i].description + '</td>'
-      htmlString += '<td class="mau-text-center">' + array[i].subtotal + '</td>'
+      htmlString +=
+        '<td class="mau-text-center">' +
+          (array[i].subtotal ? array[i].subtotal : 0).toFixed(2) +
+        '</td>'
       htmlString += '<td class="mau-text-left">' + (array[i].expense_subcategory && array[i].expense_subcategory.id ? array[i].expense_subcategory.name : '') + '</td>'
       htmlString += '<td class="mau-text-left">' + (array[i].expense_category && array[i].expense_category.id ? array[i].expense_category.name : '') + '</td>'
       htmlString += '<td class="mau-text-left">' + (array[i].machine && array[i].machine.id ? array[i].machine.name : '') + '</td>'
@@ -231,7 +234,14 @@ export default {
     for (let i = 0; i < array.length; i++) {
       htmlString += '<tr>'
       htmlString += '<td class="mau-text-left">' + array[i].date + '</td>'
-      htmlString += '<td class="mau-text-center">' + array[i].subtotal + '</td>'
+      htmlString +=
+        '<td class="mau-text-center">' +
+          ((array[i].subtotal) +
+          (array[i].tax ? array[i].tax : 0) +
+          (array[i].ieps ? array[i].ieps : 0) -
+          (array[i].tax_retained ? array[i].tax_retained : 0) -
+          (array[i].isr_retained ? array[i].isr_retained : 0)).toFixed(2) +
+        '</td>'
       htmlString += '<td class="mau-text-center">' + (array[i].expense_money_source && array[i].expense_money_source.id ? array[i].expense_money_source.name : '') + '</td>'
       htmlString += '</tr>'
     }

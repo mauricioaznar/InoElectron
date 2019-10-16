@@ -509,40 +509,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT,
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
-  {
-    componentName: 'Main',
-    category: Categories.ADMINISTRATION
-  },
-  [
-    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
-      {
-        componentName: 'List',
-        groupDefault: true,
-        navbar: true,
-        categoryDefault: true
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
-      {
-        componentName: 'Create'
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
-      {
-        componentName: 'Edit',
-        params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.EXPENSE,
-      {
-        componentName: 'View',
-        params: [GlobalEntityIdentifier]
-      }
-    )
-  ]
-))
-
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.NOTE_EXPENSE,
   {
     componentName: 'Main',
@@ -553,7 +519,8 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.NOTE_EXPENSE,
       {
         componentName: 'List',
         groupDefault: true,
-        navbar: true
+        navbar: true,
+        categoryDefault: true
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.NOTE_EXPENSE,
