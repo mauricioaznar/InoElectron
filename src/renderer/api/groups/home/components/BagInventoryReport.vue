@@ -4,7 +4,7 @@
         <!--<h2 v-if="!isLoading">Inventario V2... Perro juega left 4 dead 2 conmigo hoy no seas rata</h2>-->
         <h2 v-if="!isLoading">Inventario V2</h2>
         <b-table :fields="inventoryProductsFields" :items="inventoryProductsItems" hover v-if="!isLoading">
-            <template slot="show_details" slot-scope="row">
+            <template v-slot:cell(show_details)="row">
                 <!-- we use @click.stop here to prevent emitting of a 'row-clicked' event  -->
                 <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
                     {{ row.detailsShowing ? 'Ocultar' : 'Mostrar'}} Detalles
@@ -46,60 +46,60 @@
           timeout: '',
           interval: '',
           inventoryProductsItems: [],
-          inventoryProductsFields: {
-            description: {
+          inventoryProductsFields: [
+            {
               key: 'description',
               label: 'Nombre',
               tdClass: 'mau-text-left',
               sortable: true
             },
-            code: {
+            {
               key: 'code',
               label: 'Codigo',
               tdClass: 'mau-text-left',
               sortable: true
             },
-            total_kilos_in_inventory: {
+            {
               key: 'total_kilos_in_inventory',
               label: 'Kilos actuales',
               tdClass: 'mau-text-center',
               sortable: true
             },
-            total_groups_in_inventory: {
+            {
               key: 'total_groups_in_inventory',
               label: 'Bultos actuales',
               tdClass: 'mau-text-center',
               sortable: true
             },
-            total_kilos_requested_to_be_produced: {
+            {
               key: 'total_kilos_requested_to_be_produced',
               label: 'Kilos restantes por producir',
               tdClass: 'mau-text-center',
               sortable: true
             },
-            total_groups_requested_to_be_produced: {
+            {
               key: 'total_groups_requested_to_be_produced',
               label: 'Bultos restantes por producir',
               tdClass: 'mau-text-center',
               sortable: true
             },
-            total_kilos_requested_pending: {
+            {
               key: 'total_kilos_requested_pending',
               label: 'Kilos en pedidos pendientes',
               tdClass: 'mau-text-center',
               sortable: true
             },
-            total_groups_requested_pending: {
+            {
               key: 'total_groups_requested_pending',
               label: 'Bultos en pedidos pendientes',
               tdClass: 'mau-text-center',
               sortable: true
             },
-            show_details: {
+            {
               key: 'show_details',
               label: 'Detalles'
             }
-          },
+          ],
           chartOptions: {
             responsive: true,
             maintainAspectRatio: false,
