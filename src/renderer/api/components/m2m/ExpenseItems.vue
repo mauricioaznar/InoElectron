@@ -136,6 +136,10 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+        <div>
+            <label>Total</label>
+            <p>{{total}}</p>
+        </div>
     </div>
 </template>
 
@@ -153,6 +157,7 @@
           expenseCategories: [],
           expenseSubcategories: [],
           initialExpenseItems: [],
+          total: 0,
           machineEndpointName: EntityTypes.MACHINE.apiName,
           expenseCategoryEndpointName: EntityTypes.EXPENSE_CATEGORY.apiName,
           expenseSubcategoryEndpointName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
@@ -191,11 +196,12 @@
           let total = this.expenseItems.reduce((acc, expenseItem) => {
             return acc + ((expenseItem && expenseItem.subtotal) ? expenseItem.subtotal : 0)
           }, 0)
+          this.total = total
           this.$emit('total', total)
           this.$emit('input', this.expenseItems)
         },
         isExpenseItemQuantityRequired: function (expenseItem) {
-          return expenseItem.expenseSubcategory && (expenseItem.expenseSubcategory.id === 12 || expenseItem.expenseSubcategory.id === 13 || expenseItem.expenseSubcategory.id === 29)
+          return expenseItem.expenseSubcategory && (expenseItem.expenseSubcategory.id === 12 || expenseItem.expenseSubcategory.id === 13 || expenseItem.expenseSubcategory.id === 29 || expenseItem.expenseSubcategory.id === 39 || expenseItem.expenseSubcategory.id === 30)
         },
         addExpenseItem: function () {
           this.expenseItems.push({description: ''})

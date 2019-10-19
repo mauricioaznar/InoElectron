@@ -114,6 +114,10 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+        <div>
+            <label>Total</label>
+            <p>{{total}}</p>
+        </div>
     </div>
 </template>
 
@@ -129,6 +133,7 @@
           expensePayments: [],
           initialExpensePayments: [],
           expenseMoneySources: [],
+          total: 0,
           expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName
         }
       },
@@ -176,6 +181,16 @@
           expensePayment[propertyName] = selectedObject && selectedObject.id ? selectedObject.id : (initialExpensePayment && initialExpensePayment[propertyName] > 0 ? 'null' : null)
         },
         refreshInput: function () {
+          let total = this.expensePayments.reduce((acc, expensePayment) => {
+            let subtotal = ((expensePayment && expensePayment.subtotal) ? expensePayment.subtotal : 0)
+            let tax = ((this.hasTax && expensePayment && expensePayment.tax) ? expensePayment.tax : 0)
+            let ieps = ((this.hasIeps && expensePayment && expensePayment.ieps) ? expensePayment.ieps : 0)
+            let isrRetained = (-1 * ((this.hasRetentions && expensePayment && expensePayment.isr_retained) ? expensePayment.isr_retained : 0))
+            let taxRetained = (-1 * ((this.hasRetentions && expensePayment && expensePayment.tax_retained) ? expensePayment.tax_retained : 0))
+            return acc + subtotal + tax + ieps + taxRetained + isrRetained
+          }, 0)
+          this.total = total
+          this.$emit('total', total)
           this.$emit('input', this.expensePayments)
         },
         addExpensePayment: function () {
