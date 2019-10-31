@@ -32,11 +32,6 @@
         ],
         tableFields: [
           {
-            title: ExpensePropertiesReference.DESCRIPTION.title,
-            name: ExpensePropertiesReference.DESCRIPTION.name,
-            filterType: 'text'
-          },
-          {
             name: ExpensePropertiesReference.DATE.name,
             title: ExpensePropertiesReference.DATE.title,
             sortField: ExpensePropertiesReference.DATE.name,

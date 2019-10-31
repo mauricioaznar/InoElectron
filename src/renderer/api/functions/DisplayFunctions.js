@@ -2,6 +2,7 @@ import Vue from 'vue'
 import ConvertDateTimeTo from 'renderer/services/common/ConvertDateTimeTo'
 import moment from 'moment'
 import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+import 'moment/locale/es.js'
 moment.locale('es')
 
 export default {
@@ -62,11 +63,11 @@ export default {
   },
   getDate: function (date) {
     let momentDate = moment(date)
-    return momentDate.isValid() ? moment(date).format('dddd, MMMM D, YYYY') : '-'
+    return momentDate.isValid() ? moment(date).locale('es').format('dddd, MMMM D, YYYY') : '-'
   },
   getDateTime: function (date) {
     let momentDate = moment(date)
-    return momentDate.isValid() ? moment(date).format('dddd, MMMM D, YYYY. HH:mm') : '-'
+    return momentDate.isValid() ? moment(date).locale('es').format('dddd, MMMM D, YYYY. HH:mm') : '-'
   },
   getTimeFromDateTime: function (date) {
     return ConvertDateTimeTo.time(date)
