@@ -144,6 +144,10 @@ export default {
     name: 'employeeType',
     apiName: 'employeeType'
   },
+  EMPLOYEE_STATUS: {
+    name: 'employeeStatus',
+    apiName: 'employeeStatus'
+  },
   EMPLOYEE_ATTENDANCE: {
     name: 'employeeAttendance',
     apiName: 'employeeAttendance',

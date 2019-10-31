@@ -86,6 +86,22 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+        <div class="form-group">
+            <div v-if="employeeMode">
+                <mau-form-input-select-dynamic
+                        :initialObject="initialValues[EmployeePropertiesReference.EMPLOYEE_STATUS.name]"
+                        :label="EmployeePropertiesReference.EMPLOYEE_STATUS.title"
+                        :displayProperty="'name'"
+                        :endpointName="employeeStatusEndpointName"
+                        v-model="persona.employeeStatus"
+                        :name="EmployeePropertiesReference.EMPLOYEE_STATUS.name"
+                        :error="errors.first(EmployeePropertiesReference.EMPLOYEE_STATUS.name)"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'object_required'"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
+        </div>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -116,12 +132,14 @@
           email: '',
           cellphone: '',
           client: {},
-          employeeType: {}
+          employeeType: {},
+          employeeStatus: {}
         },
         initialValues: {},
         buttonDisabled: false,
         clientEndpointName: EntityTypes.CLIENT.apiName,
-        employeeTypeEndpointName: EntityTypes.EMPLOYEE_TYPE.apiName
+        employeeTypeEndpointName: EntityTypes.EMPLOYEE_TYPE.apiName,
+        employeeStatusEndpointName: EntityTypes.EMPLOYEE_STATUS.apiName
       }
     },
     components: {
@@ -178,6 +196,7 @@
         }
         if (this.employeeMode) {
           this.initialValues[EmployeePropertiesReference.EMPLOYEE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, EmployeePropertiesReference.EMPLOYEE_TYPE.name)
+          this.initialValues[EmployeePropertiesReference.EMPLOYEE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, EmployeePropertiesReference.EMPLOYEE_STATUS.name)
         }
       },
       save: function () {
@@ -192,6 +211,7 @@
         }
         if (this.employeeMode) {
           directParams[EmployeePropertiesReference.EMPLOYEE_TYPE.relationship_id_name] = this.persona.employeeType ? this.persona.employeeType[GlobalEntityIdentifier] : null
+          directParams[EmployeePropertiesReference.EMPLOYEE_STATUS.relationship_id_name] = this.persona.employeeStatus ? this.persona.employeeStatus[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
         }

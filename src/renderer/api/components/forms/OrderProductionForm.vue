@@ -274,10 +274,10 @@
         return {filterExacts: {product_type_id: 1}}
       },
       rollsEmployeeTypeApiOperationOptions: function () {
-        return {filterExacts: {employee_type_id: 2}}
+        return {filterExacts: {employee_type_id: 2, employee_status_id: 1}}
       },
       bagsEmployeeTypeApiOperationOptions: function () {
-        return {filterExacts: {employee_type_id: 1}}
+        return {filterExacts: {employee_type_id: 1, employee_status_id: 1}}
       },
       rollsMachineApiOperationOptions: function () {
         return {filterExacts: {machine_type_id: 2}}

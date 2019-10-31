@@ -73,6 +73,11 @@
             title: EmployeePropertiesReference.EMPLOYEE_TYPE.title,
             display: DisplayFunctions.getNameFromObject
           })
+          this.properties.push({
+            name: EmployeePropertiesReference.EMPLOYEE_STATUS.name,
+            title: EmployeePropertiesReference.EMPLOYEE_STATUS.title,
+            display: DisplayFunctions.getNameFromObject
+          })
         }
       }
 }

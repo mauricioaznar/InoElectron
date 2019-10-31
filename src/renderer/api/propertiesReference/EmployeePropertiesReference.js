@@ -33,5 +33,12 @@ export default {
     relationship_id_name: 'employee_type_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
+  },
+  EMPLOYEE_STATUS: {
+    title: 'Estado del empleado',
+    name: 'employee_status',
+    relationship_id_name: 'employee_status_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
   }
 }

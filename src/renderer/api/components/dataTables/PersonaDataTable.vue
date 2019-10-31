@@ -100,6 +100,14 @@
           entityName: EntityTypes.EMPLOYEE_TYPE.name,
           entityFieldName: 'name'
         })
+        this.tableFields.push({
+          name: EmployeePropertiesReference.EMPLOYEE_STATUS.name,
+          title: EmployeePropertiesReference.EMPLOYEE_STATUS.title,
+          callback: DisplayFunctions.getNameFromObject,
+          filterType: 'entity',
+          entityName: EntityTypes.EMPLOYEE_STATUS.name,
+          entityFieldName: 'name'
+        })
       }
     },
     components: {
