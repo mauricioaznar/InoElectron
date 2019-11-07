@@ -642,6 +642,43 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.SUPPLIER,
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PAYROLL,
+  {
+    componentName: 'Main',
+    category: Categories.HUMAN_RESOURCES
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.PAYROLL,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        title: 'Nominas',
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.PAYROLL,
+      {
+        componentName: 'Create',
+        title: 'Nominas'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.PAYROLL,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier],
+        title: 'Nominas'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.PAYROLL,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier],
+        title: 'Nominas'
+      }
+    )
+  ]
+))
+
 
 export default routeObjects
 
