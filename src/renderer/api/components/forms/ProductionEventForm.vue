@@ -17,7 +17,7 @@
                 :initialValue="initialValues[ProductionEventPropertiesReference.END_DATE_TIME.name]"
                 :error="errors.has(ProductionEventPropertiesReference.END_DATE_TIME.name) ? errors.first(ProductionEventPropertiesReference.END_DATE_TIME.name) : ''"
                 :disabled="!userHasWritePrivileges"
-                v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + productionEvent.startDateTime"
+                v-validate="'date_format:yyyy-MM-dd HH:mm:ss|after:' + productionEvent.startDateTime"
         >
         </mau-form-group-date-time>
         <div class="form-group">
