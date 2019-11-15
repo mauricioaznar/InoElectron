@@ -21,12 +21,12 @@
                   v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + payroll.startDateTime"
           >
           </mau-form-group-date-time>
-          <payroll-employees
-            :initialValues="initialValues[PayrollPropertiesReference.PAYROLL_EMPLOYEES.name]"
-            v-model="payroll.payrollEmployees"
+          <payroll-payments
+            :initialValues="initialValues[PayrollPropertiesReference.PAYROLL_PAYMENTS.name]"
+            v-model="payroll.payrollPayments"
           >
 
-          </payroll-employees>
+          </payroll-payments>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
           </div>
@@ -40,7 +40,7 @@
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import PayrollPropertiesReference from 'renderer/api/propertiesReference/PayrollPropertiesReference'
-  import PayrollEmployees from 'renderer/api/components/m2m/PayrollEmployees'
+  import PayrollPayments from 'renderer/api/components/m2m/PayrollPayments'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
   export default {
@@ -52,7 +52,7 @@
         payroll: {
           startDateTime: '',
           endDateTime: '',
-          payrollEmployees: []
+          payrollPayments: []
         },
         initialValues: {},
         buttonDisabled: false
@@ -60,7 +60,7 @@
     },
     components: {
       MauFormInputSelectDynamic,
-      PayrollEmployees
+      PayrollPayments
     },
     props: {
       initialObject: {
@@ -90,7 +90,7 @@
       setInitialValues: function () {
         this.initialValues[PayrollPropertiesReference.START_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, PayrollPropertiesReference.START_DATE_TIME.name)
         this.initialValues[PayrollPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, PayrollPropertiesReference.END_DATE_TIME.name)
-        this.initialValues[PayrollPropertiesReference.PAYROLL_EMPLOYEES.name] = DefaultValuesHelper.array(this.initialObject, PayrollPropertiesReference.PAYROLL_EMPLOYEES.name)
+        this.initialValues[PayrollPropertiesReference.PAYROLL_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, PayrollPropertiesReference.PAYROLL_PAYMENTS.name)
       },
       save: function () {
         let directParams = {
@@ -99,12 +99,13 @@
         }
         let relayObjects = []
         let expenseItemsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
-          this.initialValues[PayrollPropertiesReference.PAYROLL_EMPLOYEES.name],
-          this.payroll.payrollEmployees,
+          this.initialValues[PayrollPropertiesReference.PAYROLL_PAYMENTS.name],
+          this.payroll.payrollPayments,
           'id'
         )
-        let payrollEmployeesRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.PAYROLL_EMPLOYEES)
-        relayObjects.push(payrollEmployeesRelayObjects)
+        let payrollPaymentsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.PAYROLL_PAYMENT)
+        relayObjects.push(payrollPaymentsRelayObjects)
+        console.log(relayObjects)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true

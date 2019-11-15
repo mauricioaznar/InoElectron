@@ -145,9 +145,9 @@ export default {
     apiName: 'payroll',
     title: 'Nominas'
   },
-  PAYROLL_EMPLOYEE: {
-    name: 'payrollEmployee',
-    apiName: 'payrollEmployee'
+  PAYROLL_PAYMENT: {
+    name: 'payrollPayment',
+    apiName: 'payrollPayment'
   },
   EMPLOYEE_TYPE: {
     name: 'employeeType',

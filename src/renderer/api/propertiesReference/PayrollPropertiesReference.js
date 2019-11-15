@@ -14,9 +14,9 @@ export default {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
-  PAYROLL_EMPLOYEES: {
-    title: 'Empleados',
-    name: 'payroll_employees',
+  PAYROLL_PAYMENTS: {
+    title: 'Pagos',
+    name: 'payroll_payments',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   }

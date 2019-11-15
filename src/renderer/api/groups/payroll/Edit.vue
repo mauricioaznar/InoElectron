@@ -12,6 +12,7 @@
       :id="id"
       :entityType="entityType"
       :callback="callback"
+      :relationshipIdName="'payroll_id'"
     >
       <template slot-scope="params">
         <payroll-form
