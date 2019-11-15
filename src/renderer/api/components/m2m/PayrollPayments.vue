@@ -160,14 +160,15 @@
           let newPayrollPayments = []
           for (let i = 0; i < employeesSelected.length; i++) {
             let previousPayrollPayment = this.payrollPayments.find(payrollPayment => { return payrollPayment.employee_id === employeesSelected[i].id })
-            console.log(previousPayrollPayment)
-            let newPayrollPayment = {
+            previousPayrollPayment = !previousPayrollPayment && this.initialValues.length > 0
+              ? this.initialValues.find(payrollPayment => { return payrollPayment.employee_id === employeesSelected[i].id }) : previousPayrollPayment
+            let newPayrollPayment = !previousPayrollPayment ? {
               employee_id: employeesSelected[i].id,
               employee: employeesSelected[i],
               base_salary: employeesSelected[i].base_salary,
               hours_should_work: employeesSelected[i].hours_should_work
-            }
-            newPayrollPayments.push(previousPayrollPayment || newPayrollPayment)
+            } : previousPayrollPayment
+            newPayrollPayments.push(newPayrollPayment)
           }
           this.payrollPayments = cloneDeep(newPayrollPayments)
           this.initialPayrollPayments = cloneDeep(newPayrollPayments)
