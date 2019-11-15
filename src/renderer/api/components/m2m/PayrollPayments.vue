@@ -157,23 +157,20 @@
         changePayrollPaymentsWithNewEmployees: function () {
           console.log('PAYROLL PAYMENT CHANGE')
           let employeesSelected = this.employeesSelected
-          if (this.initialValues.length === 0) {
-            let newPayrollPayments = []
-            for (let i = 0; i < employeesSelected.length; i++) {
-              let previousPayrollPayment = this.payrollPayments.find(payrollPayment => { return payrollPayment.employee_id === employeesSelected[i].id })
-              console.log(previousPayrollPayment)
-              let newPayrollPayment = {
-                employee_id: employeesSelected[i].id,
-                employee: employeesSelected[i],
-                base_salary: employeesSelected[i].base_salary,
-                hours_should_work: employeesSelected[i].hours_should_work
-              }
-              newPayrollPayments.push(previousPayrollPayment || newPayrollPayment)
+          let newPayrollPayments = []
+          for (let i = 0; i < employeesSelected.length; i++) {
+            let previousPayrollPayment = this.payrollPayments.find(payrollPayment => { return payrollPayment.employee_id === employeesSelected[i].id })
+            console.log(previousPayrollPayment)
+            let newPayrollPayment = {
+              employee_id: employeesSelected[i].id,
+              employee: employeesSelected[i],
+              base_salary: employeesSelected[i].base_salary,
+              hours_should_work: employeesSelected[i].hours_should_work
             }
-            this.payrollPayments = cloneDeep(newPayrollPayments)
-            this.initialPayrollPayments = cloneDeep(newPayrollPayments)
-          } else {
+            newPayrollPayments.push(previousPayrollPayment || newPayrollPayment)
           }
+          this.payrollPayments = cloneDeep(newPayrollPayments)
+          this.initialPayrollPayments = cloneDeep(newPayrollPayments)
         }
       }
     }
