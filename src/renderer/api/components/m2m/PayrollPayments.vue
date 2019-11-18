@@ -21,25 +21,72 @@
             >
             </mau-form-input-select-dynamic>
             <div class="row mb-3">
-                <div class="col-sm-3">
-                    <div class="col-sm-4 font-weight-bold">
-                        Nombre
-                    </div>
+                <div class="col-sm-5">
+                    General
                 </div>
-                <div class="col-sm-3">
-                    <div class="col-sm-4">
-                        Sueldo
-                    </div>
+                <div class="col-sm-2">
+                    Ganancias
+                </div>
+                <div class="col-sm-2">
+                    Bonos
+                </div>
+                <div class="col-sm-2">
+                    Descuentos
+                </div>
+                <div class="col-sm-1">
+                    Total
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-2">
+                    Nombre
+                </div>
+                <div class="col-sm-1">
+                    Sueldo
+                </div>
+                <div class="col-sm-1">
+                    Horas por trabajar
+                </div>
+                <div class="col-sm-1 d-flex flex-column">
+                    <div>Horas normales</div>
+                    <div>Horas extra</div>
+                    <div>Horas triples</div>
+                </div>
+                <div class="col-sm-1 d-flex flex-column">
+                    <div>Coeficiente normal</div>
+                    <div>Coeficiente extras</div>
+                    <div>Coeficiente triples</div>
+                </div>
+                <div class="col-sm-1 d-flex flex-column">
+                    <div>Ganancias normal</div>
+                    <div>Ganancias extras</div>
+                    <div>Ganancias triples</div>
+                </div>
+                <div class="col-sm-1">
+                    Bono de puntualidad
+                </div>
+                <div class="col-sm-1">
+                    Bono de disponibilidad
+                </div>
+                <div class="col-sm-1">
+                    Descuento prestamo
+                </div>
+                <div class="col-sm-1">
+                    Otros descuentos
+                </div>
+                <div class="col-sm-1 d-flex flex-column">
+                    <div>Total dinero</div>
+                    <div>Total credito</div>
                 </div>
             </div>
             <div v-for="(payrollPayment, index) in payrollPayments"
                  :class="index + 1 !== payrollPayments.length ? 'mb-2' : ''"
                  class="row"
             >
-                <div class="col-sm-3">
+                <div class="col-sm-2 p-0">
                     {{payrollPayment.employee.fullname}}
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-1 p-0">
                     <mau-form-input-number
                         :name="'BaseSalary' + payrollPayment.employee_id"
                         :key="'BaseSalary' + payrollPayment.employee_id"
@@ -47,21 +94,66 @@
                         :initialValue="getInitialPayrollPayment(payrollPayment).base_salary"
                         v-model="payrollPayment.base_salary"
                         :error="errors.has('BaseSalary' + payrollPayment.employee_id) ? errors.first('BaseSalary' + payrollPayment.employee_id) : ''"
-                        @input="refreshInput"
+                        @input="refreshPayrollPayment(payrollPayment)"
                     >
                     </mau-form-input-number>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-1 p-0">
                     <mau-form-input-number
-                        :name="'HoursShouldWork' + payrollPayment.employee_id"
-                        :key="'HoursShouldWork' + payrollPayment.employee_id"
-                        :label="''"
-                        :initialValue="getInitialPayrollPayment(payrollPayment).hours_should_work"
-                        v-model="payrollPayment.hours_should_work"
-                        :error="errors.has('HoursShouldWork' + payrollPayment.employee_id) ? errors.first('HoursShouldWork' + payrollPayment.employee_id) : ''"
-                        @input="refreshInput"
+                            :name="'HoursShouldWork' + payrollPayment.employee_id"
+                            :key="'HoursShouldWork' + payrollPayment.employee_id"
+                            :label="''"
+                            :initialValue="getInitialPayrollPayment(payrollPayment).hours_should_work"
+                            v-model="payrollPayment.hours_should_work"
+                            :error="errors.has('HoursShouldWork' + payrollPayment.employee_id) ? errors.first('HoursShouldWork' + payrollPayment.employee_id) : ''"
+                            @input="refreshPayrollPayment(payrollPayment)"
                     >
                     </mau-form-input-number>
+                </div>
+                <div class="col-sm-1 p-0 d-flex flex-sm-column">
+                    <mau-form-input-number
+                            :name="'HoursNormalWorked' + payrollPayment.employee_id"
+                            :key="'HoursNormalWorked' + payrollPayment.employee_id"
+                            :label="''"
+                            :initialValue="getInitialPayrollPayment(payrollPayment).hours_normal_worked"
+                            v-model="payrollPayment.hours_normal_worked"
+                            :error="errors.has('HoursNormalWorked' + payrollPayment.employee_id) ? errors.first('HoursNormalWorked' + payrollPayment.employee_id) : ''"
+                            @input="refreshPayrollPayment(payrollPayment)"
+                            v-validate="'required'"
+                    >
+                    </mau-form-input-number>
+                    <mau-form-input-number
+                            :name="'HoursExtraWorked' + payrollPayment.employee_id"
+                            :key="'HoursExtraWorked' + payrollPayment.employee_id"
+                            :label="''"
+                            :initialValue="getInitialPayrollPayment(payrollPayment).hours_extra_worked"
+                            v-model="payrollPayment.hours_extra_worked"
+                            :error="errors.has('HoursExtraWorked' + payrollPayment.employee_id) ? errors.first('HoursExtraWorked' + payrollPayment.employee_id) : ''"
+                            @input="refreshPayrollPayment(payrollPayment)"
+                            v-validate="'required'"
+                    >
+                    </mau-form-input-number>
+                    <mau-form-input-number
+                            :name="'HoursTripleWorked' + payrollPayment.employee_id"
+                            :key="'HoursTripleWorked' + payrollPayment.employee_id"
+                            :label="''"
+                            :initialValue="getInitialPayrollPayment(payrollPayment).hours_triple_worked"
+                            v-model="payrollPayment.hours_triple_worked"
+                            :error="errors.has('HoursTripleWorked' + payrollPayment.employee_id) ? errors.first('HoursTripleWorked' + payrollPayment.employee_id) : ''"
+                            @input="refreshPayrollPayment(payrollPayment)"
+                            v-validate="'required'"
+                    >
+                    </mau-form-input-number>
+                </div>
+                <div class="col-sm-1 p-0 d-flex flex-sm-column">
+                    <div class="text-right">
+                        {{payrollPayment.coeficient_normal}}
+                    </div>
+                </div>
+                <div class="col-sm-1 p-0 d-flex flex-sm-column">
+                    <div class="text-right">
+                        {{payrollPayment.earnings_normal}}
+                    </div>
                 </div>
             </div>
             <div>
@@ -140,6 +232,11 @@
         },
         refreshInput: function () {
           this.$emit('input', this.payrollPayments)
+        },
+        refreshPayrollPayment: function (payrollPayment) {
+          payrollPayment.coeficient_normal = (payrollPayment.base_salary / 6).toFixed(2)
+          payrollPayment.earnings_normal = (payrollPayment.coeficient_normal * payrollPayment.hours_normal_worked).toFixed(2)
+          this.refreshInput()
         },
         getInitialPayrollPayment: function (payrollPayment) {
           if (!payrollPayment.employee_id) {
