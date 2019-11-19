@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <div class="col-sm-2">
+                <div class="col-sm-2" style="background-color: #0CE879">
                     Nombre
                 </div>
                 <div class="col-sm-1">
@@ -88,7 +88,7 @@
                  :class="index + 1 !== payrollPayments.length ? 'mb-2' : ''"
                  class="row"
             >
-                <div class="col-sm-2 p-0">
+                <div class="col-sm-2 p-0" style="background-color: #0CE879">
                     {{payrollPayment.employee.fullname}}
                 </div>
                 <div class="col-sm-1 p-0">
@@ -205,7 +205,7 @@
                 <div class="col-sm-1 p-0 d-flex flex-sm-column">
                     <mau-form-input-number
                             :name="'BonusPunctuality' + payrollPayment.employee_id"
-                            :key="'BonusPunctuality' + payrollPayment.employee_id"
+                            :key="!isEditMode ? 'BonusPunctuality' + payrollPayment.employee_id + '' + payrollPayment.base_salary + '' + payrollPayment.time_delays : 'BonusPunctuality' + payrollPayment.employee_id"
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).bonus_punctuality"
                             v-model="payrollPayment.bonus_punctuality"
@@ -314,8 +314,13 @@
       components: {
         MauFormInputSelectDynamic
       },
+      computed: {
+        isEditMode: function () {
+          return this.initialValues.length !== 0
+        }
+      },
       created () {
-        if (this.initialValues.length === 0) {
+        if (!this.isEditMode) {
           Promise.all([
             GenericApiOperations.list(EntityTypes.EMPLOYEE.apiName, {paginate: false, filterExacts: { employee_status_id: 1 }})
           ])
@@ -355,10 +360,13 @@
         refreshPayrollPayment: function (payrollPayment) {
           payrollPayment.coeficient_normal = payrollPayment.base_salary / payrollPayment.hours_should_work
           payrollPayment.earnings_normal = payrollPayment.coeficient_normal * payrollPayment.hours_normal_worked
-          payrollPayment.coeficient_extra = payrollPayment.base_salary / (payrollPayment.hours_should_work + (payrollPayment.hours_should_work / 7))
+          payrollPayment.coeficient_extra = (payrollPayment.base_salary / (payrollPayment.hours_should_work + (payrollPayment.hours_should_work / 6))) * 2
           payrollPayment.earnings_extra = payrollPayment.coeficient_extra * payrollPayment.hours_extra_worked
-          payrollPayment.coeficient_triple = payrollPayment.coeficient_extra * 2
-          payrollPayment.earnings_triple = payrollPayment.coeficient_triple * payrollPayment.hours_triple_worked
+          payrollPayment.coeficient_triple = (payrollPayment.base_salary / (payrollPayment.hours_should_work + (payrollPayment.hours_should_work / 6))) * 3
+          payrollPayment.earnings_triple = (payrollPayment.coeficient_triple * payrollPayment.hours_triple_worked)
+          if (!this.isEditMode) {
+            this.getInitialPayrollPayment(payrollPayment).bonus_punctuality = payrollPayment.base_salary * 0.15
+          }
           payrollPayment.total_cash = payrollPayment.earnings_extra +
             payrollPayment.earnings_normal +
             payrollPayment.earnings_triple +
