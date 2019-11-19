@@ -6,20 +6,21 @@
             <label>
                 Empleados <span :class="!showEmployees ? 'fa fa-eye' : 'fa fa-eye-slash'" @click="toggleShowEmployees"></span>
             </label>
-            <mau-form-input-select-dynamic
-                    v-show="showEmployees"
-                    class="mb-2"
-                    :label="''"
-                    :initialObjects="initialEmployeesSelected"
-                    :displayProperty="'fullname'"
-                    :endpointName="employeeEndpointName"
-                    :multiselect="true"
-                    v-model="employeesSelected"
-                    :name="'Employees'"
-                    :error="errors.has('Employees') ? errors.first('Employees') : ''"
-                    @input="changePayrollPaymentsWithNewEmployees"
-            >
-            </mau-form-input-select-dynamic>
+            <div style="height: 200px" v-show="showEmployees">
+                <mau-form-input-select-dynamic
+                        class="mb-2"
+                        :label="''"
+                        :initialObjects="initialEmployeesSelected"
+                        :displayProperty="'fullname'"
+                        :endpointName="employeeEndpointName"
+                        :multiselect="true"
+                        v-model="employeesSelected"
+                        :name="'Employees'"
+                        :error="errors.has('Employees') ? errors.first('Employees') : ''"
+                        @input="changePayrollPaymentsWithNewEmployees"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
             <div class="row mb-3">
                 <div class="col-sm-6">
                     General
@@ -327,7 +328,7 @@
             })
         } else {
           this.inputAreaDisabled = false
-          let employeesSelected = this.initialPayrollPayments.map(function (payrollPayment) { return payrollPayment.employee })
+          let employeesSelected = this.initialValues.map(function (payrollPayment) { return payrollPayment.employee })
           this.initialEmployeesSelected = cloneDeep(employeesSelected)
           this.employeesSelected = cloneDeep(employeesSelected)
           this.initialPayrollPayments = cloneDeep(this.initialValues)
