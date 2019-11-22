@@ -145,6 +145,14 @@ export default {
     apiName: 'payroll',
     title: 'Nominas'
   },
+  PAYROLL_TYPE: {
+    name: 'payrollType',
+    apiName: 'payrollType'
+  },
+  PAYROLL_PAYMENT_TYPE: {
+    name: 'payrollPaymentType',
+    apiName: 'payrollPaymentType'
+  },
   PAYROLL_PAYMENT: {
     name: 'payrollPayment',
     apiName: 'payrollPayment'

@@ -42,6 +42,14 @@
             name: PayrollPropertiesReference.END_DATE_TIME.name,
             callback: DisplayFunctions.getValue,
             filterType: 'date'
+          },
+          {
+            title: PayrollPropertiesReference.PAYROLL_TYPE.title,
+            name: PayrollPropertiesReference.PAYROLL_TYPE.name,
+            callback: DisplayFunctions.getNameFromObject,
+            filterType: 'entity',
+            entityName: EntityTypes.MACHINE_TYPE.name,
+            entityFieldName: 'name'
           }
         ]
       }

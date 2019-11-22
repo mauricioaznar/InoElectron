@@ -21,9 +21,57 @@
                   v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + payroll.startDateTime"
           >
           </mau-form-group-date-time>
+          <div class="form-row">
+              <div class="form-group col-sm-12">
+                  <mau-form-input-number
+                          :label="PayrollPropertiesReference.CREDIT_USED.title"
+                          :name="PayrollPropertiesReference.CREDIT_USED.name"
+                          :initialValue="initialValues[PayrollPropertiesReference.CREDIT_USED.name]"
+                          v-model="payroll.creditUsed"
+                          :error="errors.has(PayrollPropertiesReference.CREDIT_USED.name) ? errors.first(PayrollPropertiesReference.CREDIT_USED.name) : ''"
+                          :disabled="!userHasWritePrivileges"
+                          v-validate="'required'"
+                          :type="'float'"
+                  >
+                  </mau-form-input-number>
+              </div>
+          </div>
+          <div class="form-row">
+              <div class="form-group col-sm-12">
+                  <mau-form-input-number
+                          :label="PayrollPropertiesReference.INFONAVIT_USED.title"
+                          :name="PayrollPropertiesReference.INFONAVIT_USED.name"
+                          :initialValue="initialValues[PayrollPropertiesReference.INFONAVIT_USED.name]"
+                          v-model="payroll.infonavitUsed"
+                          :error="errors.has(PayrollPropertiesReference.INFONAVIT_USED.name) ? errors.first(PayrollPropertiesReference.INFONAVIT_USED.name) : ''"
+                          :disabled="!userHasWritePrivileges"
+                          v-validate="'required'"
+                          :type="'float'"
+                  >
+                  </mau-form-input-number>
+              </div>
+          </div>
+          <div class="form-row">
+              <div class="form-group col-sm-12">
+                  <mau-form-input-select-dynamic
+                          :initialObject="initialValues[PayrollPropertiesReference.PAYROLL_TYPE.name]"
+                          :label="PayrollPropertiesReference.PAYROLL_TYPE.title"
+                          v-model="payroll.payrollType"
+                          :name="PayrollPropertiesReference.PAYROLL_TYPE.name"
+                          :displayProperty="'name'"
+                          :error="errors.has(PayrollPropertiesReference.PAYROLL_TYPE.name) ? errors.first(PayrollPropertiesReference.PAYROLL_TYPE.name) : ''"
+                          :disabled="!userHasWritePrivileges"
+                          :endpointName="payrollTypeEndpointName"
+                          v-validate="'required'"
+                  >
+                  </mau-form-input-select-dynamic>
+              </div>
+          </div>
           <payroll-payments
             :initialValues="initialValues[PayrollPropertiesReference.PAYROLL_PAYMENTS.name]"
             v-model="payroll.payrollPayments"
+            :creditUsed="payroll.creditUsed > 0 ? payroll.creditUsed : 0"
+            :infonavitUsed="payroll.infonavitUsed > 0 ? payroll.infonavitUsed : 0"
           >
 
           </payroll-payments>
@@ -43,6 +91,7 @@
   import PayrollPayments from 'renderer/api/components/m2m/PayrollPayments'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import EntityTypes from 'renderer/api/EntityTypes'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'PayrollForm',
     data () {
@@ -52,9 +101,13 @@
         payroll: {
           startDateTime: '',
           endDateTime: '',
-          payrollPayments: []
+          payrollType: '',
+          payrollPayments: [],
+          creditUsed: '',
+          infonavitUsed: ''
         },
         initialValues: {},
+        payrollTypeEndpointName: EntityTypes.PAYROLL_TYPE.apiName,
         buttonDisabled: false
       }
     },
@@ -84,6 +137,9 @@
     computed: {
       userHasWritePrivileges: function () {
         return true
+      },
+      isInitialObjectDefined: function () {
+        return this.initialObject && this.initialObject.id
       }
     },
     methods: {
@@ -91,11 +147,17 @@
         this.initialValues[PayrollPropertiesReference.START_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, PayrollPropertiesReference.START_DATE_TIME.name)
         this.initialValues[PayrollPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, PayrollPropertiesReference.END_DATE_TIME.name)
         this.initialValues[PayrollPropertiesReference.PAYROLL_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, PayrollPropertiesReference.PAYROLL_PAYMENTS.name)
+        this.initialValues[PayrollPropertiesReference.CREDIT_USED.name] = DefaultValuesHelper.simple(this.initialObject, PayrollPropertiesReference.CREDIT_USED.name)
+        this.initialValues[PayrollPropertiesReference.INFONAVIT_USED.name] = DefaultValuesHelper.simple(this.initialObject, PayrollPropertiesReference.INFONAVIT_USED.name)
+        this.initialValues[PayrollPropertiesReference.PAYROLL_TYPE.name] = DefaultValuesHelper.object(this.initialObject, PayrollPropertiesReference.PAYROLL_TYPE.name)
       },
       save: function () {
         let directParams = {
           [PayrollPropertiesReference.START_DATE_TIME.name]: this.payroll.startDateTime,
-          [PayrollPropertiesReference.END_DATE_TIME.name]: this.payroll.endDateTime
+          [PayrollPropertiesReference.END_DATE_TIME.name]: this.payroll.endDateTime,
+          [PayrollPropertiesReference.CREDIT_USED.name]: this.payroll.creditUsed,
+          [PayrollPropertiesReference.INFONAVIT_USED.name]: this.payroll.infonavitUsed,
+          [PayrollPropertiesReference.PAYROLL_TYPE.relationship_id_name]: this.payroll.payrollType ? this.payroll.payrollType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
         }
         let relayObjects = []
         let expenseItemsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
@@ -105,7 +167,6 @@
         )
         let payrollPaymentsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.PAYROLL_PAYMENT)
         relayObjects.push(payrollPaymentsRelayObjects)
-        console.log(relayObjects)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true

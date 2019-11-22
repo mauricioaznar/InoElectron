@@ -20,6 +20,12 @@ export default {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
+  INFONAVIT: {
+    title: 'Infonavit',
+    name: 'infonavit',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
   CELLPHONE: {
     title: 'Telefono del contacto',
     name: 'cellphone',
@@ -31,6 +37,13 @@ export default {
     title: 'Tipo de empleado',
     name: 'employee_type',
     relationship_id_name: 'employee_type_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  PAYROLL_PAYMENT_TYPE: {
+    title: 'Tipo de pago en nomina',
+    name: 'payroll_payment_type',
+    relationship_id_name: 'payroll_payment_type_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
