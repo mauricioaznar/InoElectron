@@ -116,22 +116,6 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group">
-            <div v-if="employeeMode">
-                <mau-form-input-select-dynamic
-                        :initialObject="initialValues[EmployeePropertiesReference.PAYROLL_PAYMENT_TYPE.name]"
-                        :label="EmployeePropertiesReference.PAYROLL_PAYMENT_TYPE.title"
-                        :displayProperty="'name'"
-                        :endpointName="payrollPaymentTypeEndpointName"
-                        v-model="persona.payrollPaymentType"
-                        :name="EmployeePropertiesReference.PAYROLL_PAYMENT_TYPE.name"
-                        :error="errors.has(EmployeePropertiesReference.PAYROLL_PAYMENT_TYPE.name) ? errors.first(EmployeePropertiesReference.PAYROLL_PAYMENT_TYPE.name) : ''"
-                        :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
-                >
-                </mau-form-input-select-dynamic>
-            </div>
-        </div>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -164,15 +148,13 @@
           infonavit: '',
           client: {},
           employeeType: {},
-          employeeStatus: {},
-          payrollPaymentType: {}
+          employeeStatus: {}
         },
         initialValues: {},
         buttonDisabled: false,
         clientEndpointName: EntityTypes.CLIENT.apiName,
         employeeTypeEndpointName: EntityTypes.EMPLOYEE_TYPE.apiName,
-        employeeStatusEndpointName: EntityTypes.EMPLOYEE_STATUS.apiName,
-        payrollPaymentTypeEndpointName: EntityTypes.PAYROLL_PAYMENT_TYPE.apiName
+        employeeStatusEndpointName: EntityTypes.EMPLOYEE_STATUS.apiName
       }
     },
     components: {
@@ -229,7 +211,6 @@
         }
         if (this.employeeMode) {
           this.initialValues[EmployeePropertiesReference.INFONAVIT.name] = DefaultValuesHelper.simple(this.initialObject, EmployeePropertiesReference.INFONAVIT.name)
-          this.initialValues[EmployeePropertiesReference.PAYROLL_PAYMENT_TYPE.name] = DefaultValuesHelper.simple(this.initialObject, EmployeePropertiesReference.PAYROLL_PAYMENT_TYPE.name)
           this.initialValues[EmployeePropertiesReference.EMPLOYEE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, EmployeePropertiesReference.EMPLOYEE_TYPE.name)
           this.initialValues[EmployeePropertiesReference.EMPLOYEE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, EmployeePropertiesReference.EMPLOYEE_STATUS.name)
         }
@@ -248,7 +229,6 @@
           directParams[EmployeePropertiesReference.EMPLOYEE_TYPE.relationship_id_name] = this.persona.employeeType ? this.persona.employeeType[GlobalEntityIdentifier] : null
           directParams[EmployeePropertiesReference.INFONAVIT.relationship_id_name] = this.persona.infonavit
           directParams[EmployeePropertiesReference.EMPLOYEE_STATUS.relationship_id_name] = this.persona.employeeStatus ? this.persona.employeeStatus[GlobalEntityIdentifier] : null
-          directParams[EmployeePropertiesReference.PAYROLL_PAYMENT_TYPE.relationship_id_name] = this.persona.payrollPaymentType ? this.persona.payrollPaymentType[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
         }

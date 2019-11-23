@@ -149,10 +149,6 @@ export default {
     name: 'payrollType',
     apiName: 'payrollType'
   },
-  PAYROLL_PAYMENT_TYPE: {
-    name: 'payrollPaymentType',
-    apiName: 'payrollPaymentType'
-  },
   PAYROLL_PAYMENT: {
     name: 'payrollPayment',
     apiName: 'payrollPayment'

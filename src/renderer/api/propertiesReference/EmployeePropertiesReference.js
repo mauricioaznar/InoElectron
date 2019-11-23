@@ -40,13 +40,6 @@ export default {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  PAYROLL_PAYMENT_TYPE: {
-    title: 'Tipo de pago en nomina',
-    name: 'payroll_payment_type',
-    relationship_id_name: 'payroll_payment_type_id',
-    display: DisplayFunctions.getNameFromObject,
-    defaultValue: MauInputDefaultValues.SELECT
-  },
   EMPLOYEE_STATUS: {
     title: 'Estado del empleado',
     name: 'employee_status',
