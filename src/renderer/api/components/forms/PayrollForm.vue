@@ -45,7 +45,10 @@
                           v-model="payroll.infonavitUsed"
                           :error="errors.has(PayrollPropertiesReference.INFONAVIT_USED.name) ? errors.first(PayrollPropertiesReference.INFONAVIT_USED.name) : ''"
                           :disabled="!userHasWritePrivileges"
-                          v-validate="'required'"
+                          v-validate="{
+                            required: true,
+                            max_value: payroll.creditUsed > 0 ? payroll.creditUsed : 0
+                          }"
                           :type="'float'"
                   >
                   </mau-form-input-number>
@@ -60,7 +63,6 @@
                           :name="PayrollPropertiesReference.PAYROLL_TYPE.name"
                           :displayProperty="'name'"
                           :error="errors.has(PayrollPropertiesReference.PAYROLL_TYPE.name) ? errors.first(PayrollPropertiesReference.PAYROLL_TYPE.name) : ''"
-                          :disabled="!userHasWritePrivileges"
                           :endpointName="payrollTypeEndpointName"
                           v-validate="'required'"
                   >

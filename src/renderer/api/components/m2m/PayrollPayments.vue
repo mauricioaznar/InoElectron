@@ -92,7 +92,7 @@
                 <div class="col-sm-2 p-0 d-flex flex-column">
                     <p>{{payrollPayment.employee.fullname}}</p>
                     <div>
-                        <label>Infonavit personalizado</label>
+                        <label>Infonavit manual</label>
                         <mau-form-input-check-box
                                 :initial-value="getInitialPayrollPayment(payrollPayment).is_infonavit_custom"
                                 v-model="payrollPayment.is_infonavit_custom"
@@ -101,7 +101,7 @@
                         </mau-form-input-check-box>
                     </div>
                     <div>
-                        <label>Credito personalizado</label>
+                        <label>Credito manual</label>
                         <mau-form-input-check-box
                                 :initial-value="getInitialPayrollPayment(payrollPayment).is_credit_custom"
                                 v-model="payrollPayment.is_credit_custom"
@@ -128,6 +128,7 @@
                             :name="'HoursShouldWork' + payrollPayment.employee_id"
                             :key="'HoursShouldWork' + payrollPayment.employee_id"
                             :label="''"
+                            :disabled="true"
                             :initialValue="getInitialPayrollPayment(payrollPayment).hours_should_work"
                             v-model="payrollPayment.hours_should_work"
                             :error="errors.has('HoursShouldWork' + payrollPayment.employee_id) ? errors.first('HoursShouldWork' + payrollPayment.employee_id) : ''"
@@ -292,7 +293,8 @@
                     <div>
                         <mau-form-input-number
                             :name="'Infonavit' + payrollPayment.employee_id"
-                            :key="'Infonavit' + payrollPayment.employee_id + '' + (payrollPayment.is_infonavit_custom === 1 ? 1 : infonavitUsed)"
+                            :disabled="payrollPayment.is_infonavit_custom === 0"
+                            :key="'Infonavit' + payrollPayment.employee_id + '' + (payrollPayment.is_infonavit_custom === 0 ? infonavitUsed : '')"
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).infonavit"
                             v-model="payrollPayment.infonavit"
@@ -313,17 +315,10 @@
                     <div>
                         <mau-form-input-number
                             :name="'TotalCredit' + payrollPayment.employee_id"
-                            :key="'TotalCredit' +
-                                creditUsed + '' +
-                                payrollPayment.employee_id + '' +
-                                payrollPayment.bonus_punctuality + '' +
-                                payrollPayment.bonus_availability + '' +
-                                payrollPayment.bonus_others + '' +
-                                payrollPayment.discount_loans + '' +
-                                payrollPayment.discount_others + '' +
-                                payrollPayment.earnings_extra + '' +
-                                payrollPayment.earnings_normal + '' +
-                                payrollPayment.earnings_triple + ''
+                            :disabled="payrollPayment.is_credit_custom === 0"
+                            :key="'TotalCredit' + payrollPayment.employee_id + '' +
+                                (payrollPayment.is_credit_custom === 0 ? creditUsed : '') +
+                                (payrollPayment.is_infonavit_custom === 0 ? infonavitUsed : payrollPayment.infonavit)
                             "
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).total_credit"
@@ -431,9 +426,28 @@
             payrollPayment.bonus_availability -
             payrollPayment.discount_loans -
             payrollPayment.discount_others
-          let totalInfonavit = payrollPayment.is_infonavit_custom === 1 ? payrollPayment.infonavit : (creditUsed > infonavitUsed ? infonavitUsed : creditUsed)
-          let totalCredit = payrollPayment.is_credit_custom === 1 ? payrollPayment.total_credit : (creditUsed > infonavitUsed ? creditUsed - infonavitUsed : 0)
-          let totalCash = totalWithoutCreditApplied >= (totalCredit) ? totalWithoutCreditApplied - (totalCredit) : 0
+          let totalInfonavit = 0
+          let totalCredit = 0
+          if (payrollPayment.is_infonavit_custom === 0 && payrollPayment.is_credit_custom === 0) {
+            totalInfonavit = infonavitUsed
+            totalCredit = creditUsed - infonavitUsed
+          }
+          if (payrollPayment.is_infonavit_custom === 1 && payrollPayment.is_credit_custom === 0) {
+            totalInfonavit = payrollPayment.infonavit
+            totalCredit = creditUsed - totalInfonavit
+            console.log(totalInfonavit)
+            console.log(totalCredit)
+            console.log(totalWithoutCreditApplied)
+          }
+          if (payrollPayment.is_infonavit_custom === 0 && payrollPayment.is_credit_custom === 1) {
+            totalInfonavit = infonavitUsed
+            totalCredit = payrollPayment.total_credit
+          }
+          if (payrollPayment.is_infonavit_custom === 1 && payrollPayment.is_credit_custom === 1) {
+            totalCredit = payrollPayment.total_credit
+            totalInfonavit = payrollPayment.infonavit
+          }
+          let totalCash = totalWithoutCreditApplied >= (totalCredit + totalInfonavit) ? totalWithoutCreditApplied - (totalCredit + totalInfonavit) : totalWithoutCreditApplied
           return {totalCredit, totalCash, totalInfonavit}
         },
         refreshPayrollPayment: function (payrollPayment) {
@@ -446,18 +460,9 @@
           payrollPayment.bonus_punctuality = payrollPayment.time_delays < 3 ? payrollPayment.base_salary * 0.15 : 0
           let {totalCredit, totalCash, totalInfonavit} = this.calculateTotals(payrollPayment, this.creditUsed, this.infonavitUsed)
           this.getInitialPayrollPayment(payrollPayment).total_credit = totalCredit
-          if (payrollPayment.is_infonavit_custom === 1) {
-            this.getInitialPayrollPayment(payrollPayment).infonavit = totalInfonavit
-          } else {
-            payrollPayment.infonavit = totalInfonavit
-          }
-          if (payrollPayment.is_credit_custom === 1) {
-            this.getInitialPayrollPayment(payrollPayment).total_credit = totalCredit
-          } else {
-            payrollPayment.total_credit = totalCredit
-          }
+          this.getInitialPayrollPayment(payrollPayment).infonavit = totalInfonavit
           payrollPayment.total_cash = totalCash
-          payrollPayment.total = totalCredit + totalCash
+          payrollPayment.total = totalCredit + totalCash + totalInfonavit
           this.refreshInput()
         },
         getInitialPayrollPayment: function (payrollPayment) {
@@ -476,12 +481,16 @@
         changePayrollPaymentsWithNewEmployees: function () {
           console.log('PAYROLL PAYMENT CHANGE')
           let employeesSelected = this.employeesSelected
-          let newPayrollPayments = []
+          let selectedPayrollPayments = []
           for (let i = 0; i < employeesSelected.length; i++) {
             let previousPayrollPayment = this.payrollPayments.find(payrollPayment => { return payrollPayment.employee_id === employeesSelected[i].id })
-            previousPayrollPayment = !previousPayrollPayment && this.initialValues.length > 0
-              ? this.initialValues.find(payrollPayment => { return payrollPayment.employee_id === employeesSelected[i].id }) : previousPayrollPayment
-            let newPayrollPayment = !previousPayrollPayment ? {
+            let initialPayrollPayment = this.initialValues.length > 0
+              ? this.initialValues.find(payrollPayment => { return payrollPayment.employee_id === employeesSelected[i].id }) : {}
+            if (initialPayrollPayment.employee_id && initialPayrollPayment.employee_id > 0) {
+              initialPayrollPayment.is_infonavit_custom = (initialPayrollPayment.infonavit !== this.infonavitUsed ? 1 : 0)
+              initialPayrollPayment.is_credit_custom = (initialPayrollPayment.total_credit !== this.creditUsed ? 1 : 0)
+            }
+            let newPayrollPayment = {
               employee_id: employeesSelected[i].id,
               employee: employeesSelected[i],
               base_salary: employeesSelected[i].base_salary,
@@ -500,25 +509,32 @@
               hours_normal_worked: employeesSelected[i].hours_should_work,
               hours_extra_worked: 0,
               hours_triple_worked: 0,
+              infonavit: employeesSelected[i].infonavit > 0 ? employeesSelected[i].infonavit : 0,
+              total_credit: employeesSelected[i].credit > 0 ? employeesSelected[i].credit : 0,
               total_cash: 0,
-              total_credit: 0,
-              infonavit: employeesSelected[i].infonavit > 0 ? employeesSelected[i].infonavit : 0
-            } : previousPayrollPayment
-            newPayrollPayment.is_infonavit_custom = (!this.isEditMode && newPayrollPayment.infonavit > 0 ? 1 : (this.isEditMode && newPayrollPayment.infonavit !== this.infonavitUsed ? 1 : 0))
-            newPayrollPayment.is_credit_custom = (!this.isEditMode && employeesSelected[i].credit_required > 0 ? 1 : (this.isEditMode && newPayrollPayment.total_credit > 0 ? 1 : 0))
-            newPayrollPayments.push(newPayrollPayment)
+              is_infonavit_custom: employeesSelected[i].infonavit > 0 ? 1 : 0,
+              is_credit_custom: employeesSelected[i].credit > 0 ? 1 : 0
+            }
+            let selectedPayrollPayment = previousPayrollPayment && previousPayrollPayment.employee_id > 0
+              ? previousPayrollPayment
+              : initialPayrollPayment && initialPayrollPayment.employee_id > 0
+                ? initialPayrollPayment
+                : newPayrollPayment.employee_id > 0
+                  ? newPayrollPayment
+                  : {}
+            selectedPayrollPayments.push(selectedPayrollPayment)
           }
-          this.payrollPayments = cloneDeep(newPayrollPayments)
-          this.initialPayrollPayments = cloneDeep(newPayrollPayments)
+          this.payrollPayments = cloneDeep(selectedPayrollPayments)
+          this.initialPayrollPayments = cloneDeep(selectedPayrollPayments)
         }
       },
       watch: {
-        creditUsed: function (creditUsed) {
+        creditUsed: function () {
           this.payrollPayments.forEach((payrollPayment) => {
             this.refreshPayrollPayment(payrollPayment)
           })
         },
-        infonavitUsed: function (creditUsed) {
+        infonavitUsed: function () {
           this.payrollPayments.forEach((payrollPayment) => {
             this.refreshPayrollPayment(payrollPayment)
           })
