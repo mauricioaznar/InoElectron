@@ -46,11 +46,11 @@
             entityFieldName: 'name'
           },
           {
-            title: SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.title,
-            name: SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name,
+            title: SupplierPropertiesReference.DEFAULT_BRANCH.title,
+            name: SupplierPropertiesReference.DEFAULT_BRANCH.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: 'defaultExpenseBranch',
+            entityName: 'defaultBranch',
             entityFieldName: 'name'
           },
           {

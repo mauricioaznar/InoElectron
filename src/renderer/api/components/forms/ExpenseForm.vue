@@ -267,14 +267,14 @@
         >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
-                        :key="(expense.supplier && expense.supplier.id ? expense.supplier.id : 0) + 'expenseBranch'"
-                        :endpointName="expenseBranchEndpointName"
-                        :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_BRANCH.name]"
-                        :label="ExpensePropertiesReference.EXPENSE_BRANCH.title"
+                        :key="(expense.supplier && expense.supplier.id ? expense.supplier.id : 0) + 'branch'"
+                        :endpointName="branchEndpointName"
+                        :initialObject="initialValues[ExpensePropertiesReference.BRANCH.name]"
+                        :label="ExpensePropertiesReference.BRANCH.title"
                         :displayProperty="'name'"
-                        v-model="expense.expenseBranch"
-                        :name="ExpensePropertiesReference.EXPENSE_BRANCH.name"
-                        :error="errors.has(ExpensePropertiesReference.EXPENSE_BRANCH.name) ? errors.first(ExpensePropertiesReference.EXPENSE_BRANCH.name) : ''"
+                        v-model="expense.branch"
+                        :name="ExpensePropertiesReference.BRANCH.name"
+                        :error="errors.has(ExpensePropertiesReference.BRANCH.name) ? errors.first(ExpensePropertiesReference.BRANCH.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'object_required'"
                 >
@@ -470,7 +470,7 @@
           expenseMoneySource: {},
           expenseCategory: {},
           expenseSubcategory: {},
-          expenseBranch: {},
+          branch: {},
           supplier: {},
           expenseStatus: {},
           expenseInvoiceStatus: {},
@@ -495,7 +495,7 @@
         expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
         expenseCategoryEndpointName: EntityTypes.EXPENSE_CATEGORY.apiName,
         expenseSubcategoryEndpointName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
-        expenseBranchEndpointName: EntityTypes.EXPENSE_BRANCH.apiName,
+        branchEndpointName: EntityTypes.BRANCH.apiName,
         supplierEndpointName: EntityTypes.SUPPLIER.apiName,
         expenseTypeEndpointName: EntityTypes.EXPENSE_TYPE.apiName,
         expenseItemEndpointName: EntityTypes.EXPENSE_ITEM.apiName,
@@ -597,7 +597,7 @@
         this.initialValues[ExpensePropertiesReference.EXPENSE_CATEGORY.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_CATEGORY.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
-        this.initialValues[ExpensePropertiesReference.EXPENSE_BRANCH.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_BRANCH.name)
+        this.initialValues[ExpensePropertiesReference.BRANCH.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.BRANCH.name)
         this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
         this.initialValues[ExpensePropertiesReference.TAX.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.TAX.name)
         this.initialHasNoteTax = this.initialValues[ExpensePropertiesReference.TAX.name] > 0 ? 1 : 0
@@ -621,8 +621,8 @@
         this.initialValues[ExpensePropertiesReference.EXPENSE_TYPE.name] = isObjectEmpty(initialExpenseType) && !isObjectEmpty(supplier) ? supplier.default_expense_type : initialExpenseType
         let initialExpenseCategory = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_CATEGORY.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_CATEGORY.name] = isObjectEmpty(initialExpenseCategory) && !isObjectEmpty(supplier) ? supplier.default_expense_category : initialExpenseCategory
-        let initialExpenseBranch = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_BRANCH.name)
-        this.initialValues[ExpensePropertiesReference.EXPENSE_BRANCH.name] = isObjectEmpty(initialExpenseBranch) && !isObjectEmpty(supplier) ? supplier.default_expense_branch : initialExpenseBranch
+        let initialBranch = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.BRANCH.name)
+        this.initialValues[ExpensePropertiesReference.BRANCH.name] = isObjectEmpty(initialBranch) && !isObjectEmpty(supplier) ? supplier.default_expense_branch : initialBranch
       },
       setInitialExpenseSubcategory: function (expenseCategory) {
         let expenseSubcategory = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name)
@@ -650,7 +650,7 @@
           [ExpensePropertiesReference.SUBTOTAL.name]: this.expense.subtotal,
           [ExpensePropertiesReference.DATE.name]: this.expense.date,
           [ExpensePropertiesReference.EXPENSE_CATEGORY.relationship_id_name]: this.expense.expenseCategory ? this.expense.expenseCategory[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
-          [ExpensePropertiesReference.EXPENSE_BRANCH.relationship_id_name]: this.expense.expenseBranch ? this.expense.expenseBranch[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [ExpensePropertiesReference.BRANCH.relationship_id_name]: this.expense.branch ? this.expense.branch[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_SUBCATEGORY.relationship_id_name]: this.expense.expenseSubcategory ? this.expense.expenseSubcategory[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.SUPPLIER.relationship_id_name]: this.expense.supplier ? this.expense.supplier[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_STATUS.relationship_id_name]: this.expense.expenseStatus ? this.expense.expenseStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)

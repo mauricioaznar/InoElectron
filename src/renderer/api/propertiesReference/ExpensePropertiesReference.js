@@ -43,24 +43,17 @@ export default {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
+  BRANCH: {
+    title: 'Sucursal',
+    name: 'branch',
+    relationship_id_name: 'branch_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
   EXPENSE_TYPE: {
     title: 'Tipo de gasto',
     name: 'expense_type',
     relationship_id_name: 'expense_type_id',
-    display: DisplayFunctions.getNameFromObject,
-    defaultValue: MauInputDefaultValues.SELECT
-  },
-  EXPENSE_MONEY_SOURCE: {
-    title: 'Origen del dinero',
-    name: 'expense_money_source',
-    relationship_id_name: 'expense_money_source_id',
-    display: DisplayFunctions.getNameFromObject,
-    defaultValue: MauInputDefaultValues.SELECT
-  },
-  EXPENSE_BRANCH: {
-    title: 'Sucursal',
-    name: 'expense_branch',
-    relationship_id_name: 'expense_branch_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
@@ -75,6 +68,13 @@ export default {
     title: 'Subcategoria',
     name: 'expense_subcategory',
     relationship_id_name: 'expense_subcategory_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  EXPENSE_MONEY_SOURCE: {
+    title: 'Origen del dinero',
+    name: 'expense_money_source',
+    relationship_id_name: 'expense_money_source_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },

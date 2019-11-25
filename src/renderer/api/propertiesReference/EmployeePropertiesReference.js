@@ -20,12 +20,6 @@ export default {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },
-  INFONAVIT: {
-    title: 'Infonavit',
-    name: 'infonavit',
-    display: DisplayFunctions.getValue,
-    defaultValue: MauInputDefaultValues.NUMBER
-  },
   CELLPHONE: {
     title: 'Telefono del contacto',
     name: 'cellphone',
@@ -44,6 +38,43 @@ export default {
     title: 'Estado del empleado',
     name: 'employee_status',
     relationship_id_name: 'employee_status_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
+  INFONAVIT: {
+    title: 'Infonavit',
+    name: 'infonavit',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
+  CREDIT_REQUIRED: {
+    title: 'Require credito',
+    name: 'credit_required',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.BOOLEAN
+  },
+  BASE_SALARY: {
+    title: 'Salario base',
+    name: 'base_salary',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
+  HOURS_SHOULD_WORK: {
+    title: 'Hora que tiene que trabajar',
+    name: 'hours_should_work',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
+  CREDIT: {
+    title: 'Credito',
+    name: 'credit',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
+  BRANCH: {
+    title: 'Sucursal',
+    name: 'branch',
+    relationship_id_name: 'branch_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   }

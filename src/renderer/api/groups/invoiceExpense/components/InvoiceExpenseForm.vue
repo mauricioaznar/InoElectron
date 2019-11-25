@@ -178,7 +178,7 @@
                 @total="setTotal"
                 :initialFirstExpenseItem="{
                 expenseCategory: expense.supplier && expense.supplier.id ? expense.supplier.default_expense_category : {},
-                expenseBranch: expense.supplier && expense.supplier.id ? expense.supplier.default_expense_branch : {},
+                branch: expense.supplier && expense.supplier.id ? expense.supplier.default_branch : {},
                 expenseSubcategory: expense.supplier && expense.supplier.id ? expense.supplier.default_expense_subcategory : {}
                 }"
         >

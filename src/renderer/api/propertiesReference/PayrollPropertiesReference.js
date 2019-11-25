@@ -41,5 +41,12 @@ export default {
     relationship_id_name: 'payroll_type_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
+  },
+  BRANCH: {
+    title: 'Sucursal',
+    name: 'branch',
+    relationship_id_name: 'branch_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
   }
 }

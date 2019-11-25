@@ -32,5 +32,11 @@ function object (initialObject, propertyName) {
   }
   return initialObject[propertyName]
 }
-export default {tripleboolean, simple, array: array, object}
+function boolean (initialObject, propertyName) {
+  if (initialObject === undefined || initialObject[propertyName] === null || initialObject[propertyName] === 'null' || initialObject[propertyName] === '') {
+    return 0
+  }
+  return initialObject[propertyName]
+}
+export default {tripleboolean, simple, array: array, object, boolean}
 

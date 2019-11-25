@@ -92,18 +92,18 @@
                 >
                 </mau-form-input-select-dynamic>
                 <mau-form-input-select-dynamic
-                        :key="'ItemExpenseBranch' + index + 'a' +
+                        :key="'Itembranch' + index + 'a' +
                         (isFirstExpenseItem(index) ?
-                        (getFirstExpenseItem().expenseBranch && getFirstExpenseItem().expenseBranch.id ? getFirstExpenseItem().expenseBranch.id : 0) : 0)"
+                        (getFirstExpenseItem().branch && getFirstExpenseItem().branch.id ? getFirstExpenseItem().branch.id : 0) : 0)"
                         class="mb-2"
                         :label="'Sucursal'"
-                        :initialObject="isFirstExpenseItem(index) ? getFirstExpenseItem().expenseBranch : (expenseItem.id ? getInitialExpenseItem(expenseItem).expense_branch : {})"
+                        :initialObject="isFirstExpenseItem(index) ? getFirstExpenseItem().branch : (expenseItem.id ? getInitialExpenseItem(expenseItem).branch : {})"
                         :displayProperty="'name'"
-                        :endpointName="expenseBranchEndpointName"
-                        v-model="expenseItem.expenseBranch"
-                        @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'expense_branch_id') }"
-                        :name="'ExpenseBranch' + index"
-                        :error="errors.has('ExpenseBranch' + index) ? errors.first('ExpenseBranch' + index) : ''"
+                        :endpointName="branchEndpointName"
+                        v-model="expenseItem.branch"
+                        @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'branch_id') }"
+                        :name="'branch' + index"
+                        :error="errors.has('branch' + index) ? errors.first('branch' + index) : ''"
                         v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
@@ -153,7 +153,7 @@
         return {
           expenseItems: [],
           machines: [],
-          expenseBranches: [],
+          branches: [],
           expenseCategories: [],
           expenseSubcategories: [],
           initialExpenseItems: [],
@@ -161,7 +161,7 @@
           machineEndpointName: EntityTypes.MACHINE.apiName,
           expenseCategoryEndpointName: EntityTypes.EXPENSE_CATEGORY.apiName,
           expenseSubcategoryEndpointName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
-          expenseBranchEndpointName: EntityTypes.EXPENSE_BRANCH.apiName
+          branchEndpointName: EntityTypes.BRANCH.apiName
         }
       },
       components: {
@@ -225,10 +225,10 @@
           return index === 0 && this.initialValues.length === 0
         },
         getFirstExpenseItem: function () {
-          let {expenseCategory, expenseSubcategory, expenseBranch} = this.initialFirstExpenseItem
+          let {expenseCategory, expenseSubcategory, branch} = this.initialFirstExpenseItem
           return {
             expenseCategory: (expenseCategory && expenseCategory.id) ? expenseCategory : {},
-            expenseBranch: (expenseBranch && expenseBranch.id) ? expenseBranch : {},
+            branch: (branch && branch.id) ? branch : {},
             expenseSubcategory: (expenseSubcategory && expenseSubcategory.id) ? expenseSubcategory : {}
           }
         },

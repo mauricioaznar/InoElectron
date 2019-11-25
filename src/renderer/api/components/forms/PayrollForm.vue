@@ -62,8 +62,25 @@
                           v-model="payroll.payrollType"
                           :name="PayrollPropertiesReference.PAYROLL_TYPE.name"
                           :displayProperty="'name'"
+                          :disabled="isInitialObjectDefined"
                           :error="errors.has(PayrollPropertiesReference.PAYROLL_TYPE.name) ? errors.first(PayrollPropertiesReference.PAYROLL_TYPE.name) : ''"
                           :endpointName="payrollTypeEndpointName"
+                          v-validate="'required'"
+                  >
+                  </mau-form-input-select-dynamic>
+              </div>
+          </div>
+          <div class="form-row">
+              <div class="form-group col-sm-12">
+                  <mau-form-input-select-dynamic
+                          :initialObject="initialValues[PayrollPropertiesReference.BRANCH.name]"
+                          :label="PayrollPropertiesReference.BRANCH.title"
+                          v-model="payroll.branch"
+                          :name="PayrollPropertiesReference.BRANCH.name"
+                          :disabled="isInitialObjectDefined"
+                          :displayProperty="'name'"
+                          :error="errors.has(PayrollPropertiesReference.BRANCH.name) ? errors.first(PayrollPropertiesReference.BRANCH.name) : ''"
+                          :endpointName="branchEndpointName"
                           v-validate="'required'"
                   >
                   </mau-form-input-select-dynamic>
@@ -74,6 +91,7 @@
             v-model="payroll.payrollPayments"
             :creditUsed="payroll.creditUsed > 0 ? payroll.creditUsed : 0"
             :infonavitUsed="payroll.infonavitUsed > 0 ? payroll.infonavitUsed : 0"
+            :branch="payroll.branch"
           >
 
           </payroll-payments>
@@ -106,10 +124,12 @@
           payrollType: '',
           payrollPayments: [],
           creditUsed: '',
-          infonavitUsed: ''
+          infonavitUsed: '',
+          branch: {}
         },
         initialValues: {},
         payrollTypeEndpointName: EntityTypes.PAYROLL_TYPE.apiName,
+        branchEndpointName: EntityTypes.BRANCH.apiName,
         buttonDisabled: false
       }
     },
@@ -141,7 +161,7 @@
         return true
       },
       isInitialObjectDefined: function () {
-        return this.initialObject && this.initialObject.id
+        return (this.initialObject && this.initialObject.id > 0)
       }
     },
     methods: {
@@ -152,6 +172,7 @@
         this.initialValues[PayrollPropertiesReference.CREDIT_USED.name] = DefaultValuesHelper.simple(this.initialObject, PayrollPropertiesReference.CREDIT_USED.name)
         this.initialValues[PayrollPropertiesReference.INFONAVIT_USED.name] = DefaultValuesHelper.simple(this.initialObject, PayrollPropertiesReference.INFONAVIT_USED.name)
         this.initialValues[PayrollPropertiesReference.PAYROLL_TYPE.name] = DefaultValuesHelper.object(this.initialObject, PayrollPropertiesReference.PAYROLL_TYPE.name)
+        this.initialValues[PayrollPropertiesReference.BRANCH.name] = DefaultValuesHelper.object(this.initialObject, PayrollPropertiesReference.BRANCH.name)
       },
       save: function () {
         let directParams = {
@@ -159,7 +180,8 @@
           [PayrollPropertiesReference.END_DATE_TIME.name]: this.payroll.endDateTime,
           [PayrollPropertiesReference.CREDIT_USED.name]: this.payroll.creditUsed,
           [PayrollPropertiesReference.INFONAVIT_USED.name]: this.payroll.infonavitUsed,
-          [PayrollPropertiesReference.PAYROLL_TYPE.relationship_id_name]: this.payroll.payrollType ? this.payroll.payrollType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
+          [PayrollPropertiesReference.PAYROLL_TYPE.relationship_id_name]: this.payroll.payrollType ? this.payroll.payrollType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [PayrollPropertiesReference.BRANCH.relationship_id_name]: this.payroll.branch ? this.payroll.branch[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
         }
         let relayObjects = []
         let expenseItemsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(

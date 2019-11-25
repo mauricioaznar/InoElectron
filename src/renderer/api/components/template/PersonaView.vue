@@ -74,9 +74,39 @@
             display: DisplayFunctions.getNameFromObject
           })
           this.properties.push({
+            name: EmployeePropertiesReference.BRANCH.name,
+            title: EmployeePropertiesReference.BRANCH.title,
+            display: DisplayFunctions.getNameFromObject
+          })
+          this.properties.push({
             name: EmployeePropertiesReference.EMPLOYEE_STATUS.name,
             title: EmployeePropertiesReference.EMPLOYEE_STATUS.title,
             display: DisplayFunctions.getNameFromObject
+          })
+          this.properties.push({
+            name: EmployeePropertiesReference.BASE_SALARY.name,
+            title: EmployeePropertiesReference.BASE_SALARY.title,
+            display: DisplayFunctions.getValue
+          })
+          this.properties.push({
+            name: EmployeePropertiesReference.HOURS_SHOULD_WORK.name,
+            title: EmployeePropertiesReference.HOURS_SHOULD_WORK.title,
+            display: DisplayFunctions.getValue
+          })
+          this.properties.push({
+            name: EmployeePropertiesReference.CREDIT_REQUIRED.name,
+            title: EmployeePropertiesReference.CREDIT_REQUIRED.title,
+            display: DisplayFunctions.getTwoStateBoolean
+          })
+          this.properties.push({
+            name: EmployeePropertiesReference.CREDIT.name,
+            title: EmployeePropertiesReference.CREDIT.title,
+            display: DisplayFunctions.getValue
+          })
+          this.properties.push({
+            name: EmployeePropertiesReference.INFONAVIT.name,
+            title: EmployeePropertiesReference.INFONAVIT.title,
+            display: DisplayFunctions.getValue
           })
         }
       }

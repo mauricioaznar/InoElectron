@@ -34,11 +34,6 @@
             title: PayrollPropertiesReference.END_DATE_TIME.title,
             name: PayrollPropertiesReference.END_DATE_TIME.name,
             display: DisplayFunctions.getValue
-          },
-          {
-            title: PayrollPropertiesReference.MACHINE_TYPE.title,
-            name: PayrollPropertiesReference.MACHINE_TYPE.name,
-            display: DisplayFunctions.getNameFromObject
           }
         ]
       }

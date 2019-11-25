@@ -8,11 +8,13 @@
             </label>
             <div style="height: 200px" v-show="showEmployees">
                 <mau-form-input-select-dynamic
+                        :key="'Employees' + (branch && branch.id ? branch.id : 0)"
                         class="mb-2"
                         :label="''"
                         :initialObjects="initialEmployeesSelected"
                         :displayProperty="'fullname'"
                         :endpointName="employeeEndpointName"
+                        :apiOperationOptions="employeeApiOperations"
                         :multiselect="true"
                         v-model="employeesSelected"
                         :name="'Employees'"
@@ -22,7 +24,7 @@
                 </mau-form-input-select-dynamic>
             </div>
             <div class="row mb-3">
-                <div class="col-sm-6">
+                <div class="col-sm-5">
                     General
                 </div>
                 <div class="col-sm-2">
@@ -34,7 +36,7 @@
                 <div class="col-sm-1">
                     Descuentos
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-3">
                     Totales
                 </div>
             </div>
@@ -42,11 +44,9 @@
                 <div class="col-sm-2">
                     Nombre
                 </div>
-                <div class="col-sm-1">
-                    Sueldo
-                </div>
-                <div class="col-sm-1">
-                    Horas por trabajar
+                <div class="col-sm-1 d-flex flex-column">
+                    <div>Sueldo</div>
+                    <div>Horas por trabajar</div>
                 </div>
                 <div class="col-sm-1 d-flex flex-column">
                     <div>Puntualidad</div>
@@ -75,11 +75,13 @@
                 <div class="col-sm-1 d-flex flex-column">
                     <div>Descuentos prestamos</div>
                     <div>Descuentos otros</div>
-                    <div>Infonavit</div>
                 </div>
                 <div class="col-sm-1 d-flex flex-column">
                     <div>Total dinero</div>
                     <div>Total credito</div>
+                </div>
+                <div class="col-sm-1 d-flex flex-column">
+                    <div>Infonavit</div>
                 </div>
                 <div class="col-sm-1 d-flex flex-column">
                     <div>Total</div>
@@ -92,25 +94,37 @@
                 <div class="col-sm-2 p-0 d-flex flex-column">
                     <p>{{payrollPayment.employee.fullname}}</p>
                     <div>
-                        <label>Infonavit manual</label>
+                        <label>Se requiere credito</label>
                         <mau-form-input-check-box
-                                :initial-value="getInitialPayrollPayment(payrollPayment).is_infonavit_custom"
+                                :initialValue="getInitialPayrollPayment(payrollPayment).credit_required"
+                                v-model="payrollPayment.credit_required"
+                                @input="refreshPayrollPayment(payrollPayment)"
+                        >
+
+                        </mau-form-input-check-box>
+                        <label v-if="payrollPayment.credit_required === 1">Infonavit manual</label>
+                        <mau-form-input-check-box
+                                v-if="payrollPayment.credit_required === 1"
+                                :initialValue="getInitialPayrollPayment(payrollPayment).is_infonavit_custom"
                                 v-model="payrollPayment.is_infonavit_custom"
+                                @input="refreshPayrollPayment(payrollPayment)"
                         >
 
                         </mau-form-input-check-box>
                     </div>
                     <div>
-                        <label>Credito manual</label>
+                        <label v-if="payrollPayment.credit_required === 1">Credito manual</label>
                         <mau-form-input-check-box
-                                :initial-value="getInitialPayrollPayment(payrollPayment).is_credit_custom"
+                                v-if="payrollPayment.credit_required === 1"
+                                :initialValue="getInitialPayrollPayment(payrollPayment).is_credit_custom"
                                 v-model="payrollPayment.is_credit_custom"
+                                @input="refreshPayrollPayment(payrollPayment)"
                         >
 
                         </mau-form-input-check-box>
                     </div>
                 </div>
-                <div class="col-sm-1 p-0">
+                <div class="col-sm-1 p-0 d-flex flex-column">
                     <mau-form-input-number
                         :name="'BaseSalary' + payrollPayment.employee_id"
                         :key="'BaseSalary' + payrollPayment.employee_id"
@@ -122,13 +136,10 @@
                         @input="refreshPayrollPayment(payrollPayment)"
                     >
                     </mau-form-input-number>
-                </div>
-                <div class="col-sm-1 p-0">
                     <mau-form-input-number
                             :name="'HoursShouldWork' + payrollPayment.employee_id"
                             :key="'HoursShouldWork' + payrollPayment.employee_id"
                             :label="''"
-                            :disabled="true"
                             :initialValue="getInitialPayrollPayment(payrollPayment).hours_should_work"
                             v-model="payrollPayment.hours_should_work"
                             :error="errors.has('HoursShouldWork' + payrollPayment.employee_id) ? errors.first('HoursShouldWork' + payrollPayment.employee_id) : ''"
@@ -290,32 +301,14 @@
                             :type="'float'"
                     >
                     </mau-form-input-number>
-                    <div>
-                        <mau-form-input-number
-                            :name="'Infonavit' + payrollPayment.employee_id"
-                            :disabled="payrollPayment.is_infonavit_custom === 0"
-                            :key="'Infonavit' + payrollPayment.employee_id + '' + (payrollPayment.is_infonavit_custom === 0 ? infonavitUsed : '')"
-                            :label="''"
-                            :initialValue="getInitialPayrollPayment(payrollPayment).infonavit"
-                            v-model="payrollPayment.infonavit"
-                            :placeholder="''"
-                            :error="errors.has('Infonavit' + payrollPayment.employee_id) ? errors.first('Infonavit' + payrollPayment.employee_id) : ''"
-                            @input="refreshPayrollPayment(payrollPayment)"
-                            :type="'float'"
-                            v-validate="{
-                                required: true,
-                                max_value: payrollPayment.total_credit > 0 ? payrollPayment.total_credit : 0
-                            }"
-                        >
-                        </mau-form-input-number>
-                    </div>
                 </div>
                 <div class="col-sm-1 p-0 d-flex flex-column">
                     <div class="payroll-payment-cell text-right">{{fixNumber(payrollPayment.total_cash)}}</div>
                     <div>
                         <mau-form-input-number
+                            v-if="payrollPayment.credit_required === 1"
+                            v-show="payrollPayment.is_credit_custom === 1"
                             :name="'TotalCredit' + payrollPayment.employee_id"
-                            :disabled="payrollPayment.is_credit_custom === 0"
                             :key="'TotalCredit' + payrollPayment.employee_id + '' +
                                 (payrollPayment.is_credit_custom === 0 ? creditUsed : '') +
                                 (payrollPayment.is_infonavit_custom === 0 ? infonavitUsed : payrollPayment.infonavit)
@@ -328,11 +321,37 @@
                             @input="refreshPayrollPayment(payrollPayment)"
                             v-validate="{
                                 required: true,
-                                max_value: payrollPayment.total_cash > 0 ? payrollPayment.total_cash : 0
+                                max_value: payrollPayment.total_without_credit_applied > 0 ? payrollPayment.total_without_credit_applied : 0
                             }"
                             :type="'float'"
                         >
                         </mau-form-input-number>
+                        <div v-show="payrollPayment.is_credit_custom === 0" class="payroll-payment-cell text-right" :class="{'text-danger': errors.has('TotalCredit' + payrollPayment.employee_id)}">{{payrollPayment.total_credit}}</div>
+                        <p v-show="payrollPayment.is_credit_custom === 0" v-if="errors.has('TotalCredit' + payrollPayment.employee_id)" class="text-danger">{{errors.first('TotalCredit' + payrollPayment.employee_id)}}'</p>
+                    </div>
+                </div>
+                <div class="col-sm-1 p-0">
+                    <div>
+                        <mau-form-input-number
+                                v-if="payrollPayment.credit_required === 1"
+                                v-show="payrollPayment.is_infonavit_custom === 1"
+                                :name="'Infonavit' + payrollPayment.employee_id"
+                                :key="'Infonavit' + payrollPayment.employee_id + '' + (payrollPayment.is_infonavit_custom === 0 ? infonavitUsed : '')"
+                                :label="''"
+                                :initialValue="getInitialPayrollPayment(payrollPayment).infonavit"
+                                v-model="payrollPayment.infonavit"
+                                :placeholder="''"
+                                :error="errors.has('Infonavit' + payrollPayment.employee_id) ? errors.first('Infonavit' + payrollPayment.employee_id) : ''"
+                                @input="refreshPayrollPayment(payrollPayment)"
+                                :type="'float'"
+                                v-validate="{
+                                required: true,
+                                max_value: (payrollPayment.total_credit >= 0) ? (payrollPayment.total_credit) : 0
+                            }"
+                        >
+                        </mau-form-input-number>
+                        <div v-show="payrollPayment.is_infonavit_custom === 0" class="payroll-payment-cell text-right" :class="{'text-danger': errors.has('Infonavit' + payrollPayment.employee_id)}">{{payrollPayment.infonavit}}</div>
+                        <p v-show="payrollPayment.is_infonavit_custom === 0" v-if="errors.has('Infonavit' + payrollPayment.employee_id)" class="text-danger">{{errors.first('Infonavit' + payrollPayment.employee_id)}}'</p>
                     </div>
                 </div>
                 <div class="col-sm-1">
@@ -369,27 +388,30 @@
       computed: {
         isEditMode: function () {
           return this.initialValues.length !== 0
+        },
+        employeeApiOperations: function () {
+          if (this.branch && this.branch.id) {
+            return {filterExacts: {branch_id: this.branch.id}}
+          }
+          return {}
         }
       },
       created () {
-        if (!this.isEditMode) {
-          Promise.all([
-            GenericApiOperations.list(EntityTypes.EMPLOYEE.apiName, {paginate: false, filterExacts: { employee_status_id: 1 }})
-          ])
-            .then(result => {
-              this.employees = result[0]
-              this.initialEmployeesSelected = result[0]
-            })
-            .finally(() => {
-              this.inputAreaDisabled = false
-            })
-        } else {
-          this.inputAreaDisabled = false
-          let employeesSelected = this.initialValues.map(function (payrollPayment) { return payrollPayment.employee })
-          this.initialEmployeesSelected = cloneDeep(employeesSelected)
-          this.employeesSelected = cloneDeep(employeesSelected)
-          this.initialPayrollPayments = cloneDeep(this.initialValues)
-        }
+        Promise.all([
+          GenericApiOperations.list(EntityTypes.EMPLOYEE.apiName, {paginate: false, filterExacts: { employee_status_id: 1 }})
+        ])
+          .then(result => {
+            this.employees = result[0]
+            if (this.isEditMode) {
+              let employeesSelected = this.initialValues.map(function (payrollPayment) { return payrollPayment.employee })
+              this.initialEmployeesSelected = cloneDeep(employeesSelected)
+              this.employeesSelected = cloneDeep(employeesSelected)
+              this.initialPayrollPayments = cloneDeep(this.initialValues)
+            }
+          })
+          .finally(() => {
+            this.inputAreaDisabled = false
+          })
         this.refreshInput()
       },
       props: {
@@ -404,6 +426,12 @@
         infonavitUsed: {
           type: Number,
           required: true
+        },
+        branch: {
+          type: Object,
+          default: function () {
+            return {}
+          }
         }
       },
       methods: {
@@ -428,27 +456,26 @@
             payrollPayment.discount_others
           let totalInfonavit = 0
           let totalCredit = 0
-          if (payrollPayment.is_infonavit_custom === 0 && payrollPayment.is_credit_custom === 0) {
-            totalInfonavit = infonavitUsed
-            totalCredit = creditUsed - infonavitUsed
+          if (payrollPayment.credit_required === 1) {
+            if (payrollPayment.is_infonavit_custom === 0 && payrollPayment.is_credit_custom === 0) {
+              totalInfonavit = creditUsed > totalWithoutCreditApplied ? totalWithoutCreditApplied : infonavitUsed
+              totalCredit = creditUsed > totalWithoutCreditApplied ? totalWithoutCreditApplied : creditUsed
+            }
+            if (payrollPayment.is_infonavit_custom === 1 && payrollPayment.is_credit_custom === 0) {
+              totalInfonavit = payrollPayment.infonavit
+              totalCredit = creditUsed || 0
+            }
+            if (payrollPayment.is_infonavit_custom === 0 && payrollPayment.is_credit_custom === 1) {
+              totalInfonavit = infonavitUsed || 0
+              totalCredit = payrollPayment.total_credit
+            }
+            if (payrollPayment.is_infonavit_custom === 1 && payrollPayment.is_credit_custom === 1) {
+              totalCredit = payrollPayment.total_credit
+              totalInfonavit = payrollPayment.infonavit
+            }
           }
-          if (payrollPayment.is_infonavit_custom === 1 && payrollPayment.is_credit_custom === 0) {
-            totalInfonavit = payrollPayment.infonavit
-            totalCredit = creditUsed - totalInfonavit
-            console.log(totalInfonavit)
-            console.log(totalCredit)
-            console.log(totalWithoutCreditApplied)
-          }
-          if (payrollPayment.is_infonavit_custom === 0 && payrollPayment.is_credit_custom === 1) {
-            totalInfonavit = infonavitUsed
-            totalCredit = payrollPayment.total_credit
-          }
-          if (payrollPayment.is_infonavit_custom === 1 && payrollPayment.is_credit_custom === 1) {
-            totalCredit = payrollPayment.total_credit
-            totalInfonavit = payrollPayment.infonavit
-          }
-          let totalCash = totalWithoutCreditApplied >= (totalCredit + totalInfonavit) ? totalWithoutCreditApplied - (totalCredit + totalInfonavit) : totalWithoutCreditApplied
-          return {totalCredit, totalCash, totalInfonavit}
+          let totalCash = totalWithoutCreditApplied >= (totalCredit) ? totalWithoutCreditApplied - (totalCredit) : totalWithoutCreditApplied
+          return {totalCredit, totalCash, totalInfonavit, totalWithoutCreditApplied}
         },
         refreshPayrollPayment: function (payrollPayment) {
           payrollPayment.coeficient_normal = payrollPayment.base_salary / payrollPayment.hours_should_work
@@ -458,11 +485,12 @@
           payrollPayment.coeficient_triple = (payrollPayment.base_salary / (payrollPayment.hours_should_work + (payrollPayment.hours_should_work / 6))) * 3
           payrollPayment.earnings_triple = (payrollPayment.coeficient_triple * payrollPayment.hours_triple_worked)
           payrollPayment.bonus_punctuality = payrollPayment.time_delays < 3 ? payrollPayment.base_salary * 0.15 : 0
-          let {totalCredit, totalCash, totalInfonavit} = this.calculateTotals(payrollPayment, this.creditUsed, this.infonavitUsed)
+          let {totalCredit, totalCash, totalInfonavit, totalWithoutCreditApplied} = this.calculateTotals(payrollPayment, this.creditUsed, this.infonavitUsed)
           this.getInitialPayrollPayment(payrollPayment).total_credit = totalCredit
           this.getInitialPayrollPayment(payrollPayment).infonavit = totalInfonavit
           payrollPayment.total_cash = totalCash
-          payrollPayment.total = totalCredit + totalCash + totalInfonavit
+          payrollPayment.total_without_credit_applied = totalWithoutCreditApplied
+          payrollPayment.total = totalCredit + totalCash
           this.refreshInput()
         },
         getInitialPayrollPayment: function (payrollPayment) {
@@ -479,7 +507,6 @@
           this.showEmployees = !this.showEmployees
         },
         changePayrollPaymentsWithNewEmployees: function () {
-          console.log('PAYROLL PAYMENT CHANGE')
           let employeesSelected = this.employeesSelected
           let selectedPayrollPayments = []
           for (let i = 0; i < employeesSelected.length; i++) {
@@ -510,8 +537,9 @@
               hours_extra_worked: 0,
               hours_triple_worked: 0,
               infonavit: employeesSelected[i].infonavit > 0 ? employeesSelected[i].infonavit : 0,
-              total_credit: employeesSelected[i].credit > 0 ? employeesSelected[i].credit : 0,
+              total_credit: employeesSelected[i].credit > 0 ? employeesSelected[i].credit : this.creditUsed,
               total_cash: 0,
+              credit_required: employeesSelected[i].credit_required,
               is_infonavit_custom: employeesSelected[i].infonavit > 0 ? 1 : 0,
               is_credit_custom: employeesSelected[i].credit > 0 ? 1 : 0
             }
@@ -538,6 +566,17 @@
           this.payrollPayments.forEach((payrollPayment) => {
             this.refreshPayrollPayment(payrollPayment)
           })
+        },
+        branch: function () {
+          if (!this.isEditMode) {
+            let branchId = this.branch.id
+            let employeesSelected = this.employees.filter(employee => {
+              return employee.branch_id === branchId
+            })
+            console.log(employeesSelected)
+            this.employeesSelected = employeesSelected
+            this.changePayrollPaymentsWithNewEmployees()
+          }
         }
       }
     }

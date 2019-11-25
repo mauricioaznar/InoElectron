@@ -27,5 +27,12 @@ export default {
     title: 'Cantidad',
     name: 'quantity',
     defaultValue: MauInputDefaultValues.NUMBER
+  },
+  BRANCH: {
+    title: 'Sucursal',
+    name: 'branch',
+    relationship_id_name: 'branch_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
   }
 }

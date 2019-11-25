@@ -66,8 +66,8 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
-            title: ExpensePropertiesReference.EXPENSE_BRANCH.title,
-            name: ExpensePropertiesReference.EXPENSE_BRANCH.name,
+            title: ExpensePropertiesReference.BRANCH.title,
+            name: ExpensePropertiesReference.BRANCH.name,
             display: DisplayFunctions.getNameFromObject
           },
           {

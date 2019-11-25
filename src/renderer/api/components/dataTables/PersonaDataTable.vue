@@ -101,12 +101,50 @@
           entityFieldName: 'name'
         })
         this.tableFields.push({
+          name: EmployeePropertiesReference.BRANCH.name,
+          title: EmployeePropertiesReference.BRANCH.title,
+          callback: DisplayFunctions.getNameFromObject,
+          filterType: 'entity',
+          entityName: EntityTypes.BRANCH.name,
+          entityFieldName: 'name'
+        })
+        this.tableFields.push({
           name: EmployeePropertiesReference.EMPLOYEE_STATUS.name,
           title: EmployeePropertiesReference.EMPLOYEE_STATUS.title,
           callback: DisplayFunctions.getNameFromObject,
           filterType: 'entity',
           entityName: EntityTypes.EMPLOYEE_STATUS.name,
           entityFieldName: 'name'
+        })
+        this.tableFields.push({
+          name: EmployeePropertiesReference.BASE_SALARY.name,
+          title: EmployeePropertiesReference.BASE_SALARY.title,
+          sortField: EmployeePropertiesReference.BASE_SALARY.name,
+          filterType: 'text'
+        })
+        this.tableFields.push({
+          name: EmployeePropertiesReference.HOURS_SHOULD_WORK.name,
+          title: EmployeePropertiesReference.HOURS_SHOULD_WORK.title,
+          sortField: EmployeePropertiesReference.HOURS_SHOULD_WORK.name,
+          filterType: 'text'
+        })
+        this.tableFields.push({
+          name: EmployeePropertiesReference.CREDIT_REQUIRED.name,
+          title: EmployeePropertiesReference.CREDIT_REQUIRED.title,
+          sortField: EmployeePropertiesReference.CREDIT_REQUIRED.name,
+          callback: DisplayFunctions.getTwoStateBoolean
+        })
+        this.tableFields.push({
+          name: EmployeePropertiesReference.CREDIT.name,
+          title: EmployeePropertiesReference.CREDIT.title,
+          sortField: EmployeePropertiesReference.CREDIT.name,
+          filterType: 'text'
+        })
+        this.tableFields.push({
+          name: EmployeePropertiesReference.INFONAVIT.name,
+          title: EmployeePropertiesReference.INFONAVIT.title,
+          sortField: EmployeePropertiesReference.INFONAVIT.name,
+          filterType: 'text'
         })
       }
     },

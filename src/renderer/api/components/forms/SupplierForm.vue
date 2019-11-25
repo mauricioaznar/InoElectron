@@ -25,7 +25,7 @@
                         :name="SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.name"
                         :error="errors.has(SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.name) ? errors.first(SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
             </div>
@@ -41,7 +41,7 @@
                         :name="SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name"
                         :error="errors.has(SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name) ? errors.first(SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
             </div>
@@ -59,7 +59,7 @@
                         :name="SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name"
                         :error="errors.has(SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name) ? errors.first(SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
             </div>
@@ -67,15 +67,15 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
-                        :endpointName="expenseBranchEndpointName"
-                        :initialObject="initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name]"
-                        :label="SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.title"
+                        :endpointName="defaultBranchEndpointName"
+                        :initialObject="initialValues[SupplierPropertiesReference.DEFAULT_BRANCH.name]"
+                        :label="SupplierPropertiesReference.DEFAULT_BRANCH.title"
                         :displayProperty="'name'"
-                        v-model="supplier.defaultExpenseBranch"
-                        :name="SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name"
-                        :error="errors.has(SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name) ? errors.first(SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name) : ''"
+                        v-model="supplier.defaultBranch"
+                        :name="SupplierPropertiesReference.DEFAULT_BRANCH.name"
+                        :error="errors.has(SupplierPropertiesReference.DEFAULT_BRANCH.name) ? errors.first(SupplierPropertiesReference.DEFAULT_BRANCH.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
             </div>
@@ -105,13 +105,13 @@
           defaultExpenseType: {},
           defaultExpenseCategory: {},
           defaultExpenseSubcategory: {},
-          defaultExpenseBranch: {}
+          defaultBranch: {}
         },
         initialValues: {},
         expenseTypeEndpointName: EntityTypes.EXPENSE_TYPE.apiName,
         expenseCategoryEndpointName: EntityTypes.EXPENSE_CATEGORY.apiName,
         expenseSubcategoryEndpointName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
-        expenseBranchEndpointName: EntityTypes.EXPENSE_BRANCH.apiName,
+        defaultBranchEndpointName: EntityTypes.BRANCH.apiName,
         buttonDisabled: false
       }
     },
@@ -155,7 +155,7 @@
         this.initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.name)
         this.initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name)
         this.initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name)
-        this.initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name)
+        this.initialValues[SupplierPropertiesReference.DEFAULT_BRANCH.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_BRANCH.name)
       },
       setDefaultSubcategoryInitialValue: function (defaultExpenseCategory) {
         let defaultExpenseSubcategory = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name)
@@ -173,7 +173,7 @@
           [SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.relationship_id_name]: this.supplier.defaultExpenseType ? this.supplier.defaultExpenseType[GlobalEntityIdentifier] : null,
           [SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.relationship_id_name]: this.supplier.defaultExpenseCategory ? this.supplier.defaultExpenseCategory[GlobalEntityIdentifier] : null,
           [SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.relationship_id_name]: this.supplier.defaultExpenseSubcategory ? this.supplier.defaultExpenseSubcategory[GlobalEntityIdentifier] : null,
-          [SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.relationship_id_name]: this.supplier.defaultExpenseBranch ? this.supplier.defaultExpenseBranch[GlobalEntityIdentifier] : null
+          [SupplierPropertiesReference.DEFAULT_BRANCH.relationship_id_name]: this.supplier.defaultBranch ? this.supplier.defaultBranch[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
         }

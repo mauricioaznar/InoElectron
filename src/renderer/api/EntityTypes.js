@@ -252,9 +252,9 @@ export default {
     apiName: 'expenseSubcategory',
     title: 'Subcategoria'
   },
-  EXPENSE_BRANCH: {
-    name: 'expenseBranch',
-    apiName: 'expenseBranch',
+  BRANCH: {
+    name: 'branch',
+    apiName: 'branch',
     title: 'Sucursal'
   },
   EXPENSE_STATUS: {

@@ -46,8 +46,8 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
-            title: SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.title,
-            name: SupplierPropertiesReference.DEFAULT_EXPENSE_BRANCH.name,
+            title: SupplierPropertiesReference.DEFAULT_BRANCH.title,
+            name: SupplierPropertiesReference.DEFAULT_BRANCH.name,
             display: DisplayFunctions.getNameFromObject
           }
         ]

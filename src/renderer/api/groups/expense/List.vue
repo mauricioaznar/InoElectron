@@ -82,11 +82,11 @@
             entityFieldName: 'name'
           },
           {
-            title: ExpensePropertiesReference.EXPENSE_BRANCH.title,
-            name: ExpensePropertiesReference.EXPENSE_BRANCH.name,
+            title: ExpensePropertiesReference.BRANCH.title,
+            name: ExpensePropertiesReference.BRANCH.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_BRANCH.apiName,
+            entityName: EntityTypes.BRANCH.apiName,
             entityFieldName: 'name'
           },
           {

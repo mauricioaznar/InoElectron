@@ -65,7 +65,7 @@
                         :name="ClientContactPropertiesReference.CLIENT.name"
                         :error="errors.first(ClientContactPropertiesReference.CLIENT.name)"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
             </div>
@@ -81,24 +81,10 @@
                         :name="EmployeePropertiesReference.EMPLOYEE_TYPE.name"
                         :error="errors.has(EmployeePropertiesReference.EMPLOYEE_TYPE.name) ? errors.first(EmployeePropertiesReference.EMPLOYEE_TYPE.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
             </div>
-        </div>
-        <div class="form-group">
-           <div v-if="employeeMode">
-               <mau-form-input-number
-                       :initialValue="initialValues[EmployeePropertiesReference.INFONAVIT.name]"
-                       :label="EmployeePropertiesReference.INFONAVIT.title"
-                       v-model="persona.infonavit"
-                       :name="EmployeePropertiesReference.INFONAVIT.name"
-                       :error="errors.has(EmployeePropertiesReference.INFONAVIT.name) ? errors.first(EmployeePropertiesReference.INFONAVIT.name) : ''"
-                       :type="'float'"
-                       v-validate="'required'"
-               >
-               </mau-form-input-number>
-           </div>
         </div>
         <div class="form-group">
             <div v-if="employeeMode">
@@ -111,9 +97,95 @@
                         :name="EmployeePropertiesReference.EMPLOYEE_STATUS.name"
                         :error="errors.has(EmployeePropertiesReference.EMPLOYEE_STATUS.name) ? errors.first(EmployeePropertiesReference.EMPLOYEE_STATUS.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
+            </div>
+        </div>
+        <div class="form-group">
+            <div v-if="employeeMode">
+                <mau-form-input-select-dynamic
+                        :initialObject="initialValues[EmployeePropertiesReference.BRANCH.name]"
+                        :label="EmployeePropertiesReference.BRANCH.title"
+                        :displayProperty="'name'"
+                        :endpointName="branchEndpointName"
+                        v-model="persona.branch"
+                        :name="EmployeePropertiesReference.BRANCH.name"
+                        :error="errors.has(EmployeePropertiesReference.BRANCH.name) ? errors.first(EmployeePropertiesReference.BRANCH.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
+        </div>
+        <div class="form-group">
+            <div v-if="employeeMode">
+                <mau-form-input-number
+                        :initialValue="initialValues[EmployeePropertiesReference.HOURS_SHOULD_WORK.name]"
+                        :label="EmployeePropertiesReference.HOURS_SHOULD_WORK.title"
+                        v-model="persona.hoursShouldWork"
+                        :name="EmployeePropertiesReference.HOURS_SHOULD_WORK.name"
+                        :error="errors.has(EmployeePropertiesReference.HOURS_SHOULD_WORK.name) ? errors.first(EmployeePropertiesReference.HOURS_SHOULD_WORK.name) : ''"
+                        :type="'float'"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+        </div>
+        <div class="form-group">
+            <div v-if="employeeMode">
+                <mau-form-input-number
+                        :initialValue="initialValues[EmployeePropertiesReference.BASE_SALARY.name]"
+                        :label="EmployeePropertiesReference.BASE_SALARY.title"
+                        v-model="persona.baseSalary"
+                        :name="EmployeePropertiesReference.BASE_SALARY.name"
+                        :error="errors.has(EmployeePropertiesReference.BASE_SALARY.name) ? errors.first(EmployeePropertiesReference.BASE_SALARY.name) : ''"
+                        :type="'float'"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+        </div>
+        <div class="form-group">
+            <div v-if="employeeMode" class="d-flex flex-column">
+                <label>Require credito?</label>
+                <mau-form-input-check-box
+                    :initialValue="initialValues[EmployeePropertiesReference.CREDIT_REQUIRED.name]"
+                    v-model="persona.creditRequired"
+                >
+
+                </mau-form-input-check-box>
+            </div>
+        </div>
+        <div class="form-group">
+            <div v-if="employeeMode && persona.creditRequired === 1">
+                <mau-form-input-number
+                        :initialValue="initialValues[EmployeePropertiesReference.INFONAVIT.name]"
+                        :label="EmployeePropertiesReference.INFONAVIT.title"
+                        v-model="persona.infonavit"
+                        :name="EmployeePropertiesReference.INFONAVIT.name"
+                        :error="errors.has(EmployeePropertiesReference.INFONAVIT.name) ? errors.first(EmployeePropertiesReference.INFONAVIT.name) : ''"
+                        :type="'float'"
+                        v-validate="{
+                          required: true,
+                          max_value: persona.credit > 0 ? persona.credit : 0
+                        }"
+                >
+                </mau-form-input-number>
+            </div>
+        </div>
+        <div class="form-group">
+            <div v-if="employeeMode && persona.creditRequired === 1">
+                <mau-form-input-number
+                        :initialValue="initialValues[EmployeePropertiesReference.CREDIT.name]"
+                        :label="EmployeePropertiesReference.CREDIT.title"
+                        v-model="persona.credit"
+                        :name="EmployeePropertiesReference.CREDIT.name"
+                        :error="errors.has(EmployeePropertiesReference.CREDIT.name) ? errors.first(EmployeePropertiesReference.CREDIT.name) : ''"
+                        :type="'float'"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
             </div>
         </div>
         <div class="container mb-2 text-right">
@@ -147,6 +219,11 @@
           cellphone: '',
           infonavit: '',
           client: {},
+          credit: '',
+          creditRequired: 0,
+          hoursShouldWork: '',
+          baseSalary: '',
+          branch: {},
           employeeType: {},
           employeeStatus: {}
         },
@@ -154,6 +231,7 @@
         buttonDisabled: false,
         clientEndpointName: EntityTypes.CLIENT.apiName,
         employeeTypeEndpointName: EntityTypes.EMPLOYEE_TYPE.apiName,
+        branchEndpointName: EntityTypes.BRANCH.apiName,
         employeeStatusEndpointName: EntityTypes.EMPLOYEE_STATUS.apiName
       }
     },
@@ -210,9 +288,14 @@
           this.initialValues[ClientContactPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, ClientContactPropertiesReference.CLIENT.name)
         }
         if (this.employeeMode) {
+          this.initialValues[EmployeePropertiesReference.BRANCH.name] = DefaultValuesHelper.simple(this.initialObject, EmployeePropertiesReference.BRANCH.name)
           this.initialValues[EmployeePropertiesReference.INFONAVIT.name] = DefaultValuesHelper.simple(this.initialObject, EmployeePropertiesReference.INFONAVIT.name)
+          this.initialValues[EmployeePropertiesReference.HOURS_SHOULD_WORK.name] = DefaultValuesHelper.simple(this.initialObject, EmployeePropertiesReference.HOURS_SHOULD_WORK.name)
+          this.initialValues[EmployeePropertiesReference.BASE_SALARY.name] = DefaultValuesHelper.simple(this.initialObject, EmployeePropertiesReference.BASE_SALARY.name)
           this.initialValues[EmployeePropertiesReference.EMPLOYEE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, EmployeePropertiesReference.EMPLOYEE_TYPE.name)
           this.initialValues[EmployeePropertiesReference.EMPLOYEE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, EmployeePropertiesReference.EMPLOYEE_STATUS.name)
+          this.initialValues[EmployeePropertiesReference.CREDIT.name] = DefaultValuesHelper.simple(this.initialObject, EmployeePropertiesReference.CREDIT.name)
+          this.initialValues[EmployeePropertiesReference.CREDIT_REQUIRED.name] = DefaultValuesHelper.boolean(this.initialObject, EmployeePropertiesReference.CREDIT_REQUIRED.name)
         }
       },
       save: function () {
@@ -227,8 +310,13 @@
         }
         if (this.employeeMode) {
           directParams[EmployeePropertiesReference.EMPLOYEE_TYPE.relationship_id_name] = this.persona.employeeType ? this.persona.employeeType[GlobalEntityIdentifier] : null
-          directParams[EmployeePropertiesReference.INFONAVIT.relationship_id_name] = this.persona.infonavit
+          directParams[EmployeePropertiesReference.CREDIT_REQUIRED.name] = this.persona.creditRequired
+          directParams[EmployeePropertiesReference.INFONAVIT.name] = this.persona.creditRequired === 1 ? this.persona.infonavit : 0
+          directParams[EmployeePropertiesReference.BASE_SALARY.name] = this.persona.baseSalary
+          directParams[EmployeePropertiesReference.HOURS_SHOULD_WORK.name] = this.persona.hoursShouldWork
+          directParams[EmployeePropertiesReference.CREDIT.name] = this.persona.creditRequired === 1 ? this.persona.credit : 0
           directParams[EmployeePropertiesReference.EMPLOYEE_STATUS.relationship_id_name] = this.persona.employeeStatus ? this.persona.employeeStatus[GlobalEntityIdentifier] : null
+          directParams[EmployeePropertiesReference.BRANCH.relationship_id_name] = this.persona.branch ? this.persona.branch[GlobalEntityIdentifier] : null
         }
         let indirectParams = {
         }

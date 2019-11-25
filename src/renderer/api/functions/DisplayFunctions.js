@@ -220,7 +220,7 @@ export default {
       htmlString += '<td class="mau-text-left">' + (array[i].expense_subcategory && array[i].expense_subcategory.id ? array[i].expense_subcategory.name : '') + '</td>'
       htmlString += '<td class="mau-text-left">' + (array[i].expense_category && array[i].expense_category.id ? array[i].expense_category.name : '') + '</td>'
       htmlString += '<td class="mau-text-left">' + (array[i].machine && array[i].machine.id ? array[i].machine.name : '') + '</td>'
-      htmlString += '<td class="mau-text-left">' + (array[i].expense_branch && array[i].expense_branch.id ? array[i].expense_branch.name : '') + '</td>'
+      htmlString += '<td class="mau-text-left">' + (array[i].branch && array[i].branch.id ? array[i].branch.name : '') + '</td>'
       htmlString += '</tr>'
     }
     return htmlString + '</table>'

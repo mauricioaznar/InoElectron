@@ -28,10 +28,10 @@ export default {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  DEFAULT_EXPENSE_BRANCH: {
+  DEFAULT_BRANCH: {
     title: 'Sucursal por defecto',
-    name: 'default_expense_branch',
-    relationship_id_name: 'default_expense_branch_id',
+    name: 'default_branch',
+    relationship_id_name: 'default_branch_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   }
