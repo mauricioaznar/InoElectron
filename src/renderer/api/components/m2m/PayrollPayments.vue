@@ -27,7 +27,7 @@
                 <div class="col-sm-5">
                     General
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     Ganancias
                 </div>
                 <div class="col-sm-1">
@@ -58,11 +58,6 @@
                     <div>Horas triples</div>
                 </div>
                 <div class="col-sm-1 d-flex flex-column">
-                    <div>Coeficiente normal</div>
-                    <div>Coeficiente extras</div>
-                    <div>Coeficiente triples</div>
-                </div>
-                <div class="col-sm-1 d-flex flex-column">
                     <div>Ganancias normal</div>
                     <div>Ganancias extras</div>
                     <div>Ganancias triples</div>
@@ -75,13 +70,11 @@
                 <div class="col-sm-1 d-flex flex-column">
                     <div>Descuentos prestamos</div>
                     <div>Descuentos otros</div>
+                    <div>Infonavit</div>
                 </div>
                 <div class="col-sm-1 d-flex flex-column">
                     <div>Total dinero</div>
                     <div>Total credito</div>
-                </div>
-                <div class="col-sm-1 d-flex flex-column">
-                    <div>Infonavit</div>
                 </div>
                 <div class="col-sm-1 d-flex flex-column">
                     <div>Total</div>
@@ -142,6 +135,7 @@
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).hours_should_work"
                             v-model="payrollPayment.hours_should_work"
+                            :type="'float'"
                             :error="errors.has('HoursShouldWork' + payrollPayment.employee_id) ? errors.first('HoursShouldWork' + payrollPayment.employee_id) : ''"
                             @input="refreshPayrollPayment(payrollPayment)"
                     >
@@ -181,6 +175,7 @@
                             :initialValue="getInitialPayrollPayment(payrollPayment).hours_normal_worked"
                             v-model="payrollPayment.hours_normal_worked"
                             :placeholder="''"
+                            :type="'float'"
                             :error="errors.has('HoursNormalWorked' + payrollPayment.employee_id) ? errors.first('HoursNormalWorked' + payrollPayment.employee_id) : ''"
                             @input="refreshPayrollPayment(payrollPayment)"
                             v-validate="'required'"
@@ -193,6 +188,7 @@
                             :initialValue="getInitialPayrollPayment(payrollPayment).hours_extra_worked"
                             v-model="payrollPayment.hours_extra_worked"
                             :placeholder="''"
+                            :type="'float'"
                             :error="errors.has('HoursExtraWorked' + payrollPayment.employee_id) ? errors.first('HoursExtraWorked' + payrollPayment.employee_id) : ''"
                             @input="refreshPayrollPayment(payrollPayment)"
                             v-validate="'required'"
@@ -204,6 +200,7 @@
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).hours_triple_worked"
                             :placeholder="''"
+                            :type="'float'"
                             v-model="payrollPayment.hours_triple_worked"
                             :error="errors.has('HoursTripleWorked' + payrollPayment.employee_id) ? errors.first('HoursTripleWorked' + payrollPayment.employee_id) : ''"
                             @input="refreshPayrollPayment(payrollPayment)"
@@ -212,31 +209,49 @@
                     </mau-form-input-number>
                 </div>
                 <div class="col-sm-1 p-0 d-flex flex-sm-column">
-                    <div class="payroll-payment-cell text-right">
-                        {{fixNumber(payrollPayment.coeficient_normal)}}
-                    </div>
-                    <div class="payroll-payment-cell text-right">
-                        {{fixNumber(payrollPayment.coeficient_extra)}}
-                    </div>
-                    <div class="payroll-payment-cell text-right">
-                        {{fixNumber(payrollPayment.coeficient_triple)}}
-                    </div>
-                </div>
-                <div class="col-sm-1 p-0 d-flex flex-sm-column">
-                    <div class="payroll-payment-cell text-right">
-                        {{fixNumber(payrollPayment.earnings_normal)}}
-                    </div>
-                    <div class="payroll-payment-cell text-right">
-                        {{fixNumber(payrollPayment.earnings_extra)}}
-                    </div>
-                    <div class="payroll-payment-cell text-right">
-                        {{fixNumber(payrollPayment.earnings_triple)}}
-                    </div>
+                    <mau-form-input-number
+                            :name="'EarningsNormal' + payrollPayment.employee_id"
+                            :key="'EarningsNormal' + payrollPayment.employee_id"
+                            :label="''"
+                            :initialValue="getInitialPayrollPayment(payrollPayment).earnings_normal"
+                            :placeholder="''"
+                            :type="'float'"
+                            v-model="payrollPayment.earnings_normal"
+                            :error="errors.has('EarningsNormal' + payrollPayment.employee_id) ? errors.first('EarningsNormal' + payrollPayment.employee_id) : ''"
+                            @input="refreshPayrollPayment(payrollPayment)"
+                            v-validate="'required'"
+                    >
+                    </mau-form-input-number>
+                    <mau-form-input-number
+                            :name="'EarningsExtra' + payrollPayment.employee_id"
+                            :key="'EarningsExtra' + payrollPayment.employee_id"
+                            :label="''"
+                            :initialValue="getInitialPayrollPayment(payrollPayment).earnings_extra"
+                            :placeholder="''"
+                            :type="'float'"
+                            v-model="payrollPayment.earnings_extra"
+                            :error="errors.has('EarningsExtra' + payrollPayment.employee_id) ? errors.first('EarningsExtra' + payrollPayment.employee_id) : ''"
+                            @input="refreshPayrollPayment(payrollPayment)"
+                            v-validate="'required'"
+                    >
+                    </mau-form-input-number>
+                    <mau-form-input-number
+                            :name="'EarningsTriple' + payrollPayment.employee_id"
+                            :key="'EarningsTriple' + payrollPayment.employee_id"
+                            :label="''"
+                            :initialValue="getInitialPayrollPayment(payrollPayment).earnings_triple"
+                            :placeholder="''"
+                            :type="'float'"
+                            v-model="payrollPayment.earnings_triple"
+                            :error="errors.has('EarningsTriple' + payrollPayment.employee_id) ? errors.first('EarningsTriple' + payrollPayment.employee_id) : ''"
+                            @input="refreshPayrollPayment(payrollPayment)"
+                            v-validate="'required'"
+                    >
+                    </mau-form-input-number>
                 </div>
                 <div class="col-sm-1 p-0 d-flex flex-sm-column">
                     <mau-form-input-number
                             :name="'BonusPunctuality' + payrollPayment.employee_id"
-                            :key="'BonusPunctuality' + payrollPayment.employee_id + '' + payrollPayment.base_salary + '' + payrollPayment.time_delays"
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).bonus_punctuality"
                             v-model="payrollPayment.bonus_punctuality"
@@ -249,7 +264,6 @@
                     </mau-form-input-number>
                     <mau-form-input-number
                             :name="'BonusAvailability' + payrollPayment.employee_id"
-                            :key="'BonusAvailability' + payrollPayment.employee_id"
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).bonus_availability"
                             v-model="payrollPayment.bonus_availability"
@@ -262,7 +276,6 @@
                     </mau-form-input-number>
                     <mau-form-input-number
                             :name="'BonusOthers' + payrollPayment.employee_id"
-                            :key="'BonusOthers' + payrollPayment.employee_id"
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).bonus_others"
                             v-model="payrollPayment.bonus_others"
@@ -277,7 +290,6 @@
                 <div class="col-sm-1 p-0 d-flex flex-sm-column">
                     <mau-form-input-number
                             :name="'DiscountLoans' + payrollPayment.employee_id"
-                            :key="'DiscountLoans' + payrollPayment.employee_id"
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).discount_loans"
                             v-model="payrollPayment.discount_loans"
@@ -290,7 +302,6 @@
                     </mau-form-input-number>
                     <mau-form-input-number
                             :name="'DiscountOthers' + payrollPayment.employee_id"
-                            :key="'DiscountOthers' + payrollPayment.employee_id"
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).discount_others"
                             v-model="payrollPayment.discount_others"
@@ -301,18 +312,28 @@
                             :type="'float'"
                     >
                     </mau-form-input-number>
+                    <mau-form-input-number
+                            v-if="payrollPayment.credit_required === 1"
+                            :name="'Infonavit' + payrollPayment.employee_id"
+                            :label="''"
+                            :initialValue="getInitialPayrollPayment(payrollPayment).infonavit"
+                            v-model="payrollPayment.infonavit"
+                            :placeholder="''"
+                            :error="errors.has('Infonavit' + payrollPayment.employee_id) ? errors.first('Infonavit' + payrollPayment.employee_id) : ''"
+                            @input="refreshPayrollPayment(payrollPayment)"
+                            :type="'float'"
+                            v-validate="{
+                                required: true
+                            }"
+                    >
+                    </mau-form-input-number>
                 </div>
                 <div class="col-sm-1 p-0 d-flex flex-column">
                     <div class="payroll-payment-cell text-right">{{fixNumber(payrollPayment.total_cash)}}</div>
                     <div>
                         <mau-form-input-number
                             v-if="payrollPayment.credit_required === 1"
-                            v-show="payrollPayment.is_credit_custom === 1"
                             :name="'TotalCredit' + payrollPayment.employee_id"
-                            :key="'TotalCredit' + payrollPayment.employee_id + '' +
-                                (payrollPayment.is_credit_custom === 0 ? creditUsed : '') +
-                                (payrollPayment.is_infonavit_custom === 0 ? infonavitUsed : payrollPayment.infonavit)
-                            "
                             :label="''"
                             :initialValue="getInitialPayrollPayment(payrollPayment).total_credit"
                             v-model="payrollPayment.total_credit"
@@ -320,38 +341,11 @@
                             :error="errors.has('TotalCredit' + payrollPayment.employee_id) ? errors.first('TotalCredit' + payrollPayment.employee_id) : ''"
                             @input="refreshPayrollPayment(payrollPayment)"
                             v-validate="{
-                                required: true,
-                                max_value: payrollPayment.total_without_credit_applied > 0 ? payrollPayment.total_without_credit_applied : 0
+                                required: true
                             }"
                             :type="'float'"
                         >
                         </mau-form-input-number>
-                        <div v-show="payrollPayment.is_credit_custom === 0" class="payroll-payment-cell text-right" :class="{'text-danger': errors.has('TotalCredit' + payrollPayment.employee_id)}">{{payrollPayment.total_credit}}</div>
-                        <p v-show="payrollPayment.is_credit_custom === 0" v-if="errors.has('TotalCredit' + payrollPayment.employee_id)" class="text-danger">{{errors.first('TotalCredit' + payrollPayment.employee_id)}}'</p>
-                    </div>
-                </div>
-                <div class="col-sm-1 p-0">
-                    <div>
-                        <mau-form-input-number
-                                v-if="payrollPayment.credit_required === 1"
-                                v-show="payrollPayment.is_infonavit_custom === 1"
-                                :name="'Infonavit' + payrollPayment.employee_id"
-                                :key="'Infonavit' + payrollPayment.employee_id + '' + (payrollPayment.is_infonavit_custom === 0 ? infonavitUsed : '')"
-                                :label="''"
-                                :initialValue="getInitialPayrollPayment(payrollPayment).infonavit"
-                                v-model="payrollPayment.infonavit"
-                                :placeholder="''"
-                                :error="errors.has('Infonavit' + payrollPayment.employee_id) ? errors.first('Infonavit' + payrollPayment.employee_id) : ''"
-                                @input="refreshPayrollPayment(payrollPayment)"
-                                :type="'float'"
-                                v-validate="{
-                                required: true,
-                                max_value: (payrollPayment.total_credit >= 0) ? (payrollPayment.total_credit) : 0
-                            }"
-                        >
-                        </mau-form-input-number>
-                        <div v-show="payrollPayment.is_infonavit_custom === 0" class="payroll-payment-cell text-right" :class="{'text-danger': errors.has('Infonavit' + payrollPayment.employee_id)}">{{payrollPayment.infonavit}}</div>
-                        <p v-show="payrollPayment.is_infonavit_custom === 0" v-if="errors.has('Infonavit' + payrollPayment.employee_id)" class="text-danger">{{errors.first('Infonavit' + payrollPayment.employee_id)}}'</p>
                     </div>
                 </div>
                 <div class="col-sm-1">
@@ -454,37 +448,12 @@
             payrollPayment.bonus_availability -
             payrollPayment.discount_loans -
             payrollPayment.discount_others
-          let totalInfonavit = 0
-          let totalCredit = 0
-          if (payrollPayment.credit_required === 1) {
-            if (payrollPayment.is_infonavit_custom === 0 && payrollPayment.is_credit_custom === 0) {
-              totalInfonavit = creditUsed > totalWithoutCreditApplied ? totalWithoutCreditApplied : infonavitUsed
-              totalCredit = creditUsed > totalWithoutCreditApplied ? totalWithoutCreditApplied : creditUsed
-            }
-            if (payrollPayment.is_infonavit_custom === 1 && payrollPayment.is_credit_custom === 0) {
-              totalInfonavit = payrollPayment.infonavit
-              totalCredit = creditUsed || 0
-            }
-            if (payrollPayment.is_infonavit_custom === 0 && payrollPayment.is_credit_custom === 1) {
-              totalInfonavit = infonavitUsed || 0
-              totalCredit = payrollPayment.total_credit
-            }
-            if (payrollPayment.is_infonavit_custom === 1 && payrollPayment.is_credit_custom === 1) {
-              totalCredit = payrollPayment.total_credit
-              totalInfonavit = payrollPayment.infonavit
-            }
-          }
+          let totalInfonavit = payrollPayment.credit_required === 1 ? payrollPayment.infonavit : 0
+          let totalCredit = payrollPayment.credit_required === 1 ? payrollPayment.total_credit : 0
           let totalCash = totalWithoutCreditApplied >= (totalCredit) ? totalWithoutCreditApplied - (totalCredit) : totalWithoutCreditApplied
           return {totalCredit, totalCash, totalInfonavit, totalWithoutCreditApplied}
         },
         refreshPayrollPayment: function (payrollPayment) {
-          payrollPayment.coeficient_normal = payrollPayment.base_salary / payrollPayment.hours_should_work
-          payrollPayment.earnings_normal = payrollPayment.coeficient_normal * payrollPayment.hours_normal_worked
-          payrollPayment.coeficient_extra = (payrollPayment.base_salary / (payrollPayment.hours_should_work + (payrollPayment.hours_should_work / 6))) * 2
-          payrollPayment.earnings_extra = payrollPayment.coeficient_extra * payrollPayment.hours_extra_worked
-          payrollPayment.coeficient_triple = (payrollPayment.base_salary / (payrollPayment.hours_should_work + (payrollPayment.hours_should_work / 6))) * 3
-          payrollPayment.earnings_triple = (payrollPayment.coeficient_triple * payrollPayment.hours_triple_worked)
-          payrollPayment.bonus_punctuality = payrollPayment.time_delays < 3 ? payrollPayment.base_salary * 0.15 : 0
           let {totalCredit, totalCash, totalInfonavit, totalWithoutCreditApplied} = this.calculateTotals(payrollPayment, this.creditUsed, this.infonavitUsed)
           this.getInitialPayrollPayment(payrollPayment).total_credit = totalCredit
           this.getInitialPayrollPayment(payrollPayment).infonavit = totalInfonavit
@@ -516,6 +485,7 @@
             if (initialPayrollPayment.employee_id && initialPayrollPayment.employee_id > 0) {
               initialPayrollPayment.is_infonavit_custom = (initialPayrollPayment.infonavit !== this.infonavitUsed ? 1 : 0)
               initialPayrollPayment.is_credit_custom = (initialPayrollPayment.total_credit !== this.creditUsed ? 1 : 0)
+              initialPayrollPayment.is_bonus_punctuality_custom = 1
             }
             let newPayrollPayment = {
               employee_id: employeesSelected[i].id,
@@ -541,7 +511,8 @@
               total_cash: 0,
               credit_required: employeesSelected[i].credit_required,
               is_infonavit_custom: employeesSelected[i].infonavit > 0 ? 1 : 0,
-              is_credit_custom: employeesSelected[i].credit > 0 ? 1 : 0
+              is_credit_custom: employeesSelected[i].credit > 0 ? 1 : 0,
+              is_bonus_punctuality_custom: 0
             }
             let selectedPayrollPayment = previousPayrollPayment && previousPayrollPayment.employee_id > 0
               ? previousPayrollPayment
