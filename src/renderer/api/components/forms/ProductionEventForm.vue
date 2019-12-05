@@ -172,7 +172,9 @@
       isMachineRequired: function () {
         return this.productionEvent.productionEventType
           ? (this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 5)
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 6 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 7 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 8)
           : false
       },
       maintenanceEmployeeApiOperationOptions: function () {
