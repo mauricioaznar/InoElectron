@@ -171,8 +171,7 @@
     computed: {
       isMachineRequired: function () {
         return this.productionEvent.productionEventType
-          ? (this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 6 ||
+          ? (this.productionEvent.productionEventType[GlobalEntityIdentifier] === 6 ||
               this.productionEvent.productionEventType[GlobalEntityIdentifier] === 7 ||
               this.productionEvent.productionEventType[GlobalEntityIdentifier] === 8 ||
               this.productionEvent.productionEventType[GlobalEntityIdentifier] === 9 ||
