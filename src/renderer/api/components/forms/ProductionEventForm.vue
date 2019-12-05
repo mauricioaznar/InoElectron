@@ -174,7 +174,23 @@
           ? (this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 ||
               this.productionEvent.productionEventType[GlobalEntityIdentifier] === 6 ||
               this.productionEvent.productionEventType[GlobalEntityIdentifier] === 7 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 8)
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 8 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 9 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 10 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 11 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 12 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 13 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 14 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 15 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 16 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 17 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 18 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 19 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 20 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 21 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 22 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 23 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 24)
           : false
       },
       maintenanceEmployeeApiOperationOptions: function () {
