@@ -17,7 +17,10 @@
                 :initialValue="initialValues[ProductionEventPropertiesReference.END_DATE_TIME.name]"
                 :error="errors.has(ProductionEventPropertiesReference.END_DATE_TIME.name) ? errors.first(ProductionEventPropertiesReference.END_DATE_TIME.name) : ''"
                 :disabled="!userHasWritePrivileges"
-                v-validate="'date_format:yyyy-MM-dd HH:mm:ss|after:' + productionEvent.startDateTime"
+                v-validate="{
+                  date_format:  'yyyy-MM-dd HH:mm:ss',
+                  after: productionEvent.startDateTime
+                }"
         >
         </mau-form-group-date-time>
         <div class="form-group">
@@ -28,13 +31,14 @@
                     v-model="productionEvent.productionEventType"
                     :name="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name"
                     :data-vv-as="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title"
-                    :error="errors.first(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name)"
+                    :error="errors.has(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name) ? errors.first(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name) : ''"
                     :endpointName="productionEventTypeEndpointName"
                     :disabled="!userHasWritePrivileges"
+                    v-validate="'object_required'"
             >
             </mau-form-input-select-dynamic>
         </div>
-        <div class="form-group" v-if="isMachineFailureTypeSelected">
+        <div class="form-group" v-if="isMachineRequired">
             <mau-form-input-select-dynamic
                     :initialObject="initialValues[ProductionEventPropertiesReference.MACHINE.name]"
                     :label="ProductionEventPropertiesReference.MACHINE.title"
@@ -42,9 +46,10 @@
                     v-model="productionEvent.machine"
                     :name="ProductionEventPropertiesReference.MACHINE.name"
                     :data-vv-as="ProductionEventPropertiesReference.MACHINE.title"
-                    :error="errors.first(ProductionEventPropertiesReference.MACHINE.name)"
+                    :error="errors.has(ProductionEventPropertiesReference.MACHINE.name) ? errors.first(ProductionEventPropertiesReference.MACHINE.name) : ''"
                     :endpointName="machineEndpointName"
                     :disabled="!userHasWritePrivileges"
+                    v-validate="'object_required'"
             >
             </mau-form-input-select-dynamic>
         </div>
@@ -60,12 +65,11 @@
             <production-event-check-table
                 :initialChecks="initialValues[ProductionEventPropertiesReference.CHECKS.name]"
                 :name="ProductionEventPropertiesReference.CHECKS.name"
-                v-validate="'required'"
                 v-model="productionEvent.checks"
             >
 
             </production-event-check-table>
-            <span v-show="errors.has(ProductionEventPropertiesReference.CHECKS.name)" class="danger font-80">
+            <span v-show="errors.has(ProductionEventPropertiesReference.CHECKS.name)" class="text-danger font-80">
               {{ errors.first(ProductionEventPropertiesReference.CHECKS.name) }}
             </span>
         </div>
@@ -77,9 +81,10 @@
                     v-model="productionEvent.reportEmployee"
                     :name="ProductionEventPropertiesReference.REPORT_EMPLOYEE.name"
                     :data-vv-as="ProductionEventPropertiesReference.REPORT_EMPLOYEE.title"
-                    :error="errors.first(ProductionEventPropertiesReference.REPORT_EMPLOYEE.name)"
+                    :error="errors.has(ProductionEventPropertiesReference.REPORT_EMPLOYEE.name) ? errors.first(ProductionEventPropertiesReference.REPORT_EMPLOYEE.name) : ''"
                     :endpointName="employeeEndpointName"
                     :disabled="!userHasWritePrivileges"
+                    v-validate="'object_required'"
             >
             </mau-form-input-select-dynamic>
         </div>
@@ -93,8 +98,11 @@
                     v-model="productionEvent.maintenanceEmployee"
                     :name="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name"
                     :data-vv-as="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title"
-                    :error="errors.first(ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name)"
+                    :error="errors.has(ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name) ? errors.first(ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name) : ''"
                     :disabled="!userHasWritePrivileges"
+                    v-validate="{
+                        object_required: productionEvent.endDateTime !== ''
+                    }"
             >
             </mau-form-input-select-dynamic>
         </div>
@@ -161,11 +169,17 @@
       this.setInitialValues()
     },
     computed: {
-      isMachineFailureTypeSelected: function () {
-        return this.productionEvent.productionEventType ? this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 : false
+      isMachineRequired: function () {
+        return this.productionEvent.productionEventType
+          ? (this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 5)
+          : false
       },
       maintenanceEmployeeApiOperationOptions: function () {
         return {filterExacts: {employee_type_id: 3}}
+      },
+      isEditMode: function () {
+        return this.initialValues[GlobalEntityIdentifier] && this.initialValues[GlobalEntityIdentifier] > 0
       },
       userHasWritePrivileges: function () {
         return true
@@ -190,14 +204,8 @@
           [ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.relationship_id_name]: this.productionEvent.productionEventType ? this.productionEvent.productionEventType[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.REPORT_EMPLOYEE.relationship_id_name]: this.productionEvent.reportEmployee ? this.productionEvent.reportEmployee[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.relationship_id_name]: this.productionEvent.maintenanceEmployee ? this.productionEvent.maintenanceEmployee[GlobalEntityIdentifier] : null,
+          [ProductionEventPropertiesReference.MACHINE.relationship_id_name]: this.isMachineRequired === true && this.productionEvent.machine ? this.productionEvent.machine[GlobalEntityIdentifier] : this.isEditMode ? 'null' : null,
           [ProductionEventPropertiesReference.DESCRIPTION.name]: this.productionEvent.description
-        }
-        if (this.isMachineFailureTypeSelected) {
-          directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = this.productionEvent.machine ? this.productionEvent.machine[GlobalEntityIdentifier] : null
-        } else {
-          if (this.initialObject[ProductionEventPropertiesReference.MACHINE.name]) {
-            directParams[ProductionEventPropertiesReference.MACHINE.relationship_id_name] = null
-          }
         }
         let relayObjects = []
         let filteredProductionChecks = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
