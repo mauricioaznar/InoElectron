@@ -185,7 +185,8 @@
           ],
           yearObjects: [
             { value: 0, text: '2018' },
-            { value: 1, text: '2019' }
+            { value: 1, text: '2019' },
+            { value: 2, text: '2020' }
           ]
         }
       },
@@ -228,7 +229,7 @@
       methods: {
         setGenericDateArrays: function () {
           let genericYears = []
-          for (let year = 2018; year <= 2019; year++) {
+          for (let year = 2018; year <= 2020; year++) {
             let months = []
             for (let month = 1; month <= 12; month++) {
               month = month < 10 ? '0' + month : month
