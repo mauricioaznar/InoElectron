@@ -174,7 +174,7 @@
             client['calculations']['sales_total_cost'] = 0
             client['calculations']['finalized_requests_total'] = 0
             client['calculations']['finalized_requests_total_days_difference'] = 0
-            for (let i = 2018; i <= 2019; i++) {
+            for (let i = 2018; i <= 2020; i++) {
               let clientYearData = []
               for (let j = 0; j < this.monthNames.length; j++) {
                 let clientMonthData = {
@@ -237,7 +237,7 @@
         let totalKilosRequestedYearsData = []
         let totalCostSoldYearsData = []
         let totalCostRequestedYearsData = []
-        for (let yearIndex = 0; yearIndex <= 1; yearIndex++) {
+        for (let yearIndex = 0; yearIndex <= 2; yearIndex++) {
           let totalKilosSoldYearData = []
           let totalKilosRequestedYearData = []
           let totalCostSoldYearData = []
@@ -267,7 +267,7 @@
         this.salesByMonthCostData = []
         this.salesByMonthByClientKilosData = []
         this.salesByMonthByClientCostData = []
-        for (let yearIndex = 0; yearIndex <= 1; yearIndex++) {
+        for (let yearIndex = 0; yearIndex <= 2; yearIndex++) {
           this.salesByMonthKilosData.push({
             labels: this.monthNames,
             datasets: [
