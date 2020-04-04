@@ -29,7 +29,7 @@
       data () {
         return {
           tabIndex: '',
-          initialTabIndex: {value: 4, text: 'Reporte de gastos'},
+          initialTabIndex: {value: 5, text: 'Reporte de gastos 2'},
           options: [
             {value: 0, text: 'Reporte de ventas'},
             {value: 1, text: 'Inventario de bolsas'},

@@ -6,8 +6,16 @@ function createListUrl (entityEndpointName, options) {
   let filterExactQuery = (options && options.filterExacts) !== undefined ? getFilterExactsQuery(options.filterExacts) : ''
   let filterEntityQuery = (options && options.filterEntities) !== undefined ? getFilterEntitiesQuery(options.filterEntities) : ''
   let filterStartDateTimeQuery = (options && options.filterStartDateTime) !== undefined ? getFilterStartDateTimeQuery(options.filterStartDateTime) : ''
+  let filterEndDateTimeQuery = (options && options.filterEndDateTime) !== undefined ? getFilterEndDateTimeQuery(options.filterEndDateTime) : ''
   let filterOrderByQuery = (options && options.filterOrderBy) !== undefined ? getFilterOrderByQuery(options.filterOrderBy) : ''
-  return Vue.http.options.root + '/' + entityEndpointName + '/list?' + paginateQuery + filterLikeQuery + filterExactQuery + filterEntityQuery + filterStartDateTimeQuery + filterOrderByQuery
+  return Vue.http.options.root + '/' + entityEndpointName + '/list?' +
+    paginateQuery +
+    filterLikeQuery +
+    filterExactQuery +
+    filterEntityQuery +
+    filterStartDateTimeQuery +
+    filterEndDateTimeQuery +
+    filterOrderByQuery
   function getFilterLikesQuery (filterLikes) {
     let filterLikeQuery = ''
     let i = 1
@@ -61,12 +69,25 @@ function createListUrl (entityEndpointName, options) {
     for (let filterStartDateObjectKey in filterStartDateObject) {
       if (filterStartDateObject.hasOwnProperty(filterStartDateObjectKey)) {
         if (loopIndex === 1) {
-          filterStartDateQuery += '&start_date_property=' + filterStartDateObjectKey + '&start_date_value' + '=' + filterStartDateObject[filterStartDateObjectKey]
+          filterStartDateQuery += '&start_date_1=' + filterStartDateObjectKey + '&start_date_value_1' + '=' + filterStartDateObject[filterStartDateObjectKey]
         }
         loopIndex++
       }
     }
     return filterStartDateQuery
+  }
+  function getFilterEndDateTimeQuery (filterEndDateObject) {
+    let filterEndDateQuery = ''
+    let loopIndex = 1
+    for (let filterEndDateObjectKey in filterEndDateObject) {
+      if (filterEndDateObject.hasOwnProperty(filterEndDateObjectKey)) {
+        if (loopIndex === 1) {
+          filterEndDateQuery += '&end_date_1=' + filterEndDateObjectKey + '&end_date_value_1' + '=' + filterEndDateObject[filterEndDateObjectKey]
+        }
+        loopIndex++
+      }
+    }
+    return filterEndDateQuery
   }
   function getFilterOrderByQuery (filterOrderBy) {
     let hasPipe = filterOrderBy.includes('|')
