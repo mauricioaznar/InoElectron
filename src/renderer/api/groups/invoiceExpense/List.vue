@@ -32,9 +32,9 @@
         ],
         tableFields: [
           {
-            name: ExpensePropertiesReference.DATE.name,
-            title: ExpensePropertiesReference.DATE.title,
-            sortField: ExpensePropertiesReference.DATE.name,
+            name: ExpensePropertiesReference.DATE_PAID.name,
+            title: ExpensePropertiesReference.DATE_PAID.title,
+            sortField: ExpensePropertiesReference.DATE_PAID.name,
             callback: DisplayFunctions.getDate,
             filterType: 'date'
           },
@@ -47,14 +47,6 @@
             entityFieldName: 'description'
           },
           {
-            title: ExpensePropertiesReference.EXPENSE_PAYMENTS.title,
-            name: ExpensePropertiesReference.EXPENSE_PAYMENTS.name,
-            callback: DisplayFunctions.getExpensePayments,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_PAYMENT.apiName,
-            entityFieldName: 'date'
-          },
-          {
             title: ExpensePropertiesReference.SUPPLIER.title,
             name: ExpensePropertiesReference.SUPPLIER.name,
             callback: DisplayFunctions.getNameFromObject,
@@ -63,11 +55,11 @@
             entityFieldName: 'name'
           },
           {
-            title: ExpensePropertiesReference.EXPENSE_STATUS.title,
-            name: ExpensePropertiesReference.EXPENSE_STATUS.name,
+            title: ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.title,
+            name: ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name,
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_STATUS.apiName,
+            entityName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
             entityFieldName: 'name'
           },
           {
@@ -95,24 +87,13 @@
             entityFieldName: 'name'
           },
           {
-            title: ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.title,
-            name: ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_INVOICE_PAYMENT_METHOD.apiName,
-            entityFieldName: 'name'
-          },
-          {
-            title: ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.title,
-            name: ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_INVOICE_CDFI_USE.apiName,
-            entityFieldName: 'name'
-          },
-          {
             title: ExpensePropertiesReference.INVOICE_CODE.title,
             name: ExpensePropertiesReference.INVOICE_CODE.name,
+            filterType: 'text'
+          },
+          {
+            title: ExpensePropertiesReference.INTERNAL_CODE.title,
+            name: ExpensePropertiesReference.INTERNAL_CODE.name,
             filterType: 'text'
           }
         ]

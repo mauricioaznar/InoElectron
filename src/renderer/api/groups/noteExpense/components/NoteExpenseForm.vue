@@ -3,11 +3,11 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-date
-                        :name="ExpensePropertiesReference.DATE.name"
-                        :label="ExpensePropertiesReference.DATE.title"
-                        v-model="expense.date"
-                        :initialValue="initialValues[ExpensePropertiesReference.DATE.name]"
-                        :error="errors.has(ExpensePropertiesReference.DATE.name) ? errors.first(ExpensePropertiesReference.DATE.name) : ''"
+                        :name="ExpensePropertiesReference.DATE_PAID.name"
+                        :label="ExpensePropertiesReference.DATE_PAID.title"
+                        v-model="expense.datePaid"
+                        :initialValue="initialValues[ExpensePropertiesReference.DATE_PAID.name]"
+                        :error="errors.has(ExpensePropertiesReference.DATE_PAID.name) ? errors.first(ExpensePropertiesReference.DATE_PAID.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -55,13 +55,6 @@
                 }"
         >
         </expense-items>
-        <expense-payments
-                v-model="expense.expensePayments"
-                :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name]"
-                :initialFirstExpensePayment="{subtotal: total, date: expense.date}"
-        >
-
-        </expense-payments>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -77,17 +70,15 @@
     import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
     import EntityTypes from 'renderer/api/EntityTypes'
     import ExpenseItems from 'renderer/api/components/m2m/ExpenseItems'
-    import ExpensePayments from 'renderer/api/components/m2m/ExpensePayments'
     export default {
       data () {
         return {
           ExpensePropertiesReference: ExpensePropertiesReference,
           expense: {
-            date: '',
+            datePaid: '',
             supplier: {},
             expenseStatus: {},
-            expenseItems: [],
-            expensePayments: []
+            expenseItems: []
           },
           buttonDisabled: false,
           initialValues: {},
@@ -119,8 +110,7 @@
       },
       components: {
         MauFormInputSelectDynamic,
-        ExpenseItems,
-        ExpensePayments
+        ExpenseItems
       },
       mounted () {
         FormSubmitEventBus.onEvent(function (isSuccess) {
@@ -131,16 +121,15 @@
       },
       methods: {
         setInitialValues: function () {
-          this.initialValues[ExpensePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE.name)
+          this.initialValues[ExpensePropertiesReference.DATE_PAID.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_PAID.name)
           this.initialValues[ExpensePropertiesReference.EXPENSE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_STATUS.name)
           this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
           this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
-          this.initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_PAYMENTS.name)
         },
         save: function () {
           let directParams = {
             [ExpensePropertiesReference.EXPENSE_TYPE.relationship_id_name]: 1,
-            [ExpensePropertiesReference.DATE.name]: this.expense.date,
+            [ExpensePropertiesReference.DATE_PAID.name]: this.expense.datePaid,
             [ExpensePropertiesReference.SUPPLIER.relationship_id_name]: this.expense.supplier ? this.expense.supplier[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
             [ExpensePropertiesReference.EXPENSE_STATUS.relationship_id_name]: this.expense.expenseStatus ? this.expense.expenseStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
           }
@@ -150,15 +139,8 @@
             this.expense.expenseItems,
             'id'
           )
-          let expensePaymentsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
-            this.initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name],
-            this.expense.expensePayments,
-            'id'
-          )
           let expenseItemsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.EXPENSE_ITEM)
-          let expensePaymentsRelayObjects = ManyToManyHelper.createRelayObject(expensePaymentsM2mFilteredObject, EntityTypes.EXPENSE_PAYMENT)
           relayObjects.push(expenseItemsRelayObjects)
-          relayObjects.push(expensePaymentsRelayObjects)
           this.$validator.validateAll().then((result) => {
             if (result) {
               this.buttonDisabled = true

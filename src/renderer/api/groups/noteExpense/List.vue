@@ -40,9 +40,9 @@
             entityFieldName: 'name'
           },
           {
-            name: ExpensePropertiesReference.DATE.name,
-            title: ExpensePropertiesReference.DATE.title,
-            sortField: ExpensePropertiesReference.DATE.name,
+            name: ExpensePropertiesReference.DATE_PAID.name,
+            title: ExpensePropertiesReference.DATE_PAID.title,
+            sortField: ExpensePropertiesReference.DATE_PAID.name,
             callback: DisplayFunctions.getDate,
             filterType: 'date'
           },
@@ -53,14 +53,6 @@
             filterType: 'entity',
             entityName: EntityTypes.EXPENSE_ITEM.apiName,
             entityFieldName: 'description'
-          },
-          {
-            title: ExpensePropertiesReference.EXPENSE_PAYMENTS.title,
-            name: ExpensePropertiesReference.EXPENSE_PAYMENTS.name,
-            callback: DisplayFunctions.getExpensePayments,
-            filterType: 'entity',
-            entityName: EntityTypes.EXPENSE_PAYMENT.apiName,
-            entityFieldName: 'date'
           }
         ]
       }

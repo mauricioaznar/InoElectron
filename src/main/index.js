@@ -21,20 +21,19 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
     useContentSize: true,
-    width: 1000,
     webPreferences: {
       webSecurity: false
     }
   })
+  mainWindow.maximize()
   mainWindow.loadURL(winURL)
   mainWindow.webContents.on('did-finish-load', () => {
     let version = app.getVersion()
     let title = app.getName()
     mainWindow.setTitle(title + ' v' + version)
   })
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
   mainWindow.on('closed', () => {
     mainWindow = null
   })

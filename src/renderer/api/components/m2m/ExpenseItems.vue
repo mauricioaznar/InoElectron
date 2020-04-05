@@ -136,7 +136,7 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div>
+        <div class="mt-2">
             <label>Total</label>
             <p>{{total}}</p>
         </div>

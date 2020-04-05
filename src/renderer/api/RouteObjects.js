@@ -13,16 +13,11 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.HOME,
   [
     RouteObjectHelper.createRouteObject(EntityTypes.HOME, {
       appDefault: true,
-      componentName: 'Default',
       categoryDefault: true,
       groupDefault: true,
-      navbar: true,
-      title: 'Inicio'
-    }),
-    RouteObjectHelper.createRouteObject(EntityTypes.HOME, {
       componentName: 'Analytics',
       navbar: true,
-      title: 'Analytics'
+      title: 'Inicio'
     }),
     RouteObjectHelper.createRouteObject(EntityTypes.HOME,
       {
@@ -40,23 +35,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.AUTH,
     componentName: 'Main'
   },
   [
-    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
-      componentName: 'MyProfile',
-      categoryDefault: true,
-      groupDefault: true,
-      navbar: true,
-      title: 'Mi perfil'
-    }),
-    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
-      componentName: 'UserManual',
-      navbar: true,
-      title: 'Manual de usuario'
-    }),
-    RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
-      componentName: 'Downloads',
-      navbar: true,
-      title: 'Descargas'
-    }),
     RouteObjectHelper.createRouteObject(EntityTypes.AUTH, {
       componentName: 'Login',
       requiresAuth: false,
@@ -568,39 +546,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.INVOICE_EXPENS
       }
     ),
     RouteObjectHelper.createRouteObject(EntityTypes.INVOICE_EXPENSE,
-      {
-        componentName: 'View',
-        params: [GlobalEntityIdentifier]
-      }
-    )
-  ]
-))
-
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
-  {
-    componentName: 'Main',
-    category: Categories.ADMINISTRATION
-  },
-  [
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
-      {
-        componentName: 'List',
-        groupDefault: true,
-        navbar: true
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
-      {
-        componentName: 'Create'
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
-      {
-        componentName: 'Edit',
-        params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.COMPLEMENT_EXPENSE,
       {
         componentName: 'View',
         params: [GlobalEntityIdentifier]

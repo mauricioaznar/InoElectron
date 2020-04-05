@@ -3,11 +3,11 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-date
-                        :name="ExpensePropertiesReference.DATE.name"
-                        :label="ExpensePropertiesReference.DATE.title"
-                        v-model="expense.date"
-                        :initialValue="initialValues[ExpensePropertiesReference.DATE.name]"
-                        :error="errors.has(ExpensePropertiesReference.DATE.name) ? errors.first(ExpensePropertiesReference.DATE.name) : ''"
+                        :name="ExpensePropertiesReference.DATE_PAID.name"
+                        :label="ExpensePropertiesReference.DATE_PAID.title + ' (spei, dia de la transferencia, dia del pago)'"
+                        v-model="expense.datePaid"
+                        :initialValue="initialValues[ExpensePropertiesReference.DATE_PAID.name]"
+                        :error="errors.has(ExpensePropertiesReference.DATE_PAID.name) ? errors.first(ExpensePropertiesReference.DATE_PAID.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -62,18 +62,16 @@
         </div>
         <div class="form-group form-row">
             <div class="col-sm-12">
-                <mau-form-input-select-dynamic
-                        :endpointName="expenseStatusEndpointName"
-                        :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_STATUS.name]"
-                        :label="ExpensePropertiesReference.EXPENSE_STATUS.title"
-                        :displayProperty="'name'"
-                        v-model="expense.expenseStatus"
-                        :name="ExpensePropertiesReference.EXPENSE_STATUS.name"
-                        :error="errors.has(ExpensePropertiesReference.EXPENSE_STATUS.name) ? errors.first(ExpensePropertiesReference.EXPENSE_STATUS.name) : ''"
+                <mau-form-input-text
+                        :label="ExpensePropertiesReference.INTERNAL_CODE.title"
+                        :name="ExpensePropertiesReference.INTERNAL_CODE.name"
+                        v-model="expense.internalCode"
+                        :initialValue="initialValues[ExpensePropertiesReference.INTERNAL_CODE.name]"
+                        :error="errors.has(ExpensePropertiesReference.INTERNAL_CODE.name) ? errors.first(ExpensePropertiesReference.INTERNAL_CODE.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
                 >
-                </mau-form-input-select-dynamic>
+                </mau-form-input-text>
             </div>
         </div>
         <div class="form-group form-row">
@@ -172,6 +170,36 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+        <div class="form-group form-row">
+            <div class="col-sm-12">
+                <mau-form-input-select-dynamic
+                        :endpointName="expenseMoneySourceEndpointName"
+                        :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name]"
+                        :label="ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.title"
+                        :displayProperty="'name'"
+                        v-model="expense.expenseMoneySource"
+                        :name="ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name"
+                        :error="errors.has(ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name) ? errors.first(ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'object_required'"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
+        </div>
+        <div class="form-group form-row" v-if="expense.expenseMoneySource.id === 5">
+            <div class="col-sm-12">
+                <mau-form-input-date
+                        :name="ExpensePropertiesReference.DATE_EMITTED.name"
+                        :label="ExpensePropertiesReference.DATE_EMITTED.title + ' (CiBanco)'"
+                        v-model="expense.dateEmitted"
+                        :initialValue="initialValues[ExpensePropertiesReference.DATE_EMITTED.name]"
+                        :error="errors.has(ExpensePropertiesReference.DATE_EMITTED.name) ? errors.first(ExpensePropertiesReference.DATE_EMITTED.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                </mau-form-input-date>
+            </div>
+        </div>
         <expense-items
                 v-model="expense.expenseItems"
                 :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
@@ -183,16 +211,78 @@
                 }"
         >
         </expense-items>
-        <expense-payments
-                v-model="expense.expensePayments"
-                :hasTax="true"
-                :hasIeps="isExpenseInvoiceTypeWithIeps"
-                :hasRetentions="isExpenseInvoiceTypeRetained"
-                :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name]"
-                :initialFirstExpensePayment="{subtotal: total, date: expense.date}"
-        >
 
-        </expense-payments>
+        <div class="form-group form-row">
+            <div class="col-sm-12">
+                <mau-form-input-number
+                        :key="ExpensePropertiesReference.TAX.name + total"
+                        :initialValue="initialValues[ExpensePropertiesReference.TAX.name] ? initialValues[ExpensePropertiesReference.TAX.name] : initialTax"
+                        v-model="expense.tax"
+                        :label="ExpensePropertiesReference.TAX.title"
+                        :placeholder="''"
+                        :type="'float'"
+                        :error="errors.has(ExpensePropertiesReference.TAX.name) ? errors.first(ExpensePropertiesReference.TAX.name) : ''"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+        </div>
+        <div class="form-group form-row" v-if="isExpenseInvoiceTypeRetained">
+            <div class="col-sm-12">
+                <mau-form-input-number
+                        :initialValue="initialValues[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name]"
+                        v-model="expense.invoiceIsrRetained"
+                        :label="ExpensePropertiesReference.INVOICE_ISR_RETAINED.title"
+                        :placeholder="''"
+                        :type="'float'"
+                        :error="errors.has(ExpensePropertiesReference.INVOICE_ISR_RETAINED.name) ? errors.first(ExpensePropertiesReference.INVOICE_ISR_RETAINED.name) : ''"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+        </div>
+        <div class="form-group form-row" v-if="isExpenseInvoiceTypeRetained">
+            <div class="col-sm-12">
+                <mau-form-input-number
+                        :initialValue="initialValues[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name]"
+                        v-model="expense.invoiceTaxRetained"
+                        :label="ExpensePropertiesReference.INVOICE_TAX_RETAINED.title"
+                        :placeholder="''"
+                        :type="'float'"
+                        :error="errors.has(ExpensePropertiesReference.INVOICE_TAX_RETAINED.name) ? errors.first(ExpensePropertiesReference.INVOICE_TAX_RETAINED.name) : ''"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+        </div>
+        <div class="form-group form-row" v-if="isExpenseInvoiceTypeWithIeps">
+            <div class="col-sm-12">
+                <mau-form-input-number
+                        :initialValue="initialValues[ExpensePropertiesReference.IEPS.name]"
+                        v-model="expense.ieps"
+                        :label="ExpensePropertiesReference.IEPS.title"
+                        :placeholder="''"
+                        :type="'float'"
+                        :error="errors.has(ExpensePropertiesReference.IEPS.name) ? errors.first(ExpensePropertiesReference.IEPS.name) : ''"
+                        v-validate="'required'"
+                >
+                </mau-form-input-number>
+            </div>
+        </div>
+        <div class="form-group form-row">
+            <div class="col-sm-12">
+                <mau-form-input-text
+                        :label="ExpensePropertiesReference.COMMENTS.title"
+                        :name="ExpensePropertiesReference.COMMENTS.name"
+                        v-model="expense.comments"
+                        :initialValue="initialValues[ExpensePropertiesReference.COMMENTS.name]"
+                        :error="errors.has(ExpensePropertiesReference.COMMENTS.name) ? errors.first(ExpensePropertiesReference.COMMENTS.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                </mau-form-input-text>
+            </div>
+        </div>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -216,7 +306,10 @@
       return {
         ExpensePropertiesReference: ExpensePropertiesReference,
         expense: {
-          date: '',
+          datePaid: '',
+          dateEmitted: '',
+          comments: '',
+          internalCode: '',
           expenseMoneySource: {},
           supplier: {},
           expenseStatus: {},
@@ -227,16 +320,20 @@
           expenseInvoiceCdfiUse: {},
           expenseItems: [],
           expensePayments: [],
+          tax: 0,
+          ieps: 0,
+          invoiceIsrRetained: 0,
+          invoiceTaxRetained: 0,
           invoiceCode: '',
           invoiceProvisionDate: ''
         },
         initialValues: {},
+        initialTax: 0,
         initialHasProvisionDate: 0,
         hasProvisionDate: 0,
         expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
         supplierEndpointName: EntityTypes.SUPPLIER.apiName,
         expenseItemEndpointName: EntityTypes.EXPENSE_ITEM.apiName,
-        expenseStatusEndpointName: EntityTypes.EXPENSE_STATUS.apiName,
         expenseInvoiceStatusEndpointName: EntityTypes.EXPENSE_INVOICE_STATUS.apiName,
         expenseInvoiceTypeEndpointName: EntityTypes.EXPENSE_INVOICE_TYPE.apiName,
         expenseInvoicePaymentMethodEndpointName: EntityTypes.EXPENSE_INVOICE_PAYMENT_METHOD.apiName,
@@ -296,11 +393,18 @@
     },
     methods: {
       setInitialValues: function () {
-        this.initialValues[ExpensePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE.name)
+        this.initialValues[ExpensePropertiesReference.DATE_PAID.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_PAID.name)
+        this.initialValues[ExpensePropertiesReference.DATE_EMITTED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_EMITTED.name)
+        this.initialValues[ExpensePropertiesReference.TAX.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.TAX.name)
+        this.initialValues[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_ISR_RETAINED.name)
+        this.initialValues[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_TAX_RETAINED.name)
+        this.initialValues[ExpensePropertiesReference.IEPS.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.IEPS.name)
+        this.initialValues[ExpensePropertiesReference.INTERNAL_CODE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INTERNAL_CODE.name)
+        this.initialValues[ExpensePropertiesReference.COMMENTS.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.COMMENTS.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
         this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
-        this.initialValues[ExpensePropertiesReference.EXPENSE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_STATUS.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.name)
@@ -308,7 +412,6 @@
         this.initialValues[ExpensePropertiesReference.INVOICE_CODE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_CODE.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_PROVISION_DATE.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
-        this.initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_PAYMENTS.name)
         if (moment(this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name], 'YYYY-MM-DD').isValid()) {
           this.initialHasProvisionDate = 1
         }
@@ -316,17 +419,24 @@
       save: function () {
         let directParams = {
           [ExpensePropertiesReference.EXPENSE_TYPE.relationship_id_name]: 2,
-          [ExpensePropertiesReference.DATE.name]: this.expense.date,
+          [ExpensePropertiesReference.DATE_PAID.name]: this.expense.datePaid,
+          [ExpensePropertiesReference.DATE_EMITTED.name]: this.expense.expenseMoneySource.id === 5 ? this.expense.dateEmitted : this.expense.datePaid,
+          [ExpensePropertiesReference.COMMENTS.name]: this.expense.comments,
+          [ExpensePropertiesReference.INTERNAL_CODE.name]: this.expense.internalCode,
+          [ExpensePropertiesReference.TAX.name]: this.expense.tax,
+          [ExpensePropertiesReference.INVOICE_TAX_RETAINED.name]: this.expense.invoiceTaxRetained,
+          [ExpensePropertiesReference.INVOICE_ISR_RETAINED.name]: this.expense.invoiceIsrRetained,
+          [ExpensePropertiesReference.IEPS.name]: this.expense.ieps,
           [ExpensePropertiesReference.SUPPLIER.relationship_id_name]: this.expense.supplier
             ? this.expense.supplier[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
-          [ExpensePropertiesReference.EXPENSE_STATUS.relationship_id_name]: this.expense.expenseStatus
-            ? this.expense.expenseStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.relationship_id_name]: this.expense.expenseInvoiceCdfiUse
             ? this.expense.expenseInvoiceCdfiUse[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.relationship_id_name]: this.expense.expenseInvoiceType
             ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.relationship_id_name]: this.expense.expenseInvoiceStatus
             ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.relationship_id_name]: this.expense.expenseMoneySource
+            ? this.expense.expenseMoneySource[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.INVOICE_CODE.name]: this.expense.invoiceCode,
           [ExpensePropertiesReference.INVOICE_PROVISION_DATE.name]: this.hasProvisionDate
             ? this.expense.invoiceProvisionDate : '0000-00-00',
@@ -341,15 +451,8 @@
           this.expense.expenseItems,
           'id'
         )
-        let expensePaymentsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
-          this.initialValues[ExpensePropertiesReference.EXPENSE_PAYMENTS.name],
-          this.expense.expensePayments,
-          'id'
-        )
         let expenseItemsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.EXPENSE_ITEM)
-        let expensePaymentsRelayObjects = ManyToManyHelper.createRelayObject(expensePaymentsM2mFilteredObject, EntityTypes.EXPENSE_PAYMENT)
         relayObjects.push(expenseItemsRelayObjects)
-        relayObjects.push(expensePaymentsRelayObjects)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true
@@ -358,6 +461,7 @@
         })
       },
       setTotal: function (total) {
+        this.initialTax = total * 0.16
         this.total = total
       }
     },
