@@ -7,8 +7,8 @@
                         :label="'Fecha de inicio'"
                         v-model="startDate"
                         :error="errors.has('starteDate') ? errors.first('startDate') : ''"
+                        :initialValue="initialStartDate"
                         v-validate="'required'"
-                        @change="getExpenses"
                 >
                 </mau-form-input-date>
             </div>
@@ -19,7 +19,7 @@
                         v-model="endDate"
                         :error="errors.has('endDate') ? errors.first('endDate') : ''"
                         v-validate="'required'"
-                        @change="getExpenses"
+                        :initialValue="initialEndDate"
                 >
                 </mau-form-input-date>
             </div>
@@ -62,7 +62,9 @@
           expenseCategories: [],
           expenseSubcategories: [],
           startDate: '',
-          endDate: ''
+          initialStartDate: moment().format('YYYY-MM-DD'),
+          endDate: '',
+          initialEndDate: moment().add(7, 'd').format('YYYY-MM-DD')
         }
       },
       created () {
@@ -115,16 +117,19 @@
           ])
             .then(result => {
               let expenses = result[0]
-              // this.expenses = expenses.forEach(expense => {
-              //   expense.expense_items.forEach(expenseItem => {
-              //     let loopedExpenseItemExpenseSubcategoryId = expenseItem.expense_subcategory_id
-              //     let loopedExpenseItemExpenseSCategoryId = expenseItem.expense_category_id
-              //     let foundExpenseCategory = this.expenseCategories.find(expenseCategory => { return expenseCategory.id === loopedExpenseItemExpenseSCategoryId })
-              //     let foundExpenseSubcategory = this.expenseSubcategories.find(expenseSubcategory => { return expenseSubcategory.id === loopedExpenseItemExpenseSubcategoryId })
-              //     foundExpenseCategory.total += expenseItem.subtotal
-              //     foundExpenseSubcategory.total += expenseItem.subtotal
-              //   })
-              // })
+              console.log(expenses)
+              expenses.forEach(expense => {
+                expense.expense_items.forEach(expenseItem => {
+                  let loopedExpenseItemExpenseSubcategoryId = expenseItem.expense_subcategory_id
+                  let loopedExpenseItemExpenseSCategoryId = expenseItem.expense_category_id
+                  let foundExpenseCategory = this.expenseCategories.find(expenseCategory => { return expenseCategory.id === loopedExpenseItemExpenseSCategoryId })
+                  let foundExpenseSubcategory = this.expenseSubcategories.find(expenseSubcategory => { return expenseSubcategory.id === loopedExpenseItemExpenseSubcategoryId })
+                  console.log(foundExpenseSubcategory.name)
+                  console.log(foundExpenseCategory.name)
+                  foundExpenseCategory.total += expenseItem.subtotal
+                  foundExpenseSubcategory.total += expenseItem.subtotal
+                })
+              })
               this.expenses = expenses
             })
             .finally(() => {
@@ -133,10 +138,10 @@
         }
       },
       watch: {
-        yearSelected: function () {
+        startDate: function () {
           this.getExpenses()
         },
-        monthSelected: function () {
+        endDate: function () {
           this.getExpenses()
         }
       }
