@@ -29,7 +29,7 @@
       data () {
         return {
           tabIndex: '',
-          initialTabIndex: {value: 4, text: 'Resumen de facturas'},
+          initialTabIndex: {value: 5, text: 'Resumen de gastos'},
           options: [
             {value: 0, text: 'Reporte de ventas'},
             {value: 1, text: 'Inventario de bolsas'},
