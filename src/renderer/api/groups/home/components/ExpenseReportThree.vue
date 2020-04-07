@@ -176,7 +176,7 @@
               expenses.forEach(expense => {
                 expense.expense_items.forEach(expenseItem => {
                   let loopedExpenseItemExpenseSubcategoryId = expenseItem.expense_subcategory_id
-                  let loopedExpenseItemExpenseSCategoryId = expenseItem.expense_category_id
+                  let loopedExpenseItemExpenseSCategoryId = expenseItem.expense_subcategory.expense_category_id
                   let foundExpenseCategory = this.expenseCategories.find(expenseCategory => { return expenseCategory.id === loopedExpenseItemExpenseSCategoryId })
                   let foundExpenseSubcategory = this.expenseSubcategories.find(expenseSubcategory => { return expenseSubcategory.id === loopedExpenseItemExpenseSubcategoryId })
                   foundExpenseCategory.total += expenseItem.subtotal

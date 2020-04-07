@@ -54,14 +54,6 @@
             entityFieldName: 'name'
           },
           {
-            title: SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.title,
-            name: SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: 'defaultExpenseCategory',
-            entityFieldName: 'name'
-          },
-          {
             title: SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.title,
             name: SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name,
             callback: DisplayFunctions.getNameFromObject,

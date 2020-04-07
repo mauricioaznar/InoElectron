@@ -36,11 +36,6 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
-            title: SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.title,
-            name: SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name,
-            display: DisplayFunctions.getNameFromObject
-          },
-          {
             title: SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.title,
             name: SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name,
             display: DisplayFunctions.getNameFromObject

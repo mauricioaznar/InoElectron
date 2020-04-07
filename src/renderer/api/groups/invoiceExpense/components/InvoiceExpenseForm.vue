@@ -205,7 +205,6 @@
                 :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
                 @total="setTotal"
                 :initialFirstExpenseItem="{
-                expenseCategory: expense.supplier && expense.supplier.id ? expense.supplier.default_expense_category : {},
                 branch: expense.supplier && expense.supplier.id ? expense.supplier.default_branch : {},
                 expenseSubcategory: expense.supplier && expense.supplier.id ? expense.supplier.default_expense_subcategory : {}
                 }"

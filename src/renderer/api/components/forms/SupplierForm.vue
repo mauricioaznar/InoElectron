@@ -33,24 +33,7 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
-                        :endpointName="expenseCategoryEndpointName"
-                        :initialObject="initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name]"
-                        :label="SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.title"
-                        :displayProperty="'name'"
-                        v-model="supplier.defaultExpenseCategory"
-                        :name="SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name"
-                        :error="errors.has(SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name) ? errors.first(SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name) : ''"
-                        :disabled="!userHasWritePrivileges"
-                        v-validate="'required'"
-                >
-                </mau-form-input-select-dynamic>
-            </div>
-        </div>
-        <div class="form-group form-row">
-            <div class="col-sm-12">
-                <mau-form-input-select-dynamic
-                        :key="(supplier.defaultExpenseCategory && supplier.defaultExpenseCategory.id ? supplier.defaultExpenseCategory.id : 0) + 'defaultExpenseSubcategory'"
-                        :apiOperationOptions="defaultExpenseSubcategoryApiOperations"
+                        :apiOperationOptions="{filterOrderBy: 'expense_category_id|asc'}"
                         :endpointName="expenseSubcategoryEndpointName"
                         :initialObject="initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name]"
                         :label="SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.title"
@@ -94,7 +77,6 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   export default {
     name: 'SupplierForm',
     data () {
@@ -103,13 +85,11 @@
         supplier: {
           name: '',
           defaultExpenseType: {},
-          defaultExpenseCategory: {},
           defaultExpenseSubcategory: {},
           defaultBranch: {}
         },
         initialValues: {},
         expenseTypeEndpointName: EntityTypes.EXPENSE_TYPE.apiName,
-        expenseCategoryEndpointName: EntityTypes.EXPENSE_CATEGORY.apiName,
         expenseSubcategoryEndpointName: EntityTypes.EXPENSE_SUBCATEGORY.apiName,
         defaultBranchEndpointName: EntityTypes.BRANCH.apiName,
         buttonDisabled: false
@@ -140,12 +120,6 @@
     computed: {
       userHasWritePrivileges: function () {
         return true
-      },
-      defaultExpenseSubcategoryApiOperations: function () {
-        if (this.supplier.defaultExpenseCategory && this.supplier.defaultExpenseCategory.id) {
-          return {filterExacts: {expense_category_id: this.supplier.defaultExpenseCategory.id}}
-        }
-        return {}
       }
     },
     methods: {
@@ -153,25 +127,13 @@
       setInitialValues: function () {
         this.initialValues[SupplierPropertiesReference.NAME.name] = DefaultValuesHelper.simple(this.initialObject, SupplierPropertiesReference.NAME.name)
         this.initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.name)
-        this.initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.name)
         this.initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name)
         this.initialValues[SupplierPropertiesReference.DEFAULT_BRANCH.name] = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_BRANCH.name)
-      },
-      setDefaultSubcategoryInitialValue: function (defaultExpenseCategory) {
-        let defaultExpenseSubcategory = DefaultValuesHelper.object(this.initialObject, SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name)
-        let initialDefaultSubcategory = {}
-        if (!isObjectEmpty(defaultExpenseSubcategory)) {
-          if (defaultExpenseSubcategory.expense_category_id === defaultExpenseCategory.id) {
-            initialDefaultSubcategory = defaultExpenseSubcategory
-          }
-        }
-        this.initialValues[SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.name] = initialDefaultSubcategory
       },
       save: function () {
         let directParams = {
           [SupplierPropertiesReference.NAME.name]: this.supplier.name,
           [SupplierPropertiesReference.DEFAULT_EXPENSE_TYPE.relationship_id_name]: this.supplier.defaultExpenseType ? this.supplier.defaultExpenseType[GlobalEntityIdentifier] : null,
-          [SupplierPropertiesReference.DEFAULT_EXPENSE_CATEGORY.relationship_id_name]: this.supplier.defaultExpenseCategory ? this.supplier.defaultExpenseCategory[GlobalEntityIdentifier] : null,
           [SupplierPropertiesReference.DEFAULT_EXPENSE_SUBCATEGORY.relationship_id_name]: this.supplier.defaultExpenseSubcategory ? this.supplier.defaultExpenseSubcategory[GlobalEntityIdentifier] : null,
           [SupplierPropertiesReference.DEFAULT_BRANCH.relationship_id_name]: this.supplier.defaultBranch ? this.supplier.defaultBranch[GlobalEntityIdentifier] : null
         }
@@ -188,9 +150,6 @@
     watch: {
       initialObject: function (initialObject) {
         this.setInitialValues(initialObject)
-      },
-      'supplier.defaultExpenseCategory': function (defaultExpenseCategory) {
-        this.setDefaultSubcategoryInitialValue(defaultExpenseCategory)
       }
     }
   }

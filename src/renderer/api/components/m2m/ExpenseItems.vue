@@ -54,34 +54,16 @@
 
                 </mau-form-input-number>
                 <mau-form-input-select-dynamic
-                        :key="'ItemExpenseCategory' + index + 'a' +
-                        (isFirstExpenseItem(index) ?
-                        (getFirstExpenseItem().expenseCategory && getFirstExpenseItem().expenseCategory.id ? getFirstExpenseItem().expenseCategory.id : 0) : 0)"
-                        class="mb-2"
-                        :label="'Categoria'"
-                        :initialObject="isFirstExpenseItem(index) ? getFirstExpenseItem().expenseCategory : (expenseItem.id ? getInitialExpenseItem(expenseItem).expense_category : '')"
-                        :displayProperty="'name'"
-                        :endpointName="expenseCategoryEndpointName"
-                        v-model="expenseItem.expenseCategory"
-                        @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'expense_category_id') }"
-                        :name="'ExpenseCategory' + index"
-                        :error="errors.has('ExpenseCategory' + index) ? errors.first('ExpenseCategory' + index) : ''"
-                        v-validate="'required'"
-                >
-                </mau-form-input-select-dynamic>
-                <mau-form-input-select-dynamic
                         :key="'ItemExpenseSubcategory' + index + 'a' +
-                            (expenseItem.expenseCategory && expenseItem.expenseCategory.id > 0 ? expenseItem.expenseCategory.id : '') +
                             (isFirstExpenseItem(index) ?
                             (getFirstExpenseItem().expenseSubcategory && getFirstExpenseItem().expenseSubcategory.id ? getFirstExpenseItem().expenseSubcategory.id : '') : '')"
                         class="mb-2"
                         :label="'Subcategoria'"
                         :initialObject="
-                            (isFirstExpenseItem(index) && doesExpenseSubcategoryBelongsToExpenseCategory(expenseItem.expenseCategory, getFirstExpenseItem().expenseSubcategory))
+                            (isFirstExpenseItem(index))
                             ? getFirstExpenseItem().expenseSubcategory :
-                            (expenseItem.id && doesExpenseSubcategoryBelongsToExpenseCategory(expenseItem.expenseCategory, getInitialExpenseItem(expenseItem).expense_subcategory)?
-                             getInitialExpenseItem(expenseItem).expense_subcategory : {})"
-                        :apiOperationOptions="expenseItem.expense_category_id ? {filterExacts: {expense_category_id: expenseItem.expense_category_id}} : {}"
+                             getInitialExpenseItem(expenseItem).expense_subcategory"
+                        :apiOperationOptions="{filterOrderBy: 'expense_category_id|asc'}"
                         :displayProperty="'name'"
                         :endpointName="expenseSubcategoryEndpointName"
                         v-model="expenseItem.expenseSubcategory"
@@ -154,7 +136,6 @@
           expenseItems: [],
           machines: [],
           branches: [],
-          expenseCategories: [],
           expenseSubcategories: [],
           initialExpenseItems: [],
           total: 0,
@@ -225,18 +206,11 @@
           return index === 0 && this.initialValues.length === 0
         },
         getFirstExpenseItem: function () {
-          let {expenseCategory, expenseSubcategory, branch} = this.initialFirstExpenseItem
+          let {expenseSubcategory, branch} = this.initialFirstExpenseItem
           return {
-            expenseCategory: (expenseCategory && expenseCategory.id) ? expenseCategory : {},
             branch: (branch && branch.id) ? branch : {},
             expenseSubcategory: (expenseSubcategory && expenseSubcategory.id) ? expenseSubcategory : {}
           }
-        },
-        doesExpenseSubcategoryBelongsToExpenseCategory: function (expenseCategory, expenseSubcategory) {
-          if (!expenseCategory) {
-            return true
-          }
-          return expenseSubcategory && expenseCategory && expenseSubcategory.id && expenseCategory.id && expenseSubcategory.expense_category_id === expenseCategory.id
         }
       }
     }
