@@ -159,7 +159,6 @@
           if (this.startDate === '' || this.endDate === '') {
             return
           }
-          this.expenseCategories = this.expenseCategories.map(expenseCategory => { return {...expenseCategory, total: 0} })
           let startMomentDate = moment(this.startDate, 'YYYY-MM-DD')
           let startDate = startMomentDate.format('YYYY-MM-DD')
           let endDate = moment(this.endDate, 'YYYY-MM-DD').add(1, 'd').format('YYYY-MM-DD')
@@ -171,6 +170,8 @@
               })
           ])
             .then(result => {
+              this.expenseCategories = this.expenseCategories.map(expenseCategory => { return {...expenseCategory, total: 0} })
+              this.expenseSubcategories = this.expenseSubcategories.map(expenseSubcategory => { return {...expenseSubcategory, total: 0} })
               let expenses = result[0]
               expenses.forEach(expense => {
                 expense.expense_items.forEach(expenseItem => {
