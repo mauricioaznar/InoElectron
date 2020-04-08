@@ -37,10 +37,6 @@ export default {
     name: 'productionEventType',
     apiName: 'productionEventType'
   },
-  PRODUCTION_EVENT_CHECK: {
-    name: 'productionEventCheck',
-    apiName: 'productionEventCheck'
-  },
   BAG_ORDER_PRODUCTION: {
     name: 'bagOrderProduction',
     apiName: 'orderProduction',

@@ -14,9 +14,15 @@ let propertiesReference = {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
-  DESCRIPTION: {
-    title: 'Descripcion',
-    name: 'description',
+  MAINTENANCE_EMPLOYEE_DESCRIPTION: {
+    title: 'Descripcion del empleado de mantenimiento',
+    name: 'maintenance_employee_description',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
+  REPORT_EMPLOYEE_DESCRIPTION: {
+    title: 'Descripcion del empleado de mantenimiento',
+    name: 'report_employee_description',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },

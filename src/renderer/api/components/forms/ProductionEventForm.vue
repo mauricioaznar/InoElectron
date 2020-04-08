@@ -55,18 +55,6 @@
             </mau-form-input-select-dynamic>
         </div>
         <div class="form-group">
-            <mau-form-input-text
-                    :label="ProductionEventPropertiesReference.DESCRIPTION.title"
-                    :name="ProductionEventPropertiesReference.DESCRIPTION.name"
-                    v-model="productionEvent.description"
-                    :initialValue="initialValues[ProductionEventPropertiesReference.DESCRIPTION.name]"
-                    :error="errors.has(ProductionEventPropertiesReference.DESCRIPTION.name) ? errors.first(ProductionEventPropertiesReference.DESCRIPTION.name) : ''"
-                    :disabled="!userHasWritePrivileges"
-                    v-validate="'required'"
-            >
-            </mau-form-input-text>
-        </div>
-        <div class="form-group">
             <mau-form-input-select-dynamic
                     :initialObject="initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE.name]"
                     :label="ProductionEventPropertiesReference.REPORT_EMPLOYEE.title"
@@ -80,6 +68,18 @@
                     v-validate="'object_required'"
             >
             </mau-form-input-select-dynamic>
+        </div>
+        <div class="form-group">
+            <mau-form-input-text
+                    :label="ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.title"
+                    :name="ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name"
+                    v-model="productionEvent.reportEmployeeDescription"
+                    :initialValue="initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name]"
+                    :error="errors.has(ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name) ? errors.first(ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name) : ''"
+                    :disabled="!userHasWritePrivileges"
+                    v-validate="'required'"
+            >
+            </mau-form-input-text>
         </div>
         <div class="form-group">
             <mau-form-input-select-dynamic
@@ -99,6 +99,18 @@
             >
             </mau-form-input-select-dynamic>
         </div>
+        <div class="form-group">
+            <mau-form-input-text
+                    :label="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.title"
+                    :name="ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name"
+                    v-model="productionEvent.maintenanceEmployeeDescription"
+                    :initialValue="initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name]"
+                    :error="errors.has(ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name) ? errors.first(ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name) : ''"
+                    :disabled="!userHasWritePrivileges"
+                    v-validate="'required'"
+            >
+            </mau-form-input-text>
+        </div>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -108,7 +120,6 @@
 <script>
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  import ProductionEventCheckTable from 'renderer/api/components/m2m/ProductionEventCheckTable.vue'
   import ProductionEventPropertiesReference from 'renderer/api/propertiesReference/ProductionEventPropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import EntityTypes from 'renderer/api/EntityTypes'
@@ -125,8 +136,8 @@
           reportEmployee: {},
           maintenanceEmployee: {},
           productionEventType: {},
-          description: '',
-          checks: []
+          maintenanceEmployeeDescription: '',
+          reportEmployeeDescription: ''
         },
         initialValues: [],
         buttonDisabled: false,
@@ -145,8 +156,7 @@
       }
     },
     components: {
-      MauFormInputSelectDynamic,
-      ProductionEventCheckTable
+      MauFormInputSelectDynamic
     },
     mounted () {
       FormSubmitEventBus.onEvent(function (isSuccess) {
@@ -187,7 +197,8 @@
         this.initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.REPORT_EMPLOYEE.name)
         this.initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name)
         this.initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name)
-        this.initialValues[ProductionEventPropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.DESCRIPTION.name)
+        this.initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name)
+        this.initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name)
       },
       save: function () {
         let directParams = {
@@ -197,7 +208,8 @@
           [ProductionEventPropertiesReference.REPORT_EMPLOYEE.relationship_id_name]: this.productionEvent.reportEmployee ? this.productionEvent.reportEmployee[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.relationship_id_name]: this.productionEvent.maintenanceEmployee ? this.productionEvent.maintenanceEmployee[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.MACHINE.relationship_id_name]: this.isMachineRequired === true && this.productionEvent.machine ? this.productionEvent.machine[GlobalEntityIdentifier] : this.isEditMode ? 'null' : null,
-          [ProductionEventPropertiesReference.DESCRIPTION.name]: this.productionEvent.description
+          [ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name]: this.productionEvent.maintenanceEmployeeDescription,
+          [ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name]: this.productionEvent.reportEmployeeDescription
         }
         let relayObjects = []
         this.$validator.validateAll().then((result) => {

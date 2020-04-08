@@ -28,11 +28,6 @@
       return {
         properties: [
           {
-            title: ProductionEventPropertiesReference.DESCRIPTION.title,
-            name: ProductionEventPropertiesReference.DESCRIPTION.name,
-            display: DisplayFunctions.getValue
-          },
-          {
             title: ProductionEventPropertiesReference.START_DATE_TIME.title,
             name: ProductionEventPropertiesReference.START_DATE_TIME.name,
             display: DisplayFunctions.getDateTime
@@ -58,14 +53,19 @@
             display: DisplayFunctions.getPersona
           },
           {
+            title: ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.title,
+            name: ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name,
+            display: DisplayFunctions.getValue
+          },
+          {
             title: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title,
             name: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name,
             display: DisplayFunctions.getPersona
           },
           {
-            title: ProductionEventPropertiesReference.CHECKS.title,
-            name: ProductionEventPropertiesReference.CHECKS.name,
-            display: DisplayFunctions.getNameArray
+            title: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.title,
+            name: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name,
+            display: DisplayFunctions.getValue
           }
         ],
         entityType: EntityTypes.PRODUCTION_EVENT,
@@ -82,6 +82,7 @@
     },
     methods: {
       entityResultHandler: function (entityObj) {
+        this.isRequestedEntityLoading = false
         this.entity = entityObj
       }
     },

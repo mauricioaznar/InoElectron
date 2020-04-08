@@ -26,12 +26,6 @@
         apiUrl: GenericApiUrls.createListUrl(EntityTypes.PRODUCTION_EVENT.apiName, {paginate: true}),
         tableFields: [
           {
-            name: ProductionEventPropertiesReference.DESCRIPTION.name,
-            title: ProductionEventPropertiesReference.DESCRIPTION.title,
-            callback: DisplayFunctions.getValue,
-            filterType: 'text'
-          },
-          {
             name: ProductionEventPropertiesReference.START_DATE_TIME.name,
             title: ProductionEventPropertiesReference.START_DATE_TIME.title,
             callback: DisplayFunctions.getDateTime,
@@ -60,14 +54,6 @@
             entityFieldName: 'name'
           },
           {
-            name: ProductionEventPropertiesReference.CHECKS.name,
-            title: ProductionEventPropertiesReference.CHECKS.title,
-            callback: DisplayFunctions.getNameArray,
-            filterType: 'entity',
-            entityName: ProductionEventPropertiesReference.CHECKS.name,
-            entityFieldName: 'name'
-          },
-          {
             name: ProductionEventPropertiesReference.REPORT_EMPLOYEE.name,
             title: ProductionEventPropertiesReference.REPORT_EMPLOYEE.title,
             callback: DisplayFunctions.getPersona,
@@ -76,12 +62,24 @@
             entityName: EntityTypes.EMPLOYEE.name
           },
           {
+            name: ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name,
+            title: ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.title,
+            callback: DisplayFunctions.getValue,
+            filterType: 'text'
+          },
+          {
             name: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name,
             title: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.title,
             callback: DisplayFunctions.getPersona,
             filterType: 'entity',
             entityFieldName: 'fullname',
             entityName: EntityTypes.EMPLOYEE.name
+          },
+          {
+            name: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name,
+            title: ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.title,
+            callback: DisplayFunctions.getValue,
+            filterType: 'text'
           }
         ],
         actions: [
