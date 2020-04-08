@@ -25,6 +25,7 @@
         </mau-form-group-date-time>
         <div class="form-group">
             <mau-form-input-select-dynamic
+                    :apiOperationOptions="{filterOrderBy: 'id|asc'}"
                     :initialObject="initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name]"
                     :label="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title"
                     :displayProperty="'name'"
@@ -54,24 +55,16 @@
             </mau-form-input-select-dynamic>
         </div>
         <div class="form-group">
-            <label>Descripcion</label>
-            <mau-editor
-                    :id="'description'"
+            <mau-form-input-text
+                    :label="ProductionEventPropertiesReference.DESCRIPTION.title"
+                    :name="ProductionEventPropertiesReference.DESCRIPTION.name"
                     v-model="productionEvent.description"
-                    :initialValue="initialValues[ProductionEventPropertiesReference.DESCRIPTION.name]">
-            </mau-editor>
-        </div>
-        <div class="form-group">
-            <production-event-check-table
-                :initialChecks="initialValues[ProductionEventPropertiesReference.CHECKS.name]"
-                :name="ProductionEventPropertiesReference.CHECKS.name"
-                v-model="productionEvent.checks"
+                    :initialValue="initialValues[ProductionEventPropertiesReference.DESCRIPTION.name]"
+                    :error="errors.has(ProductionEventPropertiesReference.DESCRIPTION.name) ? errors.first(ProductionEventPropertiesReference.DESCRIPTION.name) : ''"
+                    :disabled="!userHasWritePrivileges"
+                    v-validate="'required'"
             >
-
-            </production-event-check-table>
-            <span v-show="errors.has(ProductionEventPropertiesReference.CHECKS.name)" class="text-danger font-80">
-              {{ errors.first(ProductionEventPropertiesReference.CHECKS.name) }}
-            </span>
+            </mau-form-input-text>
         </div>
         <div class="form-group">
             <mau-form-input-select-dynamic
@@ -115,12 +108,10 @@
 <script>
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import ValidatorHelper from 'renderer/api/functions/ValidatorHelper'
-  import MauEditor from 'renderer/components/mau-components/mau-editor/MauEditor.vue'
   import ProductionEventCheckTable from 'renderer/api/components/m2m/ProductionEventCheckTable.vue'
   import ProductionEventPropertiesReference from 'renderer/api/propertiesReference/ProductionEventPropertiesReference'
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import EntityTypes from 'renderer/api/EntityTypes'
-  import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
@@ -155,7 +146,6 @@
     },
     components: {
       MauFormInputSelectDynamic,
-      MauEditor,
       ProductionEventCheckTable
     },
     mounted () {
@@ -171,25 +161,11 @@
     computed: {
       isMachineRequired: function () {
         return this.productionEvent.productionEventType
-          ? (this.productionEvent.productionEventType[GlobalEntityIdentifier] === 6 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 7 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 8 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 9 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 10 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 11 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 12 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 13 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 14 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 15 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 16 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 17 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 18 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 19 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 20 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 21 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 22 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 23 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 24)
+          ? !(this.productionEvent.productionEventType[GlobalEntityIdentifier] === 1 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 3 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 4 ||
+              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 5)
           : false
       },
       maintenanceEmployeeApiOperationOptions: function () {
@@ -212,7 +188,6 @@
         this.initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name)
         this.initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name)
         this.initialValues[ProductionEventPropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.DESCRIPTION.name)
-        this.initialValues[ProductionEventPropertiesReference.CHECKS.name] = DefaultValuesHelper.array(this.initialObject, ProductionEventPropertiesReference.CHECKS.name)
       },
       save: function () {
         let directParams = {
@@ -225,13 +200,6 @@
           [ProductionEventPropertiesReference.DESCRIPTION.name]: this.productionEvent.description
         }
         let relayObjects = []
-        let filteredProductionChecks = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
-          this.initialValues[ProductionEventPropertiesReference.CHECKS.name],
-          this.productionEvent.checks,
-          'id'
-        )
-        let productionCheckRelayObject = ManyToManyHelper.createRelayObject(filteredProductionChecks, EntityTypes.PRODUCTION_EVENT_CHECK)
-        relayObjects.push(productionCheckRelayObject)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true

@@ -34,12 +34,6 @@ let propertiesReference = {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  CHECKS: {
-    title: 'Por hacer',
-    name: 'checks',
-    display: DisplayFunctions.getNameArray,
-    defaultValue: MauInputDefaultValues.MULTISELECT
-  },
   REPORT_EMPLOYEE: {
     title: 'Empleado que reporto',
     name: 'report_employee',
