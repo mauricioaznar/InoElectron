@@ -491,7 +491,7 @@
         })
       },
       setTotal: function (total) {
-        this.initialTax = total / 1.16
+        this.initialTax = total  - (total / 1.16)
         this.total = total
       }
     },
