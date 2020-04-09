@@ -2,20 +2,6 @@
     <div>
         <div class="form-group form-row">
             <div class="col-sm-12">
-                <mau-form-input-date
-                        :name="ExpensePropertiesReference.DATE_PAID.name"
-                        :label="ExpensePropertiesReference.DATE_PAID.title + ' (spei, dia de la transferencia, dia del pago)'"
-                        v-model="expense.datePaid"
-                        :initialValue="initialValues[ExpensePropertiesReference.DATE_PAID.name]"
-                        :error="errors.has(ExpensePropertiesReference.DATE_PAID.name) ? errors.first(ExpensePropertiesReference.DATE_PAID.name) : ''"
-                        :disabled="!userHasWritePrivileges"
-                        v-validate="'required'"
-                >
-                </mau-form-input-date>
-            </div>
-        </div>
-        <div class="form-group form-row">
-            <div class="col-sm-12">
                 <mau-form-input-select-dynamic
                         :endpointName="supplierEndpointName"
                         :initialObject="initialValues[ExpensePropertiesReference.SUPPLIER.name]"
@@ -90,36 +76,6 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group form-row"
-        >
-            <div class="col-sm-12">
-                <label>
-                    Esta o fue provisionada?
-                </label>
-                <mau-form-input-check-box
-                        :initialValue="initialHasProvisionDate"
-                        v-model="hasProvisionDate"
-                >
-
-                </mau-form-input-check-box>
-            </div>
-        </div>
-        <div class="form-group form-row"
-             v-if="hasProvisionDate === 1"
-        >
-            <div class="col-sm-12">
-                <mau-form-input-date
-                        :name="ExpensePropertiesReference.INVOICE_PROVISION_DATE.name"
-                        :label="ExpensePropertiesReference.INVOICE_PROVISION_DATE.title"
-                        v-model="expense.invoiceProvisionDate"
-                        :initialValue="initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name]"
-                        :error="errors.has(ExpensePropertiesReference.INVOICE_PROVISION_DATE.name) ? errors.first(ExpensePropertiesReference.INVOICE_PROVISION_DATE.name) : ''"
-                        :disabled="!userHasWritePrivileges"
-                        v-validate="'required'"
-                >
-                </mau-form-input-date>
-            </div>
-        </div>
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
@@ -186,14 +142,75 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group form-row" v-if="expense.expenseMoneySource.id === 5">
+        <div class="form-group form-row" v-if="expense.expenseInvoicePaymentForm.id === 3">
             <div class="col-sm-12">
                 <mau-form-input-date
                         :name="ExpensePropertiesReference.DATE_EMITTED.name"
-                        :label="ExpensePropertiesReference.DATE_EMITTED.title + ' (CiBanco)'"
+                        :label="ExpensePropertiesReference.DATE_EMITTED.title + ' (transferencia de fondos)'"
                         v-model="expense.dateEmitted"
                         :initialValue="initialValues[ExpensePropertiesReference.DATE_EMITTED.name]"
                         :error="errors.has(ExpensePropertiesReference.DATE_EMITTED.name) ? errors.first(ExpensePropertiesReference.DATE_EMITTED.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                </mau-form-input-date>
+            </div>
+        </div>
+        <div class="form-group form-row"
+             v-if="isExpenseInvoicePaymentFormTransfer"
+        >
+            <div class="col-sm-12">
+                <label>
+                    Ya se pago?
+                </label>
+                <mau-form-input-check-box
+                        :initialValue="initialHasDatePaid"
+                        v-model="hasDatePaid"
+                >
+
+                </mau-form-input-check-box>
+            </div>
+        </div>
+        <div class="form-group form-row"
+             v-if="!isExpenseInvoicePaymentFormTransfer || hasDatePaid"
+        >
+            <div class="col-sm-12">
+                <mau-form-input-date
+                        :name="ExpensePropertiesReference.DATE_PAID.name"
+                        :label="ExpensePropertiesReference.DATE_PAID.title + ' (spei, dia de la transferencia, dia del pago)'"
+                        v-model="expense.datePaid"
+                        :initialValue="initialValues[ExpensePropertiesReference.DATE_PAID.name]"
+                        :error="errors.has(ExpensePropertiesReference.DATE_PAID.name) ? errors.first(ExpensePropertiesReference.DATE_PAID.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                </mau-form-input-date>
+            </div>
+        </div>
+        <div class="form-group form-row"
+        >
+            <div class="col-sm-12">
+                <label>
+                    Esta o fue provisionada?
+                </label>
+                <mau-form-input-check-box
+                        :initialValue="initialHasProvisionDate"
+                        v-model="hasProvisionDate"
+                >
+
+                </mau-form-input-check-box>
+            </div>
+        </div>
+        <div class="form-group form-row"
+             v-if="hasProvisionDate === 1"
+        >
+            <div class="col-sm-12">
+                <mau-form-input-date
+                        :name="ExpensePropertiesReference.INVOICE_PROVISION_DATE.name"
+                        :label="ExpensePropertiesReference.INVOICE_PROVISION_DATE.title"
+                        v-model="expense.invoiceProvisionDate"
+                        :initialValue="initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name]"
+                        :error="errors.has(ExpensePropertiesReference.INVOICE_PROVISION_DATE.name) ? errors.first(ExpensePropertiesReference.INVOICE_PROVISION_DATE.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
                 >
@@ -330,6 +347,8 @@
         initialTax: 0,
         initialHasProvisionDate: 0,
         hasProvisionDate: 0,
+        initialHasDatePaid: 1,
+        hasDatePaid: 1,
         expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
         supplierEndpointName: EntityTypes.SUPPLIER.apiName,
         expenseItemEndpointName: EntityTypes.EXPENSE_ITEM.apiName,
@@ -388,11 +407,14 @@
       isExpenseInvoiceTypeWithIeps: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
           ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 3 : false
+      },
+      isExpenseInvoicePaymentFormTransfer: function () {
+        return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier] === 3 : false
       }
     },
     methods: {
       setInitialValues: function () {
-        this.initialValues[ExpensePropertiesReference.DATE_PAID.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_PAID.name)
         this.initialValues[ExpensePropertiesReference.DATE_EMITTED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_EMITTED.name)
         this.initialValues[ExpensePropertiesReference.TAX.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.TAX.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_ISR_RETAINED.name)
@@ -414,12 +436,19 @@
         if (moment(this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name], 'YYYY-MM-DD').isValid()) {
           this.initialHasProvisionDate = 1
         }
+        this.initialValues[ExpensePropertiesReference.DATE_PAID.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_PAID.name)
+        if (this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name].id === 3) {
+          if (moment(this.initialValues[ExpensePropertiesReference.DATE_PAID.name], 'YYYY-MM-DD').isValid()) {
+            this.initialHasDatePaid = 1
+          } else {
+            this.initialHasDatePaid = 0
+          }
+        }
       },
       save: function () {
         let directParams = {
           [ExpensePropertiesReference.EXPENSE_TYPE.relationship_id_name]: 2,
-          [ExpensePropertiesReference.DATE_PAID.name]: this.expense.datePaid,
-          [ExpensePropertiesReference.DATE_EMITTED.name]: this.expense.expenseMoneySource.id === 5 ? this.expense.dateEmitted : this.expense.datePaid,
+          [ExpensePropertiesReference.DATE_EMITTED.name]: this.isExpenseInvoicePaymentFormTransfer ? this.expense.dateEmitted : this.expense.datePaid,
           [ExpensePropertiesReference.COMMENTS.name]: this.expense.comments,
           [ExpensePropertiesReference.INTERNAL_CODE.name]: this.expense.internalCode,
           [ExpensePropertiesReference.TAX.name]: this.expense.tax,
@@ -439,6 +468,8 @@
           [ExpensePropertiesReference.INVOICE_CODE.name]: this.expense.invoiceCode,
           [ExpensePropertiesReference.INVOICE_PROVISION_DATE.name]: this.hasProvisionDate
             ? this.expense.invoiceProvisionDate : '0000-00-00',
+          [ExpensePropertiesReference.DATE_PAID.name]: !this.isExpenseInvoicePaymentFormTransfer ? this.expense.datePaid
+            : (this.hasDatePaid ? this.expense.datePaid : '0000-00-00'),
           [ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name]: this.expense.expenseInvoicePaymentMethod
             ? this.expense.expenseInvoicePaymentMethod[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name]: this.expense.expenseInvoicePaymentForm
