@@ -26,15 +26,16 @@
         <div class="form-group">
             <mau-form-input-select-dynamic
                     :apiOperationOptions="{filterOrderBy: 'id|asc'}"
-                    :initialObject="initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name]"
-                    :label="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title"
+                    :initialObjects="initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name]"
+                    :label="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.title"
                     :displayProperty="'name'"
-                    v-model="productionEvent.productionEventType"
-                    :name="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name"
-                    :data-vv-as="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title"
-                    :error="errors.has(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name) ? errors.first(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name) : ''"
+                    v-model="productionEvent.productionEventTypes"
+                    :name="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name"
+                    :data-vv-as="ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.title"
+                    :error="errors.has(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name) ? errors.first(ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name) : ''"
                     :endpointName="productionEventTypeEndpointName"
                     :disabled="!userHasWritePrivileges"
+                    :multiselect="true"
                     v-validate="'object_required'"
             >
             </mau-form-input-select-dynamic>
@@ -125,6 +126,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
+  import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   export default {
     data () {
       return {
@@ -135,11 +137,11 @@
           machine: {},
           reportEmployee: {},
           maintenanceEmployee: {},
-          productionEventType: {},
+          productionEventTypes: {},
           maintenanceEmployeeDescription: '',
           reportEmployeeDescription: ''
         },
-        initialValues: [],
+        initialValues: {},
         buttonDisabled: false,
         machineEndpointName: EntityTypes.MACHINE.apiName,
         employeeEndpointName: EntityTypes.EMPLOYEE.apiName,
@@ -170,13 +172,7 @@
     },
     computed: {
       isMachineRequired: function () {
-        return this.productionEvent.productionEventType
-          ? !(this.productionEvent.productionEventType[GlobalEntityIdentifier] === 1 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 2 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 3 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 4 ||
-              this.productionEvent.productionEventType[GlobalEntityIdentifier] === 5)
-          : false
+        return true
       },
       maintenanceEmployeeApiOperationOptions: function () {
         return {filterExacts: {employee_type_id: 3}}
@@ -196,7 +192,7 @@
         this.initialValues[ProductionEventPropertiesReference.MACHINE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.MACHINE.name)
         this.initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.REPORT_EMPLOYEE.name)
         this.initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.name)
-        this.initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name)
+        this.initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name] = DefaultValuesHelper.array(this.initialObject, ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name)
         this.initialValues[ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE_DESCRIPTION.name)
         this.initialValues[ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name)
       },
@@ -204,7 +200,6 @@
         let directParams = {
           [ProductionEventPropertiesReference.START_DATE_TIME.name]: this.productionEvent.startDateTime,
           [ProductionEventPropertiesReference.END_DATE_TIME.name]: this.productionEvent.endDateTime,
-          [ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.relationship_id_name]: this.productionEvent.productionEventType ? this.productionEvent.productionEventType[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.REPORT_EMPLOYEE.relationship_id_name]: this.productionEvent.reportEmployee ? this.productionEvent.reportEmployee[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.MAINTENANCE_EMPLOYEE.relationship_id_name]: this.productionEvent.maintenanceEmployee ? this.productionEvent.maintenanceEmployee[GlobalEntityIdentifier] : null,
           [ProductionEventPropertiesReference.MACHINE.relationship_id_name]: this.isMachineRequired === true && this.productionEvent.machine ? this.productionEvent.machine[GlobalEntityIdentifier] : this.isEditMode ? 'null' : null,
@@ -212,6 +207,15 @@
           [ProductionEventPropertiesReference.REPORT_EMPLOYEE_DESCRIPTION.name]: this.productionEvent.reportEmployeeDescription
         }
         let relayObjects = []
+        let initialProductionEventTypesM2mStructuredObjects = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name], 'production_event_type_id')
+        let productionEventTypesM2mStructuredObjects = ManyToManyHelper.createM2MStructuredObjects(this.productionEvent.productionEventTypes, 'production_event_type_id')
+        let productionEventTypesM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          initialProductionEventTypesM2mStructuredObjects,
+          productionEventTypesM2mStructuredObjects,
+          'id'
+        )
+        let productionEventTypesRelayObjects = ManyToManyHelper.createRelayObject(productionEventTypesM2mFilteredObject, EntityTypes.PRODUCTION_E_PRODUCTION_ET)
+        relayObjects.push(productionEventTypesRelayObjects)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true

@@ -33,12 +33,9 @@ let propertiesReference = {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
-  PRODUCTION_EVENT_TYPE: {
+  PRODUCTION_EVENT_TYPES: {
     title: 'Tipo de evento',
-    name: 'production_event_type',
-    relationship_id_name: 'production_event_type_id',
-    display: DisplayFunctions.getNameFromObject,
-    defaultValue: MauInputDefaultValues.SELECT
+    name: 'production_event_types'
   },
   REPORT_EMPLOYEE: {
     title: 'Empleado que reporto',

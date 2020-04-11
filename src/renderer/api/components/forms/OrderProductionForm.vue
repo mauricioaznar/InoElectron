@@ -356,6 +356,7 @@
           )
           let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionRolls, EntityTypes.ORDER_PRODUCTION_PRODUCT)
           relayObjects.push(productionProductRelayObject)
+          console.log(productionProductRelayObject)
           directParams[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name] = 1
         }
         this.$validator.validateAll().then((result) => {

@@ -43,9 +43,9 @@
             display: DisplayFunctions.getNameFromObject
           },
           {
-            title: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title,
-            name: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name,
-            display: DisplayFunctions.getNameFromObject
+            title: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.title,
+            name: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name,
+            display: DisplayFunctions.getNameArray
           },
           {
             title: ProductionEventPropertiesReference.REPORT_EMPLOYEE.title,

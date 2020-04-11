@@ -46,12 +46,9 @@
             entityFieldName: 'name'
           },
           {
-            name: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.name,
-            title: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPE.title,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.PRODUCTION_EVENT_TYPE.name,
-            entityFieldName: 'name'
+            name: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.name,
+            title: ProductionEventPropertiesReference.PRODUCTION_EVENT_TYPES.title,
+            callback: DisplayFunctions.getNameArray
           },
           {
             name: ProductionEventPropertiesReference.REPORT_EMPLOYEE.name,
