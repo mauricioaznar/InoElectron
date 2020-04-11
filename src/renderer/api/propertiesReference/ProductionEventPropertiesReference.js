@@ -21,7 +21,7 @@ let propertiesReference = {
     defaultValue: MauInputDefaultValues.TEXT
   },
   REPORT_EMPLOYEE_DESCRIPTION: {
-    title: 'Descripcion del empleado de mantenimiento',
+    title: 'Descripcion del empleado de operacion',
     name: 'report_employee_description',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
