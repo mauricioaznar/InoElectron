@@ -42,6 +42,11 @@ export default {
     apiName: 'productionEProductionEt',
     title: 'Tipos de evento de produccion'
   },
+  ORDER_PRODUCTION: {
+    name: 'orderProduction',
+    apiName: 'orderProduction',
+    title: 'Ordenes de produccion'
+  },
   BAG_ORDER_PRODUCTION: {
     name: 'bagOrderProduction',
     apiName: 'orderProduction',
