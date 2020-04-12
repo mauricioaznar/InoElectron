@@ -31,7 +31,7 @@
       data () {
         return {
           tabIndex: '',
-          initialTabIndex: {value: 6, text: 'Reporte general'},
+          initialTabIndex: {},
           options: [
             {value: 0, text: 'Reporte de ventas'},
             {value: 1, text: 'Inventario de bolsas'},
@@ -41,6 +41,9 @@
             {value: 5, text: 'Resumen de gastos'}
           ]
         }
+      },
+      created () {
+        this.initialTabIndex = this.options[0]
       },
       components: {
         BagInventoryReport,
