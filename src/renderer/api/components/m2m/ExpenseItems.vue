@@ -15,11 +15,13 @@
             </h5>
             <div>
                 <mau-form-input-text
+                        :key="'ItemDescription' + index + 'a' +
+                            (!hasInitialValues && hasLastSupplierExpenseItems? getLastSupplierExpenseItem(index).id : '')"
                         class="mb-2"
+                        :initialValue="hasInitialValues ? getInitialExpenseItem(expenseItem).description : (hasLastSupplierExpenseItems ? getLastSupplierExpenseItem(index).description : '')"
                         :label="'Descripcion'"
                         :name="'Description' + index"
                         v-model="expenseItem.description"
-                        :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).description : ''"
                         :error="errors.has('Description' + index) ? errors.first('Description' + index) : ''"
                         :v-validate="'required'"
                         @input="refreshInput"
@@ -28,11 +30,13 @@
 
                 </mau-form-input-text>
                 <mau-form-input-number
+                        :key="'ItemSubtotal' + index + 'a' +
+                            (!hasInitialValues && hasLastSupplierExpenseItems? getLastSupplierExpenseItem(index).id : '')"
                         class="mb-2"
+                        :initialValue="hasInitialValues ? getInitialExpenseItem(expenseItem).subtotal : (hasLastSupplierExpenseItems ? getLastSupplierExpenseItem(index).subtotal : '')"
                         :name="'Subtotal' + index"
                         :label="'Subtotal'"
                         v-model="expenseItem.subtotal"
-                        :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).subtotal : ''"
                         :error="errors.has('Subtotal' + index) ? errors.first('Subtotal' + index) : ''"
                         :type="'float'"
                         @input="refreshInput"
@@ -41,11 +45,11 @@
                 </mau-form-input-number>
                 <mau-form-input-number
                         v-if="hasTax"
+                        :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).tax : ''"
                         class="mb-2"
                         :name="'Tax' + index"
                         :label="'IVA'"
                         v-model="expenseItem.tax"
-                        :initialValue="expenseItem.id ? getInitialExpenseItem(expenseItem).tax : ''"
                         :error="errors.has('Tax' + index) ? errors.first('Tax' + index) : ''"
                         :type="'float'"
                         @input="refreshInput"
@@ -54,15 +58,11 @@
 
                 </mau-form-input-number>
                 <mau-form-input-select-dynamic
-                        :key="'ItemExpenseSubcategory' + index + 'a' +
-                            (isFirstExpenseItem(index) ?
-                            (getFirstExpenseItem().expenseSubcategory && getFirstExpenseItem().expenseSubcategory.id ? getFirstExpenseItem().expenseSubcategory.id : '') : '')"
+                        :key="'ItemSubcategory' + index + 'a' +
+                            (!hasInitialValues && hasLastSupplierExpenseItems? getLastSupplierExpenseItem(index).id : '')"
                         class="mb-2"
                         :label="'Subcategoria'"
-                        :initialObject="
-                            (isFirstExpenseItem(index))
-                            ? getFirstExpenseItem().expenseSubcategory :
-                             getInitialExpenseItem(expenseItem).expense_subcategory"
+                        :initialObject="hasInitialValues ? getInitialExpenseItem(expenseItem).expense_subcategory : (hasLastSupplierExpenseItems ? getLastSupplierExpenseItem(index).expense_subcategory : {})"
                         :apiOperationOptions="{filterOrderBy: 'expense_category_id|asc'}"
                         :displayProperty="'name'"
                         :endpointName="expenseSubcategoryEndpointName"
@@ -74,12 +74,11 @@
                 >
                 </mau-form-input-select-dynamic>
                 <mau-form-input-select-dynamic
-                        :key="'Itembranch' + index + 'a' +
-                        (isFirstExpenseItem(index) ?
-                        (getFirstExpenseItem().branch && getFirstExpenseItem().branch.id ? getFirstExpenseItem().branch.id : 0) : 0)"
+                        :key="'ItemBranch' + index + 'a' +
+                            (!hasInitialValues && hasLastSupplierExpenseItems? getLastSupplierExpenseItem(index).id : '')"
                         class="mb-2"
                         :label="'Sucursal'"
-                        :initialObject="isFirstExpenseItem(index) ? getFirstExpenseItem().branch : (expenseItem.id ? getInitialExpenseItem(expenseItem).branch : {})"
+                        :initialObject="hasInitialValues ? getInitialExpenseItem(expenseItem).branch : (hasLastSupplierExpenseItems ? getLastSupplierExpenseItem(index).branch : {})"
                         :displayProperty="'name'"
                         :endpointName="branchEndpointName"
                         v-model="expenseItem.branch"
@@ -90,12 +89,16 @@
                 >
                 </mau-form-input-select-dynamic>
                 <mau-form-input-number
+                        :key="'ItemQuantity' + index + 'a' +
+                            (!hasInitialValues && hasLastSupplierExpenseItems? getLastSupplierExpenseItem(index).id : '')"
                         class="mb-2"
                         v-if="isExpenseItemQuantityRequired(expenseItem)"
                         :name="'ItemExpenseQuantity' + index"
                         :label="'Cantidad'"
                         v-model="expenseItem.quantity"
-                        :initialValue="expenseItem.id ? (getInitialExpenseItem(expenseItem).quantity >= 0 && getInitialExpenseItem(expenseItem).quantity !== null? getInitialExpenseItem(expenseItem).quantity : 0) : ''"
+                        :initialValue="hasInitialValues ?
+                            (getInitialExpenseItem(expenseItem).quantity >= 0 && getInitialExpenseItem(expenseItem).quantity !== null ? getInitialExpenseItem(expenseItem).quantity : 0)
+                            : hasLastSupplierExpenseItems ? getLastSupplierExpenseItem(index).quantity : 0"
                         :error="errors.has('ItemExpenseQuantity' + index) ? errors.first('ItemExpenseQuantity' + index) : ''"
                         :type="'float'"
                         @input="refreshInput"
@@ -103,11 +106,12 @@
                 >
                 </mau-form-input-number>
                 <mau-form-input-select-dynamic
-                        :key="'ItemExpenseMachine' + index"
+                        :key="'ItemMachine' + index + 'a' +
+                            (!hasInitialValues && hasLastSupplierExpenseItems? getLastSupplierExpenseItem(index).id : '')"
                         class="mb-2"
                         v-if="expenseItem.expenseCategory && expenseItem.expenseCategory.id === 2"
                         :label="'Maquina'"
-                        :initialObject="expenseItem.id ? getInitialExpenseItem(expenseItem).machine : {}"
+                        :initialObject="hasInitialValues ? getInitialExpenseItem(expenseItem).machine : (hasLastSupplierExpenseItems ? getLastSupplierExpenseItem(index).machine : {})"
                         :displayProperty="'name'"
                         :endpointName="machineEndpointName"
                         v-model="expenseItem.machine"
@@ -129,11 +133,13 @@
     import cloneDeep from 'renderer/services/common/cloneDeep'
     import EntityTypes from 'renderer/api/EntityTypes'
     import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
+    import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
     export default {
       inject: ['$validator'],
       data () {
         return {
           expenseItems: [],
+          lastSupplierExpenseItems: [],
           machines: [],
           branches: [],
           expenseSubcategories: [],
@@ -153,6 +159,14 @@
         this.initialExpenseItems = cloneDeep(this.initialValues)
         this.refreshInput()
       },
+      computed: {
+        hasInitialValues: function () {
+          return this.initialValues.length > 0
+        },
+        hasLastSupplierExpenseItems: function () {
+          return this.lastSupplierExpenseItems.length > 0
+        }
+      },
       props: {
         initialValues: {
           type: Array,
@@ -166,6 +180,10 @@
         },
         initialFirstExpenseItem: {
           type: Object
+        },
+        supplier: {
+          type: Object,
+          required: true
         }
       },
       methods: {
@@ -202,14 +220,24 @@
           }
           return initialExpenseItem
         },
-        isFirstExpenseItem: function (index) {
-          return index === 0 && this.initialValues.length === 0
-        },
-        getFirstExpenseItem: function () {
-          let {expenseSubcategory, branch} = this.initialFirstExpenseItem
-          return {
-            branch: (branch && branch.id) ? branch : {},
-            expenseSubcategory: (expenseSubcategory && expenseSubcategory.id) ? expenseSubcategory : {}
+        getLastSupplierExpenseItem: function (index) {
+          return this.lastSupplierExpenseItems[index]
+        }
+      },
+      watch: {
+        supplier: function (supplier) {
+          if (!this.hasInitialValues && supplier && supplier.id) {
+            let supplierId = supplier.id
+            GenericApiOperations.list(EntityTypes.EXPENSE.apiName, {filterExacts: {supplier_id: supplierId}}).then(result => {
+              this.lastSupplierExpenseItems = []
+              if (result.length > 0) {
+                this.expenseItems = []
+                result[0].expense_items.forEach(expenseItem => {
+                  this.expenseItems.push({})
+                  this.lastSupplierExpenseItems.push(expenseItem)
+                })
+              }
+            })
           }
         }
       }
