@@ -38,12 +38,13 @@
             {value: 2, text: 'Reporte de bolseo'},
             {value: 3, text: 'Reporte de extrusion'},
             {value: 4, text: 'Resumen de facturas'},
-            {value: 5, text: 'Resumen de gastos'}
+            {value: 5, text: 'Resumen de gastos'},
+            {value: 6, text: 'Resumen general'}
           ]
         }
       },
       created () {
-        this.initialTabIndex = this.options[0]
+        this.initialTabIndex = this.options[5]
       },
       components: {
         BagInventoryReport,

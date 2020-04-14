@@ -1,7 +1,9 @@
 import Vue from 'vue'
 
 function createListUrl (entityEndpointName, options) {
-  let paginateQuery = (options && options.paginate && options.paginate === true) ? 'paginate=true ' : 'paginate=false'
+  let paginateQuery = (options && options.paginate && options.paginate === true) ? 'paginate=true' : 'paginate=false'
+  let pageQuery = (options && options.page && options.page > 0) ? '&page=' + options.page : ''
+  let perPageQuery = (options && options.perPage && options.perPage > 0) ? '&per_page=' + options.perPage : ''
   let filterLikeQuery = (options && options.filterLikes) !== undefined ? getFilterLikesQuery(options.filterLikes) : ''
   let filterExactQuery = (options && options.filterExacts) !== undefined ? getFilterExactsQuery(options.filterExacts) : ''
   let filterEntityQuery = (options && options.filterEntities) !== undefined ? getFilterEntitiesQuery(options.filterEntities) : ''
@@ -10,6 +12,8 @@ function createListUrl (entityEndpointName, options) {
   let filterOrderByQuery = (options && options.filterOrderBy) !== undefined ? getFilterOrderByQuery(options.filterOrderBy) : ''
   return Vue.http.options.root + '/' + entityEndpointName + '/list?' +
     paginateQuery +
+    pageQuery +
+    perPageQuery +
     filterLikeQuery +
     filterExactQuery +
     filterEntityQuery +
