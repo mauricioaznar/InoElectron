@@ -15,7 +15,7 @@
         <production-report :key="tabIndex.value + 'roll'" :reportType="'roll'" v-if="tabIndex.value === 3" class="mt-4"></production-report>
         <expense-report-two :key="tabIndex.value + 'expenseReport2'" v-if="tabIndex.value === 4" class="mt-4"></expense-report-two>
         <expense-report-three :key="tabIndex.value + 'expenseReport3'" v-if="tabIndex.value === 5" class="mt-4"></expense-report-three>
-<!--        <general-report :key="tabIndex.value + 'generalReport'" v-if="tabIndex.value === 6"> </general-report>-->
+        <general-report :key="tabIndex.value + 'generalReport'" v-if="tabIndex.value === 6"> </general-report>
     </div>
 </template>
 
@@ -44,7 +44,7 @@
         }
       },
       created () {
-        this.initialTabIndex = this.options[5]
+        this.initialTabIndex = this.options[6]
       },
       components: {
         BagInventoryReport,
