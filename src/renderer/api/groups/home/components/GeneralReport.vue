@@ -1,7 +1,9 @@
+import {remote} from "electron"
 <template>
     <div class="mt-4">
-        <div class="form-group">
+        <div class="form-group" v-if="!isLoading">
             <mau-form-input-date
+                v-if="!isLoading"
                 :name="'startDate'"
                 :error="''"
                 :label="'Fecha de inicio'"
@@ -10,7 +12,7 @@
             >
             </mau-form-input-date>
         </div>
-        <div class="form-group">
+        <div class="form-group" v-if="!isLoading">
             <mau-form-input-date
                     :name="'endDate'"
                     :error="''"
@@ -20,8 +22,19 @@
             >
             </mau-form-input-date>
         </div>
-        <div class="form-group">
+        <div class="form-group" v-if="!isLoading">
             <button class="btn btn-primary" @click="getOrderProductionsAndProductionEventsFromDateRange">Filtrar</button>
+            <button class="btn btn-primary btn-excel" @click="createExcelFile">Excel</button>
+        </div>
+        <div class="my-2" v-if="!isLoading && selectedMaxProductionTableItem">
+            {{selectedMaxProductionTableItem.product_id + ' ' + selectedMaxProductionTableItem.machine_id}}
+            <div v-for="productionItem in selectedMaxProductionTableItem.production_items" class="d-flex justify-content-around">
+                <p>{{productionItem.employee_full_name}}</p>
+                <p>{{productionItem.start_date_time}}</p>
+                <p>{{productionItem.end_date_time}}</p>
+                <p>{{productionItem.kilos}}</p>
+            </div>
+
         </div>
         <table v-if="!isLoading" class="mt-5">
             <tr>
@@ -30,7 +43,7 @@
             </tr>
             <tr v-for="product in products.filter(productLooped => {return productLooped.product_type_id === 1})">
                 <td>{{product.description}}</td>
-                <td v-for="machine in machines.filter(machineLooped => {return machineLooped.machine_type_id === 1})">{{findMaxTableProductionItem(product.id, machine.id).max_kilo_production_per_hour}}</td>
+                <td v-for="machine in machines.filter(machineLooped => {return machineLooped.machine_type_id === 1})" @click="selectMaxProductionTableItem(product.id, machine.id)">{{findMaxTableProductionItem(product.id, machine.id).max_kilo_production_per_hour}}</td>
             </tr>
         </table>
         <table v-if="!isLoading" class="mt-5">
@@ -52,6 +65,8 @@
     import moment from 'moment'
     import Vue from 'vue'
     import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
+    import xlsx from 'xlsx'
+    import {remote} from 'electron'
     const dateFormat = 'YYYY-MM-DD'
     export default {
       name: 'SalesAndProductionReport',
@@ -64,6 +79,7 @@
           machines: [],
           products: [],
           maxProductionTable: [],
+          selectedMaxProductionTableItem: {},
           initialStartDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
           startDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
           initialEndDate: moment().subtract(moment().isoWeekday(), 'days').format(dateFormat),
@@ -84,7 +100,7 @@
                 return maxProductionTableItem.machine_id === machine.id && maxProductionTableItem.product_id === product.id
               })
               if (!foundMaxProductionTableItem) {
-                this.maxProductionTable.push({machine_id: machine.id, product_id: product.id, max_kilo_production_per_hour: 0})
+                this.maxProductionTable.push({machine_id: machine.id, machine: machine.name, product_id: product.id, product: product.description, max_kilo_production_per_hour: 0, production_items: []})
               }
             }
           }
@@ -96,8 +112,14 @@
                 return maxProductionTableItem.machine_id === orderProductionProducts[orderProductionProductIndex].pivot.machine_id && maxProductionTableItem.product_id === orderProductionProducts[orderProductionProductIndex].id
               })
               let kilos = orderProductionProducts[orderProductionProductIndex].pivot.kilos
-              if (maxProductionTableItem && maxProductionTableItem.max_kilo_production_per_hour < kilos) {
-                maxProductionTableItem.max_kilo_production_per_hour = kilos
+              let employeeFullname = orderProduction.employee.fullname
+              let startDateTime = orderProduction.start_date_time
+              let endDateTime = orderProduction.end_date_time
+              if (maxProductionTableItem) {
+                maxProductionTableItem.production_items.push({employee_full_name: employeeFullname, end_date_time: endDateTime, start_date_time: startDateTime, kilos: kilos})
+                if (maxProductionTableItem.max_kilo_production_per_hour < kilos) {
+                  maxProductionTableItem.max_kilo_production_per_hour = kilos
+                }
               }
             }
           }
@@ -149,6 +171,39 @@
             return maxProductionTableItem.machine_id === machineId && maxProductionTableItem.product_id === productId
           })
           return maxTableProductionItem || {}
+        },
+        selectMaxProductionTableItem: function (productId, machineId) {
+          this.selectedMaxProductionTableItem = this.findMaxTableProductionItem(productId, machineId)
+        },
+        createExcelFile: function () {
+          let options = {
+            title: 'Save file',
+            defaultPath: 'my_file',
+            buttonLabel: 'Save',
+            filters: [
+              {name: 'xlsx', extensions: ['xlsx']},
+              {name: 'txt', extensions: ['txt']},
+              {name: 'All Files', extensions: ['*']}
+            ]
+          }
+          let workbook = xlsx.utils.book_new()
+          let productionItems = []
+          this.maxProductionTable.forEach(maxProductionTableItem => {
+            maxProductionTableItem.production_items.forEach(productionItem => {
+              productionItems.push({
+                'Inicio': productionItem.start_date_time,
+                'Fin': productionItem.end_date_time,
+                'Empleado': productionItem.employee_full_name,
+                'Maquina': maxProductionTableItem.machine,
+                'Producto': maxProductionTableItem.product,
+                'Kilos': productionItem.kilos
+              })
+            })
+          })
+          let productsWS = xlsx.utils.json_to_sheet(productionItems)
+          xlsx.utils.book_append_sheet(workbook, productsWS, 'Productos producidos')
+          let o = remote.dialog.showSaveDialog(options)
+          xlsx.writeFile(workbook, o)
         }
       },
       created () {
