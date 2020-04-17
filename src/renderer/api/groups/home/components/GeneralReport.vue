@@ -1,4 +1,3 @@
-import {remote} from "electron"
 <template>
     <div class="mt-4">
         <div class="form-group" v-if="!isLoading">
@@ -42,7 +41,7 @@ import {remote} from "electron"
             </tr>
             <tr v-for="product in products.filter(productLooped => {return productLooped.product_type_id === 1})">
                 <td>{{product.description}}</td>
-                <td v-for="machine in machines.filter(machineLooped => {return machineLooped.machine_type_id === 1})" @click="selectMachineProductTableItem(product.id, machine.id)">{{findMaxTableProductionItem(product.id, machine.id).max_kilo_production_per_hour}}</td>
+                <td v-for="machine in machines.filter(machineLooped => {return machineLooped.machine_type_id === 1})" @click="selectMachineProductTableItem(product.id, machine.id)">{{findMachineProductTableItem(product.id, machine.id).max_kilo_production_per_hour}}</td>
             </tr>
         </table>
         <table v-show="showMachineProductTables" v-if="!isLoading" class="mt-5">
@@ -52,31 +51,63 @@ import {remote} from "electron"
             </tr>
             <tr v-for="product in products.filter(productLooped => {return productLooped.product_type_id === 2})">
                 <td>{{product.description}}</td>
-                <td v-for="machine in machines.filter(machineLooped => {return machineLooped.machine_type_id === 2})">{{findMaxTableProductionItem(product.id, machine.id).max_kilo_production_per_hour}}</td>
+                <td v-for="machine in machines.filter(machineLooped => {return machineLooped.machine_type_id === 2})">{{findMachineProductTableItem(product.id, machine.id).max_kilo_production_per_hour}}</td>
             </tr>
         </table>
-        <table class="table table-sm">
-            <tr>
-                <th>Fecha de inicio</th>
-                <th>Fecha de fin</th>
-                <th>Producto</th>
-                <th>Empleado</th>
-                <th>Maquinia</th>
-                <th>Kilos</th>
-                <th>Minutos que tiene que trabajar</th>
-                <th>Minutos en mantenimiento</th>
-            </tr>
-            <tr v-for="productionProduct in filteredOrderProductionProducts">
-                <td>{{productionProduct.start_date_time}}</td>
-                <td>{{productionProduct.end_date_time}}</td>
-                <td>{{productionProduct.product}}</td>
-                <td>{{productionProduct.employee}}</td>
-                <td>{{productionProduct.machine}}</td>
-                <td>{{productionProduct.kilos}}</td>
-                <td>{{productionProduct.minutes_should_work}}</td>
-                <td>{{productionProduct.minutes_in_maintenance}}</td>
-            </tr>
-        </table>
+        <div>
+            <div class="row">
+                <div class="text-left col-sm-1">Inicio</div>
+                <div class="text-left col-sm-1">Fin</div>
+                <div class="text-left col-sm-2">Empleado</div>
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-sm-5 text-left">Producto</div>
+                        <div class="col-sm-3 text-left">Maquina</div>
+                        <div class="col-sm-1 text-right">Kilos</div>
+                        <div class="col-sm-1 text-right">T (m)</div>
+                        <div class="col-sm-1 text-right">M (m)</div>
+                        <div class="col-sm-1 text-right">Extras</div>
+                    </div>
+                </div>
+            </div>
+            <div v-for="orderProduction in filteredOrderProductions" class="my-3">
+                <div class="row">
+                    <div class="text-left col-sm-1">{{orderProduction.start_date_time}}</div>
+                    <div class="text-left col-sm-1">{{orderProduction.end_date_time}}</div>
+                    <div class="text-left col-sm-2">{{orderProduction.employee}}</div>
+                    <div class="col-sm-8">
+                        <div v-for="(productionProduct, productionProductIndex) in orderProduction.production_products" class="row">
+                            <div class="col-sm-5 text-left">{{productionProduct.product}}</div>
+                            <div class="col-sm-3 text-left">{{productionProductIndex !== 0 && orderProduction.order_production_type_id === 1 ? '-' : productionProduct.machine}}</div>
+                            <div class="col-sm-1 text-right">{{productionProduct.kilos}}</div>
+                            <div class="col-sm-1 text-right">{{productionProductIndex !== 0 ? '-' : productionProduct.minutes_should_work}}</div>
+                            <div class="col-sm-1 text-right">{{productionProductIndex !== 0 && orderProduction.order_production_type_id === 1 ? '-' : productionProduct.minutes_in_maintenance}}</div>
+                            <div class="col-sm-1 text-right">
+                                <mau-form-input-check-box
+                                        :initial-value="0"
+                                        v-model="productionProduct.show_extras"
+                                >
+                                </mau-form-input-check-box>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row collapse my-3" v-for="(productionProduct, productionProductIndex) in orderProduction.production_products" :class="{'show': productionProduct.show_extras === 1}">
+                    <div class="col-sm-6">
+                        <div class="row" v-for="frequencyItem in findMachineProductTableItem(productionProduct.product_id, productionProduct.machine_id).frequency_production_items">
+                            <div class="col-sm-6">{{frequencyItem.label}}</div>
+                            <div class="col-sm-6">{{frequencyItem.count}}</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div
+                                class="col-sm-6"
+                        >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <table class="table table-sm">
             <tr>
                 <th>Fecha de inicio</th>
@@ -95,6 +126,7 @@ import {remote} from "electron"
 <script>
     import EntityTypes from 'renderer/api/EntityTypes'
     import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
+    import MauBarChart from 'renderer/components/mau-components/mau-chart/MauBarChart'
     import moment from 'moment'
     import Vue from 'vue'
     import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
@@ -109,7 +141,7 @@ import {remote} from "electron"
           productionEvents: [],
           filteredProductionEvents: [],
           allOrderProductions: [],
-          filteredOrderProductionProducts: [],
+          filteredOrderProductions: [],
           machines: [],
           products: [],
           machineProductTable: [],
@@ -119,7 +151,39 @@ import {remote} from "electron"
           startDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
           initialEndDate: moment().subtract(moment().isoWeekday(), 'days').format(dateFormat),
           endDate: moment().subtract(moment().isoWeekday(), 'days').format(dateFormat),
-          isLoading: false
+          isLoading: false,
+          chartOptions: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: { display: true },
+            tooltips: { displayColors: false },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }],
+              xAxes: [{
+                categoryPercentage: 1.0,
+                barPercentage: 1.0
+              }]
+            }
+          },
+          chartData: {
+            labels: ['0-1', '1-2', '2-1'],
+            datasets: [
+              {
+                label: 'Prueba',
+                backgroundColor: '#E42',
+                data: [1, 2, 5]
+              },
+              {
+                label: 'Prueba',
+                backgroundColor: '#E42',
+                data: [1, 2, 5]
+              }
+            ]
+          }
         }
       },
       methods: {
@@ -141,7 +205,8 @@ import {remote} from "electron"
                   product_id: product.id,
                   product: product.description,
                   max_kilo_production_per_hour: 0,
-                  production_items: []
+                  production_items: [],
+                  frequency_production_items: []
                 })
               }
             }
@@ -150,23 +215,55 @@ import {remote} from "electron"
             let orderProduction = this.allOrderProductions[orderProductionIndex]
             let orderProductionProducts = orderProduction.products
             for (let orderProductionProductIndex = 0; orderProductionProductIndex < orderProductionProducts.length; orderProductionProductIndex++) {
-              let MachineProductTableItem = this.machineProductTable.find(MachineProductTableItem => {
-                return MachineProductTableItem.machine_id === orderProductionProducts[orderProductionProductIndex].pivot.machine_id && MachineProductTableItem.product_id === orderProductionProducts[orderProductionProductIndex].id
+              let machineProductTableItem = this.machineProductTable.find(machineProductTableItem => {
+                return machineProductTableItem.machine_id === orderProductionProducts[orderProductionProductIndex].pivot.machine_id && machineProductTableItem.product_id === orderProductionProducts[orderProductionProductIndex].id
               })
               let kilos = orderProductionProducts[orderProductionProductIndex].pivot.kilos
               let employeeFullname = orderProduction.employee.fullname
               let startDateTime = orderProduction.start_date_time
               let endDateTime = orderProduction.end_date_time
-              if (MachineProductTableItem) {
-                MachineProductTableItem.production_items.push({
+              if (machineProductTableItem) {
+                machineProductTableItem.production_items.push({
                   employee_full_name: employeeFullname,
                   end_date_time: endDateTime,
                   start_date_time: startDateTime,
                   kilos: kilos
                 })
-                if (MachineProductTableItem.max_kilo_production_per_hour < kilos) {
-                  MachineProductTableItem.max_kilo_production_per_hour = kilos
+                if (machineProductTableItem.max_kilo_production_per_hour < kilos) {
+                  machineProductTableItem.max_kilo_production_per_hour = kilos
                 }
+              }
+            }
+          }
+          for (let machineProductTableItemIndex = 0; machineProductTableItemIndex < this.machineProductTable.length; machineProductTableItemIndex++) {
+            let machineProductTableItem = this.machineProductTable[machineProductTableItemIndex]
+            let productionItems = machineProductTableItem.production_items
+            if (productionItems.length > 0) {
+              console.log(productionItems.length)
+              let minProductionItemKilos = 0
+              let maxProductionItemKilos = 0
+              let intervals = 10
+              for (let productionItemIndex = 0; productionItemIndex < productionItems.length; productionItemIndex++) {
+                let productionItem = productionItems[productionItemIndex]
+                if (productionItem.kilos > maxProductionItemKilos) {
+                  maxProductionItemKilos = productionItem.kilos
+                }
+              }
+              let intervalSize = ((maxProductionItemKilos - minProductionItemKilos) / 10).toFixed(2)
+              for (let i = 1; i <= intervals; i++) {
+                let maxIntervalLimit = (i * intervalSize).toFixed(2)
+                let minIntervalLimit = (maxIntervalLimit - intervalSize).toFixed(2)
+                machineProductTableItem.frequency_production_items.push({
+                  label: minIntervalLimit + ' - ' + maxIntervalLimit,
+                  min: minIntervalLimit,
+                  max: maxIntervalLimit,
+                  count: 0
+                })
+              }
+              for (let productionItemIndex = 0; productionItemIndex < productionItems.length; productionItemIndex++) {
+                let productionItem = productionItems[productionItemIndex]
+                let frequencyProductionIndex = (productionItem.kilos - intervalSize) < 0 ? 0 : Math.floor((productionItem.kilos - intervalSize) / intervalSize)
+                machineProductTableItem.frequency_production_items[frequencyProductionIndex].count = machineProductTableItem.frequency_production_items[frequencyProductionIndex].count + 1
               }
             }
           }
@@ -210,58 +307,67 @@ import {remote} from "electron"
           await Promise.all([GenericApiOperations.list(EntityTypes.BAG_ORDER_PRODUCTION.apiName, {filterStartDateTime: {start_date_time: startDateTime}, filterEndDateTime: {start_date_time: endDateTime}}),
             GenericApiOperations.list(EntityTypes.PRODUCTION_EVENT.apiName, {filterStartDateTime: {start_date_time: startDateTimeMinusOverlap}, filterEndDateTime: {start_date_time: endDateTimePlusOverlap}})
           ]).then(result => {
-            this.filteredOrderProductionProducts = []
+            this.filteredOrderProductions = []
             result[0].forEach(orderProduction => {
-              return orderProduction.products.map(orderProductionProduct => {
+              let filteredOrderProduction = {
+                employee: orderProduction.employee.fullname,
+                production_products: [],
+                start_date_time: orderProduction.start_date_time,
+                end_date_time: orderProduction.end_date_time,
+                order_production_type_id: orderProduction.order_production_type_id
+              }
+              orderProduction.products.forEach(orderProductionProduct => {
                 if ((orderProduction.order_production_type_id === 1 && orderProductionProduct.product_type_id === 1) || (orderProduction.order_production_type_id === 2 && orderProductionProduct.product_type_id === 2)) {
-                  this.filteredOrderProductionProducts.push({
+                  filteredOrderProduction.production_products.push({
                     product_id: orderProductionProduct.id,
                     product: orderProductionProduct.description,
-                    employee: orderProduction.employee.fullname,
                     machine_id: orderProductionProduct.pivot.machine_id,
                     machine: this.machines.find(machine => { return machine.id === orderProductionProduct.pivot.machine_id }).name,
-                    kilos: orderProductionProduct.pivot.kilos,
-                    start_date_time: orderProduction.start_date_time,
-                    end_date_time: orderProduction.end_date_time,
+                    minutes_in_maintenance: 0,
                     minutes_should_work: moment(orderProduction.end_date_time, dateTimeFormat).diff(moment(orderProduction.start_date_time, dateTimeFormat), 'minutes'),
-                    minutes_in_maintenance: 0
+                    kilos: orderProductionProduct.pivot.kilos,
+                    show_extras: 0
                   })
                 }
               })
+              if (filteredOrderProduction.production_products.length > 0) {
+                this.filteredOrderProductions.push(filteredOrderProduction)
+              }
             })
             this.filteredProductionEvents = []
             result[1].forEach(productionEvent => {
-              let filteredOrderProductionProductsByMachine = this.filteredOrderProductionProducts.filter(productionProduct => {
-                return productionProduct.machine_id === productionEvent.machine_id
-              })
-              filteredOrderProductionProductsByMachine.forEach(productionProduct => {
-                let productionProductStartDateTime = moment(productionProduct.start_date_time, dateTimeFormat)
-                let productionProductEndDateTime = moment(productionProduct.end_date_time, dateTimeFormat)
-                let productionEventStartDateTime = moment(productionEvent.start_date_time, dateTimeFormat)
-                let productionEventEndDateTime = moment(productionEvent.end_date_time, dateTimeFormat)
-                if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]')) {
-                  let minutesInMaintenance = productionEventEndDateTime.diff(productionEventStartDateTime, 'minutes')
-                  productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
-                } else if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isAfter(productionProductEndDateTime)) {
-                  let minutesInMaintenance = productionProductEndDateTime.diff(productionEventStartDateTime, 'minutes')
-                  productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
-                } else if (productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventStartDateTime.isBefore(productionProductStartDateTime)) {
-                  let minutesInMaintenance = productionEventEndDateTime.diff(productionProductStartDateTime, 'minutes')
-                  productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
-                }
+              this.filteredOrderProductions.forEach(orderProduction => {
+                orderProduction.production_products.forEach(productionProduct => {
+                  if (productionProduct.machine_id === productionEvent.machine_id) {
+                    let productionProductStartDateTime = moment(orderProduction.start_date_time, dateTimeFormat)
+                    let productionProductEndDateTime = moment(orderProduction.end_date_time, dateTimeFormat)
+                    let productionEventStartDateTime = moment(productionEvent.start_date_time, dateTimeFormat)
+                    let productionEventEndDateTime = moment(productionEvent.end_date_time, dateTimeFormat)
+                    if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]')) {
+                      let minutesInMaintenance = productionEventEndDateTime.diff(productionEventStartDateTime, 'minutes')
+                      productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
+                    } else if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isAfter(productionProductEndDateTime)) {
+                      let minutesInMaintenance = productionProductEndDateTime.diff(productionEventStartDateTime, 'minutes')
+                      productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
+                    } else if (productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventStartDateTime.isBefore(productionProductStartDateTime)) {
+                      let minutesInMaintenance = productionEventEndDateTime.diff(productionProductStartDateTime, 'minutes')
+                      productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
+                    }
+                  }
+                })
               })
               this.filteredProductionEvents.push({...productionEvent})
             })
           })
         },
-        findMaxTableProductionItem: function (productId, machineId) {
+        findMachineProductTableItem: function (productId, machineId) {
           let maxTableProductionItem = this.machineProductTable.find(MachineProductTableItem => {
             return MachineProductTableItem.machine_id === machineId && MachineProductTableItem.product_id === productId
           })
           return maxTableProductionItem || {}
         },
         selectMachineProductTableItem: function (productId, machineId) {
-          this.selectedMachineProductTableItem = this.findMaxTableProductionItem(productId, machineId)
+          this.selectedMachineProductTableItem = this.findMachineProductTableItem(productId, machineId)
         },
         createExcelFile: function () {
           let options = {
@@ -296,6 +402,9 @@ import {remote} from "electron"
       },
       created () {
         this.setMachineProductTable()
+      },
+      components: {
+        MauBarChart
       }
     }
 </script>
