@@ -7,22 +7,11 @@ import store from './store'
 import { sync } from 'vuex-router-sync'
 import MauPlugin from 'renderer/components/mau-components/mau-components-plugin'
 import VueResource from 'vue-resource'
-import moment from 'moment'
 import Notifications from 'vue-notification'
 import VeeValidate, { Validator } from 'vee-validate'
 import VeeValidateDictionary from 'renderer/api/functions/VeeValidateDictionary'
 import VeeValidateCustomRules from 'renderer/api/functions/VeeValidateCustomRules'
 Vue.use(Notifications)
-moment.locale('es', {
-  longDateFormat: {
-    LT: 'HH:mm',
-    LTS: 'HH:mm:ss',
-    L: 'YYYY-MM-DD',
-    LL: 'D MMMM YYYY',
-    LLL: 'D MMMM YYYY HH:mm',
-    LLLL: 'dddd D MMMM YYYY HH:mm'
-  }
-})
 Vue.use(MauPlugin)
 Vue.use(BootstrapVue)
 Vue.use(MauVueComponents)

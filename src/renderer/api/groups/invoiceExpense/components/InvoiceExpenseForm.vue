@@ -142,7 +142,24 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group form-row" v-if="expense.expenseInvoicePaymentForm.id === 3">
+        <div class="form-group form-row"
+             v-if="isExpenseInvoicePaymentFormTransfer"
+        >
+            <div class="col-sm-12">
+                <label>
+                    Ya se emitio la factura?
+                </label>
+                <mau-form-input-check-box
+                        :initialValue="initialHasDateEmitted"
+                        v-model="hasDateEmitted"
+                >
+
+                </mau-form-input-check-box>
+            </div>
+        </div>
+        <div class="form-group form-row"
+             v-if="isExpenseInvoicePaymentFormTransfer && hasDateEmitted"
+        >
             <div class="col-sm-12">
                 <mau-form-input-date
                         :name="ExpensePropertiesReference.DATE_EMITTED.name"
@@ -154,6 +171,14 @@
                         v-validate="'required'"
                 >
                 </mau-form-input-date>
+            </div>
+        </div>
+        <div class="form-group form-row"
+            v-if="!isExpenseInvoicePaymentFormTransfer"
+        >
+            <div class="col-sm-12">
+                <label>{{ExpensePropertiesReference.DATE_EMITTED.title}}</label>
+                <div>{{expense.datePaid}}</div>
             </div>
         </div>
         <div class="form-group form-row"
@@ -224,7 +249,6 @@
                 :supplier="expense.supplier && expense.supplier.id ? expense.supplier : {}"
         >
         </expense-items>
-
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-number
@@ -346,6 +370,8 @@
         hasProvisionDate: 0,
         initialHasDatePaid: 1,
         hasDatePaid: 1,
+        initialHasDateEmitted: 1,
+        hasDateEmitted: 0,
         expenseMoneySourceEndpointName: EntityTypes.EXPENSE_MONEY_SOURCE.apiName,
         supplierEndpointName: EntityTypes.SUPPLIER.apiName,
         expenseItemEndpointName: EntityTypes.EXPENSE_ITEM.apiName,
@@ -412,7 +438,6 @@
     },
     methods: {
       setInitialValues: function () {
-        this.initialValues[ExpensePropertiesReference.DATE_EMITTED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_EMITTED.name)
         this.initialValues[ExpensePropertiesReference.TAX.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.TAX.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_ISR_RETAINED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_ISR_RETAINED.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_TAX_RETAINED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_TAX_RETAINED.name)
@@ -434,18 +459,23 @@
           this.initialHasProvisionDate = 1
         }
         this.initialValues[ExpensePropertiesReference.DATE_PAID.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_PAID.name)
+        this.initialValues[ExpensePropertiesReference.DATE_EMITTED.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.DATE_EMITTED.name)
         if (this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name].id === 3) {
           if (moment(this.initialValues[ExpensePropertiesReference.DATE_PAID.name], 'YYYY-MM-DD').isValid()) {
             this.initialHasDatePaid = 1
           } else {
             this.initialHasDatePaid = 0
           }
+          if (moment(this.initialValues[ExpensePropertiesReference.DATE_EMITTED.name], 'YYYY-MM-DD').isValid()) {
+            this.initialHasDateEmitted = 1
+          } else {
+            this.initialHasDateEmitted = 0
+          }
         }
       },
       save: function () {
         let directParams = {
           [ExpensePropertiesReference.EXPENSE_TYPE.relationship_id_name]: 2,
-          [ExpensePropertiesReference.DATE_EMITTED.name]: this.isExpenseInvoicePaymentFormTransfer ? this.expense.dateEmitted : this.expense.datePaid,
           [ExpensePropertiesReference.COMMENTS.name]: this.expense.comments,
           [ExpensePropertiesReference.INTERNAL_CODE.name]: this.expense.internalCode,
           [ExpensePropertiesReference.TAX.name]: this.expense.tax,
@@ -467,6 +497,8 @@
             ? this.expense.invoiceProvisionDate : '0000-00-00',
           [ExpensePropertiesReference.DATE_PAID.name]: !this.isExpenseInvoicePaymentFormTransfer ? this.expense.datePaid
             : (this.hasDatePaid ? this.expense.datePaid : '0000-00-00'),
+          [ExpensePropertiesReference.DATE_EMITTED.name]: !this.isExpenseInvoicePaymentFormTransfer ? this.expense.datePaid
+            : (this.hasDateEmitted ? this.expense.dateEmitted : '0000-00-00'),
           [ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name]: this.expense.expenseInvoicePaymentMethod
             ? this.expense.expenseInvoicePaymentMethod[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name]: this.expense.expenseInvoicePaymentForm

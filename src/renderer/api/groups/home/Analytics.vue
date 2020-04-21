@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="px-5">
         <mau-form-input-select-static
             :availableObjects="options"
             :initialObject="initialTabIndex"
@@ -44,7 +44,7 @@
         }
       },
       created () {
-        this.initialTabIndex = this.options[6]
+        this.initialTabIndex = this.options[4]
       },
       components: {
         BagInventoryReport,

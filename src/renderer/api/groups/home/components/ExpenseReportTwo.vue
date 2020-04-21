@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div class="row">
             <div class="col-sm-12 col-md-5">
                 <mau-form-input-select-static
@@ -15,7 +15,7 @@
             <div class="col-sm-12 col-md-5">
                 <mau-form-input-select-static
                         :availableObjects="monthOptions"
-                        :initialObject="monthOptions[0]"
+                        :initialObject="initialMonthSelected"
                         :displayProperty="'text'"
                         :name="'monthSelect'"
                         :trackBy="'value'"
@@ -37,14 +37,18 @@
                <thead>
                <tr>
                    <th>Codigo interno</th>
-                   <th>Proveedor</th>
                    <th>Banco</th>
                    <th>Forma de pago</th>
-                   <th>Fecha de pago</th>
-                   <th>Estado de la factura</th>
-                   <th>Codigo de la factura</th>
+                   <th>Status</th>
+                   <th>Fecha de emision</th>
+                   <th>Proveedor</th>
                    <th>Total</th>
                    <th>Iva</th>
+                   <th>Isr</th>
+                   <th>Codigo de la factura</th>
+                   <th>ISR retenido</th>
+                   <th>IVA retenido</th>
+                   <th>Fecha de pago</th>
                </tr>
                </thead>
                 <tbody>
@@ -53,28 +57,40 @@
                             {{expense['Codigo interno']}}
                         </td>
                         <td class="text-left">
-                            {{expense['Proveedor']}}
-                        </td>
-                        <td class="text-left">
                             {{expense['Banco']}}
                         </td>
                         <td>
                             {{expense['Forma de pago']}}
                         </td>
-                        <td>
-                            {{expense['Fecha de pago']}}
-                        </td>
                         <td class="text-left">
                             {{expense['Estado de la factura']}}
                         </td>
                         <td>
-                            {{expense['Codigo de la factura']}}
+                            {{expense['Fecha de emision']}}
+                        </td>
+                        <td class="text-left">
+                            {{expense['Proveedor']}}
                         </td>
                         <td>
                             {{expense['Total']}}
                         </td>
                         <td>
                             {{expense['Iva']}}
+                        </td>
+                        <td>
+                            {{expense['Isr']}}
+                        </td>
+                        <td>
+                            {{expense['Codigo de la factura']}}
+                        </td>
+                        <td>
+                            {{expense['ISR retenido']}}
+                        </td>
+                        <td>
+                            {{expense['IVA retenido']}}
+                        </td>
+                        <td>
+                            {{expense['Fecha de pago']}}
                         </td>
                     </tr>
                 </tbody>
@@ -100,24 +116,15 @@
             {value: '2020', text: '2020'},
             {value: '2021', text: '2021'}
           ],
-          monthSelected: {value: '04', text: 'Abril'},
-          monthOptions: [
-            {value: '01', text: 'Enero'},
-            {value: '02', text: 'Febrero'},
-            {value: '03', text: 'Marzo'},
-            {value: '04', text: 'Abril'},
-            {value: '05', text: 'Mayo'},
-            {value: '06', text: 'Junio'},
-            {value: '07', text: 'Julio'},
-            {value: '08', text: 'Agosto'},
-            {value: '09', text: 'Septiembre'},
-            {value: '10', text: 'Octubre'},
-            {value: '11', text: 'Noviembre'},
-            {value: '12', text: 'Diciembre'}
-          ]
+          monthSelected: {},
+          initialMonthSelected: {},
+          monthOptions: moment.months().map(function (monthName, i) {
+            return {value: i, text: monthName}
+          })
         }
       },
       created () {
+        this.initialMonthSelected = this.monthOptions[moment().month()]
       },
       methods: {
         createExcelFile: function () {
@@ -143,7 +150,7 @@
           let year = this.yearSelected.value
           let month = this.monthSelected.value
           let startMomentDate = moment(year + '-' + month + '-01')
-          let startDate = startMomentDate.format('YYYY-MM-DD')
+          let startDate = startMomentDate.format('YYYY-M-DD')
           let endDate = startMomentDate.add(1, 'M').format('YYYY-MM-DD')
           Promise.all([
             GenericApiOperations.list(EntityTypes.EXPENSE.apiName,
@@ -179,13 +186,17 @@
                 return {
                   'Proveedor': expense.supplier.name,
                   'Fecha de pago': expense.date_paid,
+                  'Fecha de emision': expense.date_emitted,
                   'Banco': expense.expense_money_source.name,
                   'Forma de pago': expense.expense_invoice_payment_form.name,
                   'Estado de la factura': expense.expense_invoice_status.name,
                   'Total': total,
                   'Iva': expense.tax,
+                  'Isr': (total - expense.tax).toFixed(2),
                   'Codigo interno': expense.internal_code,
-                  'Codigo de la factura': expense.invoice_code
+                  'Codigo de la factura': expense.invoice_code,
+                  'ISR retenido': expense.invoice_isr_retained,
+                  'IVA retenido': expense.invoice_tax_retained
                 }
               })
             })

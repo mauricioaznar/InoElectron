@@ -23,6 +23,21 @@
                 }"
         >
         </mau-form-group-date-time>
+        <div class="form-group" v-if="isMachineRequired">
+            <mau-form-input-select-dynamic
+                    :initialObject="initialValues[ProductionEventPropertiesReference.MACHINE.name]"
+                    :label="ProductionEventPropertiesReference.MACHINE.title"
+                    :displayProperty="'name'"
+                    v-model="productionEvent.machine"
+                    :name="ProductionEventPropertiesReference.MACHINE.name"
+                    :data-vv-as="ProductionEventPropertiesReference.MACHINE.title"
+                    :error="errors.has(ProductionEventPropertiesReference.MACHINE.name) ? errors.first(ProductionEventPropertiesReference.MACHINE.name) : ''"
+                    :endpointName="machineEndpointName"
+                    :disabled="!userHasWritePrivileges"
+                    v-validate="'object_required'"
+            >
+            </mau-form-input-select-dynamic>
+        </div>
         <div class="form-group">
             <mau-form-input-select-dynamic
                     :apiOperationOptions="{filterOrderBy: 'id|asc'}"
@@ -36,21 +51,6 @@
                     :endpointName="productionEventTypeEndpointName"
                     :disabled="!userHasWritePrivileges"
                     :multiselect="true"
-                    v-validate="'object_required'"
-            >
-            </mau-form-input-select-dynamic>
-        </div>
-        <div class="form-group" v-if="isMachineRequired">
-            <mau-form-input-select-dynamic
-                    :initialObject="initialValues[ProductionEventPropertiesReference.MACHINE.name]"
-                    :label="ProductionEventPropertiesReference.MACHINE.title"
-                    :displayProperty="'name'"
-                    v-model="productionEvent.machine"
-                    :name="ProductionEventPropertiesReference.MACHINE.name"
-                    :data-vv-as="ProductionEventPropertiesReference.MACHINE.title"
-                    :error="errors.has(ProductionEventPropertiesReference.MACHINE.name) ? errors.first(ProductionEventPropertiesReference.MACHINE.name) : ''"
-                    :endpointName="machineEndpointName"
-                    :disabled="!userHasWritePrivileges"
                     v-validate="'object_required'"
             >
             </mau-form-input-select-dynamic>
