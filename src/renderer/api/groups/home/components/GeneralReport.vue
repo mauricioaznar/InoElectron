@@ -248,7 +248,7 @@
             if (productionItems.length > 0) {
               let minProductionItemKilos = 0
               let maxProductionItemKilos = 0
-              let intervals = 10
+              let intervals = 30
               for (let productionItemIndex = 0; productionItemIndex < productionItems.length; productionItemIndex++) {
                 let productionItem = productionItems[productionItemIndex]
                 if (productionItem.kilos > maxProductionItemKilos) {
