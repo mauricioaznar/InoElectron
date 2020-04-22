@@ -205,6 +205,7 @@
                   machine_id: machine.id,
                   machine: machine.name,
                   product_id: product.id,
+                  product_type_id: product.product_type_id,
                   product: product.description,
                   max_kilo_production_per_hour: 0,
                   production_items: [],
@@ -218,23 +219,31 @@
             let orderProduction = this.allOrderProductions[orderProductionIndex]
             let orderProductionProducts = orderProduction.products
             for (let orderProductionProductIndex = 0; orderProductionProductIndex < orderProductionProducts.length; orderProductionProductIndex++) {
+              let productionProduct = orderProductionProducts[orderProductionProductIndex]
               let machineProductTableItem = this.machineProductTable.find(machineProductTableItem => {
-                return machineProductTableItem.machine_id === orderProductionProducts[orderProductionProductIndex].pivot.machine_id && machineProductTableItem.product_id === orderProductionProducts[orderProductionProductIndex].id
+                return machineProductTableItem.machine_id === productionProduct.pivot.machine_id && machineProductTableItem.product_id === productionProduct.id
               })
-              let kilos = orderProductionProducts[orderProductionProductIndex].pivot.kilos
-              let employeeFullname = orderProduction.employee.fullname
-              let startDateTime = orderProduction.start_date_time
-              let startDateTimeMoment = moment(startDateTime, dateTimeFormat)
-              let endDateTime = orderProduction.end_date_time
-              let endDateTimeMoment = moment(endDateTime, dateTimeFormat)
-              let kilosStandardized = ((kilos / endDateTimeMoment.diff(startDateTimeMoment, 'minutes')) * 480)
               if (machineProductTableItem) {
+                let countOfTheSameProductTypeInTheSameMachine = 0
+                orderProductionProducts.forEach(productionProduct => {
+                  if (machineProductTableItem.machine_id === productionProduct.pivot.machine_id && productionProduct.product_type_id === machineProductTableItem.product_type_id) {
+                    countOfTheSameProductTypeInTheSameMachine = countOfTheSameProductTypeInTheSameMachine + 1
+                  }
+                })
+                let kilos = productionProduct.pivot.kilos
+                let employeeFullname = orderProduction.employee.fullname
+                let startDateTime = orderProduction.start_date_time
+                let startDateTimeMoment = moment(startDateTime, dateTimeFormat)
+                let endDateTime = orderProduction.end_date_time
+                let endDateTimeMoment = moment(endDateTime, dateTimeFormat)
+                let kilosStandardized = ((kilos / endDateTimeMoment.diff(startDateTimeMoment, 'minutes')) * 480)
                 machineProductTableItem.production_items.push({
                   employee_full_name: employeeFullname,
                   end_date_time: endDateTime,
                   start_date_time: startDateTime,
                   kilos: kilos,
-                  kilos_standardized: kilosStandardized
+                  kilos_standardized: kilosStandardized,
+                  count_in_the_same_order_production: countOfTheSameProductTypeInTheSameMachine
                 })
                 if (machineProductTableItem.max_kilo_production_per_hour < kilos) {
                   machineProductTableItem.max_kilo_production_per_hour = kilos
@@ -276,11 +285,13 @@
                 } else {
                   machineProductTableItem.frequency_production_items[frequencyProductionIndex].count = machineProductTableItem.frequency_production_items[frequencyProductionIndex].count + 1
                 }
-                let frequencyProductionStandardizedIndex = Math.floor(productionItem.kilos_standardized / intervalSize)
-                if (frequencyProductionStandardizedIndex >= intervals) {
-                  machineProductTableItem.frequency_production_items_standardized[intervals - 1].count = machineProductTableItem.frequency_production_items_standardized[intervals - 1].count + 1
-                } else {
-                  machineProductTableItem.frequency_production_items_standardized[frequencyProductionStandardizedIndex].count = machineProductTableItem.frequency_production_items_standardized[frequencyProductionStandardizedIndex].count + 1
+                if (productionItem.count_in_the_same_order_production === 1) {
+                  let frequencyProductionStandardizedIndex = Math.floor(productionItem.kilos_standardized / intervalSize)
+                  if (frequencyProductionStandardizedIndex >= intervals) {
+                    machineProductTableItem.frequency_production_items_standardized[intervals - 1].count = machineProductTableItem.frequency_production_items_standardized[intervals - 1].count + 1
+                  } else {
+                    machineProductTableItem.frequency_production_items_standardized[frequencyProductionStandardizedIndex].count = machineProductTableItem.frequency_production_items_standardized[frequencyProductionStandardizedIndex].count + 1
+                  }
                 }
               }
             }
