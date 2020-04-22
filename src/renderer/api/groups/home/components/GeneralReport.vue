@@ -94,15 +94,17 @@
                 </div>
                 <div class="row collapse my-3" v-for="(productionProduct, productionProductIndex) in orderProduction.production_products" :class="{'show': productionProduct.show_extras === 1}">
                     <div class="col-sm-6">
+                        <label>Sin estandarizar</label>
                         <div class="row" v-for="frequencyItem in findMachineProductTableItem(productionProduct.product_id, productionProduct.machine_id).frequency_production_items">
                             <div class="col-sm-6">{{frequencyItem.label}}</div>
                             <div class="col-sm-6">{{frequencyItem.count}}</div>
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div
-                                class="col-sm-6"
-                        >
+                        <label>Estandarizado</label>
+                        <div class="row" v-for="frequencyItem in findMachineProductTableItem(productionProduct.product_id, productionProduct.machine_id).frequency_production_items_standardized">
+                            <div class="col-sm-6">{{frequencyItem.label}}</div>
+                            <div class="col-sm-6">{{frequencyItem.count}}</div>
                         </div>
                     </div>
                 </div>
@@ -206,7 +208,8 @@
                   product: product.description,
                   max_kilo_production_per_hour: 0,
                   production_items: [],
-                  frequency_production_items: []
+                  frequency_production_items: [],
+                  frequency_production_items_standardized: []
                 })
               }
             }
@@ -221,13 +224,17 @@
               let kilos = orderProductionProducts[orderProductionProductIndex].pivot.kilos
               let employeeFullname = orderProduction.employee.fullname
               let startDateTime = orderProduction.start_date_time
+              let startDateTimeMoment = moment(startDateTime, dateTimeFormat)
               let endDateTime = orderProduction.end_date_time
+              let endDateTimeMoment = moment(endDateTime, dateTimeFormat)
+              let kilosStandardized = ((kilos / endDateTimeMoment.diff(startDateTimeMoment, 'minutes')) * 480)
               if (machineProductTableItem) {
                 machineProductTableItem.production_items.push({
                   employee_full_name: employeeFullname,
                   end_date_time: endDateTime,
                   start_date_time: startDateTime,
-                  kilos: kilos
+                  kilos: kilos,
+                  kilos_standardized: kilosStandardized
                 })
                 if (machineProductTableItem.max_kilo_production_per_hour < kilos) {
                   machineProductTableItem.max_kilo_production_per_hour = kilos
@@ -239,7 +246,6 @@
             let machineProductTableItem = this.machineProductTable[machineProductTableItemIndex]
             let productionItems = machineProductTableItem.production_items
             if (productionItems.length > 0) {
-              console.log(productionItems.length)
               let minProductionItemKilos = 0
               let maxProductionItemKilos = 0
               let intervals = 10
@@ -249,21 +255,33 @@
                   maxProductionItemKilos = productionItem.kilos
                 }
               }
-              let intervalSize = ((maxProductionItemKilos - minProductionItemKilos) / 10).toFixed(2)
-              for (let i = 1; i <= intervals; i++) {
+              let intervalSize = Math.ceil(((maxProductionItemKilos - minProductionItemKilos) / (intervals - 1)) + 1).toFixed(2)
+              for (let i = 1; i <= (intervals); i++) {
                 let maxIntervalLimit = (i * intervalSize).toFixed(2)
                 let minIntervalLimit = (maxIntervalLimit - intervalSize).toFixed(2)
                 machineProductTableItem.frequency_production_items.push({
-                  label: minIntervalLimit + ' - ' + maxIntervalLimit,
-                  min: minIntervalLimit,
-                  max: maxIntervalLimit,
+                  label: (i >= intervals) ? (maxIntervalLimit + ' >') : (minIntervalLimit + ' - ' + maxIntervalLimit),
+                  count: 0
+                })
+                machineProductTableItem.frequency_production_items_standardized.push({
+                  label: (i >= intervals) ? (maxIntervalLimit + ' >') : (minIntervalLimit + ' - ' + maxIntervalLimit),
                   count: 0
                 })
               }
               for (let productionItemIndex = 0; productionItemIndex < productionItems.length; productionItemIndex++) {
                 let productionItem = productionItems[productionItemIndex]
-                let frequencyProductionIndex = (productionItem.kilos - intervalSize) < 0 ? 0 : Math.floor((productionItem.kilos - intervalSize) / intervalSize)
-                machineProductTableItem.frequency_production_items[frequencyProductionIndex].count = machineProductTableItem.frequency_production_items[frequencyProductionIndex].count + 1
+                let frequencyProductionIndex = Math.floor(productionItem.kilos / intervalSize)
+                if (frequencyProductionIndex >= intervals) {
+                  machineProductTableItem.frequency_production_items[intervals - 1].count = machineProductTableItem.frequency_production_items[intervals - 1].count + 1
+                } else {
+                  machineProductTableItem.frequency_production_items[frequencyProductionIndex].count = machineProductTableItem.frequency_production_items[frequencyProductionIndex].count + 1
+                }
+                let frequencyProductionStandardizedIndex = Math.floor(productionItem.kilos_standardized / intervalSize)
+                if (frequencyProductionStandardizedIndex >= intervals) {
+                  machineProductTableItem.frequency_production_items_standardized[intervals - 1].count = machineProductTableItem.frequency_production_items_standardized[intervals - 1].count + 1
+                } else {
+                  machineProductTableItem.frequency_production_items_standardized[frequencyProductionStandardizedIndex].count = machineProductTableItem.frequency_production_items_standardized[frequencyProductionStandardizedIndex].count + 1
+                }
               }
             }
           }
