@@ -7,12 +7,12 @@
                 'routerSize': routerSize
             }"
     >
-      <ring-loader :color="'#000000'" class="spinner-position"></ring-loader>
+      <spinner-loader :color="'#000000'" class="spinner-position"></spinner-loader>
     </div>
 </template>
 
 <script>
-  import RingLoader from 'vue-spinner/src/RingLoader.vue'
+  import SpinnerLoader from 'vue-spinner/src/PulseLoader.vue'
   export default {
     name: 'MauSpinner',
     data () {
@@ -32,7 +32,7 @@
       }
     },
     components: {
-      RingLoader
+      SpinnerLoader
     }
   }
 </script>
