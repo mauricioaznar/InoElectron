@@ -143,6 +143,7 @@
           productionEvents: [],
           filteredProductionEvents: [],
           allOrderProductions: [],
+          allProductionEvents: [],
           filteredOrderProductions: [],
           machines: [],
           products: [],
@@ -192,6 +193,7 @@
         setMachineProductTable: async function () {
           this.isLoading = true
           await this.getOrderProductionsSerial()
+          await this.getProductionEventsSerial()
           await this.getMachineAndProducts()
           for (let machineIndex = 0; machineIndex < this.machines.length; machineIndex++) {
             for (let productIndex = 0; productIndex < this.products.length; productIndex++) {
@@ -230,6 +232,23 @@
                     countOfTheSameProductTypeInTheSameMachine = countOfTheSameProductTypeInTheSameMachine + 1
                   }
                 })
+                let minutesInMaintenance = 0
+                for (let productionEventIndex = 0; productionEventIndex < this.allProductionEvents.length; productionEventIndex++) {
+                  let productionEvent = this.allProductionEvents[productionEventIndex]
+                  if (productionEvent.machine_id === productionProduct.pivot.machine_id) {
+                    let productionProductStartDateTime = moment(orderProduction.start_date_time, dateTimeFormat)
+                    let productionProductEndDateTime = moment(orderProduction.end_date_time, dateTimeFormat)
+                    let productionEventStartDateTime = moment(productionEvent.start_date_time, dateTimeFormat)
+                    let productionEventEndDateTime = moment(productionEvent.end_date_time, dateTimeFormat)
+                    if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]')) {
+                      minutesInMaintenance = minutesInMaintenance + productionEventEndDateTime.diff(productionEventStartDateTime, 'minutes')
+                    } else if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isAfter(productionProductEndDateTime)) {
+                      minutesInMaintenance = minutesInMaintenance + productionProductEndDateTime.diff(productionEventStartDateTime, 'minutes')
+                    } else if (productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventStartDateTime.isBefore(productionProductStartDateTime)) {
+                      minutesInMaintenance = minutesInMaintenance + productionEventEndDateTime.diff(productionProductStartDateTime, 'minutes')
+                    }
+                  }
+                }
                 let kilos = productionProduct.pivot.kilos
                 let employeeFullname = orderProduction.employee.fullname
                 let startDateTime = orderProduction.start_date_time
@@ -319,6 +338,26 @@
           }
           this.allOrderProductions = totalData
         },
+        getProductionEventsSerial: async function () {
+          let currentPage = 1
+          let perPage = 300
+          let nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.PRODUCTION_EVENT.apiName, {paginate: true, page: currentPage, perPage: perPage})
+          let totalData = []
+          while (nextPageUrl !== null) {
+            await Vue.http.get(nextPageUrl).then(result => {
+              totalData = totalData.concat(result.data.data)
+              return result.body.links.pagination
+            }).then(result => {
+              if (currentPage === result.last_page) {
+                nextPageUrl = null
+              } else {
+                currentPage++
+                nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.PRODUCTION_EVENT.apiName, {paginate: true, page: currentPage, perPage: perPage})
+              }
+            })
+          }
+          this.allProductionEvents = totalData
+        },
         getMachineAndProducts: async function () {
           await Promise.all([
             GenericApiOperations.list(EntityTypes.MACHINE.apiName),
@@ -339,6 +378,7 @@
             this.filteredOrderProductions = []
             result[0].forEach(orderProduction => {
               let filteredOrderProduction = {
+                id: orderProduction.id,
                 employee: orderProduction.employee.fullname,
                 production_products: [],
                 start_date_time: orderProduction.start_date_time,
@@ -348,6 +388,7 @@
               orderProduction.products.forEach(orderProductionProduct => {
                 if ((orderProduction.order_production_type_id === 1 && orderProductionProduct.product_type_id === 1) || (orderProduction.order_production_type_id === 2 && orderProductionProduct.product_type_id === 2)) {
                   filteredOrderProduction.production_products.push({
+                    id: orderProductionProduct.id,
                     product_id: orderProductionProduct.id,
                     product: orderProductionProduct.description,
                     machine_id: orderProductionProduct.pivot.machine_id,
