@@ -293,6 +293,11 @@ export default {
     apiName: 'expenseInvoiceCdfiUse',
     title: 'Uso del cdfi'
   },
+  EXPENSE_INVOICE_COMPLEMENTS: {
+    name: 'expenseInvoiceComplement',
+    apiName: 'expenseInvoiceComplement',
+    title: 'Complementos'
+  },
   SUPPLIER: {
     name: 'supplier',
     apiName: 'supplier',

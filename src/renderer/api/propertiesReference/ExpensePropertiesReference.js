@@ -126,6 +126,11 @@ export default {
     relationship_id_name: 'expense_invoice_payment_method_id',
     display: DisplayFunctions.getNameFromObject
   },
+  EXPENSE_INVOICE_COMPLEMENTS: {
+    title: 'Complementos',
+    name: 'expense_invoice_complements',
+    display: DisplayFunctions.getNameFromObject
+  },
   EXPENSE_INVOICE_CDFI_USE: {
     title: 'Uso del cdfi',
     name: 'expense_invoice_cdfi_use',

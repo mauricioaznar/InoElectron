@@ -48,6 +48,7 @@
                    <th>Codigo de la factura</th>
                    <th>ISR retenido</th>
                    <th>IVA retenido</th>
+                   <th>Complementos</th>
                    <th>Fecha de pago</th>
                </tr>
                </thead>
@@ -88,6 +89,9 @@
                         </td>
                         <td>
                             {{expense['IVA retenido']}}
+                        </td>
+                        <td>
+                            {{expense['Complementos']}}
                         </td>
                         <td>
                             {{expense['Fecha de pago']}}
@@ -196,7 +200,8 @@
                   'Codigo interno': expense.internal_code,
                   'Codigo de la factura': expense.invoice_code,
                   'ISR retenido': expense.invoice_isr_retained,
-                  'IVA retenido': expense.invoice_tax_retained
+                  'IVA retenido': expense.invoice_tax_retained,
+                  'Complementos': expense.expense_invoice_complements.map(complement => { return (complement.delivered === 1 ? 'E' : 'P') + ' ' + complement.name }).join(', ')
                 }
               })
             })

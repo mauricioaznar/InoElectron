@@ -126,6 +126,18 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+        <div class="form-group form-row"
+             v-if="isExpenseInvoicePaymentMethodPPD"
+        >
+            <div class="col-sm-12">
+                <expense-invoice-complements-table
+                        :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_COMPLEMENTS.name]"
+                        v-model="expense.expenseInvoiceComplements"
+                        :error="''"
+                >
+                </expense-invoice-complements-table>
+            </div>
+        </div>
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
@@ -335,6 +347,7 @@
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import ExpenseItems from 'renderer/api/components/m2m/ExpenseItems'
   import ExpensePayments from 'renderer/api/components/m2m/ExpensePayments'
+  import ExpenseInvoiceComplementsTable from 'renderer/api/components/m2m/ExpenseInvoiceComplementsTable'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import moment from 'moment'
   export default {
@@ -357,6 +370,7 @@
           expenseInvoiceCdfiUse: {},
           expenseItems: [],
           expensePayments: [],
+          expenseInvoiceComplements: [],
           tax: 0,
           ieps: 0,
           invoiceIsrRetained: 0,
@@ -387,7 +401,8 @@
     components: {
       MauFormInputSelectDynamic,
       ExpenseItems,
-      ExpensePayments
+      ExpensePayments,
+      ExpenseInvoiceComplementsTable
     },
     props: {
       initialObject: {
@@ -434,6 +449,10 @@
       isExpenseInvoicePaymentFormTransfer: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier]
           ? this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier] === 3 : false
+      },
+      isExpenseInvoicePaymentMethodPPD: function () {
+        return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoicePaymentMethod[GlobalEntityIdentifier] === 1 : false
       }
     },
     methods: {
@@ -447,6 +466,7 @@
         this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
         this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_CDFI_USE.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_COMPLEMENTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_COMPLEMENTS.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name)
@@ -512,6 +532,13 @@
         )
         let expenseItemsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.EXPENSE_ITEM)
         relayObjects.push(expenseItemsRelayObjects)
+        let expenseInvoiceComplementsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_COMPLEMENTS.name],
+          this.isExpenseInvoicePaymentMethodPPD ? this.expense.expenseInvoiceComplements : [],
+          'id'
+        )
+        let expenseInvoiceComplementsRelayObjects = ManyToManyHelper.createRelayObject(expenseInvoiceComplementsM2mFilteredObject, EntityTypes.EXPENSE_INVOICE_COMPLEMENTS)
+        relayObjects.push(expenseInvoiceComplementsRelayObjects)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true
