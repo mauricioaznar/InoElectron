@@ -32,6 +32,9 @@ export default {
   getValue: function (value) {
     return value
   },
+  getPercentage: function (value) {
+    return value + '%'
+  },
   getPersona: function (value) {
     return value ? value.fullname : ''
   },

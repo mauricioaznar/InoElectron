@@ -64,7 +64,7 @@
           {
             name: OrderProductionPropertiesReference.PERFORMANCE.name,
             title: OrderProductionPropertiesReference.PERFORMANCE.title,
-            callback: DisplayFunctions.getValue
+            callback: DisplayFunctions.getPercentage
           },
           {
             name: OrderProductionPropertiesReference.MACHINES.name,

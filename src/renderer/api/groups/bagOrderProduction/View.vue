@@ -52,6 +52,11 @@
             title: OrderProductionPropertiesReference.WASTE.title,
             name: OrderProductionPropertiesReference.WASTE.name,
             display: DisplayFunctions.getValue
+          },
+          {
+            title: OrderProductionPropertiesReference.PERFORMANCE.title,
+            name: OrderProductionPropertiesReference.PERFORMANCE.name,
+            display: DisplayFunctions.getPercentage
           }
         ],
         entityType: EntityTypes.BAG_ORDER_PRODUCTION,

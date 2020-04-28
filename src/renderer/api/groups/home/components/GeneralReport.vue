@@ -60,7 +60,7 @@
                 <div class="text-left col-sm-1">Inicio</div>
                 <div class="text-left col-sm-1">Fin</div>
                 <div class="text-left col-sm-2">Empleado</div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                     <div class="row">
                         <div class="col-sm-5 text-left">Producto</div>
                         <div class="col-sm-2 text-left">Maquina</div>
@@ -70,13 +70,14 @@
                         <div class="col-sm-1 text-right">Extras</div>
                     </div>
                 </div>
+                <div class="text-left col-sm-1">Desempeño</div>
             </div>
             <div v-for="orderProduction in filteredOrderProductions" class="my-3">
                 <div class="row">
                     <div class="text-left col-sm-1">{{orderProduction.start_date_time}}</div>
                     <div class="text-left col-sm-1">{{orderProduction.end_date_time}}</div>
                     <div class="text-left col-sm-2">{{orderProduction.employee}}</div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-7">
                         <div v-for="(productionProduct, productionProductIndex) in orderProduction.production_products" class="row">
                             <div class="col-sm-5 text-left">{{productionProduct.product}}</div>
                             <div class="col-sm-2 text-left">{{productionProductIndex !== 0 && orderProduction.order_production_type_id === 1 ? '-' : productionProduct.machine}}</div>
@@ -90,6 +91,21 @@
                                 >
                                 </mau-form-input-check-box>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <div class="form-group">
+                            <mau-form-input-number
+                                    :key="'filteredOrderProductionPerformance' + orderProduction.id"
+                                    :label="''"
+                                    :placeholder="''"
+                                    :name="'filteredOrderProductionPerformance' + orderProduction.id"
+                                    v-model="orderProduction.performance"
+                                    :initialValue="orderProduction.initial_performance"
+                                    :type="'float'"
+                                    @input="updateOrderProductionWithPerformance(orderProduction)"
+                            >
+                            </mau-form-input-number>
                         </div>
                     </div>
                 </div>
@@ -383,6 +399,8 @@
                 production_products: [],
                 start_date_time: orderProduction.start_date_time,
                 end_date_time: orderProduction.end_date_time,
+                initial_performance: orderProduction.performance,
+                performance: orderProduction.performance,
                 order_production_type_id: orderProduction.order_production_type_id
               }
               orderProduction.products.forEach(orderProductionProduct => {
@@ -475,6 +493,17 @@
           xlsx.utils.book_append_sheet(workbook, productsWS, 'Productos producidos')
           let o = remote.dialog.showSaveDialog(options)
           xlsx.writeFile(workbook, o)
+        },
+        updateOrderProductionWithPerformance: function (orderProduction) {
+          console.log(orderProduction)
+          let orderProductionId = orderProduction.id
+          let orderProductionPerformance = orderProduction.performance
+          let orderProductionInitialPerformance = orderProduction.initial_performance
+          if (orderProductionInitialPerformance !== orderProductionPerformance) {
+            GenericApiOperations.edit(EntityTypes.ORDER_PRODUCTION.apiName, orderProductionId, {performance: orderProductionPerformance}).then(result => {
+              console.log(result)
+            })
+          }
         }
       },
       created () {

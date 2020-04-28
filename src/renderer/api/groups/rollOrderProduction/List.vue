@@ -54,7 +54,8 @@
           {
             name: OrderProductionPropertiesReference.PERFORMANCE.name,
             title: OrderProductionPropertiesReference.PERFORMANCE.title,
-            sortField: OrderProductionPropertiesReference.PERFORMANCE.name
+            sortField: OrderProductionPropertiesReference.PERFORMANCE.name,
+            callback: DisplayFunctions.getPercentage
           },
           {
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
