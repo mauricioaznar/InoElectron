@@ -52,6 +52,11 @@
             filterType: 'text'
           },
           {
+            name: OrderProductionPropertiesReference.PERFORMANCE.name,
+            title: OrderProductionPropertiesReference.PERFORMANCE.title,
+            sortField: OrderProductionPropertiesReference.PERFORMANCE.name
+          },
+          {
             name: OrderProductionPropertiesReference.EMPLOYEE.name,
             title: OrderProductionPropertiesReference.EMPLOYEE.title,
             callback: DisplayFunctions.getPersona,

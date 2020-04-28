@@ -320,7 +320,7 @@
         },
         getOrderProductionsSerial: async function () {
           let currentPage = 1
-          let perPage = 1500
+          let perPage = 600
           let nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.ORDER_PRODUCTION.apiName, {paginate: true, page: currentPage, perPage: perPage})
           let totalData = []
           while (nextPageUrl !== null) {

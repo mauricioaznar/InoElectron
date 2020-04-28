@@ -45,6 +45,12 @@ export default {
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.NUMBER
   },
+  PERFORMANCE: {
+    title: 'Desempeño',
+    name: 'performance',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
   ORDER_PRODUCTION_TYPE: {
     title: 'Tipo de orden',
     name: 'order_production_type',

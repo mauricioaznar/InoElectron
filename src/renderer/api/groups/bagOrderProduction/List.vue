@@ -62,6 +62,11 @@
             entityFieldName: 'fullname'
           },
           {
+            name: OrderProductionPropertiesReference.PERFORMANCE.name,
+            title: OrderProductionPropertiesReference.PERFORMANCE.title,
+            callback: DisplayFunctions.getValue
+          },
+          {
             name: OrderProductionPropertiesReference.MACHINES.name,
             title: OrderProductionPropertiesReference.MACHINES.title,
             callback: DisplayFunctions.getFirstNameFromArray,

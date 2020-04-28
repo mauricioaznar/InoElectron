@@ -180,6 +180,18 @@
               >
               </mau-form-input-number>
           </div>
+          <div class="form-group">
+              <mau-form-input-number
+                      :label="OrderProductionPropertiesReference.PERFORMANCE.title"
+                      :name="OrderProductionPropertiesReference.PERFORMANCE.name"
+                      v-model="productionOrder.performance"
+                      :initialValue="initialValues[OrderProductionPropertiesReference.PERFORMANCE.name]"
+                      :error="errors.has(OrderProductionPropertiesReference.PERFORMANCE.name) ? errors.first(OrderProductionPropertiesReference.PERFORMANCE.name) : ''"
+                      :disabled="!userHasWritePrivileges"
+                      :type="'float'"
+              >
+              </mau-form-input-number>
+          </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
           </div>
@@ -215,7 +227,8 @@
           machine: {},
           employee: {},
           waste: '',
-          date: ''
+          date: '',
+          performance: ''
         },
         machineObjects: [],
         machineObject: {},
@@ -296,6 +309,7 @@
         this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.END_DATE_TIME.name)
         this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, OrderProductionPropertiesReference.EMPLOYEE.name)
         this.initialValues[OrderProductionPropertiesReference.WASTE.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.WASTE.name)
+        this.initialValues[OrderProductionPropertiesReference.PERFORMANCE.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.PERFORMANCE.name)
         if (this.extrusionMode) {
           if (this.initialObject && this.initialObject[OrderProductionPropertiesReference.MACHINES.name]) {
             let initialMachines = []
@@ -325,7 +339,8 @@
         let directParams = {
           [OrderProductionPropertiesReference.START_DATE_TIME.name]: this.productionOrder.startDateTime,
           [OrderProductionPropertiesReference.END_DATE_TIME.name]: this.productionOrder.endDateTime,
-          [OrderProductionPropertiesReference.WASTE.name]: this.productionOrder.waste
+          [OrderProductionPropertiesReference.WASTE.name]: this.productionOrder.waste,
+          [OrderProductionPropertiesReference.PERFORMANCE.name]: this.productionOrder.performance
         }
         directParams[OrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : null
         let relayObjects = []

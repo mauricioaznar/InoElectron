@@ -44,7 +44,7 @@
         }
       },
       created () {
-        this.initialTabIndex = this.options[5]
+        this.initialTabIndex = this.options[6]
       },
       components: {
         BagInventoryReport,
