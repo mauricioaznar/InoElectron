@@ -27,6 +27,22 @@
                 <button v-if="!isLoading" class="btn btn-excel" @click="createExcelFile">Excel</button>
             </div>
         </div>
+        <div class="w-100">
+            <div v-for="week in weeks">
+                <div>{{week.label}}</div>
+                <div>{{week.sales_kilos}}</div>
+                <div>{{week.sales_gains}}</div>
+                <div>{{week.bag_production_kilos}}</div>
+                <div>{{week.bag_production_groups}}</div>
+                <div>{{week.roll_production_kilos}}</div>
+                <div>{{week.expenses_lost}}</div>
+            </div>
+        </div>
+        <div class="w-100">
+            <div v-for="sale in sales">
+                <div>{{sale.date}}</div>
+            </div>
+        </div>
         <mau-spinner
                 v-if="isLoading"
                 :sizeType="'dataTable'"
@@ -92,15 +108,20 @@
     import cloneDeep from 'renderer/services/common/cloneDeep'
     import Vue from 'vue'
     const dateFormat = 'YYYY-MM-DD'
+    const startWeekDate = '2019-09-02'
     export default {
       name: 'ExpenseReportTwo',
       data () {
         return {
           isLoading: true,
           allExpenses: [],
+          bagOrderProductions: [],
+          rollOrderProductions: [],
+          sales: [],
           filteredExpenses: [],
           expenseCategories: [],
           expenseSubcategories: [],
+          weeks: [],
           selectedExpenseSubcategory: '',
           initialStartDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
           startDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
@@ -139,9 +160,11 @@
           let expensesWS = xlsx.utils.json_to_sheet(expenses)
           let expenseCategoriesWS = xlsx.utils.json_to_sheet(this.expenseCategories)
           let expenseSubcategoriesWS = xlsx.utils.json_to_sheet(this.expenseSubcategories)
+          let weeksWS = xlsx.utils.json_to_sheet(this.weeks)
           xlsx.utils.book_append_sheet(workbook, expensesWS, 'Gastos')
           xlsx.utils.book_append_sheet(workbook, expenseCategoriesWS, 'Categorias')
           xlsx.utils.book_append_sheet(workbook, expenseSubcategoriesWS, 'Rubros')
+          xlsx.utils.book_append_sheet(workbook, weeksWS, 'Semanas')
           let o = remote.dialog.showSaveDialog(options)
           xlsx.writeFile(workbook, o)
         },
@@ -157,7 +180,8 @@
           let filteredExpenses = []
           allExpenses.forEach(expense => {
             let datePaidMoment = moment(expense.date_paid, dateFormat)
-            if (datePaidMoment.isBetween(startDateMoment, endDateMoment, '[]')) {
+            // Check the correct functioning of is between
+            if (datePaidMoment.isSame(startDateMoment) || datePaidMoment.isSame(endDateMoment) || datePaidMoment.isBetween(startDateMoment, endDateMoment, '[]')) {
               filteredExpenses.push(expense)
               expense.expense_items.forEach(expenseItem => {
                 let loopedExpenseItemExpenseSubcategoryId = expenseItem.expense_subcategory_id
@@ -178,9 +202,16 @@
           this.filteredExpenses = filteredExpenses
         },
         getExpenses: async function () {
+          this.isLoading = true
+          await this.createWeeks()
           await this.getDependentEntities()
           await this.getAllExpensesSerial()
+          await this.getBagOrderProductions()
+          await this.getRollOrderProductions()
+          await this.getSales()
           await this.filterExpenses()
+          await this.filterEntities()
+          this.isLoading = false
         },
         getDependentEntities: async function () {
           Promise.all([
@@ -195,15 +226,34 @@
                 return {...expenseSubcategory, filteredTotal: 0}
               })
             })
-            .finally(() => {
-              this.isLoading = false
+        },
+        createWeeks: function () {
+          this.weeks = []
+          const currentWeek = moment(startWeekDate, dateFormat)
+          const todayInSevensWeeks = moment().add(7, 'days')
+          while (currentWeek.isBefore(todayInSevensWeeks)) {
+            let endOfWeek = currentWeek.clone().add(6, 'days')
+            this.weeks.push({label: (currentWeek.format() + ' - ' + endOfWeek.format()),
+              sales: 0,
+              sales_kilos: 0,
+              sales_gains: 0,
+              bag_production_kilos: 0,
+              bag_production_groups: 0,
+              roll_production_kilos: 0,
+              expenses: 0,
+              expenses_lost: 0
             })
+            currentWeek.add(7, 'days')
+          }
         },
         getAllExpensesSerial: async function () {
-          this.isLoading = true
           let currentPage = 1
           let perPage = 900
-          let nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.EXPENSE.apiName, {paginate: true, page: currentPage, perPage: perPage})
+          let nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.EXPENSE.apiName, {paginate: true,
+            page: currentPage,
+            perPage: perPage,
+            filterStartDateTime: {date_paid: '2019-09-01'}
+          })
           let totalData = []
           while (nextPageUrl !== null) {
             await Vue.http.get(nextPageUrl).then(result => {
@@ -214,12 +264,164 @@
                 nextPageUrl = null
               } else {
                 currentPage++
-                nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.EXPENSE.apiName, {paginate: true, page: currentPage, perPage: perPage})
+                nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.EXPENSE.apiName, {paginate: true,
+                  page: currentPage,
+                  perPage: perPage,
+                  filterStartDateTime: {date_paid: '2019-09-01'}
+                })
               }
             })
           }
           this.allExpenses = totalData
-          this.isLoading = false
+        },
+        getBagOrderProductions: async function () {
+          let currentPage = 1
+          let perPage = 900
+          let nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.ORDER_PRODUCTION.apiName, {paginate: true,
+            page: currentPage,
+            perPage: perPage,
+            filterStartDateTime: {start_date_time: '2019-09-01'},
+            filterExacts: {order_production_type_id: 1}
+          })
+          let totalData = []
+          while (nextPageUrl !== null) {
+            await Vue.http.get(nextPageUrl).then(result => {
+              totalData = totalData.concat(result.data.data)
+              return result.body.links.pagination
+            }).then(result => {
+              if (currentPage === result.last_page) {
+                nextPageUrl = null
+              } else {
+                currentPage++
+                nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.ORDER_PRODUCTION.apiName, {paginate: true,
+                  page: currentPage,
+                  perPage: perPage,
+                  filterStartDateTime: {start_date_time: '2019-09-01'},
+                  filterExacts: {order_production_type_id: 1}
+                })
+              }
+            })
+          }
+          this.bagOrderProductions = totalData
+        },
+        getRollOrderProductions: async function () {
+          let currentPage = 1
+          let perPage = 900
+          let nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.ORDER_PRODUCTION.apiName, {paginate: true,
+            page: currentPage,
+            perPage: perPage,
+            filterStartDateTime: {start_date_time: '2019-09-01'},
+            filterExacts: {order_production_type_id: 2}
+          })
+          let totalData = []
+          while (nextPageUrl !== null) {
+            await Vue.http.get(nextPageUrl).then(result => {
+              totalData = totalData.concat(result.data.data)
+              return result.body.links.pagination
+            }).then(result => {
+              if (currentPage === result.last_page) {
+                nextPageUrl = null
+              } else {
+                currentPage++
+                nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.ORDER_PRODUCTION.apiName, {paginate: true,
+                  page: currentPage,
+                  perPage: perPage,
+                  filterStartDateTime: {start_date_time: '2019-09-01'},
+                  filterExacts: {order_production_type_id: 2}
+                })
+              }
+            })
+          }
+          this.rollOrderProductions = totalData
+        },
+        getSales: async function () {
+          let currentPage = 1
+          let perPage = 900
+          let nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.ORDER_SALE.apiName, {paginate: true,
+            page: currentPage,
+            perPage: perPage,
+            filterStartDateTime: {date: '2019-09-01'}
+          })
+          let totalData = []
+          while (nextPageUrl !== null) {
+            await Vue.http.get(nextPageUrl).then(result => {
+              totalData = totalData.concat(result.data.data)
+              return result.body.links.pagination
+            }).then(result => {
+              if (currentPage === result.last_page) {
+                nextPageUrl = null
+              } else {
+                currentPage++
+                nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.ORDER_SALE.apiName, {paginate: true,
+                  page: currentPage,
+                  perPage: perPage,
+                  filterStartDateTime: {date: '2019-09-01'}
+                })
+              }
+            })
+          }
+          this.sales = totalData
+        },
+        filterEntities: async function () {
+          this.sales.forEach(sale => {
+            let saleDateMoment = moment(sale.date, dateFormat)
+            let startWeekDateMoment = moment(startWeekDate, dateFormat)
+            if (saleDateMoment.isAfter(startWeekDateMoment)) {
+              let daysSince = saleDateMoment.diff(startWeekDateMoment, 'days')
+              let weekArrayIndex = Math.floor((daysSince / 7))
+              this.weeks[weekArrayIndex].sales = this.weeks[weekArrayIndex].sales + 1
+              sale.products.forEach(product => {
+                this.weeks[weekArrayIndex].sales_gains = this.weeks[weekArrayIndex].sales_gains + (product.pivot.kilos * product.pivot.kilo_price)
+                this.weeks[weekArrayIndex].sales_kilos = this.weeks[weekArrayIndex].sales_kilos + product.pivot.kilos
+              })
+            }
+          })
+          this.bagOrderProductions.forEach(bagOrderProduction => {
+            let saleDateMoment = moment(bagOrderProduction.start_date_time, dateFormat)
+            let startWeekDateMoment = moment(startWeekDate, dateFormat)
+            if (saleDateMoment.isAfter(startWeekDateMoment)) {
+              let daysSince = saleDateMoment.diff(startWeekDateMoment, 'days')
+              let weekArrayIndex = Math.floor((daysSince / 7))
+              bagOrderProduction.products.forEach(product => {
+                if (product.product_type_id === 1) {
+                  this.weeks[weekArrayIndex].bag_production_kilos = this.weeks[weekArrayIndex].bag_production_kilos + product.pivot.kilos
+                  this.weeks[weekArrayIndex].bag_production_groups = this.weeks[weekArrayIndex].bag_production_groups + product.pivot.groups
+                }
+              })
+            }
+          })
+          this.rollOrderProductions.forEach(rollOrderProduction => {
+            let saleDateMoment = moment(rollOrderProduction.start_date_time, dateFormat)
+            let startWeekDateMoment = moment(startWeekDate, dateFormat)
+            if (saleDateMoment.isAfter(startWeekDateMoment)) {
+              let daysSince = saleDateMoment.diff(startWeekDateMoment, 'days')
+              let weekArrayIndex = Math.floor((daysSince / 7))
+              rollOrderProduction.products.forEach(product => {
+                if (product.product_type_id === 2) {
+                  this.weeks[weekArrayIndex].roll_production_kilos = this.weeks[weekArrayIndex].roll_production_kilos + product.pivot.kilos
+                }
+              })
+            }
+          })
+          this.allExpenses.forEach(expense => {
+            let saleDateMoment = moment(expense.date_paid, dateFormat)
+            let startWeekDateMoment = moment(startWeekDate, dateFormat)
+            if (saleDateMoment.isAfter(startWeekDateMoment)) {
+              let daysSince = saleDateMoment.diff(startWeekDateMoment, 'days')
+              let weekArrayIndex = Math.floor((daysSince / 7))
+              expense.expense_items.forEach(expenseItem => {
+                if (expenseItem.expense_subcategory_id !== 12) {
+                  if (weekArrayIndex === this.weeks.length - 2) {
+                    console.log(expenseItem.description)
+                    console.log(expenseItem.expense_subcategory.name)
+                    console.log(expense.date_paid)
+                    console.log(expenseItem.subtotal)
+                  }
+                  this.weeks[weekArrayIndex].expenses_lost = this.weeks[weekArrayIndex].expenses_lost + expenseItem.subtotal
+                }
+              })
+            }
+          })
         },
         currencyFormat: function (num) {
           return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
