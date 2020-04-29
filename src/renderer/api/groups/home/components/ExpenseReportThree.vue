@@ -27,7 +27,12 @@
                 <button v-if="!isLoading" class="btn btn-excel" @click="createExcelFile">Excel</button>
             </div>
         </div>
-        <div class="w-100">
+        <mau-spinner
+                v-if="isLoading"
+                :sizeType="'dataTable'"
+        >
+        </mau-spinner>
+        <div class="w-100" v-if="!isLoading">
             <div v-for="week in weeks">
                 <div>{{week.label}}</div>
                 <div>{{week.sales_kilos}}</div>
@@ -38,16 +43,6 @@
                 <div>{{week.expenses_lost}}</div>
             </div>
         </div>
-        <div class="w-100">
-            <div v-for="sale in sales">
-                <div>{{sale.date}}</div>
-            </div>
-        </div>
-        <mau-spinner
-                v-if="isLoading"
-                :sizeType="'dataTable'"
-        >
-        </mau-spinner>
             <div class="col-sm-6">
                 <div class="row mt-5">
                     <div class="col-sm-6 text-center text-uppercase"><b>Nombre</b></div>
@@ -119,6 +114,13 @@
           rollOrderProductions: [],
           sales: [],
           filteredExpenses: [],
+          filteredBagOrderProductions: [],
+          filteredRollOrderProductions: [],
+          filteredSales: [],
+          filteredTotalKilosBagProduced: 0,
+          filteredTotalKilosRollProduced: 0,
+          filteredTotalKilosSold: 0,
+          filteredTotalMoneyGained: 0,
           expenseCategories: [],
           expenseSubcategories: [],
           weeks: [],
@@ -165,6 +167,15 @@
           xlsx.utils.book_append_sheet(workbook, expenseCategoriesWS, 'Categorias')
           xlsx.utils.book_append_sheet(workbook, expenseSubcategoriesWS, 'Rubros')
           xlsx.utils.book_append_sheet(workbook, weeksWS, 'Semanas')
+          let equilibriumWS = xlsx.utils.json_to_sheet([])
+          xlsx.utils.book_append_sheet(workbook, equilibriumWS, 'Punto de equilibrio')
+          equilibriumWS = workbook.Sheets['Punto de equilibrio']
+          equilibriumWS[xlsx.utils.encode_cell({c: 4, r: 4})] = {v: 'Vetas', t: 's'}
+          equilibriumWS[xlsx.utils.encode_cell({c: 1, r: 0})] = {v: 'this.filteredTotalMoneyGained', t: 's'}
+          equilibriumWS[xlsx.utils.encode_cell({c: 0, r: 1})] = {v: 'Kilos en venta'}
+          equilibriumWS[xlsx.utils.encode_cell({c: 1, r: 1})] = {v: this.filteredTotalKilosSold, t: 's'}
+          equilibriumWS[xlsx.utils.encode_cell({c: 0, r: 2})] = {v: 'Kilos producidos'}
+          equilibriumWS[xlsx.utils.encode_cell({c: 0, r: 2})] = {v: this.filteredTotalKilosBagProduced}
           let o = remote.dialog.showSaveDialog(options)
           xlsx.writeFile(workbook, o)
         },
@@ -200,6 +211,40 @@
               : aMomentDate.isBefore(bMomentDate) ? -1 : 0)
           })
           this.filteredExpenses = filteredExpenses
+          this.filteredTotalKilosBagProduced = 0
+          let bagOrderProductions = cloneDeep(this.bagOrderProductions)
+          bagOrderProductions.forEach(bagOrderProduction => {
+            let startDateTimeMoment = moment(bagOrderProduction.start_date_time, dateFormat)
+            if (startDateTimeMoment.isSame(startDateMoment) || startDateTimeMoment.isSame(endDateMoment) || startDateTimeMoment.isBetween(startDateMoment, endDateMoment)) {
+              bagOrderProduction.products.forEach(product => {
+                if (product.product_type_id === 1) {
+                  this.filteredTotalKilosBagProduced = this.filteredTotalKilosBagProduced + product.pivot.kilos
+                }
+              })
+            }
+          })
+          this.filteredTotalKilosRollProduced = 0
+          let rollOrderProductions = cloneDeep(this.rollOrderProductions)
+          rollOrderProductions.forEach(rollOrderProduction => {
+            let startDateTimeMoment = moment(rollOrderProduction.start_date_time, dateFormat)
+            if (startDateTimeMoment.isSame(startDateMoment) || startDateTimeMoment.isSame(endDateMoment) || startDateTimeMoment.isBetween(startDateMoment, endDateMoment)) {
+              rollOrderProduction.products.forEach(product => {
+                this.filteredTotalKilosRollProduced = this.filteredTotalKilosRollProduced + product.pivot.kilos
+              })
+            }
+          })
+          this.filteredTotalKilosSold = 0
+          this.filteredTotalMoneyGained = 0
+          let sales = cloneDeep(this.sales)
+          sales.forEach(sale => {
+            let startDateTimeMoment = moment(sale.date, dateFormat)
+            if (startDateTimeMoment.isSame(startDateMoment) || startDateTimeMoment.isSame(endDateMoment) || startDateTimeMoment.isBetween(startDateMoment, endDateMoment)) {
+              sale.products.forEach(product => {
+                this.filteredTotalKilosSold = this.filteredTotalKilosSold + product.pivot.kilos
+                this.filteredTotalMoneyGained = this.filteredTotalMoneyGained + (product.pivot.kilos * product.pivot.kilo_price)
+              })
+            }
+          })
         },
         getExpenses: async function () {
           this.isLoading = true
@@ -210,7 +255,7 @@
           await this.getRollOrderProductions()
           await this.getSales()
           await this.filterExpenses()
-          await this.filterEntities()
+          await this.filterEntitiesByWeek()
           this.isLoading = false
         },
         getDependentEntities: async function () {
@@ -233,7 +278,7 @@
           const todayInSevensWeeks = moment().add(7, 'days')
           while (currentWeek.isBefore(todayInSevensWeeks)) {
             let endOfWeek = currentWeek.clone().add(6, 'days')
-            this.weeks.push({label: (currentWeek.format() + ' - ' + endOfWeek.format()),
+            this.weeks.push({label: (currentWeek.format(dateFormat) + ' - ' + endOfWeek.format(dateFormat)),
               sales: 0,
               sales_kilos: 0,
               sales_gains: 0,
@@ -362,7 +407,7 @@
           }
           this.sales = totalData
         },
-        filterEntities: async function () {
+        filterEntitiesByWeek: async function () {
           this.sales.forEach(sale => {
             let saleDateMoment = moment(sale.date, dateFormat)
             let startWeekDateMoment = moment(startWeekDate, dateFormat)
@@ -411,12 +456,6 @@
               let weekArrayIndex = Math.floor((daysSince / 7))
               expense.expense_items.forEach(expenseItem => {
                 if (expenseItem.expense_subcategory_id !== 12) {
-                  if (weekArrayIndex === this.weeks.length - 2) {
-                    console.log(expenseItem.description)
-                    console.log(expenseItem.expense_subcategory.name)
-                    console.log(expense.date_paid)
-                    console.log(expenseItem.subtotal)
-                  }
                   this.weeks[weekArrayIndex].expenses_lost = this.weeks[weekArrayIndex].expenses_lost + expenseItem.subtotal
                 }
               })
