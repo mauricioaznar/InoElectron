@@ -35,10 +35,16 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="row mt-5">
-                    <p>Total de kilos producidos en bolseo: {{currencyFormat(filteredTotalKilosBagProduced)}}</p>
-                    <p>Total de kilos producidos en extrusion: {{currencyFormat(filteredTotalKilosRollProduced)}}</p>
-                    <p>Total de kilos en ventas: {{currencyFormat(filteredTotalKilosSold)}}</p>
                     <p>Total de dinero en ventas: {{currencyFormat(filteredTotalMoneyGained)}}</p>
+                </div>
+                <div class="row mt-5">
+                    <p>Total de kilos producidos en bolseo: {{currencyFormat(filteredTotalKilosBagProduced)}}</p>
+                </div>
+                <div class="row mt-5">
+                    <p>Total de kilos en ventas: {{currencyFormat(filteredTotalKilosSold)}}</p>
+                </div>
+                <div class="row mt-5">
+                    <p>Total de kilos producidos en extrusion: {{currencyFormat(filteredTotalKilosRollProduced)}}</p>
                 </div>
             </div>
             <div class="col-sm-6">
