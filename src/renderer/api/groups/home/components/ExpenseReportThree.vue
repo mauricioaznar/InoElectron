@@ -32,17 +32,15 @@
                 :sizeType="'dataTable'"
         >
         </mau-spinner>
-        <div class="w-100" v-if="!isLoading">
-            <div v-for="week in weeks">
-                <div>{{week.label}}</div>
-                <div>{{week.sales_kilos}}</div>
-                <div>{{week.sales_gains}}</div>
-                <div>{{week.bag_production_kilos}}</div>
-                <div>{{week.bag_production_groups}}</div>
-                <div>{{week.roll_production_kilos}}</div>
-                <div>{{week.expenses_lost}}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row mt-5">
+                    <p>Total de kilos producidos en bolseo: {{currencyFormat(filteredTotalKilosBagProduced)}}</p>
+                    <p>Total de kilos producidos en extrusion: {{currencyFormat(filteredTotalKilosRollProduced)}}</p>
+                    <p>Total de kilos en ventas: {{currencyFormat(filteredTotalKilosSold)}}</p>
+                    <p>Total de dinero en ventas: {{currencyFormat(filteredTotalMoneyGained)}}</p>
+                </div>
             </div>
-        </div>
             <div class="col-sm-6">
                 <div class="row mt-5">
                     <div class="col-sm-6 text-center text-uppercase"><b>Nombre</b></div>
@@ -59,7 +57,7 @@
                     </div>
                     <div class="pl-3 row mt-1"
                          v-for="expenseSubcategory in expenseSubcategories.filter(loopedExpenseSubcategory => { return loopedExpenseSubcategory.expense_category_id === expenseCategory.id })"
-                        >
+                    >
                         <div class="col-sm-8">
                             {{expenseSubcategory.name}}
                         </div>
@@ -69,27 +67,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-3">
-                <div class="row">
-                    <div class="col-sm-2 text-center text-uppercase"><b>Fecha</b></div>
-                    <div class="col-sm-3 text-center text-uppercase"><b>Proveedor</b></div>
-                    <div class="col-sm-3 text-center text-uppercase"><b>Concepto</b></div>
-                    <div class="col-sm-2 text-center text-uppercase"><b>Rubro</b></div>
-                    <div class="col-sm-2 text-center text-uppercase"><b>Total</b></div>
-                </div>
-                <div class="mt-1" v-if="!isLoading" v-for="expense in filteredExpenses">
-                    <div v-for="expenseItem in expense.expense_items">
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-2 text-center">{{expense.date_paid}}</div>
-                            <div class="col-sm-3">{{expense.supplier.name}}</div>
-                            <div class="col-sm-3">{{expenseItem.description}}</div>
-                            <div class="col-sm-2">{{expenseItem.expense_subcategory.name}}</div>
-                            <div class="col-sm-2 text-right">{{currencyFormat(expenseItem.subtotal)}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
     </div>
 </template>
 
@@ -159,23 +137,28 @@
               })
             })
           })
+          let filteredMapedExpenseCategoriesForElequilibriumPoint = this.expenseCategories
+            .filter(expenseCategory => { return expenseCategory.id !== 7 })
+            .map(expenseCategory => { return {'Rubro': expenseCategory.name, 'Valor': expenseCategory.filteredTotal} })
+          let equilibriumPoint = [
+            {'Rubro': 'Total de kilos en bolseo', 'Valor': this.filteredTotalKilosBagProduced},
+            {'Rubro': 'Total de kilos en bolseo', 'Valor': this.filteredTotalKilosBagProduced},
+            {'Rubro': '', 'Valor': ''},
+            ...filteredMapedExpenseCategoriesForElequilibriumPoint,
+            {'Rubro': '', 'Valor': ''},
+            {'Rubro': 'Total de kilos en ventas', 'Valor': this.filteredTotalKilosSold},
+            {'Rubro': 'Dinero en ventas', 'Valor': this.filteredTotalMoneyGained}
+          ]
+          let equilibriumWS = xlsx.utils.json_to_sheet(equilibriumPoint)
           let expensesWS = xlsx.utils.json_to_sheet(expenses)
           let expenseCategoriesWS = xlsx.utils.json_to_sheet(this.expenseCategories)
           let expenseSubcategoriesWS = xlsx.utils.json_to_sheet(this.expenseSubcategories)
           let weeksWS = xlsx.utils.json_to_sheet(this.weeks)
+          xlsx.utils.book_append_sheet(workbook, equilibriumWS, 'Punto de equilibrio')
           xlsx.utils.book_append_sheet(workbook, expensesWS, 'Gastos')
           xlsx.utils.book_append_sheet(workbook, expenseCategoriesWS, 'Categorias')
           xlsx.utils.book_append_sheet(workbook, expenseSubcategoriesWS, 'Rubros')
           xlsx.utils.book_append_sheet(workbook, weeksWS, 'Semanas')
-          let equilibriumWS = xlsx.utils.json_to_sheet([])
-          xlsx.utils.book_append_sheet(workbook, equilibriumWS, 'Punto de equilibrio')
-          equilibriumWS = workbook.Sheets['Punto de equilibrio']
-          equilibriumWS[xlsx.utils.encode_cell({c: 4, r: 4})] = {v: 'Vetas', t: 's'}
-          equilibriumWS[xlsx.utils.encode_cell({c: 1, r: 0})] = {v: 'this.filteredTotalMoneyGained', t: 's'}
-          equilibriumWS[xlsx.utils.encode_cell({c: 0, r: 1})] = {v: 'Kilos en venta'}
-          equilibriumWS[xlsx.utils.encode_cell({c: 1, r: 1})] = {v: this.filteredTotalKilosSold, t: 's'}
-          equilibriumWS[xlsx.utils.encode_cell({c: 0, r: 2})] = {v: 'Kilos producidos'}
-          equilibriumWS[xlsx.utils.encode_cell({c: 0, r: 2})] = {v: this.filteredTotalKilosBagProduced}
           let o = remote.dialog.showSaveDialog(options)
           xlsx.writeFile(workbook, o)
         },
