@@ -109,7 +109,7 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group form-row">
+        <div class="form-group form-row" v-if="isComplexDocument">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
                         :key="(expense.expenseType && expense.expenseType['id'] ? expense.expenseType['id'] : '0') + 'expenseInvoicePaymentMethod' "
@@ -186,14 +186,6 @@
             </div>
         </div>
         <div class="form-group form-row"
-            v-if="!isExpenseInvoicePaymentFormTransfer"
-        >
-            <div class="col-sm-12">
-                <label>{{ExpensePropertiesReference.DATE_EMITTED.title}}</label>
-                <div>{{expense.datePaid}}</div>
-            </div>
-        </div>
-        <div class="form-group form-row"
              v-if="isExpenseInvoicePaymentFormTransfer"
         >
             <div class="col-sm-12">
@@ -222,6 +214,14 @@
                         v-validate="'required'"
                 >
                 </mau-form-input-date>
+            </div>
+        </div>
+        <div class="form-group form-row"
+             v-if="!isExpenseInvoicePaymentFormTransfer"
+        >
+            <div class="col-sm-12">
+                <label>{{ExpensePropertiesReference.DATE_EMITTED.title}}:</label>
+                <p> {{expense.datePaid}}</p>
             </div>
         </div>
         <div class="form-group form-row"
@@ -265,7 +265,7 @@
             <div class="col-sm-12">
                 <mau-form-input-number
                         :key="ExpensePropertiesReference.TAX.name + total"
-                        :initialValue="initialValues[ExpensePropertiesReference.TAX.name] ? initialValues[ExpensePropertiesReference.TAX.name] : initialTax"
+                        :initialValue="isInitialObjectDefined ? initialValues[ExpensePropertiesReference.TAX.name] : initialTax"
                         v-model="expense.tax"
                         :label="ExpensePropertiesReference.TAX.title"
                         :placeholder="''"
@@ -430,13 +430,13 @@
       isInitialObjectDefined: function () {
         return this.initialObject && this.initialObject.id
       },
-      isExpenseInvoiceStatusPaid: function () {
-        return this.expense && this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
-          ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 3 : false
+      isComplexDocument: function () {
+        return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
+          ? (this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 1 || this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 2 || this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 3) : false
       },
-      isExpenseInvoiceStatusProvisioned: function () {
-        return this.expense && this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
-          ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 2 : false
+      isSimpleDocument: function () {
+        return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
+          ? (this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 4 || this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 5) : false
       },
       isExpenseInvoiceTypeRetained: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
@@ -445,6 +445,14 @@
       isExpenseInvoiceTypeWithIeps: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
           ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 3 : false
+      },
+      isExpenseInvoiceTypeFullIva: function () {
+        return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 4 : false
+      },
+      isExpenseInvoiceTypeNoIva: function () {
+        return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 5 : false
       },
       isExpenseInvoicePaymentFormTransfer: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier]
@@ -547,8 +555,13 @@
         })
       },
       setTotal: function (total) {
-        this.initialTax = total - (total / 1.16)
-        this.total = total
+        if (this.isExpenseInvoiceTypeFullIva) {
+          this.initialTax = total
+        } else if (this.isExpenseInvoiceTypeNoIva) {
+        } else {
+          this.initialTax = total - (total / 1.16)
+          this.total = total
+        }
       }
     },
     watch: {
