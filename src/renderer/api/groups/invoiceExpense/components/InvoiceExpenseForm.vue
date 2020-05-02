@@ -225,6 +225,7 @@
             </div>
         </div>
         <div class="form-group form-row"
+             v-if="!isExpenseInvoiceStatusProvisioned"
         >
             <div class="col-sm-12">
                 <label>
@@ -430,6 +431,22 @@
       isInitialObjectDefined: function () {
         return this.initialObject && this.initialObject.id
       },
+      isExpenseInvoiceStatusPending: function () {
+        return this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 1 : false
+      },
+      isExpenseInvoiceStatusProvisioned: function () {
+        return this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 2 : false
+      },
+      isExpenseInvoiceStatusPaid: function () {
+        return this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 3 : false
+      },
+      isExpenseInvoiceStatusCanceled: function () {
+        return this.expense.expenseInvoiceStatus && this.expense.expenseInvoiceStatus[GlobalEntityIdentifier]
+          ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] === 4 : false
+      },
       isComplexDocument: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoiceType[GlobalEntityIdentifier]
           ? (this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 1 || this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 2 || this.expense.expenseInvoiceType[GlobalEntityIdentifier] === 3) : false
@@ -523,10 +540,8 @@
           [ExpensePropertiesReference.INVOICE_CODE.name]: this.expense.invoiceCode,
           [ExpensePropertiesReference.INVOICE_PROVISION_DATE.name]: this.hasProvisionDate
             ? this.expense.invoiceProvisionDate : '0000-00-00',
-          [ExpensePropertiesReference.DATE_PAID.name]: !this.isExpenseInvoicePaymentFormTransfer ? this.expense.datePaid
-            : (this.hasDatePaid ? this.expense.datePaid : '0000-00-00'),
-          [ExpensePropertiesReference.DATE_EMITTED.name]: !this.isExpenseInvoicePaymentFormTransfer ? this.expense.datePaid
-            : (this.hasDateEmitted ? this.expense.dateEmitted : '0000-00-00'),
+          [ExpensePropertiesReference.DATE_PAID.name]: this.hasDatePaid ? this.expense.datePaid : '0000-00-00',
+          [ExpensePropertiesReference.DATE_EMITTED.name]: this.hasDateEmitted ? this.expense.dateEmitted : '0000-00-00',
           [ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.relationship_id_name]: this.expense.expenseInvoicePaymentMethod
             ? this.expense.expenseInvoicePaymentMethod[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.relationship_id_name]: this.expense.expenseInvoicePaymentForm
@@ -567,6 +582,15 @@
     watch: {
       initialObject: function (initialObject) {
         this.setInitialValues(initialObject)
+      },
+      'expense.expenseStatus': function (expenseStatus) {
+        if (this.isExpenseInvoiceStatusPaid) {
+          this.hasDatePaid = 1
+        } else if (this.isExpenseInvoiceStatusProvisioned) {
+          this.hasProvisionDate = 1
+        } else if (this.isExpenseInvoiceStatusCanceled) {
+          this.hasDatePaid = 0
+        }
       }
     }
   }

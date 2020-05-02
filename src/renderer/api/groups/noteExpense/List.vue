@@ -53,6 +53,14 @@
             filterType: 'entity',
             entityName: EntityTypes.EXPENSE_ITEM.apiName,
             entityFieldName: 'description'
+          },
+          {
+            title: ExpensePropertiesReference.EXPENSE_STATUS.title,
+            name: ExpensePropertiesReference.EXPENSE_STATUS.name,
+            callback: DisplayFunctions.getNameFromObject,
+            filterType: 'entity',
+            entityName: EntityTypes.EXPENSE_STATUS.apiName,
+            entityFieldName: 'name'
           }
         ]
       }

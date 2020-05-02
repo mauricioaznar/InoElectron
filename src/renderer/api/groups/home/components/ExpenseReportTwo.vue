@@ -25,6 +25,7 @@
             </div>
             <div class="col-md-2">
                 <button v-if="!isLoading" class="btn btn-excel" @click="createExcelFile">Excel</button>
+                <button v-if="!isLoading" class="btn btn-primary" @click="getExpenses">Filtrar</button>
             </div>
         </div>
         <mau-spinner
@@ -53,7 +54,7 @@
                </tr>
                </thead>
                 <tbody>
-                    <tr v-for="expense in expenses">
+                    <tr v-for="expense in paidInvoiceExpensesInDates">
                         <td class="text-left">
                             {{expense['Codigo interno']}}
                         </td>
@@ -114,7 +115,10 @@
       data () {
         return {
           isLoading: true,
-          expenses: [],
+          paidInvoiceExpensesInDates: [],
+          pendingInvoiceExpenses: [],
+          provisionedInvoiceExpenses: [],
+          canceledInvoiceExpenses: [],
           yearSelected: {value: '2020', text: '2020'},
           yearOptions: [
             {value: '2020', text: '2020'},
@@ -123,12 +127,14 @@
           monthSelected: {},
           initialMonthSelected: {},
           monthOptions: moment.months().map(function (monthName, i) {
-            return {value: i, text: monthName}
+            return {value: i + 1, text: monthName}
           })
         }
       },
       created () {
         this.initialMonthSelected = this.monthOptions[moment().month()]
+        this.monthSelected = this.monthOptions[moment().month()]
+        this.getExpenses()
       },
       methods: {
         createExcelFile: function () {
@@ -143,11 +149,43 @@
             ]
           }
           let workbook = xlsx.utils.book_new()
-          let data = this.expenses
-          let ws = xlsx.utils.json_to_sheet(data)
-          xlsx.utils.book_append_sheet(workbook, ws, 'Results')
+          let paidInvoiceExpensesInDatesWS = xlsx.utils.json_to_sheet(this.paidInvoiceExpensesInDates)
+          xlsx.utils.book_append_sheet(workbook, paidInvoiceExpensesInDatesWS, 'Facturas en el mes de ' + this.monthSelected.text)
+          let pendingInvoiceExpensesWS = xlsx.utils.json_to_sheet(this.pendingInvoiceExpenses)
+          xlsx.utils.book_append_sheet(workbook, pendingInvoiceExpensesWS, 'Facturas pendientes')
+          let provisionedInvoiceExpensesWS = xlsx.utils.json_to_sheet(this.provisionedInvoiceExpenses)
+          xlsx.utils.book_append_sheet(workbook, provisionedInvoiceExpensesWS, 'Facturas provisionadas')
+          let canceledInvoiceExpensesWS = xlsx.utils.json_to_sheet(this.canceledInvoiceExpenses)
+          xlsx.utils.book_append_sheet(workbook, canceledInvoiceExpensesWS, 'Facturas canceladas')
           let o = remote.dialog.showSaveDialog(options)
           xlsx.writeFile(workbook, o)
+        },
+        mapExpenseInvoices: function (invoiceExpenses) {
+          return invoiceExpenses.map(expense => {
+            let total = 0
+            expense.expense_items.forEach(expenseItem => {
+              total += expenseItem.subtotal
+            })
+            if (expense.expense_invoice_payment_form.name) {
+              console.log(expense)
+            }
+            return {
+              'Proveedor': expense.supplier.name,
+              'Fecha de pago': expense.date_paid,
+              'Fecha de emision': expense.date_emitted,
+              'Banco': expense.expense_money_source ? expense.expense_money_source.name : '',
+              'Forma de pago': expense.expense_invoice_payment_form ? expense.expense_invoice_payment_form.name : '',
+              'Estado de la factura': expense.expense_invoice_status.name,
+              'Total': total,
+              'Iva': expense.tax,
+              'Isr': (total - expense.tax).toFixed(2),
+              'Codigo interno': expense.internal_code,
+              'Codigo de la factura': expense.invoice_code,
+              'ISR retenido': expense.invoice_isr_retained,
+              'IVA retenido': expense.invoice_tax_retained,
+              'Complementos': expense.expense_invoice_complements.map(complement => { return (complement.delivered === 1 ? 'E' : 'P') + ' ' + complement.name }).join(', ')
+            }
+          })
         },
         getExpenses: function () {
           this.isLoading = true
@@ -162,11 +200,32 @@
                 filterStartDateTime: {date_paid: startDate},
                 filterEndDateTime: {date_paid: endDate},
                 filterExacts: {expense_type_id: 2}
+              }),
+            GenericApiOperations.list(EntityTypes.EXPENSE.apiName,
+              {paginate: false,
+                filterExacts: {
+                  expense_type_id: 2,
+                  expense_invoice_status_id: 1
+                }
+              }),
+            GenericApiOperations.list(EntityTypes.EXPENSE.apiName,
+              {paginate: false,
+                filterExacts: {
+                  expense_type_id: 2,
+                  expense_invoice_status_id: 2
+                }
+              }),
+            GenericApiOperations.list(EntityTypes.EXPENSE.apiName,
+              {paginate: false,
+                filterExacts: {
+                  expense_type_id: 2,
+                  expense_invoice_status_id: 4
+                }
               })
           ])
             .then(result => {
-              let expenses = result[0]
-              expenses.sort(function (a, b) {
+              let paidInvoiceExpensesInDates = result[0]
+              paidInvoiceExpensesInDates.sort(function (a, b) {
                 let aMomentDate = moment(a.date_paid, 'YYYY-MM-DD')
                 let bMomentDate = moment(b.date_paid, 'YYYY-MM-DD')
                 let aExpenseMoneySourceId = a.expense_money_source_id
@@ -182,28 +241,10 @@
                             : a.interal_code > b.internal_code ? 1
                               : a.internal_code < b.internal_code ? -1 : 0)
               })
-              this.expenses = expenses.map(expense => {
-                let total = 0
-                expense.expense_items.forEach(expenseItem => {
-                  total += expenseItem.subtotal
-                })
-                return {
-                  'Proveedor': expense.supplier.name,
-                  'Fecha de pago': expense.date_paid,
-                  'Fecha de emision': expense.date_emitted,
-                  'Banco': expense.expense_money_source.name,
-                  'Forma de pago': expense.expense_invoice_payment_form.name,
-                  'Estado de la factura': expense.expense_invoice_status.name,
-                  'Total': total,
-                  'Iva': expense.tax,
-                  'Isr': (total - expense.tax).toFixed(2),
-                  'Codigo interno': expense.internal_code,
-                  'Codigo de la factura': expense.invoice_code,
-                  'ISR retenido': expense.invoice_isr_retained,
-                  'IVA retenido': expense.invoice_tax_retained,
-                  'Complementos': expense.expense_invoice_complements.map(complement => { return (complement.delivered === 1 ? 'E' : 'P') + ' ' + complement.name }).join(', ')
-                }
-              })
+              this.paidInvoiceExpensesInDates = this.mapExpenseInvoices(paidInvoiceExpensesInDates)
+              this.pendingInvoiceExpenses = this.mapExpenseInvoices(result[1])
+              this.provisionedInvoiceExpenses = this.mapExpenseInvoices(result[2])
+              this.canceledInvoiceExpenses = this.mapExpenseInvoices(result[3])
             })
             .finally(() => {
               this.isLoading = false
@@ -211,12 +252,6 @@
         }
       },
       watch: {
-        yearSelected: function () {
-          this.getExpenses()
-        },
-        monthSelected: function () {
-          this.getExpenses()
-        }
       }
     }
 </script>

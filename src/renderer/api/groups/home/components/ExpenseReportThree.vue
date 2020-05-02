@@ -286,7 +286,8 @@
           let nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.EXPENSE.apiName, {paginate: true,
             page: currentPage,
             perPage: perPage,
-            filterStartDateTime: {date_paid: '2019-09-01'}
+            filterStartDateTime: {date_paid: '2019-09-01'},
+            filterExacts: {expense_status_id: 2}
           })
           let totalData = []
           while (nextPageUrl !== null) {
@@ -301,7 +302,8 @@
                 nextPageUrl = GenericApiUrls.createListUrl(EntityTypes.EXPENSE.apiName, {paginate: true,
                   page: currentPage,
                   perPage: perPage,
-                  filterStartDateTime: {date_paid: '2019-09-01'}
+                  filterStartDateTime: {date_paid: '2019-09-01'},
+                  filterExacts: {expense_status_id: 2}
                 })
               }
             })
