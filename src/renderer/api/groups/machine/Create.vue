@@ -3,6 +3,7 @@
     <mau-crud-create
       :entityType="entityType"
       :callback="callback"
+      :relationshipIdName="relationshipIdName"
     >
       <template slot-scope="params">
         <machine-form :saveFunction="params.save"></machine-form>
@@ -19,7 +20,8 @@
     name: 'CreateMachine',
     data () {
       return {
-        entityType: EntityTypes.MACHINE
+        entityType: EntityTypes.MACHINE,
+        relationshipIdName: 'machine_id'
       }
     },
     props: {

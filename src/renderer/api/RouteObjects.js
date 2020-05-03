@@ -112,6 +112,39 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT_TRAN
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT,
+  {
+    componentName: 'Main',
+    category: Categories.MAINTENANCE
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
   {
     componentName: 'Main',
@@ -454,7 +487,7 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE_ATTEN
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.MACHINE,
   {
     componentName: 'Main',
-    category: Categories.PRODUCTION
+    category: Categories.MAINTENANCE
   },
   [
     RouteObjectHelper.createRouteObject(EntityTypes.MACHINE,

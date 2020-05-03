@@ -13,5 +13,9 @@ export default {
     relationship_id_name: 'machine_type_id',
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
+  },
+  MACHINES_EQUIPMENTS: {
+    title: 'Refacciones/partes/equipos',
+    name: 'machines_equipments'
   }
 }

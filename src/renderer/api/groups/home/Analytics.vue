@@ -16,6 +16,7 @@
         <expense-report-two :key="tabIndex.value + 'expenseReport2'" v-if="tabIndex.value === 4" class="mt-4"></expense-report-two>
         <expense-report-three :key="tabIndex.value + 'expenseReport3'" v-if="tabIndex.value === 5" class="mt-4"></expense-report-three>
         <general-report :key="tabIndex.value + 'generalReport'" v-if="tabIndex.value === 6"> </general-report>
+        <equipment-transaction-report :key="tabIndex.value + 'equipmentTransactionReport'" v-if="tabIndex.value === 7"> </equipment-transaction-report>
     </div>
 </template>
 
@@ -27,6 +28,7 @@
     import ExpenseReportTwo from 'renderer/api/groups/home/components/ExpenseReportTwo'
     import ExpenseReportThree from 'renderer/api/groups/home/components/ExpenseReportThree'
     import GeneralReport from 'renderer/api/groups/home/components/GeneralReport'
+    import EquipmentTransactionReport from 'renderer/api/groups/home/components/EquipmentTransactionReport'
     export default {
       data () {
         return {
@@ -39,7 +41,8 @@
             {value: 3, text: 'Reporte de extrusion'},
             {value: 4, text: 'Resumen de facturas'},
             {value: 5, text: 'Resumen de gastos'},
-            {value: 6, text: 'Resumen general'}
+            {value: 6, text: 'Resumen general'},
+            {value: 7, text: 'Equipment transaction report'}
           ]
         }
       },
@@ -53,7 +56,8 @@
         ProductionReport,
         ExpenseReportTwo,
         ExpenseReportThree,
-        GeneralReport
+        GeneralReport,
+        EquipmentTransactionReport
       },
       methods: {
       }

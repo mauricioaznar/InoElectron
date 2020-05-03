@@ -46,6 +46,25 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
+        <div class="form-group form-row"
+             v-if="isEquipmentTransactionPurchase"
+        >
+            <div class="col-sm-12">
+                <mau-form-input-select-dynamic
+                        v-if=""
+                        :initialObject="initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name]"
+                        :label="EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.title"
+                        :displayProperty="'id'"
+                        :endpointName="equipmentTransactionEndpointName"
+                        v-model="equipmentTransaction.equipmentTransactionRequest"
+                        :name="EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name"
+                        :error="errors.has(EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name) ? errors.first(EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
+        </div>
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
@@ -83,7 +102,8 @@
                 <equipment-transaction-items
                     v-model="equipmentTransaction.equipmentTransactionItems"
                     :initialValues="initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_ITEMS.name]"
-
+                    :requiresPrice="isEquipmentTransactionPurchase"
+                    :requiresMachine="true"
                 >
 
                 </equipment-transaction-items>
@@ -102,7 +122,7 @@
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
-  import EquipmentTransactionItems from './EquipmentTransactionItems'
+  import EquipmentTransactionItems from 'renderer/api/components/m2m/EquipmentTransactionItems'
   export default {
     name: 'ExpenseForm',
     data () {
@@ -114,11 +134,13 @@
           supplier: {},
           equipmentTransactionType: {},
           equipmentTransactionStatus: {},
+          equipmentTransactionRequest: {},
           equipmentTransactionItems: []
         },
         initialValues: {},
         equipmentTransactionStatusEndpointName: EntityTypes.EQUIPMENT_TRANSACTION_STATUS.apiName,
         equipmentTransactionTypeEndpointName: EntityTypes.EQUIPMENT_TRANSACTION_TYPE.apiName,
+        equipmentTransactionEndpointName: EntityTypes.EQUIPMENT_TRANSACTION.apiName,
         branchEndpointName: EntityTypes.BRANCH.apiName,
         supplierEndpointName: EntityTypes.SUPPLIER.apiName,
         buttonDisabled: false
@@ -155,12 +177,16 @@
         return this.initialObject && this.initialObject.id
       },
       total: function () {
+      },
+      isEquipmentTransactionPurchase: function () {
+        return this.equipmentTransaction.equipmentTransactionType && this.equipmentTransaction.equipmentTransactionType.id && this.equipmentTransaction.equipmentTransactionType.id === 2
       }
     },
     methods: {
       setInitialValues: function () {
         this.initialValues[EquipmentTransactionPropertiesReference.DATE_EMITTED.name] = DefaultValuesHelper.simple(this.initialObject, EquipmentTransactionPropertiesReference.DATE_EMITTED.name)
         this.initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.name] = DefaultValuesHelper.object(this.initialObject, EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.name)
+        this.initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name] = DefaultValuesHelper.object(this.initialObject, EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name)
         this.initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_TYPE.name] = DefaultValuesHelper.object(this.initialObject, EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_TYPE.name)
         this.initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_ITEMS.name)
         this.initialValues[EquipmentTransactionPropertiesReference.BRANCH.name] = DefaultValuesHelper.object(this.initialObject, EquipmentTransactionPropertiesReference.BRANCH.name)
@@ -172,7 +198,9 @@
           [EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.relationship_id_name]: this.equipmentTransaction.equipmentTransactionStatus ? this.equipmentTransaction.equipmentTransactionStatus['id'] : (this.isInitialObjectDefined ? 'null' : null),
           [EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_TYPE.relationship_id_name]: this.equipmentTransaction.equipmentTransactionType ? this.equipmentTransaction.equipmentTransactionType['id'] : (this.isInitialObjectDefined ? 'null' : null),
           [EquipmentTransactionPropertiesReference.SUPPLIER.relationship_id_name]: this.equipmentTransaction.supplier ? this.equipmentTransaction.supplier['id'] : (this.isInitialObjectDefined ? 'null' : null),
-          [EquipmentTransactionPropertiesReference.BRANCH.relationship_id_name]: this.equipmentTransaction.branch ? this.equipmentTransaction.branch['id'] : (this.isInitialObjectDefined ? 'null' : null)
+          [EquipmentTransactionPropertiesReference.BRANCH.relationship_id_name]: this.equipmentTransaction.branch ? this.equipmentTransaction.branch['id'] : (this.isInitialObjectDefined ? 'null' : null),
+          [EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.relationship_id_name]: this.equipmentTransaction.equipmentTransactionRequest && this.isEquipmentTransactionPurchase
+            ? this.equipmentTransaction.equipmentTransactionRequest['id'] : (this.isInitialObjectDefined ? 'null' : null)
         }
         let relayObjects = []
         let equipmentTransactionItemsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(

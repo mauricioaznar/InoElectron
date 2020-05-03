@@ -141,6 +141,10 @@ export default {
     name: 'machineType',
     apiName: 'machineType'
   },
+  MACHINE_EQUIPMENT: {
+    name: 'machineEquipment',
+    apiName: 'machineEquipment'
+  },
   EMPLOYEE: {
     name: 'employee',
     apiName: 'employee',
@@ -307,6 +311,18 @@ export default {
     name: 'equipment',
     apiName: 'equipment',
     title: 'Equipo/Refacciones/Servicios'
+  },
+  EQUIPMENT_CATEGORY: {
+    name: 'equipmentCategory',
+    apiName: 'equipmentCategory'
+  },
+  EQUIPMENT_SUBCATEGORY: {
+    name: 'equipmentSubcategory',
+    apiName: 'equipmentSubcategory'
+  },
+  EQUIPMENT_MEASUREMENT_UNIT: {
+    name: 'equipmentMeasurementUnit',
+    apiName: 'equipmentMeasurementUnit'
   },
   EQUIPMENT_TRANSACTION: {
     name: 'equipmentTransaction',

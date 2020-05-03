@@ -12,6 +12,7 @@
       :id="id"
       :entityType="entityType"
       :callback="callback"
+      :relationshipIdName="relationshipIdName"
     >
       <template slot-scope="params">
         <machine-form
@@ -36,7 +37,8 @@
     data () {
       return {
         entityType: EntityTypes.MACHINE,
-        entity: null
+        entity: null,
+        relationshipIdName: 'machine_id'
       }
     },
     props: {

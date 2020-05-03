@@ -28,5 +28,10 @@ export default {
   EQUIPMENT_TRANSACTION_ITEMS: {
     title: 'Elementos de la transaccion',
     name: 'equipment_transaction_items'
+  },
+  EQUIPMENT_TRANSACTION_REQUEST: {
+    title: 'Transaccion tipo pedido',
+    name: 'equipment_transaction_request',
+    relationship_id_name: 'equipment_transaction_request_id'
   }
 }

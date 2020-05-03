@@ -37,6 +37,7 @@
               let hostCreatedIdentifier = result[GlobalEntityIdentifier]
               Notifications.success(this)
               FormSubmitEventBus.emitEvent(true)
+              console.log(relayObjects)
               for (let i = 0; i < relayObjects.length; i++) {
                 let filteredM2MObjects = ManyToManyHelper.getRelayObjectFilteredM2MObjects(relayObjects[i])
                 let entityType = ManyToManyHelper.getRelayObjectEntityType(relayObjects[i])
