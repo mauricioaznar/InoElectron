@@ -78,6 +78,40 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCT,
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT_TRANSACTION,
+  {
+    componentName: 'Main',
+    category: Categories.MAINTENANCE
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT_TRANSACTION,
+      {
+        componentName: 'List',
+        categoryDefault: true,
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT_TRANSACTION,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT_TRANSACTION,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT_TRANSACTION,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
   {
     componentName: 'Main',
@@ -623,6 +657,7 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PAYROLL,
     )
   ]
 ))
+
 
 
 export default routeObjects

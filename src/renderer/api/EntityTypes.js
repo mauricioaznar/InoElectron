@@ -302,6 +302,31 @@ export default {
     name: 'supplier',
     apiName: 'supplier',
     title: 'Proveedor'
+  },
+  EQUIPMENT: {
+    name: 'equipment',
+    apiName: 'equipment',
+    title: 'Equipo/Refacciones/Servicios'
+  },
+  EQUIPMENT_TRANSACTION: {
+    name: 'equipmentTransaction',
+    apiName: 'equipmentTransaction',
+    title: 'Transaccion de equipo'
+  },
+  EQUIPMENT_TRANSACTION_STATUS: {
+    name: 'equipmentTransactionStatus',
+    apiName: 'equipmentTransactionStatus',
+    title: 'Transaccion de equipo'
+  },
+  EQUIPMENT_TRANSACTION_TYPE: {
+    name: 'equipmentTransactionType',
+    apiName: 'equipmentTransactionType',
+    title: 'Transaccion de equipo'
+  },
+  EQUIPMENT_TRANSACTION_ITEM: {
+    name: 'equipmentTransactionItem',
+    apiName: 'equipmentTransactionItem',
+    title: 'Elementos de la transaccion de equipo'
   }
 }
 

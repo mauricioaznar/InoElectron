@@ -24,6 +24,11 @@ export default {
     title: 'Administracion',
     iconClass: 'fa fa-user'
   },
+  MAINTENANCE: {
+    name: 'maintenance',
+    title: 'Mantenimiento',
+    iconClass: 'fa fa-cogs'
+  },
   AUTH: {
     name: 'auth',
     title: 'Otros',
