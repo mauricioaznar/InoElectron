@@ -5,7 +5,7 @@
                       :tableFields="tableFields"
                       :actions="actions"
                       @actionClicked="actionHandler"
-                      :localStoragePrefix="'machineList'"
+                      :localStoragePrefix="'branchList'"
       ></mau-data-table>
     </mau-crud-list>
   </div>
@@ -15,14 +15,14 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-  import MachinePropertiesReference from 'renderer/api/propertiesReference/MachinePropertiesReference'
-  import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import BranchPropertiesReference from 'renderer/api/propertiesReference/BranchPropertiesReference'
   import MauDataTable from 'renderer/api/components/dataTables/MauDataTable'
+  // import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
   export default {
-    name: 'ListMachine',
+    name: 'ListBranch',
     data () {
       return {
-        apiUrl: GenericApiUrls.createListUrl(EntityTypes.MACHINE.apiName, {paginate: true}),
+        apiUrl: GenericApiUrls.createListUrl(EntityTypes.BRANCH.apiName, {paginate: true}),
         actions: [
           {
             name: 'view',
@@ -32,25 +32,9 @@
         ],
         tableFields: [
           {
-            title: MachinePropertiesReference.NAME.title,
-            name: MachinePropertiesReference.NAME.name,
+            title: BranchPropertiesReference.NAME.title,
+            name: BranchPropertiesReference.NAME.name,
             filterType: 'text'
-          },
-          {
-            title: MachinePropertiesReference.MACHINE_TYPE.title,
-            name: MachinePropertiesReference.MACHINE_TYPE.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.MACHINE_TYPE.name,
-            entityFieldName: 'name'
-          },
-          {
-            title: MachinePropertiesReference.BRANCH.title,
-            name: MachinePropertiesReference.BRANCH.name,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.BRANCH.name,
-            entityFieldName: 'name'
           }
         ]
       }
@@ -62,7 +46,7 @@
       actionHandler: function (action, entityObj) {
         if (action.name === 'view') {
           this.$router.push({
-            name: 'ViewMachine',
+            name: 'ViewBranch',
             params: { id: entityObj[GlobalEntityIdentifier] }
           })
         }

@@ -23,9 +23,25 @@
                         :displayProperty="'name'"
                         v-model="machine.machineType"
                         :name="MachinePropertiesReference.MACHINE_TYPE.name"
-                        :error="errors.first(MachinePropertiesReference.MACHINE_TYPE.name)"
+                        :error="errors.has(MachinePropertiesReference.MACHINE_TYPE.name) ? errors.first(MachinePropertiesReference.MACHINE_TYPE.name) : ''"
                         :disabled="!userHasWritePrivileges"
-                        v-validate="'object_required'"
+                        v-validate="'required'"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
+        </div>
+        <div class="form-group form-row">
+            <div class="col-sm-12">
+                <mau-form-input-select-dynamic
+                        :endpointName="branchEndpointName"
+                        :initialObject="initialValues[MachinePropertiesReference.BRANCH.name]"
+                        :label="MachinePropertiesReference.BRANCH.title"
+                        :displayProperty="'name'"
+                        v-model="machine.branch"
+                        :name="MachinePropertiesReference.BRANCH.name"
+                        :error="errors.has(MachinePropertiesReference.BRANCH.name) ? errors.first(MachinePropertiesReference.BRANCH.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
                 >
                 </mau-form-input-select-dynamic>
             </div>
@@ -66,10 +82,12 @@
         machine: {
           name: '',
           machineType: {},
+          branch: {},
           machinesEquipments: []
         },
         initialValues: {},
         machineTypeEndpointName: EntityTypes.MACHINE_TYPE.apiName,
+        branchEndpointName: EntityTypes.BRANCH.apiName,
         buttonDisabled: false
       }
     },
@@ -109,12 +127,14 @@
       setInitialValues: function () {
         this.initialValues[MachinePropertiesReference.NAME.name] = DefaultValuesHelper.simple(this.initialObject, MachinePropertiesReference.NAME.name)
         this.initialValues[MachinePropertiesReference.MACHINE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, MachinePropertiesReference.MACHINE_TYPE.name)
+        this.initialValues[MachinePropertiesReference.BRANCH.name] = DefaultValuesHelper.object(this.initialObject, MachinePropertiesReference.BRANCH.name)
         this.initialValues[MachinePropertiesReference.MACHINES_EQUIPMENTS.name] = DefaultValuesHelper.array(this.initialObject, MachinePropertiesReference.MACHINES_EQUIPMENTS.name)
       },
       save: function () {
         let directParams = {
           [MachinePropertiesReference.NAME.name]: this.machine.name,
-          [MachinePropertiesReference.MACHINE_TYPE.relationship_id_name]: this.machine.machineType ? this.machine.machineType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
+          [MachinePropertiesReference.MACHINE_TYPE.relationship_id_name]: this.machine.machineType ? this.machine.machineType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [MachinePropertiesReference.BRANCH.relationship_id_name]: this.machine.branch ? this.machine.branch[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
         }
         let relayObjects = []
         let machinesEquipmentsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(

@@ -145,6 +145,39 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EQUIPMENT,
   ]
 ))
 
+routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.BRANCH,
+  {
+    componentName: 'Main',
+    category: Categories.MAINTENANCE
+  },
+  [
+    RouteObjectHelper.createRouteObject(EntityTypes.BRANCH,
+      {
+        componentName: 'List',
+        groupDefault: true,
+        navbar: true
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BRANCH,
+      {
+        componentName: 'Create'
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BRANCH,
+      {
+        componentName: 'Edit',
+        params: [GlobalEntityIdentifier]
+      }
+    ),
+    RouteObjectHelper.createRouteObject(EntityTypes.BRANCH,
+      {
+        componentName: 'View',
+        params: [GlobalEntityIdentifier]
+      }
+    )
+  ]
+))
+
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.PRODUCTION_EVENT,
   {
     componentName: 'Main',

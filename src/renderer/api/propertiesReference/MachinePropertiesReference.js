@@ -14,6 +14,13 @@ export default {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
+  BRANCH: {
+    title: 'Sucursal',
+    name: 'branch',
+    relationship_id_name: 'branch_id',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
   MACHINES_EQUIPMENTS: {
     title: 'Refacciones/partes/equipos',
     name: 'machines_equipments'

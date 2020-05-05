@@ -80,13 +80,12 @@
                                 :name="'ItemMachine' + index"
                                 :label="''"
                                 :placeholder="''"
-                                :initialObject="hasInitialValues ? getInitialItem(item).machine :  {}"
+                                :initialObject="hasInitialValues && getInitialItem(item).machine ? getInitialItem(item).machine :  {}"
                                 :displayProperty="'name'"
                                 :endpointName="machineEndpointName"
                                 v-model="item.machine"
                                 @input="function x(result) { updateItemProperty(result, item, 'machine_id') }"
                                 :error="errors.has('ItemMachine' + index) ? errors.first('ItemMachine' + index) : ''"
-                                v-validate="'required'"
                         >
                         </mau-form-input-select-dynamic>
                     </td>

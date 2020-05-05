@@ -267,6 +267,10 @@ export default {
     apiName: 'branch',
     title: 'Sucursal'
   },
+  BRANCH_EQUIPMENT: {
+    name: 'branchEquipment',
+    apiName: 'branchEquipment'
+  },
   EXPENSE_STATUS: {
     name: 'expenseStatus',
     apiName: 'expenseStatus',
