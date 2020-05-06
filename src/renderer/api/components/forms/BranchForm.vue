@@ -35,10 +35,25 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <equipment-transaction-items
-                        v-model="branch.branchesEquipments"
-                        :initialValues="initialValues[BranchPropertiesReference.BRANCHES_EQUIPMENTS.name]"
+                        :label="'Insumos generales'"
+                        v-model="branchesEquipmentsNoMachine"
+                        :initialValues="initialBranchesEquipmentsNoMachine"
                         :requiresPrice="false"
-                        :requiresMachine="true"
+                        :requiresMachine="false"
+                >
+
+                </equipment-transaction-items>
+            </div>
+        </div>
+        <div class="form-group form-row" v-for="machine in machines">
+            <div class="col-sm-12">
+                <equipment-transaction-items
+                        :label="'Insumos de ' + machine.name"
+                        v-model="machine.branchesEquipments"
+                        :initialValues="machine.initialBranchesEquipments"
+                        :requiresPrice="false"
+                        :requiresMachine="false"
+                        :machineId="machine.id"
                 >
 
                 </equipment-transaction-items>
@@ -121,9 +136,9 @@
               return machine.id === initialMachine.id
             })
             if (!machineFoundInInitialMachines) {
-              this.initialMachines.push({...machine, branchesEquipments: [branchEquipment]})
+              this.initialMachines.push({...machine, branchesEquipments: [], initialBranchesEquipments: [branchEquipment]})
             } else {
-              machineFoundInInitialMachines.branchesEquipments.push(branchEquipment)
+              machineFoundInInitialMachines.initialBranchesEquipments.push(branchEquipment)
             }
           } else {
             this.initialBranchesEquipmentsNoMachine.push(branchEquipment)
@@ -135,9 +150,14 @@
           [BranchPropertiesReference.NAME.name]: this.branch.name
         }
         let relayObjects = []
+        let branchesEquipments = []
+        this.machines.forEach(machine => {
+          branchesEquipments = branchesEquipments.concat(machine.branchesEquipments)
+        })
+        branchesEquipments = branchesEquipments.concat(this.branchesEquipmentsNoMachine)
         let branchesEquipmentsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
           this.initialValues[BranchPropertiesReference.BRANCHES_EQUIPMENTS.name],
-          this.branch.branchesEquipments,
+          branchesEquipments,
           'id'
         )
         let branchesEquipmentsRelayObjects = ManyToManyHelper.createRelayObject(branchesEquipmentsM2mFilteredObject, EntityTypes.BRANCH_EQUIPMENT)
@@ -156,8 +176,9 @@
       },
       machines: function (machines) {
         machines.forEach(machine => {
-          if (!machine.branchesEquipments) {
+          if (!machine.branchesEquipments && !machine.initialBranchesEquipments) {
             machine.branchesEquipments = []
+            machine.initialBranchesEquipments = []
           }
         })
       }

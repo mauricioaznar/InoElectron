@@ -19,6 +19,21 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
+                        :endpointName="expenseStatusEndpointName"
+                        :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_STATUS.name]"
+                        :label="ExpensePropertiesReference.EXPENSE_STATUS.title"
+                        :displayProperty="'name'"
+                        v-model="expense.expenseStatus"
+                        :name="ExpensePropertiesReference.EXPENSE_STATUS.name"
+                        :error="errors.has(ExpensePropertiesReference.EXPENSE_STATUS.name) ? errors.first(ExpensePropertiesReference.EXPENSE_STATUS.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                >
+                </mau-form-input-select-dynamic>
+            </div>
+        </div>
+        <div class="form-group form-row">
+            <div class="col-sm-12">
+                <mau-form-input-select-dynamic
                         :endpointName="expenseInvoiceTypeEndpointName"
                         :initialObject="initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.name]"
                         :label="ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.title"
@@ -391,6 +406,7 @@
         supplierEndpointName: EntityTypes.SUPPLIER.apiName,
         expenseItemEndpointName: EntityTypes.EXPENSE_ITEM.apiName,
         expenseInvoiceStatusEndpointName: EntityTypes.EXPENSE_INVOICE_STATUS.apiName,
+        expenseStatusEndpointName: EntityTypes.EXPENSE_STATUS.apiName,
         expenseInvoiceTypeEndpointName: EntityTypes.EXPENSE_INVOICE_TYPE.apiName,
         expenseInvoicePaymentMethodEndpointName: EntityTypes.EXPENSE_INVOICE_PAYMENT_METHOD.apiName,
         expenseInvoicePaymentFormEndpointName: EntityTypes.EXPENSE_INVOICE_PAYMENT_FORM.apiName,
@@ -496,6 +512,7 @@
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_FORM.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_PAYMENT_METHOD.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_STATUS.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_STATUS.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_INVOICE_TYPE.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_CODE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_CODE.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_PROVISION_DATE.name)
@@ -535,6 +552,8 @@
             ? this.expense.expenseInvoiceType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_INVOICE_STATUS.relationship_id_name]: this.expense.expenseInvoiceStatus
             ? this.expense.expenseInvoiceStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [ExpensePropertiesReference.EXPENSE_STATUS.relationship_id_name]: this.expense.expenseStatus
+            ? this.expense.expenseStatus[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.EXPENSE_MONEY_SOURCE.relationship_id_name]: this.expense.expenseMoneySource
             ? this.expense.expenseMoneySource[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [ExpensePropertiesReference.INVOICE_CODE.name]: this.expense.invoiceCode,

@@ -16,6 +16,9 @@
                     Equipo
                 </div>
                 <div class="col-sm-2">
+                    Total necesitados
+                </div>
+                <div class="col-sm-2">
                     Total en pedidos
                 </div>
                 <div class="col-sm-2">
@@ -31,6 +34,9 @@
             <div class="row" v-for="equipment in branch.equipments">
                 <div class="col-sm-2">
                     {{equipment.description}}
+                </div>
+                <div class="col-sm-2">
+                    {{equipment.totalNeeded}}
                 </div>
                 <div class="col-sm-2">
                     {{equipment.totalInRequests}}
@@ -78,13 +84,25 @@
             let equipments = result[1].map(equipment => {
               return {
                 ...equipment,
+                totalNeeded: 0,
                 totalInRequests: 0,
                 totalInSales: 0,
                 totalInPositiveAdjustments: 0,
                 totalInNegativeAdjustments: 0
               }
             })
-            let branches = result[0].map(branch => { return {...branch, equipments: cloneDeep(equipments)} })
+            let branches = result[0].map(branch => {
+              let equipmentsCopy = cloneDeep(equipments)
+              branch.branches_equipments.forEach(branchEquipment => {
+                let equipmentCopyfound = equipmentsCopy.find(equipmentCopy => {
+                  return equipmentCopy.id === branchEquipment.equipment_id
+                })
+                if (equipmentCopyfound) {
+                  equipmentCopyfound.totalNeeded = equipmentCopyfound.totalNeeded + branchEquipment.quantity
+                }
+              })
+              return {...branch, equipments: equipmentsCopy}
+            })
             let equipmentTransactions = result[2]
             equipmentTransactions.forEach(equipmentTransaction => {
               let foundBranch = branches.find(branch => { return branch.id === equipmentTransaction.branch_id })

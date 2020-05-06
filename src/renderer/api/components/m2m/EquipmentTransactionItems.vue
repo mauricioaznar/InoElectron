@@ -2,7 +2,7 @@
     <div>
         <div>
             <label>
-                Insumos
+                {{label}}
             </label>
             <a href="#" class="fa fa-plus p-1" @click.prevent="addItem"></a>
         </div>
@@ -93,10 +93,6 @@
                 </tr>
             </tbody>
         </table>
-        <div class="mt-2">
-            <label>Total</label>
-            <p>{{total}}</p>
-        </div>
     </div>
 </template>
 
@@ -110,7 +106,6 @@
         return {
           items: [],
           initialItems: [],
-          total: 0,
           machineEndpointName: EntityTypes.MACHINE.apiName,
           equipmentEndpointName: EntityTypes.EQUIPMENT.apiName
         }
@@ -140,6 +135,15 @@
         requiresMachine: {
           type: Boolean,
           required: true
+        },
+        label: {
+          type: String,
+          default: function () {
+            return 'Insumos'
+          }
+        },
+        machineId: {
+          type: Number
         }
       },
       methods: {
@@ -148,6 +152,9 @@
           item[propertyName] = selectedObject && selectedObject.id ? selectedObject.id : (item && initialItem[propertyName] > 0 ? 'null' : null)
         },
         refreshInput: function () {
+          if (this.machineId) {
+            this.items = this.items.map(item => { return {...item, machine_id: this.machineId} })
+          }
           this.$emit('input', this.items)
         },
         addItem: function () {
