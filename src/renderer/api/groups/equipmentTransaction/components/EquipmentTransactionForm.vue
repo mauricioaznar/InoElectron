@@ -16,6 +16,20 @@
         </div>
         <div class="form-group form-row">
             <div class="col-sm-12">
+                <mau-form-input-text
+                        :label="EquipmentTransactionPropertiesReference.DESCRIPTION.title"
+                        :name="EquipmentTransactionPropertiesReference.DESCRIPTION.name"
+                        v-model="equipmentTransaction.description"
+                        :initialValue="initialValues[EquipmentTransactionPropertiesReference.DESCRIPTION.name]"
+                        :error="errors.has(EquipmentTransactionPropertiesReference.DESCRIPTION.name) ? errors.first(EquipmentTransactionPropertiesReference.DESCRIPTION.name) : ''"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                </mau-form-input-text>
+            </div>
+        </div>
+        <div class="form-group form-row">
+            <div class="col-sm-12">
                 <mau-form-input-select-dynamic
                         :initialObject="initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.name]"
                         :label="EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.title"
@@ -81,7 +95,7 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <div class="form-group form-row">
+        <div class="form-group form-row" v-if="isEquipmentTransactionPurchase">
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
                         :initialObject="initialValues[EquipmentTransactionPropertiesReference.SUPPLIER.name]"
@@ -103,7 +117,8 @@
                     v-model="equipmentTransaction.equipmentTransactionItems"
                     :initialValues="initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_ITEMS.name]"
                     :requiresPrice="isEquipmentTransactionPurchase"
-                    :requiresMachine="true"
+                    :requiresMachine="isEquipmentTransactionRequest || isEquipmentTransactionPurchase || isEquipmentTransactionWithdraw"
+                    :requiresQuantity="true"
                 >
 
                 </equipment-transaction-items>
@@ -130,6 +145,7 @@
         EquipmentTransactionPropertiesReference: EquipmentTransactionPropertiesReference,
         equipmentTransaction: {
           dateEmitted: '',
+          description: '',
           branch: {},
           supplier: {},
           equipmentTransactionType: {},
@@ -180,11 +196,18 @@
       },
       isEquipmentTransactionPurchase: function () {
         return this.equipmentTransaction.equipmentTransactionType && this.equipmentTransaction.equipmentTransactionType.id && this.equipmentTransaction.equipmentTransactionType.id === 2
+      },
+      isEquipmentTransactionRequest: function () {
+        return this.equipmentTransaction.equipmentTransactionType && this.equipmentTransaction.equipmentTransactionType.id && this.equipmentTransaction.equipmentTransactionType.id === 1
+      },
+      isEquipmentTransactionWithdraw: function () {
+        return this.equipmentTransaction.equipmentTransactionType && this.equipmentTransaction.equipmentTransactionType.id && this.equipmentTransaction.equipmentTransactionType.id === 5
       }
     },
     methods: {
       setInitialValues: function () {
         this.initialValues[EquipmentTransactionPropertiesReference.DATE_EMITTED.name] = DefaultValuesHelper.simple(this.initialObject, EquipmentTransactionPropertiesReference.DATE_EMITTED.name)
+        this.initialValues[EquipmentTransactionPropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, EquipmentTransactionPropertiesReference.DESCRIPTION.name)
         this.initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.name] = DefaultValuesHelper.object(this.initialObject, EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.name)
         this.initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name] = DefaultValuesHelper.object(this.initialObject, EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name)
         this.initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_TYPE.name] = DefaultValuesHelper.object(this.initialObject, EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_TYPE.name)
@@ -195,6 +218,7 @@
       save: function () {
         let directParams = {
           [EquipmentTransactionPropertiesReference.DATE_EMITTED.name]: this.equipmentTransaction.dateEmitted,
+          [EquipmentTransactionPropertiesReference.DESCRIPTION.name]: this.equipmentTransaction.description,
           [EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.relationship_id_name]: this.equipmentTransaction.equipmentTransactionStatus ? this.equipmentTransaction.equipmentTransactionStatus['id'] : (this.isInitialObjectDefined ? 'null' : null),
           [EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_TYPE.relationship_id_name]: this.equipmentTransaction.equipmentTransactionType ? this.equipmentTransaction.equipmentTransactionType['id'] : (this.isInitialObjectDefined ? 'null' : null),
           [EquipmentTransactionPropertiesReference.SUPPLIER.relationship_id_name]: this.equipmentTransaction.supplier ? this.equipmentTransaction.supplier['id'] : (this.isInitialObjectDefined ? 'null' : null),

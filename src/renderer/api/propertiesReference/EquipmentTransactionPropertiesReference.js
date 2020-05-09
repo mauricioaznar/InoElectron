@@ -5,6 +5,11 @@ export default {
     name: 'date_emitted',
     defaultValue: MauInputDefaultValues.DATE
   },
+  DESCRIPTION: {
+    title: 'Descripcion',
+    name: 'description',
+    defaultValue: MauInputDefaultValues.TEXT
+  },
   EQUIPMENT_TRANSACTION_STATUS: {
     title: 'Estado de la transaccion de refacciones',
     name: 'equipment_transaction_status',

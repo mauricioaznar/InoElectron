@@ -11,7 +11,9 @@
                 <tr>
                     <th>Insumo</th>
                     <th>Equipo/Refaccion/Servicio</th>
-                    <th>Cantidad</th>
+                    <th v-if="requiresMinQuantity">Minima cantidad</th>
+                    <th v-if="requiresMaxQuantity">Maxima cantidad</th>
+                    <th v-if="requiresQuantity">Cantidad</th>
                     <th v-if="requiresPrice">Precio unitario</th>
                     <th v-if="requiresMachine">Maquina</th>
                     <th></th>
@@ -40,8 +42,39 @@
                         >
                         </mau-form-input-select-dynamic>
                     </td>
-
-                    <td>
+                    <td v-if="requiresMinQuantity">
+                        <mau-form-input-number
+                                :key="'ItemMinQuantity' + index + 'a'"
+                                class="mb-2"
+                                :name="'ItemMinQuantity' + index"
+                                :label="''"
+                                :placeholder="''"
+                                v-model="item.min_quantity"
+                                :initialValue="hasInitialValues ? (getInitialItem(item).min_quantity ? getInitialItem(item).min_quantity : '') : ''"
+                                :error="errors.has('ItemMinQuantity' + index) ? errors.first('ItemMinQuantity' + index) : ''"
+                                :type="'float'"
+                                @input="refreshInput"
+                                v-validate="'required'"
+                        >
+                        </mau-form-input-number>
+                    </td>
+                    <td v-if="requiresMaxQuantity">
+                        <mau-form-input-number
+                                :key="'ItemMaxQuantity' + index + 'a'"
+                                class="mb-2"
+                                :name="'ItemMaxQuantity' + index"
+                                :label="''"
+                                :placeholder="''"
+                                v-model="item.max_quantity"
+                                :initialValue="hasInitialValues ? (getInitialItem(item).max_quantity ? getInitialItem(item).max_quantity : '') : ''"
+                                :error="errors.has('ItemMaxQuantity' + index) ? errors.first('ItemMaxQuantity' + index) : ''"
+                                :type="'float'"
+                                @input="refreshInput"
+                                v-validate="'required'"
+                        >
+                        </mau-form-input-number>
+                    </td>
+                    <td v-if="requiresQuantity">
                         <mau-form-input-number
                                 :key="'ItemQuantity' + index + 'a'"
                                 class="mb-2"
@@ -129,12 +162,19 @@
           required: true
         },
         requiresPrice: {
-          type: Boolean,
-          required: true
+          type: Boolean
         },
         requiresMachine: {
-          type: Boolean,
-          required: true
+          type: Boolean
+        },
+        requiresQuantity: {
+          type: Boolean
+        },
+        requiresMaxQuantity: {
+          type: Boolean
+        },
+        requiresMinQuantity: {
+          type: Boolean
         },
         label: {
           type: String,
@@ -177,13 +217,6 @@
         }
       },
       watch: {
-        requiresPrice: function (requiresPrice) {
-          this.items.forEach(item => {
-            if (!requiresPrice) {
-              item.unit_price = 0
-            }
-          })
-        }
       }
     }
 </script>

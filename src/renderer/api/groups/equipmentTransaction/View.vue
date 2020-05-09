@@ -31,6 +31,31 @@
             title: EquipmentTransactionPropertiesReference.DATE_EMITTED.title,
             name: EquipmentTransactionPropertiesReference.DATE_EMITTED.name,
             display: DisplayFunctions.getDate
+          },
+          {
+            name: EquipmentTransactionPropertiesReference.DESCRIPTION.name,
+            title: EquipmentTransactionPropertiesReference.DESCRIPTION.title,
+            display: DisplayFunctions.getValue
+          },
+          {
+            name: EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_ITEMS.name,
+            title: 'Items',
+            display: DisplayFunctions.getItemsWithQuantity
+          },
+          {
+            title: EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_TYPE.title,
+            name: EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_TYPE.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.title,
+            name: EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.name,
+            display: DisplayFunctions.getNameFromObject
+          },
+          {
+            title: EquipmentTransactionPropertiesReference.BRANCH.title,
+            name: EquipmentTransactionPropertiesReference.BRANCH.name,
+            display: DisplayFunctions.getNameFromObject
           }
         ],
         entityType: EntityTypes.EQUIPMENT_TRANSACTION,

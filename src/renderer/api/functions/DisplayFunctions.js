@@ -73,6 +73,31 @@ export default {
   getTimeFromDateTime: function (date) {
     return ConvertDateTimeTo.time(date)
   },
+  getItemsWithQuantity: function (array) {
+    let htmlString = '<table class="w-100">'
+    htmlString += '<tr><th>E</th><th>Cantidad</th>'
+    htmlString += '</tr>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].equipment.description + '</td>'
+      htmlString += '<td class="mau-text-right">' + array[i].quantity + '</td>'
+      htmlString += '</tr>'
+    }
+    return htmlString + '</table>'
+  },
+  getItemsWithMaxAndMin: function (array) {
+    let htmlString = '<table class="w-100">'
+    htmlString += '<tr><th>E</th><th>Cantidad Min</th><th>Cantidad Max</th>'
+    htmlString += '</tr>'
+    for (let i = 0; i < array.length; i++) {
+      htmlString += '<tr>'
+      htmlString += '<td class="mau-text-left">' + array[i].equipment.description + '</td>'
+      htmlString += '<td class="mau-text-right">' + array[i].min_quantity + '</td>'
+      htmlString += '<td class="mau-text-right">' + array[i].max_quantity + '</td>'
+      htmlString += '</tr>'
+    }
+    return htmlString + '</table>'
+  },
   getProducts: function (array) {
     let htmlString = '<table class="w-100">'
     htmlString += '<tr><th>Producto</th><th>Kilos</th><th>Grupos</th>'

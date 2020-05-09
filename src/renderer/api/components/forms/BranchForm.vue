@@ -38,8 +38,8 @@
                         :label="'Insumos generales'"
                         v-model="branchesEquipmentsNoMachine"
                         :initialValues="initialBranchesEquipmentsNoMachine"
-                        :requiresPrice="false"
-                        :requiresMachine="false"
+                        :requiresMinQuantity="true"
+                        :requiresMaxQuantity="true"
                 >
 
                 </equipment-transaction-items>
@@ -51,8 +51,8 @@
                         :label="'Insumos de ' + machine.name"
                         v-model="machine.branchesEquipments"
                         :initialValues="machine.initialBranchesEquipments"
-                        :requiresPrice="false"
-                        :requiresMachine="false"
+                        :requiresMinQuantity="true"
+                        :requiresMaxQuantity="true"
                         :machineId="machine.id"
                 >
 

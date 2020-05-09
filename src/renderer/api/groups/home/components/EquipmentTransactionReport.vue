@@ -15,40 +15,60 @@
                 <div class="col-sm-2">
                     Equipo
                 </div>
-                <div class="col-sm-2">
-                    Total necesitados
+                <div class="col-sm-1">
+                    Total en compras
                 </div>
-                <div class="col-sm-2">
-                    Total en pedidos
-                </div>
-                <div class="col-sm-2">
-                    Total en ventas
-                </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     Total en ajustes +
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     Total en ajustes -
+                </div>
+                <div class="col-sm-1">
+                    Total en retiros
+                </div>
+                <div class="col-sm-1">
+                    Total
+                </div>
+                <div class="col-sm-1">
+                    Total en pedidos
+                </div>
+                <div class="col-sm-1">
+                    Total minimos necesitados
+                </div>
+                <div class="col-sm-1">
+                    Total maximos necesitados
                 </div>
             </div>
             <div class="row" v-for="equipment in branch.equipments">
                 <div class="col-sm-2">
                     {{equipment.description}}
                 </div>
-                <div class="col-sm-2">
-                    {{equipment.totalNeeded}}
+                <div class="col-sm-1">
+                    {{equipment.totalInPurchases}}
                 </div>
-                <div class="col-sm-2">
-                    {{equipment.totalInRequests}}
-                </div>
-                <div class="col-sm-2">
-                    {{equipment.totalInSales}}
-                </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     {{equipment.totalInPositiveAdjustments}}
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     {{equipment.totalInNegativeAdjustments}}
+                </div>
+                <div class="col-sm-1">
+                    {{equipment.totalInWithdrawal}}
+                </div>
+                <div class="col-sm-1"
+                    :class="getTotalBackgroundColor(equipment)"
+                >
+                    {{equipment.total}}
+                </div>
+                <div class="col-sm-1">
+                    {{equipment.totalInRequests}}
+                </div>
+                <div class="col-sm-1">
+                    {{equipment.totalMinNeeded}}
+                </div>
+                <div class="col-sm-1">
+                    {{equipment.totalMaxNeeded}}
                 </div>
             </div>
         </div>
@@ -84,11 +104,14 @@
             let equipments = result[1].map(equipment => {
               return {
                 ...equipment,
-                totalNeeded: 0,
+                totalMinNeeded: 0,
+                totalMaxNeeded: 0,
                 totalInRequests: 0,
-                totalInSales: 0,
+                totalInPurchases: 0,
                 totalInPositiveAdjustments: 0,
-                totalInNegativeAdjustments: 0
+                totalInNegativeAdjustments: 0,
+                totalInWithdrawal: 0,
+                total: 0
               }
             })
             let branches = result[0].map(branch => {
@@ -98,7 +121,8 @@
                   return equipmentCopy.id === branchEquipment.equipment_id
                 })
                 if (equipmentCopyfound) {
-                  equipmentCopyfound.totalNeeded = equipmentCopyfound.totalNeeded + branchEquipment.quantity
+                  equipmentCopyfound.totalMinNeeded = equipmentCopyfound.totalMinNeeded + branchEquipment.min_quantity
+                  equipmentCopyfound.totalMaxNeeded = equipmentCopyfound.totalMaxNeeded + branchEquipment.max_quantity
                 }
               })
               return {...branch, equipments: equipmentsCopy}
@@ -115,11 +139,17 @@
                     if (equipmentTransaction.equipment_transaction_type_id === 1) {
                       foundEquipment.totalInRequests = foundEquipment.totalInRequests + quantity
                     } else if (equipmentTransaction.equipment_transaction_type_id === 2) {
-                      foundEquipment.totalInSales = foundEquipment.totalInSales + quantity
+                      foundEquipment.totalInPurchases = foundEquipment.totalInPurchases + quantity
+                      foundEquipment.total = foundEquipment.total + quantity
                     } else if (equipmentTransaction.equipment_transaction_type_id === 3) {
                       foundEquipment.totalInPositiveAdjustments = foundEquipment.totalInPositiveAdjustments + quantity
+                      foundEquipment.total = foundEquipment.total + quantity
                     } else if (equipmentTransaction.equipment_transaction_type_id === 4) {
                       foundEquipment.totalInNegativeAdjustments = foundEquipment.totalInNegativeAdjustments + quantity
+                      foundEquipment.total = foundEquipment.total - quantity
+                    } else if (equipmentTransaction.equipment_transaction_type_id === 5) {
+                      foundEquipment.totalInWithdrawal = foundEquipment.totalInWithdrawal + quantity
+                      foundEquipment.total = foundEquipment.total - quantity
                     }
                   }
                 })
@@ -130,6 +160,14 @@
           }).finally(() => {
             this.isLoading = false
           })
+        },
+        getTotalBackgroundColor: function (equipment) {
+          let required = equipment.totalMinNeeded > 0 && equipment.totalMaxNeeded > 0
+          return {
+            'danger': required && equipment.total < equipment.totalMinNeeded,
+            'warning': required && equipment.total >= equipment.totalMinNeeded && equipment.total < equipment.totalMaxNeeded,
+            'success': required && equipment.total >= equipment.totalMaxNeeded
+          }
         },
         currencyFormat: function (num) {
           return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -145,3 +183,4 @@
       }
     }
 </script>
+
