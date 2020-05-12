@@ -14,46 +14,14 @@
                 </mau-form-input-text>
             </div>
         </div>
-        <div class="form-group form-row" >
-            <div class="col-sm-12">
-                <mau-form-input-select-dynamic
-                        :endpointName="machineEndpointName"
-                        :initialObjects="initialMachines"
-                        :label="'Maquinas'"
-                        :displayProperty="'name'"
-                        v-model="machines"
-                        :name="'_machines'"
-                        :data-vv-as="'maquinas'"
-                        :error="errors.has('_machines') ? errors.first('_machines') : ''"
-                        :multiselect="true"
-                        :disabled="!userHasWritePrivileges"
-                        v-validate="'required'"
-                >
-                </mau-form-input-select-dynamic>
-            </div>
-        </div>
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <equipment-transaction-items
                         :label="'Insumos generales'"
-                        v-model="branchesEquipmentsNoMachine"
-                        :initialValues="initialBranchesEquipmentsNoMachine"
+                        v-model="branch.branchesEquipments"
+                        :initialValues="initialValues[BranchPropertiesReference.BRANCHES_EQUIPMENTS.name]"
                         :requiresMinQuantity="true"
                         :requiresMaxQuantity="true"
-                >
-
-                </equipment-transaction-items>
-            </div>
-        </div>
-        <div class="form-group form-row" v-for="machine in machines">
-            <div class="col-sm-12">
-                <equipment-transaction-items
-                        :label="'Insumos de ' + machine.name"
-                        v-model="machine.branchesEquipments"
-                        :initialValues="machine.initialBranchesEquipments"
-                        :requiresMinQuantity="true"
-                        :requiresMaxQuantity="true"
-                        :machineId="machine.id"
                 >
 
                 </equipment-transaction-items>
@@ -84,11 +52,6 @@
           branchesEquipments: []
         },
         initialValues: {},
-        initialMachines: [],
-        machines: [],
-        initialBranchesEquipmentsNoMachine: [],
-        branchesEquipmentsNoMachine: [],
-        machineEndpointName: EntityTypes.MACHINE.apiName,
         buttonDisabled: false
       }
     },
@@ -128,22 +91,6 @@
       setInitialValues: function () {
         this.initialValues[BranchPropertiesReference.NAME.name] = DefaultValuesHelper.simple(this.initialObject, BranchPropertiesReference.NAME.name)
         this.initialValues[BranchPropertiesReference.BRANCHES_EQUIPMENTS.name] = DefaultValuesHelper.array(this.initialObject, BranchPropertiesReference.BRANCHES_EQUIPMENTS.name)
-        this.initialMachines = []
-        this.initialValues[BranchPropertiesReference.BRANCHES_EQUIPMENTS.name].forEach(branchEquipment => {
-          let machine = branchEquipment.machine
-          if (machine) {
-            let machineFoundInInitialMachines = this.initialMachines.find(initialMachine => {
-              return machine.id === initialMachine.id
-            })
-            if (!machineFoundInInitialMachines) {
-              this.initialMachines.push({...machine, branchesEquipments: [], initialBranchesEquipments: [branchEquipment]})
-            } else {
-              machineFoundInInitialMachines.initialBranchesEquipments.push(branchEquipment)
-            }
-          } else {
-            this.initialBranchesEquipmentsNoMachine.push(branchEquipment)
-          }
-        })
       },
       save: function () {
         let directParams = {
@@ -151,10 +98,7 @@
         }
         let relayObjects = []
         let branchesEquipments = []
-        this.machines.forEach(machine => {
-          branchesEquipments = branchesEquipments.concat(machine.branchesEquipments)
-        })
-        branchesEquipments = branchesEquipments.concat(this.branchesEquipmentsNoMachine)
+        branchesEquipments = branchesEquipments.concat(this.branch.branchesEquipments)
         let branchesEquipmentsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
           this.initialValues[BranchPropertiesReference.BRANCHES_EQUIPMENTS.name],
           branchesEquipments,

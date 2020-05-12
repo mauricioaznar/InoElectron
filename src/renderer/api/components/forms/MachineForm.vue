@@ -52,6 +52,9 @@
                         v-model="machine.machinesEquipments"
                         :initialValues="initialValues[MachinePropertiesReference.MACHINES_EQUIPMENTS.name]"
                         :requiresPrice="false"
+                        :requiresQuantity="false"
+                        :requiresMaxQuantity="true"
+                        :requiresMinQuantity="true"
                         :requiresMachine="false"
                 >
 
