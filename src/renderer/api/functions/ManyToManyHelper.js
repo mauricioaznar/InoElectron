@@ -59,10 +59,11 @@ function filterM2MStructuredObjectsByApiOperations (initialRelationshipObjects, 
     for (let initialStructuredObjKey in initialStructuredObj) {
       if (initialStructuredObj.hasOwnProperty(initialStructuredObjKey)) {
         if (initialStructuredObj[initialStructuredObjKey] !== selectedStructuredObj[initialStructuredObjKey]) {
-          if ((typeof initialStructuredObj[initialStructuredObjKey] !== 'function') && (typeof initialStructuredObj[initialStructuredObjKey] !== 'object') && (initialStructuredObj[initialStructuredObj] !== null)) {
-            areEqual = false
-            break
-          }
+          console.log(initialStructuredObj[initialStructuredObjKey])
+          console.log(selectedStructuredObj[initialStructuredObjKey])
+          console.log(initialStructuredObjKey)
+          areEqual = false
+          break
         }
       }
     }
