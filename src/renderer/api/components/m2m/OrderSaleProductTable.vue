@@ -128,7 +128,7 @@
                             {{currentStructuredObj.groups}}
                         </div>
                         <mau-form-input-number
-                                v-else
+                                v-if="(!getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)) || isProductRoll(currentStructuredObj)"
                                 :name="'_manual_groups' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialGroups(currentStructuredObj)"
                                 v-model="currentStructuredObj._manual_groups"
@@ -259,7 +259,7 @@
         },
         isProductRoll: function (structuredObject) {
           let product = this.getProductById(structuredObject['product_id'])
-          return product ? product[ProductPropertiesReference.PRODUCT_TYPE.relationship_id_name] === 1 : false
+          return product ? product[ProductPropertiesReference.PRODUCT_TYPE.relationship_id_name] === 2 : false
         },
         getCurrentObjInitialKilos: function (currentStructuredObj) {
           let quantity = 0
@@ -333,17 +333,22 @@
             currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
           currentStructuredObj[OrderSaleProductPropertiesReference.KILO_PRICE.name] = kiloPrice
-          if (this.getCurrentObjCalculationType(currentStructuredObj) === 0) {
-            currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = quantity % 1 === 0 ? quantity : quantity
-            if (productGroupWeight) {
-              currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = (quantity % 1 === 0 ? quantity : quantity) / productGroupWeight
+          if (this.isProductBag(currentStructuredObj) || this.isProductRoll(currentStructuredObj)) {
+            if (this.getCurrentObjCalculationType(currentStructuredObj) === 0) {
+              currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = quantity % 1 === 0 ? quantity : quantity
+              if (productGroupWeight) {
+                currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = (quantity % 1 === 0 ? quantity : quantity) / productGroupWeight
+              }
             }
-          }
-          if (this.getCurrentObjCalculationType(currentStructuredObj) === 1) {
-            if (productGroupWeight) {
-              currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = quantity % 1 === 0 ? quantity : quantity
-              currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = (quantity % 1 === 0 ? quantity : quantity) * productGroupWeight
+            if (this.getCurrentObjCalculationType(currentStructuredObj) === 1) {
+              if (productGroupWeight) {
+                currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = quantity % 1 === 0 ? quantity : quantity
+                currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = (quantity % 1 === 0 ? quantity : quantity) * productGroupWeight
+              }
             }
+          } else {
+            currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = quantity
+            currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = 0
           }
           this.emitStructureChangeEvent()
         },

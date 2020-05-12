@@ -81,7 +81,8 @@
         ¿Require de validacion exacta?
       </b-form-checkbox>
     </div>
-    <div class="form-group form-row">
+    <div class="form-group form-row"
+    >
       <div class="col-sm-12">
         <mau-form-input-number
                 :label="PropertiesReference.CURRENT_KILO_PRICE.title"
@@ -97,7 +98,9 @@
         </mau-form-input-number>
       </div>
     </div>
-    <div class="form-group form-row">
+    <div class="form-group form-row"
+      v-if="isBag || isRoll"
+    >
       <div :class="isBag ? 'col-sm-6' : 'col-sm-12'">
         <mau-form-input-number
                 :label="PropertiesReference.WIDTH.title"
@@ -125,7 +128,9 @@
         </mau-form-input-number>
       </div>
     </div>
-    <div class="form-group form-row">
+    <div class="form-group form-row"
+         v-if="isBag || isRoll"
+    >
       <div class="col-sm-12">
         <mau-form-input-select-dynamic
                 :initialObject="initialValues[PropertiesReference.MATERIAL.name]"
@@ -141,10 +146,10 @@
         </mau-form-input-select-dynamic>
       </div>
     </div>
-    <div class="form-group form-row">
+    <div class="form-group form-row"
+         v-if="isBag">
       <div class="col-sm-12">
         <mau-form-input-select-dynamic
-                v-if="isProductBag()"
                 :initialObject="initialValues[PropertiesReference.PACKING.name]"
                 :label="PropertiesReference.PACKING.title"
                 :displayProperty="'name'"
@@ -202,6 +207,12 @@
       isBag: function () {
         return this.product.productType[GlobalEntityIdentifier] === 1
       },
+      isRoll: function () {
+        return this.product.productType[GlobalEntityIdentifier] === 2
+      },
+      isPellet: function () {
+        return this.product.productType[GlobalEntityIdentifier] === 3
+      },
       userHasWritePrivileges: function () {
         return true
       }
@@ -248,19 +259,16 @@
           this.product.requiresGroupWeight = this.initialObject[PropertiesReference.CURRENT_GROUP_WEIGHT.name] !== null
         }
       },
-      isProductBag: function () {
-        return this.product && this.product.productType && this.product.productType[GlobalEntityIdentifier] === 1
-      },
       save: function () {
         let directParams = {
           [PropertiesReference.CODE.name]: this.product.code,
           [PropertiesReference.DESCRIPTION.name]: this.product.description,
-          [PropertiesReference.WIDTH.name]: this.product.width,
+          [PropertiesReference.WIDTH.name]: (this.isBag || this.isRoll) ? this.product.width : 0,
           [PropertiesReference.CURRENT_KILO_PRICE.name]: this.product.currentKiloPrice,
           // one to many
-          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : null,
-          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing ? this.product.packing[GlobalEntityIdentifier] : null,
-          [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : null
+          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material && (this.isBag || this.isRoll) ? this.product.material[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing && (this.isBag) ? this.product.packing[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
         }
         if (this.isBag) {
           if (this.product.requiresGroupWeight) {
@@ -275,9 +283,7 @@
           directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = -1
           directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = null
           directParams[PropertiesReference.LENGTH.name] = null
-          if (this.initialObject) {
-            directParams[PropertiesReference.PACKING.relationship_id_name] = null
-          }
+          directParams[PropertiesReference.PACKING.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
         }
         this.$validator.validateAll().then((result) => {
           if (result) {
