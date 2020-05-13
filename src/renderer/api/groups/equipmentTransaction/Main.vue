@@ -74,7 +74,7 @@
         },
         confirmDelete: function () {
           let id = this.$route.params[GlobalEntityIdentifier]
-          GenericApiOperations.del(EntityTypes.PRODUCT.apiName, id).then(result => {
+          GenericApiOperations.del(EntityTypes.EQUIPMENT_TRANSACTION.apiName, id).then(result => {
             Notifications.success(this)
             this.$router.push({name: this.groupDefaultRouteObject(this.$route).name})
           })
