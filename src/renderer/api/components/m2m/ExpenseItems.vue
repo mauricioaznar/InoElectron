@@ -98,7 +98,7 @@
                         v-model="expenseItem.quantity"
                         :initialValue="hasInitialValues ?
                             (getInitialExpenseItem(expenseItem).quantity >= 0 && getInitialExpenseItem(expenseItem).quantity !== null ? getInitialExpenseItem(expenseItem).quantity : 0)
-                            : hasLastSupplierExpenseItems ? getLastSupplierExpenseItem(index).quantity : 0"
+                            : hasLastSupplierExpenseItems && getLastSupplierExpenseItem(index).quantity > 0 ? getLastSupplierExpenseItem(index).quantity : 0"
                         :error="errors.has('ItemExpenseQuantity' + index) ? errors.first('ItemExpenseQuantity' + index) : ''"
                         :type="'float'"
                         @input="refreshInput"

@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="form-group form-row" v-if="equipmentTransaction.id !== ''">
+            <div class="col-sm-12">
+                <label>Id</label><div>{{equipmentTransaction.id}}</div>
+            </div>
+        </div>
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-date
@@ -65,13 +70,14 @@
         >
             <div class="col-sm-12">
                 <mau-form-input-select-dynamic
-                        v-if=""
+                        :key="'EquipmentTransaction' + isEquipmentTransactionPurchase"
                         :initialObject="initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name]"
                         :label="EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.title"
                         :displayProperty="'id'"
                         :endpointName="equipmentTransactionEndpointName"
                         v-model="equipmentTransaction.equipmentTransactionRequest"
                         :name="EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name"
+                        :apiOperationOptions="equipmentTransactionApiOperations"
                         :error="errors.has(EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name) ? errors.first(EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_REQUEST.name) : ''"
                         :disabled="!userHasWritePrivileges"
                         v-validate="'required'"
@@ -138,12 +144,14 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
   import EquipmentTransactionItems from 'renderer/api/components/m2m/EquipmentTransactionItems'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'ExpenseForm',
     data () {
       return {
         EquipmentTransactionPropertiesReference: EquipmentTransactionPropertiesReference,
         equipmentTransaction: {
+          id: '',
           dateEmitted: '',
           description: '',
           branch: {},
@@ -202,10 +210,14 @@
       },
       isEquipmentTransactionWithdraw: function () {
         return this.equipmentTransaction.equipmentTransactionType && this.equipmentTransaction.equipmentTransactionType.id && this.equipmentTransaction.equipmentTransactionType.id === 5
+      },
+      equipmentTransactionApiOperations: function () {
+        return {filterExacts: {equipment_transaction_type_id: 1, equipment_transaction_status_id: 1}}
       }
     },
     methods: {
       setInitialValues: function () {
+        this.equipmentTransaction.id = DefaultValuesHelper.simple(this.initialObject, GlobalEntityIdentifier)
         this.initialValues[EquipmentTransactionPropertiesReference.DATE_EMITTED.name] = DefaultValuesHelper.simple(this.initialObject, EquipmentTransactionPropertiesReference.DATE_EMITTED.name)
         this.initialValues[EquipmentTransactionPropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, EquipmentTransactionPropertiesReference.DESCRIPTION.name)
         this.initialValues[EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.name] = DefaultValuesHelper.object(this.initialObject, EquipmentTransactionPropertiesReference.EQUIPMENT_TRANSACTION_STATUS.name)

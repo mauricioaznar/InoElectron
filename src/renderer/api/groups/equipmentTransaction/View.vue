@@ -22,11 +22,17 @@
   import MauSpinner from 'renderer/components/mau-components/mau-spinner/MauSpinner.vue'
   import MauPropertyViewer from 'renderer/components/mau-components/mau-property-viewer/MauPropertyViewer.vue'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   export default {
     name: 'ViewProduct',
     data () {
       return {
         properties: [
+          {
+            title: GlobalEntityIdentifier,
+            name: GlobalEntityIdentifier,
+            display: DisplayFunctions.getValue
+          },
           {
             title: EquipmentTransactionPropertiesReference.DATE_EMITTED.title,
             name: EquipmentTransactionPropertiesReference.DATE_EMITTED.name,

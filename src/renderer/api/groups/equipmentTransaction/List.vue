@@ -26,6 +26,12 @@
         apiUrl: GenericApiUrls.createListUrl(EntityTypes.EQUIPMENT_TRANSACTION.apiName, {paginate: true}),
         tableFields: [
           {
+            name: GlobalEntityIdentifier,
+            title: GlobalEntityIdentifier,
+            filterType: 'text',
+            dataClass: 'text-center'
+          },
+          {
             name: EquipmentTransactionPropertiesReference.DATE_EMITTED.name,
             title: EquipmentTransactionPropertiesReference.DATE_EMITTED.title,
             filterType: 'text',
