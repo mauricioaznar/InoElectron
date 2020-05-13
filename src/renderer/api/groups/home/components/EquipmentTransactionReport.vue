@@ -107,37 +107,58 @@
                     Total maximos necesitados
                 </div>
             </div>
-            <div class="row" v-for="equipment in branch.equipments.filter(equipment => { return equipment.isMachineRequired })">
-                <div class="col-sm-2">
-                    {{equipment.description}}
+            <template v-for="equipment in branch.equipments.filter(equipment => { return equipment.isMachineRequired })">
+                <div class="row">
+                    <div class="col-sm-2">
+                        {{equipment.description}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{equipment.totalInPurchases}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{equipment.totalInPositiveAdjustments}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{equipment.totalInNegativeAdjustments}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{equipment.totalInWithdrawal}}
+                    </div>
+                    <div class="col-sm-1"
+                         :class="getTotalBackgroundColor(equipment)"
+                    >
+                        {{equipment.total}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{equipment.totalInRequests}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{equipment.totalMinNeeded}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{equipment.totalMaxNeeded}}
+                    </div>
                 </div>
-                <div class="col-sm-1">
-                    {{equipment.totalInPurchases}}
+                <div class="row mb-1" v-for="machine in equipment.machines">
+                    <div class="col-sm-1">
+
+                    </div>
+                    <div class="col-sm-2">
+                        {{machine.name}}
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1">
+                        {{machine.minNeeded}}
+                    </div>
+                    <div class="col-sm-1">
+                        {{machine.maxNeeded}}
+                    </div>
                 </div>
-                <div class="col-sm-1">
-                    {{equipment.totalInPositiveAdjustments}}
-                </div>
-                <div class="col-sm-1">
-                    {{equipment.totalInNegativeAdjustments}}
-                </div>
-                <div class="col-sm-1">
-                    {{equipment.totalInWithdrawal}}
-                </div>
-                <div class="col-sm-1"
-                     :class="getTotalBackgroundColor(equipment)"
-                >
-                    {{equipment.total}}
-                </div>
-                <div class="col-sm-1">
-                    {{equipment.totalInRequests}}
-                </div>
-                <div class="col-sm-1">
-                    {{equipment.totalMinNeeded}}
-                </div>
-                <div class="col-sm-1">
-                    {{equipment.totalMaxNeeded}}
-                </div>
-            </div>
+            </template>
 
             <div class="row">
                 <h1>
@@ -381,7 +402,8 @@
                 totalInPositiveAdjustments: 0,
                 totalInNegativeAdjustments: 0,
                 totalInWithdrawal: 0,
-                total: 0
+                total: 0,
+                machines: []
               }
             })
             let branches = result[1].map(branch => {
@@ -396,7 +418,7 @@
                   equipmentCopyfound.totalMaxNeeded = equipmentCopyfound.totalMaxNeeded + branchEquipment.max_quantity
                 }
               })
-              let machinesOnBranch = result[2]
+              result[2]
                 .filter(machine => { return machine.branch_id === branch.id })
                 .map(machine => {
                   return {...machine,
@@ -408,11 +430,12 @@
                         equipmentCopyfound.isMachineRequired = true
                         equipmentCopyfound.totalMinNeeded = equipmentCopyfound.totalMinNeeded + machineEquipment.min_quantity
                         equipmentCopyfound.totalMaxNeeded = equipmentCopyfound.totalMaxNeeded + machineEquipment.max_quantity
+                        equipmentCopyfound.machines.push({name: machine.name, minNeeded: machineEquipment.min_quantity, maxNeeded: machineEquipment.max_quantity})
                       }
                       return {...machineEquipment, totalMinNeeded: machineEquipment.min_quantity, totalMaxNeeded: machineEquipment.max_quantity}
                     })}
                 })
-              return {...branch, equipments: equipmentsCopy, machines: machinesOnBranch}
+              return {...branch, equipments: equipmentsCopy}
             })
             let equipmentTransactions = result[3]
             equipmentTransactions.forEach(equipmentTransaction => {
