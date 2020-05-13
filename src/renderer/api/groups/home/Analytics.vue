@@ -2,21 +2,21 @@
     <div class="px-5">
         <mau-form-input-select-static
             :availableObjects="options"
-            :initialObject="initialTabIndex"
+            :initialObject="initialOptionSelected"
             :displayProperty="'text'"
             :name="'reportSelect'"
             :trackBy="'value'"
-            v-model="tabIndex"
+            v-model="optionSelected"
         >
         </mau-form-input-select-static>
-        <sales-report v-if="tabIndex.value === 0" class="mt-4"></sales-report>
-        <bag-inventory-report v-if="tabIndex.value === 1" class="mt-4"></bag-inventory-report>
-        <production-report :key="tabIndex.value + 'bag'" :reportType="'bag'" v-if="tabIndex.value === 2" class="mt-4"></production-report>
-        <production-report :key="tabIndex.value + 'roll'" :reportType="'roll'" v-if="tabIndex.value === 3" class="mt-4"></production-report>
-        <expense-report-two :key="tabIndex.value + 'expenseReport2'" v-if="tabIndex.value === 4" class="mt-4"></expense-report-two>
-        <expense-report-three :key="tabIndex.value + 'expenseReport3'" v-if="tabIndex.value === 5" class="mt-4"></expense-report-three>
-        <general-report :key="tabIndex.value + 'generalReport'" v-if="tabIndex.value === 6"> </general-report>
-        <equipment-transaction-report :key="tabIndex.value + 'equipmentTransactionReport'" v-if="tabIndex.value === 7"> </equipment-transaction-report>
+        <sales-report v-if="optionSelected.value === 0" class="mt-4"> </sales-report>
+        <bag-inventory-report v-if="optionSelected.value === 1" class="mt-4"> </bag-inventory-report>
+        <production-report :key="optionSelected.value + 'bag'" :reportType="'bag'" v-if="optionSelected.value === 2" class="mt-4"> </production-report>
+        <production-report :key="optionSelected.value + 'roll'" :reportType="'roll'" v-if="optionSelected.value === 3" class="mt-4"> </production-report>
+        <expense-report-two :key="optionSelected.value + 'expenseReport2'" v-if="optionSelected.value === 4" class="mt-4"> </expense-report-two>
+        <expense-report-three :key="optionSelected.value + 'expenseReport3'" v-if="optionSelected.value === 5" class="mt-4"> </expense-report-three>
+        <general-report :key="optionSelected.value + 'generalReport'" v-if="optionSelected.value === 6"> </general-report>
+        <equipment-transaction-report :key="optionSelected.value + 'equipmentTransactionReport'" v-if="optionSelected.value === 7"> </equipment-transaction-report>
     </div>
 </template>
 
@@ -29,25 +29,36 @@
     import ExpenseReportThree from 'renderer/api/groups/home/components/ExpenseReportThree'
     import GeneralReport from 'renderer/api/groups/home/components/GeneralReport'
     import EquipmentTransactionReport from 'renderer/api/groups/home/components/EquipmentTransactionReport'
+    import {mapGetters} from 'vuex'
     export default {
       data () {
         return {
-          tabIndex: '',
-          initialTabIndex: {},
-          options: [
-            {value: 0, text: 'Reporte de ventas'},
-            {value: 1, text: 'Inventario de bolsas'},
-            {value: 2, text: 'Reporte de bolseo'},
-            {value: 3, text: 'Reporte de extrusion'},
-            {value: 4, text: 'Resumen de facturas'},
-            {value: 5, text: 'Resumen de gastos'},
-            {value: 6, text: 'Resumen general'},
-            {value: 7, text: 'Equipment transaction report'}
-          ]
+          optionSelected: '',
+          initialOptionSelected: {},
+          options: []
         }
       },
       created () {
-        this.initialTabIndex = this.options[0]
+        if (this.isSalesUser || this.isAdminUser) {
+          this.options.push({value: 0, text: 'Reporte de ventas'})
+          this.options.push({value: 1, text: 'Inventario de bolsas'})
+        }
+        if (this.isAdminUser) {
+          this.options.push({value: 2, text: 'Reporte de bolseo'})
+          this.options.push({value: 3, text: 'Reporte de extrusion'})
+          this.options.push({value: 4, text: 'Resumen de facturas'})
+          this.options.push({value: 5, text: 'Resumen de gastos'})
+          this.options.push({value: 6, text: 'Resumen general'})
+          this.options.push({value: 7, text: 'Equipment transaction report'})
+        }
+        this.initialOptionSelected = this.options[0]
+      },
+      computed: {
+        ...mapGetters([
+          'isAdminUser',
+          'isProductionUser',
+          'isSalesUser'
+        ])
       },
       components: {
         BagInventoryReport,

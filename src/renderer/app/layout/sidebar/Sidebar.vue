@@ -62,6 +62,18 @@
         if (category.name === Categories.PRODUCTION.name) {
           shouldShow = this.isAdminUser || this.isProductionUser
         }
+        if (category.name === Categories.ADMINISTRATION.name) {
+          shouldShow = this.isAdminUser
+        }
+        if (category.name === Categories.HUMAN_RESOURCES.name) {
+          shouldShow = this.isAdminUser
+        }
+        if (category.name === Categories.MAINTENANCE.name) {
+          shouldShow = this.isAdminUser
+        }
+        if (category.name === Categories.AUTH.name) {
+          shouldShow = this.isAdminUser
+        }
         return shouldShow
       },
       getDefaultCategoryRouteObjectPath: function (category) {
