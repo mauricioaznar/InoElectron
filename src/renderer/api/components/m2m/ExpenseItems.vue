@@ -200,7 +200,11 @@
           this.$emit('input', this.expenseItems)
         },
         isExpenseItemQuantityRequired: function (expenseItem) {
-          return expenseItem.expenseSubcategory && (expenseItem.expenseSubcategory.id === 12 || expenseItem.expenseSubcategory.id === 13 || expenseItem.expenseSubcategory.id === 29 || expenseItem.expenseSubcategory.id === 39 || expenseItem.expenseSubcategory.id === 30)
+          return expenseItem.expenseSubcategory &&
+            (expenseItem.expenseSubcategory.id === 12 ||
+              expenseItem.expenseSubcategory.id === 13 ||
+              expenseItem.expenseSubcategory.id === 39 ||
+              expenseItem.expenseSubcategory.id === 30)
         },
         addExpenseItem: function () {
           this.expenseItems.push({description: ''})
