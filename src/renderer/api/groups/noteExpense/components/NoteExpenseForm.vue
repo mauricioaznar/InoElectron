@@ -44,13 +44,17 @@
                 </mau-form-input-select-dynamic>
             </div>
         </div>
-        <expense-items
-                v-model="expense.expenseItems"
-                :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
-                @total="setTotal"
-                :supplier="expense.supplier && expense.supplier.id ? expense.supplier : {}"
-        >
-        </expense-items>
+       <div class="form-group form-row">
+           <div class="col-sm-12">
+               <expense-items
+                       v-model="expense.expenseItems"
+                       :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
+                       @total="setTotal"
+                       :supplier="expense.supplier && expense.supplier.id ? expense.supplier : {}"
+               >
+               </expense-items>
+           </div>
+       </div>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
