@@ -9,9 +9,21 @@
                         :name="EquipmentPropertiesReference.DESCRIPTION.name"
                         :error="errors.has(EquipmentPropertiesReference.DESCRIPTION.name) ? errors.first(EquipmentPropertiesReference.DESCRIPTION.name) : ''"
                         :disabled="!userHasWritePrivileges"
+                        @focus="descriptionComponentFocused = true"
+                        @blur="descriptionComponentFocused = false"
                         v-validate="'required'"
                 >
                 </mau-form-input-text>
+            </div>
+        </div>
+        <div class="form-group form-row" v-if="descriptionComponentFocused">
+            <div class="col-sm-12">
+                <mau-text-input-suggested-results
+                    :entityEndpointName="equipmentEndpointName"
+                    :searchedProperty="EquipmentPropertiesReference.DESCRIPTION.name"
+                    :searchedValue="equipment.description"
+                >
+                </mau-text-input-suggested-results>
             </div>
         </div>
         <div class="form-group form-row">
@@ -76,6 +88,7 @@
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
+  import MauTextInputSuggestedResults from 'renderer/api/components/inputs/MauTextInputSuggestedResults'
   export default {
     name: 'EquipmentForm',
     data () {
@@ -88,14 +101,17 @@
           equipmentMeasurementUnit: {}
         },
         initialValues: {},
+        descriptionComponentFocused: false,
         equipmentCategoryEndpointName: EntityTypes.EQUIPMENT_CATEGORY.apiName,
         equipmentSubcategoryEndpointName: EntityTypes.EQUIPMENT_SUBCATEGORY.apiName,
         equipmentMeasurementUnitEndpointName: EntityTypes.EQUIPMENT_MEASUREMENT_UNIT.apiName,
+        equipmentEndpointName: EntityTypes.EQUIPMENT.apiName,
         buttonDisabled: false
       }
     },
     components: {
-      MauFormInputSelectDynamic
+      MauFormInputSelectDynamic,
+      MauTextInputSuggestedResults
     },
     props: {
       initialObject: {
