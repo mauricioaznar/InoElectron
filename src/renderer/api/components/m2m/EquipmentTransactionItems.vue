@@ -122,7 +122,7 @@
                         >
                         </mau-form-input-select-dynamic>
                     </td>
-                    <td> <span v-if="index !== 0" class="btn btn-sm fa fa-times float-right font-weight-bold" @click="removeItem(index)"></span></td>
+                    <td> <span v-if="index !== 0 || !requiresFirstItem" class="btn btn-sm fa fa-times float-right font-weight-bold" @click="removeItem(index)"></span></td>
                 </tr>
             </tbody>
         </table>
@@ -147,7 +147,7 @@
         MauFormInputSelectDynamic
       },
       created () {
-        this.items = this.initialValues.length === 0 ? [{}] : cloneDeep(this.initialValues)
+        this.items = this.initialValues.length === 0 ? (this.requiresFirstItem ? [{}] : []) : cloneDeep(this.initialValues)
         this.initialItems = cloneDeep(this.initialValues)
         this.refreshInput()
       },
@@ -175,6 +175,12 @@
         },
         requiresMinQuantity: {
           type: Boolean
+        },
+        requiresFirstItem: {
+          type: Boolean,
+          default: function () {
+            return true
+          }
         },
         label: {
           type: String,

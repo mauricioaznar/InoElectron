@@ -56,6 +56,7 @@
                         :requiresMaxQuantity="true"
                         :requiresMinQuantity="true"
                         :requiresMachine="false"
+                        :requiresFirstItem="false"
                 >
 
                 </equipment-transaction-items>
