@@ -277,7 +277,7 @@
             }
             let startDateTime = moment(productionRegistry.start_date_time, 'YYYY-MM-DD HH:mm:ss')
             let endDateTime = moment(productionRegistry.end_date_time, 'YYYY-MM-DD HH:mm:ss')
-            let hours = endDateTime.diff(startDateTime, 'hours')
+            let hours = endDateTime.diff(startDateTime, 'hours') === 0 ? 1 : endDateTime.diff(startDateTime, 'hours')
             let kilosPerHour = (productionRegistry.kilos / hours).toFixed(2)
             let iterableDateTime = moment(productionRegistry.start_date_time, 'YYYY-MM-DD HH:mm:ss')
             let machineItem = machineItems.find(machineItemObj => { return machineItemObj.id === productionRegistry.machine_id })
