@@ -448,7 +448,7 @@
               let weekArrayIndex = Math.floor((daysSince / 7))
               expense.expense_items.forEach(expenseItem => {
                 if (expenseItem.expense_subcategory_id !== 12) {
-                  this.weeks[weekArrayIndex].expenses_lost = this.weeks[weekArrayIndex].expenses_lost + expenseItem.subtotal
+                  // this.weeks[weekArrayIndex].expenses_lost = this.weeks[weekArrayIndex].expenses_lost + expenseItem.subtotal
                 }
               })
             }
