@@ -447,8 +447,12 @@
               let daysSince = saleDateMoment.diff(startWeekDateMoment, 'days')
               let weekArrayIndex = Math.floor((daysSince / 7))
               expense.expense_items.forEach(expenseItem => {
+                console.log(this.weeks.length)
                 if (expenseItem.expense_subcategory_id !== 12) {
-                  // this.weeks[weekArrayIndex].expenses_lost = this.weeks[weekArrayIndex].expenses_lost + expenseItem.subtotal
+                  if (this.weeks[weekArrayIndex] === undefined) {
+                    console.log('Array index error, an expense may be out of date range created for the weeks array')
+                  }
+                  this.weeks[weekArrayIndex].expenses_lost = this.weeks[weekArrayIndex].expenses_lost + expenseItem.subtotal
                 }
               })
             }
