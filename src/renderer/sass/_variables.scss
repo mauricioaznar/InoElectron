@@ -72,7 +72,7 @@ $main-shadow: 0 0 10px 0 rgba(200,200,200,0.5);
 
 $sidebar-bg: $layout-color;
 $navbar-bg: $layout-color;
-$sidebar-width : 80px;
+$sidebar-width : 200px;
 $sidebar-top : calc(#{$top-nav-height} + #{$layout-padding});
 $sidebar-left : $layout-padding;
 
@@ -167,7 +167,7 @@ $input-h-size: 250px;
 
 
 //Sidebar
-$sidebar-link-height : 64px;
+$sidebar-link-height : 20px;
 $sidebar-submenu-link-height : 48px;
 $sidebar-link-pl : 20px;
 $sidebar-submenu-link-pl : 50px;

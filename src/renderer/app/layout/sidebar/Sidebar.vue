@@ -1,7 +1,7 @@
 <template>
   <aside class="sidebar">
-      <ul class="sidebar-menu">
-        <li v-for="(category, index) in categories" v-if="showDependingOnRol(category)">
+      <ul class="sidebar-menu" v-for="(category, index) in categories" v-if="showDependingOnRol(category)">
+        <li>
           <a
               @click="getDefaultCategoryRouteObjectPath(category)"
              class="sidebar-link"
@@ -13,6 +13,16 @@
 
               </span>
               <p>{{category.title}}</p>
+            </div>
+          </a>
+        </li>
+        <li v-for="(childRouteObject, index) in category.children">
+          <a
+                  class="sidebar-link"
+                  @click="pushChildRouteObject(childRouteObject)"
+                  :class="{'router-link-active': category.name === currentCategoryName}">
+            <div class="d-flex flex-column">
+              <p>{{childRouteObject.name}}</p>
             </div>
           </a>
         </li>
@@ -33,6 +43,25 @@
       }
     },
     created () {
+      for (let categoryKey in this.categories) {
+        if (this.categories.hasOwnProperty(categoryKey)) {
+          let category = this.categories[categoryKey]
+          let categoryChildren = []
+          console.log(category)
+          this.routeObjects.forEach(routeObject => {
+            if (category.name === RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObject, 'category').name) {
+              routeObject.children.forEach(childRouteObject => {
+                console.log(childRouteObject.name)
+                if (RouteObjectHelper.getRouteObjectMetaPropertyValue(childRouteObject, 'navbar')) {
+                  categoryChildren.push(childRouteObject)
+                }
+              })
+            }
+          })
+          console.log(categoryChildren)
+          category.children = categoryChildren
+        }
+      }
     },
     components: {
     },
@@ -79,6 +108,9 @@
       getDefaultCategoryRouteObjectPath: function (category) {
         this.$router.push({path: this.getDefaultCategoryRouteObject(category).path})
       },
+      pushChildRouteObject: function (childRouteObject) {
+        this.$router.push({path: childRouteObject.path})
+      },
       getDefaultCategoryRouteObject: function (category) {
         let foundRouteObj = {}
         this.routeObjects.forEach(routeObj => {
@@ -93,6 +125,9 @@
           }
         })
         return foundRouteObj
+      },
+      getNavbarChildrenRouteObjects: function (mainRouteObject) {
+        return []
       }
     },
     watch: {
