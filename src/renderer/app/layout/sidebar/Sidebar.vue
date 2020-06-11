@@ -1,32 +1,28 @@
 <template>
   <aside class="sidebar">
-      <ul class="sidebar-menu" v-for="(category, index) in categories" v-if="showDependingOnRol(category)">
-        <li>
+      <ul class="sidebar-menu my-3" v-for="(category, index) in categories" v-if="showDependingOnRol(category)">
+        <li class="pl-2 mb-1">
           <a
               @click="getDefaultCategoryRouteObjectPath(category)"
-             class="sidebar-link"
+             class="sidebar-link side-link-category-title"
              :class="{'router-link-active': category.name === currentCategoryName}">
-            <div class="d-flex flex-column">
-              <span
-                      class="sidebar-menu-item-icon"
-                      v-bind:class="category.iconClass">
-
-              </span>
-              <p>{{category.title}}</p>
-            </div>
+            {{category.title}}
           </a>
         </li>
-        <li v-for="(childRouteObject, index) in category.children">
+        <li class="pl-4" v-for="(childRouteObject, index) in category.children" @click="pushChildRouteObject(childRouteObject)">
           <a
                   class="sidebar-link"
-                  @click="pushChildRouteObject(childRouteObject)"
-                  :class="{'router-link-active': category.name === currentCategoryName}">
-            <div class="d-flex flex-column">
-              <p>{{childRouteObject.name}}</p>
-            </div>
+                  :class="{'router-link-active': childRouteObject.name === $route.name}">
+            {{getRouteObjectMetaPropertyValue(childRouteObject, 'title')}}
           </a>
         </li>
       </ul>
+    <a
+            class="sidebar-link sidebar-close-link"
+            @click="logout"
+    >
+      Cerrar sesión
+    </a>
   </aside>
 </template>
 
@@ -35,6 +31,7 @@
   import Categories from 'renderer/api/Categories'
   import RouteObjectHelper from 'renderer/api/functions/RouteObjectHelper'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
+  import authActions from 'renderer/api/store/authActions'
   export default {
     name: 'sidebar',
     data () {
@@ -111,6 +108,7 @@
       pushChildRouteObject: function (childRouteObject) {
         this.$router.push({path: childRouteObject.path})
       },
+      getRouteObjectMetaPropertyValue: RouteObjectHelper.getRouteObjectMetaPropertyValue,
       getDefaultCategoryRouteObject: function (category) {
         let foundRouteObj = {}
         this.routeObjects.forEach(routeObj => {
@@ -128,6 +126,11 @@
       },
       getNavbarChildrenRouteObjects: function (mainRouteObject) {
         return []
+      },
+      logout: function () {
+        this.$store.dispatch(authActions.UNSET_USER).then(result => {
+          this.$router.push({name: 'LoginAuth'})
+        })
       }
     },
     watch: {
@@ -139,106 +142,57 @@
   @import "../../../sass/variables";
 
   .sidebar {
-    height: $sidebar-viewport-height;
-    background: $sidebar-bg;
-    .vuestic-scrollbar {
-      height: 100%;
-      .scrollbar-wrapper {
-        box-shadow: $sidebar-box-shadow;
-      }
-      .scrollbar-content {
-        background: $sidebar-bg;
-      }
-    }
-
-    position: absolute;
+    background-color: rgb(44, 50, 70);
+    height: calc(100vh) !important;
+    position: fixed;
+    top: 0 !important;
     width: $sidebar-width;
-
-    .sidebar-hidden & {
-      top: $sidebar-hidden-top;
-      opacity: 0;
-      z-index: $min-z-index;
-
-    }
 
     .sidebar-link {
       position: relative;
-      height: $sidebar-link-height;
-      padding-left: $sidebar-link-pl;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      cursor: pointer;
-      text-decoration: none;
-
-      &.router-link-active, &:hover {
-        color: $white;
-        background-color: $sidebar-link-active-bg;
-
-        .sidebar-menu-item-icon, .expand-icon {
-          color: $white;
-        }
-      }
-
-      .expand-icon {
-        position: absolute;
-        right: $sidebar-arrow-right;
-        top: calc(50% - #{$font-size-root}/2);
-        font-weight: bold;
-        transition: transform 0.3s ease;
-      }
-
-      &.expanded {
-        .expand-icon {
-          transform: rotate(180deg);
-        }
-      }
-
-      .sidebar-menu-item-icon {
-        font-size: $sidebar-menu-item-icon-size;
-        color: $sidebar-submenu-icon-color;
-        margin-right: 14px;
-
-        &.fa-dashboard {       /* Temp fix */
-          position: relative;
-          top: -2px
-        }
-      }
-    }
-
-    .sidebar-submenu-link {
-      height: $sidebar-submenu-link-height;
-    }
-
-    .sidebar-menu, .sidebar-submenu {
-      list-style: none;
       padding-left: 0;
+      text-decoration: none;
+      width: 100%;
+      color:white;
+      font-weight: 500;
+      font-size: 14px;
 
-      li {
-        display: block;
-        padding-left: 0;
+      &.router-link-active{
+        color: #4ab2e3;
+        background-color: transparent;
+      }
+      &:hover{
+        color: #4ab2e3;
+        background-color: transparent;
       }
     }
 
-    .sidebar-submenu {
-      .sidebar-link {
-        padding-left: $sidebar-submenu-link-pl;
-        font-size: $font-size-smaller;
-      }
+    .side-link-category-title {
+      font-size: 17px;
     }
 
     .sidebar-menu {
+      width: 100%;
       max-height: 100%;
       margin-bottom: 0;
+      padding: 0;
+      li {
+        width: 100%;
+        height: 26px;
+        cursor: pointer;
+      }
     }
 
-    .expand-icon {
-      color: $body-color;
-    }
-
-    a {
-      color: $body-color;
-      text-decoration: none;
+    .sidebar-close-link {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 30px;
+      vertical-align: center;
+      text-align: center;
     }
   }
+
+
 </style>
