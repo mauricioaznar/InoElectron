@@ -6,7 +6,7 @@
             </label>
             <a href="#" class="fa fa-plus p-1" @click.prevent="addExpenseItem"></a>
         </div>
-        <table>
+        <table class="w-100">
             <thead>
             <tr>
                 <th>#</th>
@@ -15,10 +15,10 @@
                 <th>Rubro</th>
                 <th>Sucursal</th>
                 <th>Cantidad</th>
-                <th>Maquina</th>
+                <th> </th>
             </tr>
             </thead>
-            <tr class="border p-2" v-for="(expenseItem, index) in expenseItems"
+            <tr class="border p-2 w-100" v-for="(expenseItem, index) in expenseItems"
                 :class="index + 1 !== expenseItems.length ? '' : ''"
             >
                 <td>{{index + 1}}</td>
@@ -105,20 +105,8 @@
                     </mau-form-input-number>
                 </td>
                 <td>
-                    <mau-form-input-select-dynamic
-                            :key="'ItemMachine' + index + 'a' +
-                            (!hasInitialValues && hasLastSupplierExpenseItems? supplier.id : '')"
-                            v-if="expenseItem.expenseCategory && expenseItem.expenseCategory.id === 2"
-                            :label="''"
-                            :initialObject="hasInitialValues ? getInitialExpenseItem(expenseItem).machine : (hasLastSupplierExpenseItems && isIndexValidInLastSupplierExpenseItems(index) ? getLastSupplierExpenseItem(index).machine : {})"
-                            :displayProperty="'name'"
-                            :endpointName="machineEndpointName"
-                            v-model="expenseItem.machine"
-                            @input="function x(result) { updateExpenseItemProperty(result, expenseItem, 'machine_id') }"
-                            :name="'Machine' + index"
-                            :error="errors.has('Machine' + index) ? errors.first('Machine' + index) : ''"
-                    >
-                    </mau-form-input-select-dynamic>
+                    <a v-if="index !== 0" class="fa fa-close p-1" href="#" @click.prevent="removeExpenseItem(index)"></a>
+                    <a v-else class="p-1">-</a>
                 </td>
             </tr>
         </table>

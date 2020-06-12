@@ -6,7 +6,7 @@
             </label>
             <a href="#" class="fa fa-plus p-1" @click.prevent="addItem"></a>
         </div>
-        <table>
+        <table class="w-100">
             <thead>
                 <tr>
                     <th>Insumo</th>
@@ -21,6 +21,7 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in items"
+                    class="w-100"
                      :class="index + 1 !== items.length ? '' : ''"
                 >
                     <td>

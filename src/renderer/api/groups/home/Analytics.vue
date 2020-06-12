@@ -51,7 +51,7 @@
           this.options.push({value: 6, text: 'Resumen general'})
           this.options.push({value: 7, text: 'Equipment transaction report'})
         }
-        this.initialOptionSelected = this.options[0]
+        this.initialOptionSelected = this.options[5]
       },
       computed: {
         ...mapGetters([

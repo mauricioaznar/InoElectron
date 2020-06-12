@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-        <div class="danger">DANGER</div>
         <div class="row">
             <div class="col-sm-12 col-md-5">
                 <mau-form-input-date
@@ -132,6 +131,22 @@
             ]
           }
           let workbook = xlsx.utils.book_new()
+          let sales = []
+          this.filteredSales.forEach(sale => {
+            sale.products.forEach(product => {
+              sales.push({
+                'Codigo': sale.order_code,
+                'Fecha': sale.date,
+                'Tipo': sale.order_sale_receipt_type.name,
+                'Cliente': sale.client.name,
+                'Status': sale.order_sale_status.name,
+                'Producto': product.description,
+                'Kilos': product.pivot.kilos,
+                'Precio': product.pivot.kilo_price,
+                'Total': (product.pivot.kilos * product.pivot.kilo_price) * (sale.order_sale_receipt_type_id === 2 ? 1.16 : 1)
+              })
+            })
+          })
           let expenses = []
           this.filteredExpenses.forEach(expense => {
             expense.expense_items.forEach(expenseItem => {
@@ -139,6 +154,7 @@
                 'Fecha': expense.date_paid,
                 'Proveedor': expense.supplier.name,
                 'Descripcion': expenseItem.description,
+                'Categoria': this.expenseCategories.find(expenseCategory => { return expenseCategory.id === expenseItem.expense_subcategory.expense_category_id }).name,
                 'Rubro': expenseItem.expense_subcategory.name,
                 'Total': expenseItem.subtotal
               })
@@ -149,7 +165,7 @@
             .map(expenseCategory => { return {'Rubro': expenseCategory.name, 'Valor': expenseCategory.filteredTotal} })
           let equilibriumPoint = [
             {'Rubro': 'Total de kilos en bolseo', 'Valor': this.filteredTotalKilosBagProduced},
-            {'Rubro': 'Total de kilos en bolseo', 'Valor': this.filteredTotalKilosBagProduced},
+            {'Rubro': 'Total de kilos en extrusion', 'Valor': this.filteredTotalKilosRollProduced},
             {'Rubro': '', 'Valor': ''},
             ...filteredMapedExpenseCategoriesForElequilibriumPoint,
             {'Rubro': '', 'Valor': ''},
@@ -158,6 +174,7 @@
           ]
           let equilibriumWS = xlsx.utils.json_to_sheet(equilibriumPoint)
           let expensesWS = xlsx.utils.json_to_sheet(expenses)
+          let salesWS = xlsx.utils.json_to_sheet(sales)
           let expenseCategoriesWS = xlsx.utils.json_to_sheet(this.expenseCategories)
           let expenseSubcategoriesWS = xlsx.utils.json_to_sheet(this.expenseSubcategories)
           let weeksWS = xlsx.utils.json_to_sheet(this.weeks)
@@ -165,6 +182,7 @@
           xlsx.utils.book_append_sheet(workbook, expensesWS, 'Gastos')
           xlsx.utils.book_append_sheet(workbook, expenseCategoriesWS, 'Categorias')
           xlsx.utils.book_append_sheet(workbook, expenseSubcategoriesWS, 'Rubros')
+          xlsx.utils.book_append_sheet(workbook, salesWS, 'Ventas')
           xlsx.utils.book_append_sheet(workbook, weeksWS, 'Semanas')
           let o = remote.dialog.showSaveDialog(options)
           xlsx.writeFile(workbook, o)
@@ -225,13 +243,15 @@
           })
           this.filteredTotalKilosSold = 0
           this.filteredTotalMoneyGained = 0
+          this.filteredSales = []
           let sales = cloneDeep(this.sales)
           sales.forEach(sale => {
             let startDateTimeMoment = moment(sale.date, dateFormat)
             if (startDateTimeMoment.isSame(startDateMoment) || startDateTimeMoment.isSame(endDateMoment) || startDateTimeMoment.isBetween(startDateMoment, endDateMoment)) {
+              this.filteredSales.push(sale)
+              this.filteredTotalMoneyGained = this.filteredTotalMoneyGained + sale.total_cost
               sale.products.forEach(product => {
                 this.filteredTotalKilosSold = this.filteredTotalKilosSold + product.pivot.kilos
-                this.filteredTotalMoneyGained = this.filteredTotalMoneyGained + (product.pivot.kilos * product.pivot.kilo_price)
               })
             }
           })

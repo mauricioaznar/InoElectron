@@ -22,6 +22,7 @@
                         :initialValues="initialValues[BranchPropertiesReference.BRANCHES_EQUIPMENTS.name]"
                         :requiresMinQuantity="true"
                         :requiresMaxQuantity="true"
+                        :requiresFirstItem="false"
                 >
 
                 </equipment-transaction-items>
