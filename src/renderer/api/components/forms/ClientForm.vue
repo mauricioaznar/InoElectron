@@ -96,9 +96,11 @@
         </div>
         <div class="form-group form-row" v-if="initialValues['_contacts'].length > 0">
             <div class="col-sm-12">
-                <label>Contactos</label>
-                <div v-html="getPersonaArray(initialValues['_contacts'])">
-                </div>
+                <client-contact-table
+                    :initialValues="initialValue"
+                    v-model=""
+                >
+                </client-contact-table>
             </div>
         </div>
         <div class="container mb-2 text-right">
@@ -124,7 +126,8 @@
           city: '',
           country: '',
           zip_code: '',
-          house_phone: ''
+          house_phone: '',
+          contacts: []
         },
         initialValues: {},
         buttonDisabled: false
@@ -166,7 +169,7 @@
         this.initialValues[ClientPropertiesReference.COUNTRY.name] = DefaultValuesHelper.simple(this.initialObject, ClientPropertiesReference.COUNTRY.name)
         this.initialValues[ClientPropertiesReference.CITY.name] = DefaultValuesHelper.simple(this.initialObject, ClientPropertiesReference.CITY.name)
         this.initialValues[ClientPropertiesReference.ZIP_CODE.name] = DefaultValuesHelper.simple(this.initialObject, ClientPropertiesReference.ZIP_CODE.name)
-        this.initialValues['_contacts'] = DefaultValuesHelper.array(this.initialObject, ClientPropertiesReference.CONTACTS.name)
+        this.initialValues[ClientPropertiesReference.CONTACTS.name] = DefaultValuesHelper.array(this.initialObject, ClientPropertiesReference.CONTACTS.name)
       },
       save: function () {
         let directParams = {

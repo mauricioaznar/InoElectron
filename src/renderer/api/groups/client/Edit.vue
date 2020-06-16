@@ -12,6 +12,7 @@
       :id="id"
       :entityType="entityType"
       :callback="callback"
+      :relationshipIdName="'client_id'"
     >
       <template slot-scope="params">
         <client-form

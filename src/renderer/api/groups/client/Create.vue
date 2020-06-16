@@ -3,6 +3,7 @@
     <mau-crud-create
       :entityType="entityType"
       :callback="callback"
+      :relationshipIdName="'client_id'"
     >
       <template slot-scope="params">
         <client-form :saveFunction="params.save"></client-form>
