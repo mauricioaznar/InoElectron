@@ -1,6 +1,18 @@
 <template>
     <div class="container">
-        <div class="row">
+        <mau-spinner
+                v-if="isLoading"
+                :sizeType="'dataTable'"
+        >
+        </mau-spinner>
+        <div class="d-flex justify-content-between">
+            <h2>Reporte general</h2>
+            <div class="d-flex">
+                <a href="#" class="fa fa-file-excel-o p-2" @click.prevent="createExcelFile()"></a>
+                <a href="#" class="fa fa-clipboard p-2" @click.prevent="copyToClipboard()"></a>
+            </div>
+        </div>
+        <div class="row" v-if="!isLoading" >
             <div class="col-sm-12 col-md-5">
                 <mau-form-input-date
                         :name="'startDate'"
@@ -24,14 +36,9 @@
                 </mau-form-input-date>
             </div>
             <div class="col-md-2">
-                <button v-if="!isLoading" class="btn btn-excel" @click="createExcelFile">Excel</button>
+                <button class="btn btn-excel" @click="createExcelFile">Excel</button>
             </div>
         </div>
-        <mau-spinner
-                v-if="isLoading"
-                :sizeType="'dataTable'"
-        >
-        </mau-spinner>
         <div class="row">
             <div class="col-sm-6">
                 <div class="row mt-5">
@@ -80,7 +87,7 @@
 <script>
     import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
     import EntityTypes from 'renderer/api/EntityTypes'
-    import {remote} from 'electron'
+    import {remote, clipboard} from 'electron'
     import moment from 'moment'
     import xlsx from 'xlsx'
     import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
@@ -108,7 +115,6 @@
           expenseCategories: [],
           expenseSubcategories: [],
           weeks: [],
-          selectedExpenseSubcategory: '',
           initialStartDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
           startDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
           initialEndDate: moment().subtract(moment().isoWeekday(), 'days').format(dateFormat),
@@ -119,6 +125,23 @@
         this.getExpenses()
       },
       methods: {
+        copyToClipboard: function () {
+          let filteredSales = this.sales.filter(sale => {
+            let momentDateCollected = moment(sale.date_collected, dateFormat)
+            let momentToday = moment().subtract(1, 'days')
+            if (!momentDateCollected.isValid()) {
+              return false
+            }
+            return momentToday.isBefore(momentDateCollected)
+          })
+          let clipboardText = 'COBRANZA:\n'
+          filteredSales.forEach(filteredSale => {
+            let momentDateCollected = moment(filteredSale.date_collected, dateFormat)
+            let filteredSaleSummary = filteredSale.total_cost + filteredSale.client.name + ' ' + momentDateCollected.format('D MMM')
+            clipboardText = clipboardText + filteredSaleSummary + '\n'
+          })
+          clipboard.writeText(clipboardText)
+        },
         createExcelFile: function () {
           let options = {
             title: 'Save file',
