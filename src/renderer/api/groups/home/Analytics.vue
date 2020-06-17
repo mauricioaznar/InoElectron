@@ -47,8 +47,8 @@
           this.options.push({value: 2, text: 'Reporte de bolseo'})
           this.options.push({value: 3, text: 'Reporte de extrusion'})
           this.options.push({value: 4, text: 'Resumen de facturas'})
-          this.options.push({value: 5, text: 'Resumen de gastos'})
-          this.options.push({value: 6, text: 'Resumen general'})
+          this.options.push({value: 5, text: 'Resumen general'})
+          this.options.push({value: 6, text: 'Resumen de empleados'})
           this.options.push({value: 7, text: 'Equipment transaction report'})
         }
         this.initialOptionSelected = this.options[5]

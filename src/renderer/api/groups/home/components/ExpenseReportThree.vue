@@ -1,18 +1,22 @@
 <template>
-    <div class="container">
+    <div>
         <mau-spinner
-                v-if="isLoading"
-                :sizeType="'dataTable'"
+            v-if="isLoading"
+            :sizeType="'dataTable'"
         >
         </mau-spinner>
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between"
+             v-if="!isLoading"
+        >
             <h2>Reporte general</h2>
             <div class="d-flex">
                 <a href="#" class="fa fa-file-excel-o p-2" @click.prevent="createExcelFile()"></a>
                 <a href="#" class="fa fa-clipboard p-2" @click.prevent="copyToClipboard()"></a>
             </div>
         </div>
-        <div class="row" v-if="!isLoading" >
+        <div class="row"
+             v-if="!isLoading"
+        >
             <div class="col-sm-12 col-md-5">
                 <mau-form-input-date
                         :name="'startDate'"
@@ -39,7 +43,9 @@
                 <button class="btn btn-excel" @click="createExcelFile">Excel</button>
             </div>
         </div>
-        <div class="row">
+        <div class="row"
+             v-if="!isLoading"
+        >
             <div class="col-sm-6">
                 <div class="row mt-5">
                     <p>Total de dinero en ventas: {{currencyFormat(filteredTotalMoneyGained)}}</p>
@@ -103,6 +109,7 @@
           allExpenses: [],
           bagOrderProductions: [],
           rollOrderProductions: [],
+          materials: [],
           sales: [],
           filteredExpenses: [],
           filteredBagOrderProductions: [],
@@ -139,6 +146,18 @@
             let momentDateCollected = moment(filteredSale.date_collected, dateFormat)
             let filteredSaleSummary = filteredSale.total_cost + ' ' + filteredSale.client.name + ' ' + momentDateCollected.format('D MMM')
             clipboardText = clipboardText + filteredSaleSummary + '\n'
+          })
+          clipboardText = clipboardText + '\n'
+          clipboardText = clipboardText + 'BOLSEO:\n'
+          let momentStartOfWeek = moment().startOf('isoWeek').subtract(1, 'days')
+          this.bagOrderProductions.forEach(bagOrderProduction => {
+            let bagOrderProductionDate = moment(bagOrderProduction.start_date_time, dateFormat)
+            if (momentStartOfWeek.isBefore(bagOrderProductionDate)) {
+              bagOrderProduction.products.forEach(product => {
+                let bagOrderProductionSummary = product.description + ' ' + product.pivot.kilos + ' (' + bagOrderProduction.employee.fullname + ') ' + bagOrderProductionDate.format('D MMM')
+                clipboardText = clipboardText + bagOrderProductionSummary + '\n'
+              })
+            }
           })
           clipboard.writeText(clipboardText)
         },
@@ -193,11 +212,13 @@
             ...filteredMapedExpenseCategoriesForElequilibriumPoint,
             {'Rubro': '', 'Valor': ''},
             {'Rubro': 'Total de kilos en ventas', 'Valor': this.filteredTotalKilosSold},
-            {'Rubro': 'Dinero en ventas', 'Valor': this.filteredTotalMoneyGained}
+            {'Rubro': 'Dinero en ventas', 'Valor': this.filteredTotalMoneyGained},
+            {'Rubro': '', 'Valor': ''}
           ]
           let equilibriumWS = xlsx.utils.json_to_sheet(equilibriumPoint)
           let expensesWS = xlsx.utils.json_to_sheet(expenses)
           let salesWS = xlsx.utils.json_to_sheet(sales)
+          let materialsWS = xlsx.utils.json_to_sheet(this.materials)
           let expenseCategoriesWS = xlsx.utils.json_to_sheet(this.expenseCategories)
           let expenseSubcategoriesWS = xlsx.utils.json_to_sheet(this.expenseSubcategories)
           let weeksWS = xlsx.utils.json_to_sheet(this.weeks)
@@ -205,6 +226,7 @@
           xlsx.utils.book_append_sheet(workbook, expensesWS, 'Gastos')
           xlsx.utils.book_append_sheet(workbook, expenseCategoriesWS, 'Categorias')
           xlsx.utils.book_append_sheet(workbook, expenseSubcategoriesWS, 'Rubros')
+          xlsx.utils.book_append_sheet(workbook, materialsWS, 'Tipos de producto')
           xlsx.utils.book_append_sheet(workbook, salesWS, 'Ventas')
           xlsx.utils.book_append_sheet(workbook, weeksWS, 'Semanas')
           let o = remote.dialog.showSaveDialog(options)
@@ -267,6 +289,9 @@
           this.filteredTotalKilosSold = 0
           this.filteredTotalMoneyGained = 0
           this.filteredSales = []
+          this.materials = this.materials.map(material => {
+            return {...material, filteredTotalWithTax: 0, filteredTotalWithoutTax: 0, filteredTax: 0, filteredKilos: 0}
+          })
           let sales = cloneDeep(this.sales)
           sales.forEach(sale => {
             let startDateTimeMoment = moment(sale.date, dateFormat)
@@ -274,6 +299,17 @@
               this.filteredSales.push(sale)
               this.filteredTotalMoneyGained = this.filteredTotalMoneyGained + sale.total_cost
               sale.products.forEach(product => {
+                let materialFound = this.materials.find(material => {
+                  return material.id === product.material_id
+                })
+                materialFound.filteredKilos = materialFound.filteredKilos + product.pivot.kilos
+                if (sale.order_sale_receipt_type_id === 1) {
+                  materialFound.filteredTotalWithoutTax = materialFound.filteredTotalWithoutTax + (product.pivot.kilos * product.pivot.kilo_price)
+                }
+                if (sale.order_sale_receipt_type_id === 2) {
+                  materialFound.filteredTotalWithTax = materialFound.filteredTotalWithTax + (product.pivot.kilos * product.pivot.kilo_price * 1.16)
+                  materialFound.filteredTax = materialFound.filteredTax + (product.pivot.kilos * product.pivot.kilo_price * 0.16)
+                }
                 this.filteredTotalKilosSold = this.filteredTotalKilosSold + product.pivot.kilos
               })
             }
@@ -294,15 +330,13 @@
         getDependentEntities: async function () {
           Promise.all([
             GenericApiOperations.list(EntityTypes.EXPENSE_CATEGORY.apiName),
-            GenericApiOperations.list(EntityTypes.EXPENSE_SUBCATEGORY.apiName)
+            GenericApiOperations.list(EntityTypes.EXPENSE_SUBCATEGORY.apiName),
+            GenericApiOperations.list(EntityTypes.MATERIAL.apiName)
           ])
             .then(result => {
-              this.expenseCategories = result[0].map(expenseCategory => {
-                return {...expenseCategory, filteredTotal: 0}
-              })
-              this.expenseSubcategories = result[1].map(expenseSubcategory => {
-                return {...expenseSubcategory, filteredTotal: 0}
-              })
+              this.expenseCategories = result[0]
+              this.expenseSubcategories = result[1]
+              this.materials = result[2]
             })
         },
         createWeeks: function () {
