@@ -137,7 +137,7 @@
           let clipboardText = 'COBRANZA:\n'
           filteredSales.forEach(filteredSale => {
             let momentDateCollected = moment(filteredSale.date_collected, dateFormat)
-            let filteredSaleSummary = filteredSale.total_cost + filteredSale.client.name + ' ' + momentDateCollected.format('D MMM')
+            let filteredSaleSummary = filteredSale.total_cost + ' ' + filteredSale.client.name + ' ' + momentDateCollected.format('D MMM')
             clipboardText = clipboardText + filteredSaleSummary + '\n'
           })
           clipboard.writeText(clipboardText)
