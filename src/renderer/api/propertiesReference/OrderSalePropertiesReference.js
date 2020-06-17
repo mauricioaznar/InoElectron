@@ -14,6 +14,12 @@ let OrderSalePropertiesReference = {
     display: DisplayFunctions.getDate,
     defaultValue: MauInputDefaultValues.DATE
   },
+  DATE_COLLECTED: {
+    title: 'Fecha de cobranza',
+    name: 'date_collected',
+    display: DisplayFunctions.getDate,
+    defaultValue: MauInputDefaultValues.DATE
+  },
   PRODUCTS: {
     title: 'Productos',
     name: 'products',

@@ -411,40 +411,6 @@ routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.ROLL_ORDER_PRO
   ]
 ))
 
-routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
-  {
-    componentName: 'Main',
-    category: Categories.SALES
-  },
-  [
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
-      {
-        componentName: 'List',
-        groupDefault: true,
-        categoryDefault: true,
-        navbar: true
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
-      {
-        componentName: 'Create'
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
-      {
-        componentName: 'Edit',
-        params: [GlobalEntityIdentifier]
-      }
-    ),
-    RouteObjectHelper.createRouteObject(EntityTypes.CLIENT_CONTACT,
-      {
-        componentName: 'View',
-        params: [GlobalEntityIdentifier]
-      }
-    )
-  ]
-))
-
 routeObjects.push(RouteObjectHelper.createRouteObject(EntityTypes.EMPLOYEE,
   {
     componentName: 'Main',

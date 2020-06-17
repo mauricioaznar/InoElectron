@@ -38,6 +38,13 @@
             filterType: 'date'
           },
           {
+            name: OrderSalePropertiesReference.DATE_COLLECTED.name,
+            title: OrderSalePropertiesReference.DATE_COLLECTED.title,
+            sortField: OrderSalePropertiesReference.DATE_COLLECTED.name,
+            callback: DisplayFunctions.getDate,
+            filterType: 'date'
+          },
+          {
             name: OrderSalePropertiesReference.RECEIPT_TYPE.name,
             title: OrderSalePropertiesReference.RECEIPT_TYPE.title,
             callback: DisplayFunctions.getNameFromObject,

@@ -92,6 +92,18 @@
               >
               </mau-form-input-select-dynamic>
           </div>
+          <div class="form-group">
+              <mau-form-input-date
+                      :name="OrderSalePropertiesReference.DATE_COLLECTED.name"
+                      :label="OrderSalePropertiesReference.DATE_COLLECTED.title"
+                      v-model="salesOrder.date_collected"
+                      :initialValue="initialValues[OrderSalePropertiesReference.DATE_COLLECTED.name]"
+                      :error="errors.first(OrderSalePropertiesReference.DATE_COLLECTED.name)"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'required'"
+              >
+              </mau-form-input-date>
+          </div>
           <div class="form-group" v-if="isPartiallyPaidStatusSelected">
               <mau-form-input-number
                       :name="OrderSalePropertiesReference.AMOUNT_COLLECTED.name"
@@ -187,6 +199,7 @@
           products: [],
           saleProducts: [],
           date: '',
+          date_collected: '',
           amountCollected: '',
           clientContact: {},
           client: {},
@@ -298,6 +311,7 @@
         this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.ORDER_CODE.name)
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.PRODUCTS.name)
         this.initialValues[OrderSalePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.DATE.name)
+        this.initialValues[OrderSalePropertiesReference.DATE_COLLECTED.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.DATE_COLLECTED.name)
         this.initialValues[OrderSalePropertiesReference.CLIENT_CONTACT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT_CONTACT.name)
         this.initialValues[OrderRequestPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.CLIENT.name)
         this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
@@ -315,6 +329,7 @@
         let directParams = {}
         directParams[OrderSalePropertiesReference.ORDER_CODE.name] = this.salesOrder.orderCode
         directParams[OrderSalePropertiesReference.DATE.name] = this.salesOrder.date
+        directParams[OrderSalePropertiesReference.DATE_COLLECTED.name] = this.salesOrder.date_collected
         directParams[OrderSalePropertiesReference.CLIENT_CONTACT.relationship_id_name] = this.salesOrder.clientContact ? this.salesOrder.clientContact[GlobalEntityIdentifier] : null
         directParams[OrderSalePropertiesReference.AMOUNT_COLLECTED.name] = this.isPartiallyPaidStatusSelected ? this.salesOrder.amountCollected : 0
         directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] = (!this.isReplacementStatusSelected && this.salesOrder.receiptType) ? this.salesOrder.receiptType[GlobalEntityIdentifier] : null

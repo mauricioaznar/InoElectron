@@ -94,11 +94,11 @@
                 </mau-form-input-text>
             </div>
         </div>
-        <div class="form-group form-row" v-if="initialValues['_contacts'].length > 0">
+        <div class="form-group form-row">
             <div class="col-sm-12">
                 <client-contact-table
-                    :initialValues="initialValue"
-                    v-model=""
+                    :initialValues="initialObject[ClientPropertiesReference.CONTACTS.name]"
+                    v-model="client.contacts"
                 >
                 </client-contact-table>
             </div>
@@ -114,6 +114,9 @@
   import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
   import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
   import DisplayFunctions from 'renderer/api/functions/DisplayFunctions'
+  import ClientContactTable from 'renderer/api/components/m2m/ClientContactTable'
+  import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
+  import EntityTypes from 'renderer/api/EntityTypes'
   export default {
     name: 'ClientForm',
     data () {
@@ -134,6 +137,7 @@
       }
     },
     components: {
+      ClientContactTable
     },
     props: {
       initialObject: {
@@ -142,6 +146,14 @@
       saveFunction: {
         type: Function,
         required: true
+      }
+    },
+    computed: {
+      hasInitialValues: function () {
+        return this.initialValues.length > 0
+      },
+      userHasWritePrivileges: function () {
+        return true
       }
     },
     mounted () {
@@ -153,11 +165,6 @@
     },
     created () {
       this.setInitialValues()
-    },
-    computed: {
-      userHasWritePrivileges: function () {
-        return true
-      }
     },
     methods: {
       getPersonaArray: DisplayFunctions.getPersonaArray,
@@ -181,12 +188,18 @@
           [ClientPropertiesReference.CITY.name]: this.client.city,
           [ClientPropertiesReference.ZIP_CODE.name]: this.client.zip_code
         }
-        let indirectParams = {
-        }
+        let relayObjects = []
+        let clientContactM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          this.initialValues[ClientPropertiesReference.CONTACTS.name],
+          this.client.contacts,
+          'id'
+        )
+        let clientContactRelayObject = ManyToManyHelper.createRelayObject(clientContactM2mFilteredObject, EntityTypes.CLIENT_CONTACT)
+        relayObjects.push(clientContactRelayObject)
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true
-            this.saveFunction(directParams, indirectParams)
+            this.saveFunction(directParams, relayObjects)
           }
         })
       }
