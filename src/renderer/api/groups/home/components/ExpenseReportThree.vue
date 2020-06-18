@@ -119,6 +119,7 @@
           filteredTotalKilosRollProduced: 0,
           filteredTotalKilosSold: 0,
           filteredTotalMoneyGained: 0,
+          filteredDays: [],
           expenseCategories: [],
           expenseSubcategories: [],
           weeks: [],
@@ -142,22 +143,56 @@
             return momentToday.isBefore(momentDateCollected)
           })
           let clipboardText = 'COBRANZA:\n'
+          filteredSales.sort((filteredSaleA, filteredSaleB) => {
+            let momentDateCollectedA = moment(filteredSaleA.date_collected, dateFormat)
+            let momentDateCollectedB = moment(filteredSaleB.date_collected, dateFormat)
+            return momentDateCollectedA.isAfter(momentDateCollectedB, 'day')
+          })
           filteredSales.forEach(filteredSale => {
             let momentDateCollected = moment(filteredSale.date_collected, dateFormat)
             let filteredSaleSummary = filteredSale.total_cost + ' ' + filteredSale.client.name + ' ' + momentDateCollected.format('D MMM')
             clipboardText = clipboardText + filteredSaleSummary + '\n'
           })
-          clipboardText = clipboardText + '\n'
-          clipboardText = clipboardText + 'BOLSEO:\n'
-          let momentStartOfWeek = moment().startOf('isoWeek').subtract(1, 'days')
+          clipboardText = clipboardText + '\n\n'
+          let momentStartOfWeek = moment().startOf('isoWeek')
+          let filteredDays = []
+          let loopedDate = moment().startOf('isoWeek')
+          while (!loopedDate.isSame(moment(), 'day')) {
+            filteredDays.push({
+              momentDate: loopedDate.clone(),
+              date: loopedDate.format('D MMM'),
+              bagTotalKilos: 0,
+              rollTotalKilos: 0
+            })
+            loopedDate.add(1, 'days')
+          }
           this.bagOrderProductions.forEach(bagOrderProduction => {
-            let bagOrderProductionDate = moment(bagOrderProduction.start_date_time, dateFormat)
-            if (momentStartOfWeek.isBefore(bagOrderProductionDate)) {
-              bagOrderProduction.products.forEach(product => {
-                let bagOrderProductionSummary = product.description + ' ' + product.pivot.kilos + ' (' + bagOrderProduction.employee.fullname + ') ' + bagOrderProductionDate.format('D MMM')
-                clipboardText = clipboardText + bagOrderProductionSummary + '\n'
-              })
+            let bagOrderProductionMomentDate = moment(bagOrderProduction.start_date_time, dateFormat)
+            if (bagOrderProductionMomentDate.isBetween(momentStartOfWeek, moment(), undefined, '[]')) {
+              let dayFound = filteredDays.find(dayObj => { return dayObj.momentDate.isSame(bagOrderProductionMomentDate, 'days') })
+              if (dayFound) {
+                bagOrderProduction.products.forEach(product => {
+                  if (product.product_type_id === 1) {
+                    dayFound.bagTotalKilos = dayFound.bagTotalKilos + product.pivot.kilos
+                  }
+                })
+              }
             }
+          })
+          this.rollOrderProductions.forEach(rollOrderProduction => {
+            let rollOrderProductionMomentDate = moment(rollOrderProduction.start_date_time, dateFormat)
+            if (rollOrderProductionMomentDate.isBetween(momentStartOfWeek, moment(), undefined, '[]')) {
+              let dayFound = filteredDays.find(dayObj => { return dayObj.momentDate.isSame(rollOrderProductionMomentDate, 'days') })
+              if (dayFound) {
+                rollOrderProduction.products.forEach(product => {
+                  dayFound.rollTotalKilos = dayFound.rollTotalKilos + product.pivot.kilos
+                })
+              }
+            }
+          })
+          clipboardText = clipboardText + 'RESUMEN SEMANAL:\n'
+          filteredDays.forEach(filteredDay => {
+            clipboardText = clipboardText + filteredDay.date + '\n' + 'Bolseo ' + filteredDay.bagTotalKilos + '\n' + 'Extrusion ' + filteredDay.rollTotalKilos + '\n\n'
           })
           clipboard.writeText(clipboardText)
         },
