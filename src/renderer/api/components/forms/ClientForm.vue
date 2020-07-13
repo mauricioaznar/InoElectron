@@ -97,7 +97,7 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <client-contact-table
-                    :initialValues="initialObject[ClientPropertiesReference.CONTACTS.name]"
+                    :initialValues="initialValues[ClientPropertiesReference.CONTACTS.name]"
                     v-model="client.contacts"
                 >
                 </client-contact-table>
