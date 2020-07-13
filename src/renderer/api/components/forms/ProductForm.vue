@@ -269,7 +269,7 @@
           [PropertiesReference.WIDTH.name]: (this.isBag || this.isRoll) ? this.product.width : 0,
           [PropertiesReference.CURRENT_KILO_PRICE.name]: this.product.currentKiloPrice,
           // one to many
-          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material && (this.isBag || this.isRoll) ? this.product.material[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [PropertiesReference.PACKING.relationship_id_name]: this.product.packing && (this.isBag) ? this.product.packing[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
         }
