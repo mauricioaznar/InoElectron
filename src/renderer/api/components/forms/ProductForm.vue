@@ -128,12 +128,11 @@
         </mau-form-input-number>
       </div>
     </div>
-    <div class="form-group form-row"
-         v-if="isBag || isRoll"
-    >
+    <div class="form-group form-row">
       <div class="col-sm-12">
         <mau-form-input-select-dynamic
                 :initialObject="initialValues[PropertiesReference.MATERIAL.name]"
+                :apiOperationOptions="materialApiOperationsOptions"
                 :label="PropertiesReference.MATERIAL.title"
                 :displayProperty="'name'"
                 :endpointName="materialEndpointName"
@@ -215,6 +214,10 @@
       },
       userHasWritePrivileges: function () {
         return true
+      },
+      materialApiOperationsOptions: function () {
+        let filterExacts = {[PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType[GlobalEntityIdentifier] ? this.product.productType[GlobalEntityIdentifier] : ''}
+        return {filterExacts: filterExacts}
       }
     },
     components: {
