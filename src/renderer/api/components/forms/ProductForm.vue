@@ -131,6 +131,7 @@
     <div class="form-group form-row">
       <div class="col-sm-12">
         <mau-form-input-select-dynamic
+                :key="'material' + (this.product.productType[GlobalEntityIdentifier] ? this.product.productType[GlobalEntityIdentifier] : '')"
                 :initialObject="initialValues[PropertiesReference.MATERIAL.name]"
                 :apiOperationOptions="materialApiOperationsOptions"
                 :label="PropertiesReference.MATERIAL.title"
@@ -199,7 +200,8 @@
         productTypeEndpointName: EntityTypes.PRODUCT_TYPE.apiName,
         packingEndpointName: EntityTypes.PACKING.apiName,
         productEndpointName: EntityTypes.PRODUCT.apiName,
-        PropertiesReference: PropertiesReference
+        PropertiesReference: PropertiesReference,
+        GlobalEntityIdentifier: GlobalEntityIdentifier
       }
     },
     computed: {
