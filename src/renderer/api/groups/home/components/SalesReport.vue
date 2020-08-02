@@ -1,7 +1,10 @@
 <template>
     <div>
         <mau-spinner v-if="isLoading" :sizeType="'router'"></mau-spinner>
-        <h2 v-if="!isLoading">Reporte de clientes</h2>
+        <div class="d-flex justify-content-between">
+            <h2 v-if="!isLoading">Reporte de clientes</h2>
+            <a class="fa fa-clipboard p-2" href="#" @click.prevent="copySalesToClipboard()"></a>
+        </div>
         <table v-if="!isLoading" class="table">
             <thead>
                 <tr>
@@ -27,47 +30,6 @@
                 </tr>
             </tbody>
         </table>
-        <h2 v-if="!isLoading">Reporte de ventas</h2>
-        <div class="row" v-if="!isLoading">
-            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthCostData">
-                <h6>Comparativo de total de pedidos vs total de ventas (sin IVA) por mes, {{index + 2018}}</h6>
-                <mau-bar-chart
-                        :chartData="chartData"
-                        :options="chartOptions"
-                        :width="400"
-                        :height="200"
-                ></mau-bar-chart>
-            </div>
-            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthKilosData">
-                <h6>Comparativo de kilos de pedidos vs kilos vendidos de ventas por mes, {{index + 2018}}</h6>
-                <mau-bar-chart
-                        :chartData="chartData"
-                        :options="chartOptions"
-                        :width="400"
-                        :height="200"
-                ></mau-bar-chart>
-            </div>
-        </div>
-        <div class="row" v-if="!isLoading">
-            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthByClientCostData">
-                <h6>Total de ventas por cliente por mes, {{index + 2018}}</h6>
-                <mau-line-chart
-                        :chartData="chartData"
-                        :options="chartOptions"
-                        :width="400"
-                        :height="400"
-                ></mau-line-chart>
-            </div>
-            <div class="col-sm-12 py-2" v-for="(chartData, index) in salesByMonthByClientKilosData">
-                <h6>Total de kilos de ventas por cliente por mes, {{index + 2018}}</h6>
-                <mau-line-chart
-                        :chartData="chartData"
-                        :options="chartOptions"
-                        :width="400"
-                        :height="400"
-                ></mau-line-chart>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -77,6 +39,7 @@
   import MauBarChart from 'renderer/components/mau-components/mau-chart/MauBarChart'
   import MauLineChart from 'renderer/components/mau-components/mau-chart/MauLineChart'
   import EntityTypes from 'renderer/api/EntityTypes'
+  import {clipboard} from 'electron'
   import moment from 'moment'
   export default {
     data () {
@@ -91,16 +54,6 @@
         clients: [],
         interval: '',
         monthNames: '',
-        colors: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
-          '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
-          '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
-          '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
-          '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
-          '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
-          '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
-          '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
-          '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
-          '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'],
         chartOptions: {
           responsive: true,
           maintainAspectRatio: false,
@@ -111,38 +64,6 @@
               ticks: {
                 beginAtZero: true
               }
-            }]
-          }
-        },
-        chartCostReachedOptions: {
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: {
-            position: 'right'
-          },
-          tooltips: { displayColors: false },
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: false
-              }
-            }]
-          }
-        },
-        stackedChartOptions: {
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: { display: false },
-          tooltips: { displayColors: false },
-          scales: {
-            yAxes: [{
-              stacked: true,
-              ticks: {
-                beginAtZero: true
-              }
-            }],
-            xAxes: [{
-              stacked: true
             }]
           }
         }
@@ -222,112 +143,15 @@
             vm.isLoading = false
           }, 2000)
         })
+      },
+      copySalesToClipboard: function () {
+        clipboard.writeText('is it on clipboard?')
       }
     },
     beforeDestroy: function () {
       clearTimeout(this.timeout)
-      // clearInterval(this.interval)
     },
     watch: {
-      clients: function (clients) {
-        if (clients === undefined) {
-          return
-        }
-        let totalKilosSoldYearsData = []
-        let totalKilosRequestedYearsData = []
-        let totalCostSoldYearsData = []
-        let totalCostRequestedYearsData = []
-        for (let yearIndex = 0; yearIndex <= 2; yearIndex++) {
-          let totalKilosSoldYearData = []
-          let totalKilosRequestedYearData = []
-          let totalCostSoldYearData = []
-          let totalCostRequestedYearData = []
-          for (let monthIndex = 0; monthIndex < this.monthNames.length; monthIndex++) {
-            let kilosSoldMonthData = 0
-            let kilosRequestedMonthTotal = 0
-            let costSoldMonthData = 0
-            let costRequestedMonthData = 0
-            for (let clientIndex = 0; clientIndex < clients.length; clientIndex++) {
-              kilosSoldMonthData += clients[clientIndex]['years'][yearIndex][monthIndex]['total_kilos_sold']
-              kilosRequestedMonthTotal += clients[clientIndex]['years'][yearIndex][monthIndex]['total_kilos_requested']
-              costSoldMonthData += clients[clientIndex]['years'][yearIndex][monthIndex]['total_cost_sold']
-              costRequestedMonthData += clients[clientIndex]['years'][yearIndex][monthIndex]['total_cost_requested']
-            }
-            totalKilosSoldYearData.push(kilosSoldMonthData)
-            totalKilosRequestedYearData.push(kilosRequestedMonthTotal)
-            totalCostSoldYearData.push(costSoldMonthData)
-            totalCostRequestedYearData.push(costRequestedMonthData)
-          }
-          totalKilosSoldYearsData.push(totalKilosSoldYearData)
-          totalKilosRequestedYearsData.push(totalKilosRequestedYearData)
-          totalCostSoldYearsData.push(totalCostSoldYearData)
-          totalCostRequestedYearsData.push(totalCostRequestedYearData)
-        }
-        this.salesByMonthKilosData = []
-        this.salesByMonthCostData = []
-        this.salesByMonthByClientKilosData = []
-        this.salesByMonthByClientCostData = []
-        for (let yearIndex = 0; yearIndex <= 2; yearIndex++) {
-          this.salesByMonthKilosData.push({
-            labels: this.monthNames,
-            datasets: [
-              {
-                label: 'Kilos vendidos',
-                backgroundColor: '#E42',
-                data: totalKilosSoldYearsData[yearIndex]
-              },
-              {
-                label: 'Kilos solicitados',
-                backgroundColor: '#AA2',
-                data: totalKilosRequestedYearsData[yearIndex]
-              }
-            ]
-          })
-          this.salesByMonthCostData.push({
-            labels: this.monthNames,
-            datasets: [
-              {
-                label: 'Dinero obtenido en ventas (iva no incluido)',
-                backgroundColor: '#E42',
-                data: totalCostSoldYearsData[yearIndex]
-              },
-              {
-                label: 'Dinero en los pedidos',
-                backgroundColor: '#AA2',
-                data: totalCostRequestedYearsData[yearIndex]
-              }
-            ]
-          })
-          let clientsTotalKilosSoldYear1DataSets = clients.map((clientObj, i) => {
-            return {
-              label: clientObj['name'],
-              borderColor: this.colors[i],
-              fill: false,
-              data: clientObj['years'][yearIndex].map(clientYear1DataObj => {
-                return clientYear1DataObj['total_kilos_sold']
-              })
-            }
-          })
-          this.salesByMonthByClientKilosData.push({
-            labels: this.monthNames,
-            datasets: clientsTotalKilosSoldYear1DataSets
-          })
-          let clientsTotalCostSoldYear1DataSets = clients.map((clientObj, i) => {
-            return {
-              label: clientObj['name'],
-              borderColor: this.colors[i],
-              fill: false,
-              data: clientObj['years'][yearIndex].map(clientYear1DataObj => {
-                return clientYear1DataObj['total_cost_sold']
-              })
-            }
-          })
-          this.salesByMonthByClientCostData.push({
-            labels: this.monthNames,
-            datasets: clientsTotalCostSoldYear1DataSets
-          })
-        }
-      }
     }
   }
 </script>

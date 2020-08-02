@@ -1,6 +1,22 @@
 <template>
-    <div class="container">
-        <div class="row">
+    <div>
+        <mau-spinner
+            v-if="isLoading"
+            :sizeType="'dataTable'"
+        >
+        </mau-spinner>
+        <div class="d-flex justify-content-between"
+             v-if="!isLoading"
+        >
+            <h2>Reporte general</h2>
+            <div class="d-flex">
+                <a href="#" class="fa fa-file-excel-o p-2" @click.prevent="createExcelFile()"></a>
+                <a href="#" class="fa fa-clipboard p-2" @click.prevent="copyToClipboard()"></a>
+            </div>
+        </div>
+        <div class="row"
+             v-if="!isLoading"
+        >
             <div class="col-sm-12 col-md-5">
                 <mau-form-input-date
                         :name="'startDate'"
@@ -24,15 +40,12 @@
                 </mau-form-input-date>
             </div>
             <div class="col-md-2">
-                <button v-if="!isLoading" class="btn btn-excel" @click="createExcelFile">Excel</button>
+                <button class="btn btn-excel" @click="createExcelFile">Excel</button>
             </div>
         </div>
-        <mau-spinner
-                v-if="isLoading"
-                :sizeType="'dataTable'"
+        <div class="row"
+             v-if="!isLoading"
         >
-        </mau-spinner>
-        <div class="row">
             <div class="col-sm-6">
                 <div class="row mt-5">
                     <p>Total de dinero en ventas: {{currencyFormat(filteredTotalMoneyGained)}}</p>
@@ -80,7 +93,7 @@
 <script>
     import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
     import EntityTypes from 'renderer/api/EntityTypes'
-    import {remote} from 'electron'
+    import {remote, clipboard} from 'electron'
     import moment from 'moment'
     import xlsx from 'xlsx'
     import GenericApiUrls from 'renderer/api/functions/GenericApiUrls'
@@ -96,6 +109,7 @@
           allExpenses: [],
           bagOrderProductions: [],
           rollOrderProductions: [],
+          materials: [],
           sales: [],
           filteredExpenses: [],
           filteredBagOrderProductions: [],
@@ -105,10 +119,10 @@
           filteredTotalKilosRollProduced: 0,
           filteredTotalKilosSold: 0,
           filteredTotalMoneyGained: 0,
+          filteredDays: [],
           expenseCategories: [],
           expenseSubcategories: [],
           weeks: [],
-          selectedExpenseSubcategory: '',
           initialStartDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
           startDate: moment().subtract(7 + moment().isoWeekday() - 1, 'days').format(dateFormat),
           initialEndDate: moment().subtract(moment().isoWeekday(), 'days').format(dateFormat),
@@ -119,6 +133,69 @@
         this.getExpenses()
       },
       methods: {
+        copyToClipboard: function () {
+          let filteredSales = this.sales.filter(sale => {
+            let momentDateCollected = moment(sale.date_collected, dateFormat)
+            let momentToday = moment().subtract(1, 'days')
+            if (!momentDateCollected.isValid()) {
+              return false
+            }
+            return momentToday.isBefore(momentDateCollected)
+          })
+          let clipboardText = 'COBRANZA:\n'
+          filteredSales.sort((filteredSaleA, filteredSaleB) => {
+            let momentDateCollectedA = moment(filteredSaleA.date_collected, dateFormat)
+            let momentDateCollectedB = moment(filteredSaleB.date_collected, dateFormat)
+            return momentDateCollectedA.isAfter(momentDateCollectedB, 'day')
+          })
+          filteredSales.forEach(filteredSale => {
+            let momentDateCollected = moment(filteredSale.date_collected, dateFormat)
+            let filteredSaleSummary = filteredSale.total_cost + ' ' + filteredSale.client.name + ' ' + momentDateCollected.format('D MMM')
+            clipboardText = clipboardText + filteredSaleSummary + '\n'
+          })
+          clipboardText = clipboardText + '\n\n'
+          let momentStartOfWeek = moment().startOf('isoWeek')
+          let filteredDays = []
+          let loopedDate = moment().startOf('isoWeek')
+          while (!loopedDate.isSame(moment(), 'day')) {
+            filteredDays.push({
+              momentDate: loopedDate.clone(),
+              date: loopedDate.format('D MMM'),
+              bagTotalKilos: 0,
+              rollTotalKilos: 0
+            })
+            loopedDate.add(1, 'days')
+          }
+          this.bagOrderProductions.forEach(bagOrderProduction => {
+            let bagOrderProductionMomentDate = moment(bagOrderProduction.start_date_time, dateFormat)
+            if (bagOrderProductionMomentDate.isBetween(momentStartOfWeek, moment(), undefined, '[]')) {
+              let dayFound = filteredDays.find(dayObj => { return dayObj.momentDate.isSame(bagOrderProductionMomentDate, 'days') })
+              if (dayFound) {
+                bagOrderProduction.products.forEach(product => {
+                  if (product.product_type_id === 1) {
+                    dayFound.bagTotalKilos = dayFound.bagTotalKilos + product.pivot.kilos
+                  }
+                })
+              }
+            }
+          })
+          this.rollOrderProductions.forEach(rollOrderProduction => {
+            let rollOrderProductionMomentDate = moment(rollOrderProduction.start_date_time, dateFormat)
+            if (rollOrderProductionMomentDate.isBetween(momentStartOfWeek, moment(), undefined, '[]')) {
+              let dayFound = filteredDays.find(dayObj => { return dayObj.momentDate.isSame(rollOrderProductionMomentDate, 'days') })
+              if (dayFound) {
+                rollOrderProduction.products.forEach(product => {
+                  dayFound.rollTotalKilos = dayFound.rollTotalKilos + product.pivot.kilos
+                })
+              }
+            }
+          })
+          clipboardText = clipboardText + 'RESUMEN SEMANAL:\n'
+          filteredDays.forEach(filteredDay => {
+            clipboardText = clipboardText + filteredDay.date + '\n' + 'Bolseo ' + filteredDay.bagTotalKilos + '\n' + 'Extrusion ' + filteredDay.rollTotalKilos + '\n\n'
+          })
+          clipboard.writeText(clipboardText)
+        },
         createExcelFile: function () {
           let options = {
             title: 'Save file',
@@ -170,11 +247,13 @@
             ...filteredMapedExpenseCategoriesForElequilibriumPoint,
             {'Rubro': '', 'Valor': ''},
             {'Rubro': 'Total de kilos en ventas', 'Valor': this.filteredTotalKilosSold},
-            {'Rubro': 'Dinero en ventas', 'Valor': this.filteredTotalMoneyGained}
+            {'Rubro': 'Dinero en ventas', 'Valor': this.filteredTotalMoneyGained},
+            {'Rubro': '', 'Valor': ''}
           ]
           let equilibriumWS = xlsx.utils.json_to_sheet(equilibriumPoint)
           let expensesWS = xlsx.utils.json_to_sheet(expenses)
           let salesWS = xlsx.utils.json_to_sheet(sales)
+          let materialsWS = xlsx.utils.json_to_sheet(this.materials)
           let expenseCategoriesWS = xlsx.utils.json_to_sheet(this.expenseCategories)
           let expenseSubcategoriesWS = xlsx.utils.json_to_sheet(this.expenseSubcategories)
           let weeksWS = xlsx.utils.json_to_sheet(this.weeks)
@@ -182,6 +261,7 @@
           xlsx.utils.book_append_sheet(workbook, expensesWS, 'Gastos')
           xlsx.utils.book_append_sheet(workbook, expenseCategoriesWS, 'Categorias')
           xlsx.utils.book_append_sheet(workbook, expenseSubcategoriesWS, 'Rubros')
+          xlsx.utils.book_append_sheet(workbook, materialsWS, 'Tipos de producto')
           xlsx.utils.book_append_sheet(workbook, salesWS, 'Ventas')
           xlsx.utils.book_append_sheet(workbook, weeksWS, 'Semanas')
           let o = remote.dialog.showSaveDialog(options)
@@ -244,6 +324,9 @@
           this.filteredTotalKilosSold = 0
           this.filteredTotalMoneyGained = 0
           this.filteredSales = []
+          this.materials = this.materials.map(material => {
+            return {...material, filteredTotalWithTax: 0, filteredTotalWithoutTax: 0, filteredTax: 0, filteredKilos: 0}
+          })
           let sales = cloneDeep(this.sales)
           sales.forEach(sale => {
             let startDateTimeMoment = moment(sale.date, dateFormat)
@@ -251,6 +334,17 @@
               this.filteredSales.push(sale)
               this.filteredTotalMoneyGained = this.filteredTotalMoneyGained + sale.total_cost
               sale.products.forEach(product => {
+                let materialFound = this.materials.find(material => {
+                  return material.id === product.material_id
+                })
+                materialFound.filteredKilos = materialFound.filteredKilos + product.pivot.kilos
+                if (sale.order_sale_receipt_type_id === 1) {
+                  materialFound.filteredTotalWithoutTax = materialFound.filteredTotalWithoutTax + (product.pivot.kilos * product.pivot.kilo_price)
+                }
+                if (sale.order_sale_receipt_type_id === 2) {
+                  materialFound.filteredTotalWithTax = materialFound.filteredTotalWithTax + (product.pivot.kilos * product.pivot.kilo_price * 1.16)
+                  materialFound.filteredTax = materialFound.filteredTax + (product.pivot.kilos * product.pivot.kilo_price * 0.16)
+                }
                 this.filteredTotalKilosSold = this.filteredTotalKilosSold + product.pivot.kilos
               })
             }
@@ -271,15 +365,13 @@
         getDependentEntities: async function () {
           Promise.all([
             GenericApiOperations.list(EntityTypes.EXPENSE_CATEGORY.apiName),
-            GenericApiOperations.list(EntityTypes.EXPENSE_SUBCATEGORY.apiName)
+            GenericApiOperations.list(EntityTypes.EXPENSE_SUBCATEGORY.apiName),
+            GenericApiOperations.list(EntityTypes.MATERIAL.apiName)
           ])
             .then(result => {
-              this.expenseCategories = result[0].map(expenseCategory => {
-                return {...expenseCategory, filteredTotal: 0}
-              })
-              this.expenseSubcategories = result[1].map(expenseSubcategory => {
-                return {...expenseSubcategory, filteredTotal: 0}
-              })
+              this.expenseCategories = result[0]
+              this.expenseSubcategories = result[1]
+              this.materials = result[2]
             })
         },
         createWeeks: function () {

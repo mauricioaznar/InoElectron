@@ -128,12 +128,12 @@
         </mau-form-input-number>
       </div>
     </div>
-    <div class="form-group form-row"
-         v-if="isBag || isRoll"
-    >
+    <div class="form-group form-row">
       <div class="col-sm-12">
         <mau-form-input-select-dynamic
+                :key="'material' + (this.product.productType[GlobalEntityIdentifier] ? this.product.productType[GlobalEntityIdentifier] : '')"
                 :initialObject="initialValues[PropertiesReference.MATERIAL.name]"
+                :apiOperationOptions="materialApiOperationsOptions"
                 :label="PropertiesReference.MATERIAL.title"
                 :displayProperty="'name'"
                 :endpointName="materialEndpointName"
@@ -200,7 +200,8 @@
         productTypeEndpointName: EntityTypes.PRODUCT_TYPE.apiName,
         packingEndpointName: EntityTypes.PACKING.apiName,
         productEndpointName: EntityTypes.PRODUCT.apiName,
-        PropertiesReference: PropertiesReference
+        PropertiesReference: PropertiesReference,
+        GlobalEntityIdentifier: GlobalEntityIdentifier
       }
     },
     computed: {
@@ -215,6 +216,10 @@
       },
       userHasWritePrivileges: function () {
         return true
+      },
+      materialApiOperationsOptions: function () {
+        let filterExacts = {[PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType[GlobalEntityIdentifier] ? this.product.productType[GlobalEntityIdentifier] : ''}
+        return {filterExacts: filterExacts}
       }
     },
     components: {
@@ -266,7 +271,7 @@
           [PropertiesReference.WIDTH.name]: (this.isBag || this.isRoll) ? this.product.width : 0,
           [PropertiesReference.CURRENT_KILO_PRICE.name]: this.product.currentKiloPrice,
           // one to many
-          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material && (this.isBag || this.isRoll) ? this.product.material[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [PropertiesReference.PACKING.relationship_id_name]: this.product.packing && (this.isBag) ? this.product.packing[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
         }
