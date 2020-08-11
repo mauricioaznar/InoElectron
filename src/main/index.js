@@ -23,7 +23,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     useContentSize: true,
     webPreferences: {
-      webSecurity: false
+      webSecurity: process.env.NODE_ENV !== 'development'
     }
   })
   mainWindow.maximize()
