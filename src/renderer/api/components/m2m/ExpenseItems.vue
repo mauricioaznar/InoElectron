@@ -192,7 +192,7 @@
             (expenseItem.expenseSubcategory.id === 12 ||
               expenseItem.expenseSubcategory.id === 13 ||
               expenseItem.expenseSubcategory.id === 39 ||
-              expenseItem.expenseSubcategory.id === 30)
+              expenseItem.expenseSubcategory.id === 54)
         },
         addExpenseItem: function () {
           this.expenseItems.push({description: ''})
