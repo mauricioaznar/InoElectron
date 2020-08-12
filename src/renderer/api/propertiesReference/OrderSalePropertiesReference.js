@@ -63,6 +63,12 @@ let OrderSalePropertiesReference = {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
+  ORDER_SALE_PAYMENTS: {
+    name: 'order_sale_payments',
+    title: 'Pagos',
+    display: DisplayFunctions.getNameFromObject,
+    defaultValue: MauInputDefaultValues.SELECT
+  },
   AMOUNT_COLLECTED: {
     title: 'Cantidad cobrada',
     name: 'amount_collected',

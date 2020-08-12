@@ -157,12 +157,24 @@
                                     v-model="salesOrder.saleProducts"
                                     :initialProducts="initialValues[OrderSalePropertiesReference.PRODUCTS.name]"
                                     :userHasWritePrivileges="userHasWritePrivileges"
+                                    @total="handleProductsTotal"
                             >
                             </order-sale-product-table>
                         </template>
                     </mau-form-input-select-dynamic>
               </div>
           </div>
+          <div class="form-group form-row">
+            <div class="col-sm-12">
+                <OrderSalePayments
+                    :initialValues="initialValues[OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name]"
+                    v-model="salesOrder.orderSalePayments"
+                    :total="total"
+                >
+
+                </OrderSalePayments>
+            </div>
+        </div>
           <div class="container mb-2 text-right">
               <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
           </div>
@@ -180,6 +192,7 @@
   import EntityTypes from 'renderer/api/EntityTypes'
   import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
   import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
+  import OrderSalePayments from 'renderer/api/components/m2m/OrderSalePayments'
   import GenericApiOperations from 'renderer/api/functions/GenericApiOperations'
   import SpecificApiOperations from 'renderer/api/functions/SpecificApiOperations'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
@@ -205,8 +218,10 @@
           client: {},
           orderSaleStatus: {},
           orderSaleCollectionStatus: {},
-          receiptType: {}
+          receiptType: {},
+          orderSalePayments: []
         },
+        total: 0,
         initialOrderCode: '',
         initialValues: {},
         buttonDisabled: false,
@@ -224,7 +239,8 @@
     },
     components: {
       MauFormInputSelectDynamic,
-      OrderSaleProductTable
+      OrderSaleProductTable,
+      OrderSalePayments
     },
     props: {
       initialObject: {
@@ -249,6 +265,7 @@
     created () {
       this.setInitialValues()
       if (!this.initialObject) {
+        console.log(this.initialObject)
         SpecificApiOperations.getMax(this.orderSaleEndpointName, OrderSalePropertiesReference.ORDER_CODE.name).then(result => {
           this.initialOrderCode = result + 1
         })
@@ -306,10 +323,14 @@
       }
     },
     methods: {
+      handleProductsTotal: function (total) {
+        this.total = total
+      },
       getPersona: DisplayFunctions.getPersona,
       setInitialValues: function () {
         this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.ORDER_CODE.name)
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.PRODUCTS.name)
+        this.initialValues[OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name)
         this.initialValues[OrderSalePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.DATE.name)
         this.initialValues[OrderSalePropertiesReference.DATE_COLLECTED.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.DATE_COLLECTED.name)
         this.initialValues[OrderSalePropertiesReference.CLIENT_CONTACT.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.CLIENT_CONTACT.name)
@@ -337,12 +358,14 @@
         directParams[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name] = this.salesOrder.orderSaleCollectionStatus ? this.salesOrder.orderSaleCollectionStatus[GlobalEntityIdentifier] : null
         let initialOrderSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderSalePropertiesReference.PRODUCTS.name], 'product_id')
         let filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialOrderSaleProducts, this.salesOrder.saleProducts, 'product_id')
+        let filteredOrderSalePayments = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(this.initialValues[OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name], this.salesOrder.orderSalePayments, 'id')
         if (!this.initialObject) {
           directParams[OrderSalePropertiesReference.ORDER_REQUEST.relationship_id_name] = this.orderRequest ? this.orderRequest[GlobalEntityIdentifier] : null
           filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations([], this.salesOrder.saleProducts, 'product_id')
         }
         let relayObjects = [
-          ManyToManyHelper.createRelayObject(filteredOrderSaleProducts, EntityTypes.ORDER_SALE_PRODUCT)
+          ManyToManyHelper.createRelayObject(filteredOrderSaleProducts, EntityTypes.ORDER_SALE_PRODUCT),
+          ManyToManyHelper.createRelayObject(filteredOrderSalePayments, EntityTypes.ORDER_SALE_PAYMENT)
         ]
         this.$validator.validateAll().then((result) => {
           if (result) {

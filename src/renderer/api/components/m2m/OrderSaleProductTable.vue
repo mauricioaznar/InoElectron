@@ -323,6 +323,8 @@
               total += this.getCurrentObjTotalCostWithoutTax(currentStructuredObjects[i])
             }
           }
+          total = Math.round(total * 100) / 100
+          this.$emit('total', total)
           return total
         },
         setCurrentObjCalculationProperties: function (currentStructuredObj) {

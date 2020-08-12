@@ -44,8 +44,21 @@ let kiloToGroup = {
   }
 }
 
+
+let isNumberEqual = {
+  validate: (value, params) => {
+    let isValid = true
+    let num = params.number
+    if (String(num) !== String(value).replace(/,/g, '')) {
+      isValid = false
+    }
+    return isValid
+  }
+}
+
 export default {
   objectRequired: objectRequired,
   remoteUnique: remoteUnique,
-  kiloToGroup: kiloToGroup
+  kiloToGroup: kiloToGroup,
+  isNumberEqual: isNumberEqual
 }

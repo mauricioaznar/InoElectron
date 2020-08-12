@@ -113,6 +113,10 @@ export default {
     name: 'orderSaleProduct',
     apiName: 'orderSaleProduct'
   },
+  ORDER_SALE_PAYMENT: {
+    name: 'orderSalePayment',
+    apiName: 'orderSalePayment'
+  },
   ORDER_REQUEST: {
     name: 'orderRequest',
     apiName: 'orderRequest',

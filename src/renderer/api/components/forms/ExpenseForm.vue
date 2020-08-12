@@ -17,14 +17,14 @@
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-date
-                        :name="ExpensePropertiesReference.DATE.name"
-                        :label="ExpensePropertiesReference.DATE.title"
-                        v-model="expense.date"
-                        :initialValue="initialValues[ExpensePropertiesReference.DATE.name]"
-                        :error="errors.has(ExpensePropertiesReference.DATE.name) ? errors.first(ExpensePropertiesReference.DATE.name) : ''"
-                        :disabled="!userHasWritePrivileges"
-                        v-validate="'required'"
-                >
+                    :name="ExpensePropertiesReference.DATE.name"
+                    :label="ExpensePropertiesReference.DATE.title"
+                    v-model="expense.date"
+                    :initialValue="initialValues[ExpensePropertiesReference.DATE.name]"
+                    :error="errors.has(ExpensePropertiesReference.DATE.name) ? errors.first(ExpensePropertiesReference.DATE.name) : ''"
+                    :disabled="!userHasWritePrivileges"
+                    v-validate="'required'"
+            >
                 </mau-form-input-date>
             </div>
         </div>
