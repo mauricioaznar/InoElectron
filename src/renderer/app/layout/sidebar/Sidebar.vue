@@ -44,18 +44,18 @@
         if (this.categories.hasOwnProperty(categoryKey)) {
           let category = this.categories[categoryKey]
           let categoryChildren = []
-          console.log(category)
+          // console.log(category)
           this.routeObjects.forEach(routeObject => {
             if (category.name === RouteObjectHelper.getRouteObjectMetaPropertyValue(routeObject, 'category').name) {
               routeObject.children.forEach(childRouteObject => {
-                console.log(childRouteObject.name)
+                // console.log(childRouteObject.name)
                 if (RouteObjectHelper.getRouteObjectMetaPropertyValue(childRouteObject, 'navbar')) {
                   categoryChildren.push(childRouteObject)
                 }
               })
             }
           })
-          console.log(categoryChildren)
+          // console.log(categoryChildren)
           category.children = categoryChildren
         }
       }

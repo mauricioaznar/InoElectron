@@ -24,7 +24,7 @@
           <div class="form-group" v-if="bagMode">
               <mau-form-input-select-dynamic
                       :endpointName="employeeEndpointName"
-                      :apiOperationOptions="bagsEmployeeTypeApiOperationOptions"
+                      :apiOperationOptions="operatorApiOperationOptions"
                       :initialObject="initialValues[OrderProductionPropertiesReference.EMPLOYEE.name]"
                       :label="OrderProductionPropertiesReference.EMPLOYEE.title"
                       :displayProperty="'fullname'"
@@ -37,10 +37,41 @@
               >
               </mau-form-input-select-dynamic>
           </div>
+          <div class="form-group">
+              <mau-form-input-select-dynamic
+                      :endpointName="employeeEndpointName"
+                      :apiOperationOptions="operatorApiOperationOptions"
+                      :initialObject="initialValues['leaderEmployee']"
+                      :label="'Operador'"
+                      :displayProperty="'fullname'"
+                      v-model="productionOrder.leaderEmployee"
+                      :name="'leaderEmployee'"
+                      :error="errors.first('leaderEmployee')"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'object_required'"
+              >
+              </mau-form-input-select-dynamic>
+          </div>
+          <div class="form-group">
+              <mau-form-input-select-dynamic
+                      :endpointName="employeeEndpointName"
+                      :apiOperationOptions="helpersApiOperationOptions"
+                      :initialObjects="initialValues['helperEmployees']"
+                      :label="'Ayudantes'"
+                      :displayProperty="'fullname'"
+                      v-model="productionOrder.helperEmployees"
+                      :name="'helperEmployees'"
+                      :error="errors.first('helperEmployees')"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="'required'"
+                      :multiselect="true"
+              >
+              </mau-form-input-select-dynamic>
+          </div>
           <div class="form-group" v-if="extrusionMode">
               <mau-form-input-select-dynamic
                       :endpointName="employeeEndpointName"
-                      :apiOperationOptions="rollsEmployeeTypeApiOperationOptions"
+                      :apiOperationOptions="operatorApiOperationOptions"
                       :initialObject="initialValues[OrderProductionPropertiesReference.EMPLOYEE.name]"
                       :label="'Extrusor'"
                       :displayProperty="'fullname'"
@@ -226,6 +257,8 @@
           machines: [],
           machine: {},
           employee: {},
+          leaderEmployee: {},
+          helperEmployees: [],
           waste: '',
           date: '',
           performance: ''
@@ -286,11 +319,11 @@
       bagsApiOperationOptions: function () {
         return {filterExacts: {product_type_id: 1}}
       },
-      rollsEmployeeTypeApiOperationOptions: function () {
-        return {filterExacts: {employee_type_id: 2, employee_status_id: 1}}
+      operatorApiOperationOptions: function () {
+        return {filterExacts: {employee_type_id: this.bagMode ? 1 : 2, employee_status_id: 1}}
       },
-      bagsEmployeeTypeApiOperationOptions: function () {
-        return {filterExacts: {employee_type_id: 1, employee_status_id: 1}}
+      helpersApiOperationOptions: function () {
+        return {filterExacts: {branch_id: 1, employee_status_id: 1}}
       },
       rollsMachineApiOperationOptions: function () {
         return {filterExacts: {machine_type_id: 2}}
@@ -305,11 +338,31 @@
         this.initialValues[OrderProductionPropertiesReference.PRODUCTS.name] = products
         this.initialValues['bags'] = products.filter(product => { return product['product_type_id'] === 1 })
         this.initialValues['rolls'] = products.filter(product => { return product['product_type_id'] === 2 })
-        this.initialValues[OrderProductionPropertiesReference.START_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.START_DATE_TIME.name)
-        this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.END_DATE_TIME.name)
-        this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] = DefaultValuesHelper.object(this.initialObject, OrderProductionPropertiesReference.EMPLOYEE.name)
-        this.initialValues[OrderProductionPropertiesReference.WASTE.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.WASTE.name)
-        this.initialValues[OrderProductionPropertiesReference.PERFORMANCE.name] = DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.PERFORMANCE.name)
+        this.initialValues[OrderProductionPropertiesReference.START_DATE_TIME.name] =
+          DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.START_DATE_TIME.name)
+        this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] =
+          DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.END_DATE_TIME.name)
+        this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] =
+          DefaultValuesHelper.object(this.initialObject, OrderProductionPropertiesReference.EMPLOYEE.name)
+        this.initialValues[OrderProductionPropertiesReference.WASTE.name] =
+          DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.WASTE.name)
+        this.initialValues[OrderProductionPropertiesReference.PERFORMANCE.name] =
+          DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.PERFORMANCE.name)
+        let employees = DefaultValuesHelper.array(this.initialObject, OrderProductionPropertiesReference.EMPLOYEES.name)
+        this.initialValues[OrderProductionPropertiesReference.EMPLOYEES.name] = DefaultValuesHelper.array(this.initialObject, OrderProductionPropertiesReference.EMPLOYEES.name)
+        this.initialValues['leaderEmployee'] = {}
+        this.initialValues['helperEmployees'] = []
+        if (employees.length !== 0) {
+          this.initialValues['helperEmployees'] = employees.filter(employee => {
+            return employee.pivot.is_leader !== 1
+          })
+          let leaderEmployee = employees.find(employee => {
+            return employee.pivot.is_leader === 1
+          })
+          if (leaderEmployee) {
+            this.initialValues['leaderEmployee'] = leaderEmployee
+          }
+        }
         if (this.extrusionMode) {
           if (this.initialObject && this.initialObject[OrderProductionPropertiesReference.MACHINES.name]) {
             let initialMachines = []
@@ -343,7 +396,34 @@
           [OrderProductionPropertiesReference.PERFORMANCE.name]: this.productionOrder.performance
         }
         directParams[OrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : null
+        let orderProductionEmployees = []
         let relayObjects = []
+        if (this.productionOrder.leaderEmployee) {
+          if (this.initialValues['leaderEmployee'] && this.productionOrder.leaderEmployee.id === this.initialValues['leaderEmployee'].id) {
+            orderProductionEmployees.push({...this.initialValues['leaderEmployee'].pivot})
+          } else {
+            orderProductionEmployees.push({employee_id: this.productionOrder.leaderEmployee.id, is_leader: 1})
+          }
+        }
+        if (this.productionOrder.helperEmployees.length !== 0) {
+          let newHelpers = this.productionOrder.helperEmployees
+            .map(helperEmployee => {
+              if (helperEmployee.pivot) {
+                return {...helperEmployee.pivot}
+              } else {
+                return {employee_id: helperEmployee.id, is_leader: 0}
+              }
+            })
+          orderProductionEmployees = orderProductionEmployees.concat(newHelpers)
+        }
+        console.log(this.initialValues[OrderProductionPropertiesReference.EMPLOYEES.name])
+        let filteredProductionEmployees = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          this.initialValues[OrderProductionPropertiesReference.EMPLOYEES.name].map(initialProductionObj => initialProductionObj.pivot),
+          orderProductionEmployees,
+          'id'
+        )
+        let productionEmployeesRelayObject = ManyToManyHelper.createRelayObject(filteredProductionEmployees, EntityTypes.ORDER_PRODUCTION_EMPLOYEE)
+        relayObjects.push(productionEmployeesRelayObject)
         if (this.extrusionMode) {
           let productionRolls = []
           for (let i = 0; i < this.machineObjects.length; i++) {
@@ -371,7 +451,6 @@
           )
           let productionProductRelayObject = ManyToManyHelper.createRelayObject(filteredProductionRolls, EntityTypes.ORDER_PRODUCTION_PRODUCT)
           relayObjects.push(productionProductRelayObject)
-          console.log(productionProductRelayObject)
           directParams[OrderProductionPropertiesReference.ORDER_PRODUCTION_TYPE.relationship_id_name] = 1
         }
         this.$validator.validateAll().then((result) => {

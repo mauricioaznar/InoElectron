@@ -76,7 +76,11 @@
                 <div class="row">
                     <div class="text-left col-sm-1">{{orderProduction.start_date_time}}</div>
                     <div class="text-left col-sm-1">{{orderProduction.end_date_time}}</div>
-                    <div class="text-left col-sm-2">{{orderProduction.employee}}</div>
+                    <div class="text-left col-sm-2">
+                        <div v-for="(employee, employeeIndex) in orderProduction.employees" class="row">
+                            <div class="col-sm-12 text-left">{{employee}}</div>
+                        </div>
+                    </div>
                     <div class="col-sm-7">
                         <div v-for="(productionProduct, productionProductIndex) in orderProduction.production_products" class="row">
                             <div class="col-sm-5 text-left">{{productionProduct.product}}</div>
@@ -396,6 +400,7 @@
               let filteredOrderProduction = {
                 id: orderProduction.id,
                 employee: orderProduction.employee.fullname,
+                employees: orderProduction.employees.map(employee => employee.fullname),
                 production_products: [],
                 start_date_time: orderProduction.start_date_time,
                 end_date_time: orderProduction.end_date_time,

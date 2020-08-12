@@ -39,6 +39,10 @@ export default {
     display: DisplayFunctions.getNameFromObject,
     defaultValue: MauInputDefaultValues.SELECT
   },
+  EMPLOYEES: {
+    title: 'Empleados',
+    name: 'employees'
+  },
   WASTE: {
     title: 'Desperdicio',
     name: 'waste',

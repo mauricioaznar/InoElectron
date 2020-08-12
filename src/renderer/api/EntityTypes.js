@@ -65,6 +65,10 @@ export default {
     name: 'orderProductionProduct',
     apiName: 'orderProductionProduct'
   },
+  ORDER_PRODUCTION_EMPLOYEE: {
+    name: 'orderProductionEmployee',
+    apiName: 'orderProductionEmployee'
+  },
   ORDER_PRODUCTION_INDICATOR: {
     name: 'orderProductionIndicator',
     apiName: 'orderProductionIndicator'
