@@ -6,13 +6,14 @@
             </label>
             <a href="#" class="fa fa-plus p-1" @click.prevent="addItem"></a>
         </div>
-        <table class="w-100">
+        <table class="w-100 mau-table table table-striped">
             <thead>
                 <tr>
-                    <th># de pago</th>
-                    <th>Fecha de pago</th>
-                    <th>Cantidad</th>
-                    <th></th>
+                    <th class="mau-text-center" width="20%"># de pago</th>
+                    <th class="mau-text-center" width="25%">Fecha de pago</th>
+                    <th class="mau-text-center" width="25%">Cantidad</th>
+                    <th class="mau-text-center" width="25%">Estado</th>
+                    <th class="mau-text-center" width="5%"></th>
                 </tr>
             </thead>
             <tbody>
@@ -20,10 +21,10 @@
                     class="w-100"
                      :class="index + 1 !== items.length ? '' : ''"
                 >
-                    <td>
+                    <td class="mau-text-center">
                         {{index + 1}}
                     </td>
-                    <td>
+                    <td class="mau-text-center">
                         <mau-form-input-date
                                 :name="'datePaid' + index + 'a'"
                                 :label="''"
@@ -34,7 +35,7 @@
                         >
                         </mau-form-input-date>
                     </td>
-                    <td>
+                    <td class="mau-text-center">
                         <mau-form-input-number
                                 :key="'Amount' + index + 'a'"
                                 :name="'Amount' + index"
@@ -54,9 +55,31 @@
                         >
                         </mau-form-input-number>
                     </td>
-                   <td> <span v-if="index !== 0" class="btn btn-sm fa fa-times float-right font-weight-bold" @click="removeItem(index)"></span></td>
+                    <td class="mau-text-center">
+                        <mau-form-input-select-dynamic
+                                :key="'OrderSaleCollectionStatus' + index + 'a'"
+                                :name="'OrderSaleCollectionStatus' + index"
+                                :label="''"
+                                :placeholder="''"
+                                :initialObject="hasInitialValues && getInitialItem(item).order_sale_collection_status ? getInitialItem(item).order_sale_collection_status :  {}"
+                                :displayProperty="'name'"
+                                :endpointName="orderSaleCollectionStatusEndpointName"
+                                v-model="item.order_sale_collection_status"
+                                @input="function x(result) { updateItemProperty(result, item, 'order_sale_collection_status_id') }"
+                                :error="errors.has('OrderSaleCollectionStatus' + index) ? errors.first('OrderSaleCollectionStatus' + index) : ''"
+                                v-validate="{
+                                  required: true
+                                }"
+                        >
+                        </mau-form-input-select-dynamic>
+                    </td>
+                   <td class="mau-text-center">
+                       <span v-if="index !== 0" class="btn btn-sm fa fa-times float-right font-weight-bold" @click="removeItem(index)"></span>
+                       <span v-else>&nbsp;</span>
+                   </td>
                 </tr>
                  <tr>
+                    <td></td>
                     <td></td>
                     <td class="text-right"><b>TOTAL:</b></td>
                     <td>
@@ -72,14 +95,14 @@
 <script>
     import cloneDeep from 'renderer/services/common/cloneDeep'
     import EntityTypes from 'renderer/api/EntityTypes'
+    import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic.vue'
     export default {
       inject: ['$validator'],
       data () {
         return {
           items: [],
           initialItems: [],
-          machineEndpointName: EntityTypes.MACHINE.apiName,
-          equipmentEndpointName: EntityTypes.EQUIPMENT.apiName
+          orderSaleCollectionStatusEndpointName: EntityTypes.ORDER_SALE_COLLECTION_STATUS.apiName
         }
       },
       created () {
@@ -101,6 +124,9 @@
           }, 0)
         }
       },
+      components: {
+        MauFormInputSelectDynamic
+      },
       props: {
         initialValues: {
           type: Array,
@@ -118,6 +144,10 @@
         }
       },
       methods: {
+        updateItemProperty: function (selectedObject, item, propertyName) {
+          let initialItem = this.getInitialItem(item)
+          item[propertyName] = selectedObject && selectedObject.id ? selectedObject.id : (item && initialItem[propertyName] > 0 ? 'null' : null)
+        },
         refreshInput: function () {
           if (this.machineId) {
             this.items = this.items.map(item => { return {...item} })
