@@ -58,11 +58,11 @@
             callback: DisplayFunctions.getPercentage
           },
           {
-            name: OrderProductionPropertiesReference.EMPLOYEE.name,
-            title: OrderProductionPropertiesReference.EMPLOYEE.title,
-            callback: DisplayFunctions.getPersona,
+            name: OrderProductionPropertiesReference.EMPLOYEES.name,
+            title: OrderProductionPropertiesReference.EMPLOYEES.title,
+            callback: DisplayFunctions.getPersonaArray,
             filterType: 'entity',
-            entityName: EntityTypes.EMPLOYEE.name,
+            entityName: OrderProductionPropertiesReference.EMPLOYEES.name,
             entityFieldName: 'fullname'
           }
         ],

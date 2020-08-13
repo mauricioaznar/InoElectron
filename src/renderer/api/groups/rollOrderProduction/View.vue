@@ -39,9 +39,9 @@
             display: DisplayFunctions.getProducts
           },
           {
-            title: OrderProductionPropertiesReference.EMPLOYEE.title,
-            name: OrderProductionPropertiesReference.EMPLOYEE.name,
-            display: DisplayFunctions.getPersona
+            name: OrderProductionPropertiesReference.EMPLOYEES.name,
+            title: OrderProductionPropertiesReference.EMPLOYEES.title,
+            display: DisplayFunctions.getPersonaArray
           },
           {
             title: OrderProductionPropertiesReference.MACHINES.title,

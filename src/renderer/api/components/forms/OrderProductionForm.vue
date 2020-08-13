@@ -21,22 +21,6 @@
                   v-validate="'required|date_format:yyyy-MM-dd HH:mm:ss|after:' + productionOrder.startDateTime"
           >
           </mau-form-group-date-time>
-          <div class="form-group" v-if="bagMode">
-              <mau-form-input-select-dynamic
-                      :endpointName="employeeEndpointName"
-                      :apiOperationOptions="operatorApiOperationOptions"
-                      :initialObject="initialValues[OrderProductionPropertiesReference.EMPLOYEE.name]"
-                      :label="OrderProductionPropertiesReference.EMPLOYEE.title"
-                      :displayProperty="'fullname'"
-                      v-model="productionOrder.employee"
-                      :name="OrderProductionPropertiesReference.EMPLOYEE.name"
-                      :data-vv-as="OrderProductionPropertiesReference.EMPLOYEE.title"
-                      :error="errors.first(OrderProductionPropertiesReference.EMPLOYEE.name)"
-                      :disabled="!userHasWritePrivileges"
-                      v-validate="'object_required'"
-              >
-              </mau-form-input-select-dynamic>
-          </div>
           <div class="form-group">
               <mau-form-input-select-dynamic
                       :endpointName="employeeEndpointName"
@@ -48,7 +32,7 @@
                       :name="'leaderEmployee'"
                       :error="errors.first('leaderEmployee')"
                       :disabled="!userHasWritePrivileges"
-                      v-validate="'object_required'"
+                      v-validate="'required'"
               >
               </mau-form-input-select-dynamic>
           </div>
@@ -63,24 +47,7 @@
                       :name="'helperEmployees'"
                       :error="errors.first('helperEmployees')"
                       :disabled="!userHasWritePrivileges"
-                      v-validate="'required'"
                       :multiselect="true"
-              >
-              </mau-form-input-select-dynamic>
-          </div>
-          <div class="form-group" v-if="extrusionMode">
-              <mau-form-input-select-dynamic
-                      :endpointName="employeeEndpointName"
-                      :apiOperationOptions="operatorApiOperationOptions"
-                      :initialObject="initialValues[OrderProductionPropertiesReference.EMPLOYEE.name]"
-                      :label="'Extrusor'"
-                      :displayProperty="'fullname'"
-                      v-model="productionOrder.employee"
-                      :name="OrderProductionPropertiesReference.EMPLOYEE.name"
-                      :data-vv-as="OrderProductionPropertiesReference.EMPLOYEE.title"
-                      :error="errors.first(OrderProductionPropertiesReference.EMPLOYEE.name)"
-                      :disabled="!userHasWritePrivileges"
-                      v-validate="'object_required'"
               >
               </mau-form-input-select-dynamic>
           </div>
@@ -256,7 +223,6 @@
           endDateTime: '',
           machines: [],
           machine: {},
-          employee: {},
           leaderEmployee: {},
           helperEmployees: [],
           waste: '',
@@ -342,8 +308,6 @@
           DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.START_DATE_TIME.name)
         this.initialValues[OrderProductionPropertiesReference.END_DATE_TIME.name] =
           DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.END_DATE_TIME.name)
-        this.initialValues[OrderProductionPropertiesReference.EMPLOYEE.name] =
-          DefaultValuesHelper.object(this.initialObject, OrderProductionPropertiesReference.EMPLOYEE.name)
         this.initialValues[OrderProductionPropertiesReference.WASTE.name] =
           DefaultValuesHelper.simple(this.initialObject, OrderProductionPropertiesReference.WASTE.name)
         this.initialValues[OrderProductionPropertiesReference.PERFORMANCE.name] =
@@ -395,7 +359,6 @@
           [OrderProductionPropertiesReference.WASTE.name]: this.productionOrder.waste,
           [OrderProductionPropertiesReference.PERFORMANCE.name]: this.productionOrder.performance
         }
-        directParams[OrderProductionPropertiesReference.EMPLOYEE.relationship_id_name] = this.productionOrder.employee ? this.productionOrder.employee[GlobalEntityIdentifier] : null
         let orderProductionEmployees = []
         let relayObjects = []
         if (this.productionOrder.leaderEmployee) {
@@ -416,7 +379,6 @@
             })
           orderProductionEmployees = orderProductionEmployees.concat(newHelpers)
         }
-        console.log(this.initialValues[OrderProductionPropertiesReference.EMPLOYEES.name])
         let filteredProductionEmployees = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
           this.initialValues[OrderProductionPropertiesReference.EMPLOYEES.name].map(initialProductionObj => initialProductionObj.pivot),
           orderProductionEmployees,
