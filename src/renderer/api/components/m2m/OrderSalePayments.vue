@@ -9,9 +9,9 @@
         <table class="w-100 mau-table table table-striped">
             <thead>
                 <tr>
-                    <th class="mau-text-center" width="20%"># de pago</th>
-                    <th class="mau-text-center" width="25%">Fecha de pago</th>
-                    <th class="mau-text-center" width="25%">Cantidad</th>
+                    <th class="mau-text-center" width="20%"># de cobranza</th>
+                    <th class="mau-text-center" width="25%">Fecha de cobranza</th>
+                    <th class="mau-text-center" width="25%">Cantidad cobrada</th>
                     <th class="mau-text-center" width="25%">Estado</th>
                     <th class="mau-text-center" width="5%"></th>
                 </tr>
@@ -135,7 +135,7 @@
         label: {
           type: String,
           default: function () {
-            return 'Pagos'
+            return 'Cobranzas'
           }
         },
         total: {
