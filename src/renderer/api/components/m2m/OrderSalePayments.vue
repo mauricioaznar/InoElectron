@@ -42,7 +42,7 @@
                                 :label="''"
                                 :placeholder="''"
                                 v-model="item.amount"
-                                :initialValue="hasInitialValues ? (getInitialItem(item).amount ? getInitialItem(item).amount : '') : ''"
+                                :initialValue="hasInitialValues ? (getInitialItem(item).amount ? getInitialItem(item).amount : '') : total"
                                 :error="errors.has('Amount' + index) ? errors.first('Amount' + index) : ''"
                                 :type="'float'"
                                 @input="refreshInput"

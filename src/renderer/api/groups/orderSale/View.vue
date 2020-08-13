@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <mau-spinner v-if="!entity" :sizeType="'router'"></mau-spinner>
-    <mau-entity-petitioner :id="id" :entityType="entityType" @entityResult="entityResultHandler"></mau-entity-petitioner>
+    <mau-entity-petitioner :id="id" :entityType="entityType"></mau-entity-petitioner>
     <mau-property-viewer v-if="entity" :entity="entity" :properties="properties"></mau-property-viewer>
   </div>
 </template>
@@ -68,11 +68,6 @@
             title: OrderSalePropertiesReference.TOTAL_COST.title,
             name: OrderSalePropertiesReference.TOTAL_COST.name,
             display: DisplayFunctions.getValue
-          },
-          {
-            title: OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.title,
-            name: OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name,
-            display: DisplayFunctions.getNameFromObject
           }
         ],
         entityType: EntityTypes.ORDER_SALE_RECEIPT,
@@ -83,17 +78,6 @@
       id: null
     },
     methods: {
-      entityResultHandler: function (entityObj) {
-        this.entity = entityObj
-        let orderSaleCollectionStatusId = entityObj[OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.relationship_id_name]
-        if (orderSaleCollectionStatusId === 2) {
-          this.properties.push({
-            title: OrderSalePropertiesReference.AMOUNT_COLLECTED.title,
-            name: OrderSalePropertiesReference.AMOUNT_COLLECTED.name,
-            display: DisplayFunctions.getValue
-          })
-        }
-      }
     }
   }
 </script>

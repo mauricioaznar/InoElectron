@@ -38,13 +38,6 @@
             filterType: 'date'
           },
           {
-            name: OrderSalePropertiesReference.DATE_COLLECTED.name,
-            title: OrderSalePropertiesReference.DATE_COLLECTED.title,
-            sortField: OrderSalePropertiesReference.DATE_COLLECTED.name,
-            callback: DisplayFunctions.getDate,
-            filterType: 'date'
-          },
-          {
             name: OrderSalePropertiesReference.RECEIPT_TYPE.name,
             title: OrderSalePropertiesReference.RECEIPT_TYPE.title,
             callback: DisplayFunctions.getNameFromObject,
@@ -74,14 +67,6 @@
             callback: DisplayFunctions.getNameFromObject,
             filterType: 'entity',
             entityName: EntityTypes.ORDER_SALE_STATUS.name,
-            entityFieldName: 'name'
-          },
-          {
-            name: OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.name,
-            title: OrderSalePropertiesReference.ORDER_SALE_COLLECTION_STATUS.title,
-            callback: DisplayFunctions.getNameFromObject,
-            filterType: 'entity',
-            entityName: EntityTypes.ORDER_SALE_COLLECTION_STATUS.name,
             entityFieldName: 'name'
           },
           {
