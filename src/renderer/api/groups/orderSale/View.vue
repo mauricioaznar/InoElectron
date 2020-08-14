@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <mau-spinner v-if="!entity" :sizeType="'router'"></mau-spinner>
-    <mau-entity-petitioner :id="id" :entityType="entityType"></mau-entity-petitioner>
+    <mau-entity-petitioner :id="id" :entityType="entityType" @entityResult="entityResultHandler"></mau-entity-petitioner>
     <mau-property-viewer v-if="entity" :entity="entity" :properties="properties"></mau-property-viewer>
   </div>
 </template>
@@ -78,6 +78,9 @@
       id: null
     },
     methods: {
+      entityResultHandler: function (entityObj) {
+        this.entity = entityObj
+      }
     }
   }
 </script>

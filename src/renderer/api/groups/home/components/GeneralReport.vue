@@ -29,7 +29,6 @@
         <div class="my-2" v-show="showMachineProductTables" v-if="!isLoading && selectedMachineProductTableItem">
             {{selectedMachineProductTableItem.product_id + ' ' + selectedMachineProductTableItem.machine_id}}
             <div v-for="productionItem in selectedMachineProductTableItem.production_items" class="d-flex justify-content-around">
-                <p>{{productionItem.employee_full_name}}</p>
                 <p>{{productionItem.start_date_time}}</p>
                 <p>{{productionItem.end_date_time}}</p>
                 <p>{{productionItem.kilos}}</p>
@@ -134,7 +133,6 @@
                             <div class="col-sm-3">{{productionEvent.start_date_time}}</div>
                             <div class="col-sm-3">{{productionEvent.end_date_time}}</div>
                             <div class="col-sm-3">{{productionEvent.machine.name}}</div>
-                            <div class="col-sm-3">{{productionEvent.maintenance_employee_description}}</div>
                         </div>
                     </div>
                 </div>
@@ -268,7 +266,6 @@
                   }
                 }
                 let kilos = productionProduct.pivot.kilos
-                let employeeFullname = orderProduction.employee.fullname
                 let startDateTime = orderProduction.start_date_time
                 let startDateTimeMoment = moment(startDateTime, dateTimeFormat)
                 let endDateTime = orderProduction.end_date_time
@@ -276,7 +273,6 @@
                 let orderProductionDuration = endDateTimeMoment.diff(startDateTimeMoment, 'minutes')
                 let kilosStandardized = ((kilos / orderProductionDuration) * 480)
                 machineProductTableItem.production_items.push({
-                  employee_full_name: employeeFullname,
                   end_date_time: endDateTime,
                   start_date_time: startDateTime,
                   kilos: kilos,
@@ -399,7 +395,6 @@
             result[0].forEach(orderProduction => {
               let filteredOrderProduction = {
                 id: orderProduction.id,
-                employee: orderProduction.employee.fullname,
                 employees: orderProduction.employees.map(employee => employee.fullname),
                 production_products: [],
                 start_date_time: orderProduction.start_date_time,
