@@ -273,14 +273,15 @@
         <expense-items
                 v-model="expense.expenseItems"
                 :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name]"
-                @total="setTotal"
+                @total="setExpenseItemsTotal"
+                @isProductPurchaseSelected="setIsProductPurchaseSelected"
                 :supplier="expense.supplier && expense.supplier.id ? expense.supplier : {}"
         >
         </expense-items>
         <div class="form-group form-row">
             <div class="col-sm-12">
                 <mau-form-input-number
-                        :key="ExpensePropertiesReference.TAX.name + total"
+                        :key="ExpensePropertiesReference.TAX.name + expenseItemsTotal"
                         :initialValue="isInitialObjectDefined ? initialValues[ExpensePropertiesReference.TAX.name] : initialTax"
                         v-model="expense.tax"
                         :label="ExpensePropertiesReference.TAX.title"
@@ -348,6 +349,43 @@
                 </mau-form-input-text>
             </div>
         </div>
+        <div class="form-group" v-if="isProductPurchaseSelected">
+           <div class="products">
+                <mau-form-input-select-dynamic
+                        :key="'OrderSaleProducts'"
+                        :endpointName="productEndpointName"
+                        :label="ExpensePropertiesReference.PRODUCTS.title"
+                        :initialObjects="initialValues[ExpensePropertiesReference.PRODUCTS.name]"
+                        v-model="expense.products"
+                        :displayProperty="'description'"
+                        :name="ExpensePropertiesReference.PRODUCTS.name"
+                        :selectedPropertyName="'product_id'"
+                        :data-vv-as="'Productos'"
+                        :error="errors.has(ExpensePropertiesReference.PRODUCTS.name) ? errors.first(ExpensePropertiesReference.PRODUCTS.name) : ''"
+                        :multiselect="true"
+                        :disabled="!userHasWritePrivileges"
+                        v-validate="'required'"
+                >
+                    <template slot-scope="params">
+                        <order-sale-product-table
+                                :saleMode="true"
+                                :hasTax="true"
+                                :selectedProducts="expense.products"
+                                v-model="expense.expenseProducts"
+                                :initialProducts="initialValues[ExpensePropertiesReference.PRODUCTS.name]"
+                                :userHasWritePrivileges="userHasWritePrivileges"
+                                @total="handleProductsTotal"
+                        >
+                        </order-sale-product-table>
+                    </template>
+                </mau-form-input-select-dynamic>
+          </div>
+      </div>
+      <div class="form-group">
+        <span v-show="isProductPurchaseSelected && expenseItemsTotal !== productsTotal" class="text-danger">
+            {{'Total de elementos de gasto no es igual al total de productos'}}
+        </span>
+      </div>
         <div class="container mb-2 text-right">
             <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
         </div>
@@ -366,6 +404,7 @@
   import ExpenseInvoiceComplementsTable from 'renderer/api/components/m2m/ExpenseInvoiceComplementsTable'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import moment from 'moment'
+  import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
   export default {
     name: 'ExpenseForm',
     data () {
@@ -384,7 +423,6 @@
           expenseInvoicePaymentForm: {},
           expenseInvoicePaymentMethod: {},
           expenseInvoiceCdfiUse: {},
-          expenseItems: [],
           expensePayments: [],
           expenseInvoiceComplements: [],
           tax: 0,
@@ -392,7 +430,9 @@
           invoiceIsrRetained: 0,
           invoiceTaxRetained: 0,
           invoiceCode: '',
-          invoiceProvisionDate: ''
+          invoiceProvisionDate: '',
+          expenseItems: [],
+          products: []
         },
         initialValues: {},
         initialTax: 0,
@@ -412,13 +452,18 @@
         expenseInvoicePaymentFormEndpointName: EntityTypes.EXPENSE_INVOICE_PAYMENT_FORM.apiName,
         expenseInvoiceCdfiUseEndpointName: EntityTypes.EXPENSE_INVOICE_CDFI_USE.apiName,
         buttonDisabled: false,
-        total: 0
+        productEndpointName: EntityTypes.PRODUCT.apiName,
+        totals: 0,
+        expenseItemsTotal: 0,
+        productsTotal: 0,
+        isProductPurchaseSelected: false
       }
     },
     components: {
       MauFormInputSelectDynamic,
       ExpenseItems,
       ExpensePayments,
+      OrderSaleProductTable,
       ExpenseInvoiceComplementsTable
     },
     props: {
@@ -517,6 +562,8 @@
         this.initialValues[ExpensePropertiesReference.INVOICE_CODE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_CODE.name)
         this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.INVOICE_PROVISION_DATE.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
+        this.initialValues[ExpensePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.PRODUCTS.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_PRODUCTS.name)
         if (moment(this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name], 'YYYY-MM-DD').isValid()) {
           this.initialHasProvisionDate = 1
         }
@@ -581,6 +628,16 @@
         )
         let expenseInvoiceComplementsRelayObjects = ManyToManyHelper.createRelayObject(expenseInvoiceComplementsM2mFilteredObject, EntityTypes.EXPENSE_INVOICE_COMPLEMENTS)
         relayObjects.push(expenseInvoiceComplementsRelayObjects)
+        let expenseProductsM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          this.initialValues[ExpensePropertiesReference.EXPENSE_PRODUCTS.name],
+          this.isProductPurchaseSelected ? this.expense.expenseProducts : [],
+          'id'
+        )
+        let expenseProductsRelayObjects = ManyToManyHelper.createRelayObject(expenseProductsM2mFilteredObject, EntityTypes.EXPENSE_PRODUCT)
+        relayObjects.push(expenseProductsRelayObjects)
+        if (this.isProductPurchaseSelected && this.expenseItemsTotal !== this.productsTotal) {
+          return
+        }
         this.$validator.validateAll().then((result) => {
           if (result) {
             this.buttonDisabled = true
@@ -588,14 +645,20 @@
           }
         })
       },
-      setTotal: function (total) {
+      setIsProductPurchaseSelected: function (value) {
+        this.isProductPurchaseSelected = value
+      },
+      setExpenseItemsTotal: function (total) {
         if (this.isExpenseInvoiceTypeFullIva) {
           this.initialTax = total
         } else if (this.isExpenseInvoiceTypeNoIva) {
         } else {
           this.initialTax = total - (total / 1.16)
-          this.total = total
+          this.expenseItemsTotal = total
         }
+      },
+      handleProductsTotal: function (total) {
+        this.productsTotal = total
       }
     },
     watch: {

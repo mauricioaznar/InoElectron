@@ -454,12 +454,14 @@
   import ExpenseItemTable from 'renderer/api/components/m2m/ExpenseItems'
   import isObjectEmpty from 'renderer/services/common/isObjectEmpty'
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
+  import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
   import moment from 'moment'
   export default {
     name: 'ExpenseForm',
     data () {
       return {
         ExpensePropertiesReference: ExpensePropertiesReference,
+        productsTotal: 0,
         expense: {
           description: '',
           subtotal: '',
@@ -484,7 +486,9 @@
           invoiceIsrRetained: '',
           invoiceCode: '',
           invoicePaidDate: '',
-          invoiceProvisionDate: ''
+          invoiceProvisionDate: '',
+          expenseProducts: [],
+          products: []
         },
         initialValues: {},
         hasNoteTax: 0,
@@ -505,12 +509,14 @@
         expenseInvoicePaymentMethodEndpointName: EntityTypes.EXPENSE_INVOICE_PAYMENT_METHOD.apiName,
         expenseInvoicePaymentFormEndpointName: EntityTypes.EXPENSE_INVOICE_PAYMENT_FORM.apiName,
         expenseInvoiceCdfiUseEndpointName: EntityTypes.EXPENSE_INVOICE_CDFI_USE.apiName,
-        buttonDisabled: false
+        buttonDisabled: false,
+        productEndpointName: EntityTypes.PRODUCT.apiName
       }
     },
     components: {
       MauFormInputSelectDynamic,
-      ExpenseItemTable
+      ExpenseItemTable,
+      OrderSaleProductTable
     },
     props: {
       initialObject: {
@@ -597,6 +603,7 @@
         this.initialValues[ExpensePropertiesReference.EXPENSE_CATEGORY.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_CATEGORY.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.EXPENSE_SUBCATEGORY.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
+        this.initialValues[ExpensePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.PRODUCTS.name)
         this.initialValues[ExpensePropertiesReference.BRANCH.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.BRANCH.name)
         this.initialValues[ExpensePropertiesReference.SUPPLIER.name] = DefaultValuesHelper.object(this.initialObject, ExpensePropertiesReference.SUPPLIER.name)
         this.initialValues[ExpensePropertiesReference.TAX.name] = DefaultValuesHelper.simple(this.initialObject, ExpensePropertiesReference.TAX.name)
@@ -614,6 +621,9 @@
         if (moment(this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name], 'YYYY-MM-DD').isValid()) {
           this.initialHasProvisionDate = 1
         }
+      },
+      handleProductsTotal: function (total) {
+        this.total = total
       },
       setSupplierInitialValues: function () {
         let supplier = this.expense.supplier
@@ -704,6 +714,7 @@
           this.expense.expenseItems,
           'id'
         )
+        console.log(directParams[ExpensePropertiesReference.PRODUCTS.name])
         let relayObjects = []
         let expenseItemsRelayObjects = ManyToManyHelper.createRelayObject(expenseItemsM2mFilteredObject, EntityTypes.EXPENSE_ITEM)
         relayObjects.push(expenseItemsRelayObjects)

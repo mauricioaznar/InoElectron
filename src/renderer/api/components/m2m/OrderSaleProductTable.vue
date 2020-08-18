@@ -328,7 +328,7 @@
           return total
         },
         setCurrentObjCalculationProperties: function (currentStructuredObj) {
-          let quantity = currentStructuredObj['_quantity'] || 0
+          let quantity = this.getCurrentObjGroupWeight(currentStructuredObj) ? currentStructuredObj['_quantity'] : currentStructuredObj['_manual_kilos']
           let kiloPrice = (this.saleMode && currentStructuredObj['_kilo_price']) ? currentStructuredObj['_kilo_price'] : 0
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {

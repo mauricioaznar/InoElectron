@@ -85,6 +85,16 @@ export default {
     name: 'expense_items',
     display: DisplayFunctions.getNameFromObject
   },
+  PRODUCTS: {
+    title: 'Productos',
+    name: 'products',
+    display: DisplayFunctions.getNameFromObject
+  },
+  EXPENSE_PRODUCTS: {
+    title: 'Gastos del productos',
+    name: 'expense_products',
+    display: DisplayFunctions.getNameFromObject
+  },
   EXPENSE_PAYMENTS: {
     title: 'Pagos del gasto',
     name: 'expense_payments',

@@ -6,7 +6,7 @@
             </label>
             <a href="#" class="fa fa-plus p-1" @click.prevent="addExpenseItem"></a>
         </div>
-        <table class="w-100">
+        <table class="mau-table table table-striped m-0">
             <thead>
             <tr>
                 <th>#</th>
@@ -15,7 +15,7 @@
                 <th>Rubro</th>
                 <th>Sucursal</th>
                 <th>Cantidad</th>
-                <th> </th>
+                <th>Total</th>
             </tr>
             </thead>
             <tr class="border p-2 w-100" v-for="(expenseItem, index) in expenseItems"
@@ -49,7 +49,9 @@
                             :error="errors.has('Subtotal' + index) ? errors.first('Subtotal' + index) : ''"
                             :type="'float'"
                             @input="refreshInput"
-                            v-validate="'required'"
+                            v-validate="{
+                              required: true
+                            }"
                     >
                     </mau-form-input-number>
                 </td>
@@ -109,11 +111,18 @@
                     <a v-else class="p-1">-</a>
                 </td>
             </tr>
+             <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right"><b>TOTAL:</b></td>
+                    <td>
+                        {{total}}
+                    </td>
+                </tr>
         </table>
-        <div class="mt-2">
-            <label>Total</label>
-            <p>{{total}}</p>
-        </div>
     </div>
 </template>
 
@@ -178,13 +187,19 @@
         updateExpenseItemProperty: function (selectedObject, expenseItem, propertyName) {
           let initialExpenseItem = this.getInitialExpenseItem(expenseItem)
           expenseItem[propertyName] = selectedObject && selectedObject.id ? selectedObject.id : (initialExpenseItem && initialExpenseItem[propertyName] > 0 ? 'null' : null)
+          this.refreshInput()
         },
         refreshInput: function () {
           let total = this.expenseItems.reduce((acc, expenseItem) => {
             return acc + ((expenseItem && expenseItem.subtotal) ? expenseItem.subtotal : 0)
           }, 0)
           this.total = total
+          let isProductPurchaseSelected = false
+          this.expenseItems.forEach(expenseItem => {
+            isProductPurchaseSelected = expenseItem.expense_subcategory_id === 55 || isProductPurchaseSelected
+          })
           this.$emit('total', total)
+          this.$emit('isProductPurchaseSelected', isProductPurchaseSelected)
           this.$emit('input', this.expenseItems)
         },
         isExpenseItemQuantityRequired: function (expenseItem) {

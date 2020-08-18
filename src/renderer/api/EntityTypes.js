@@ -245,6 +245,11 @@ export default {
     apiName: 'expenseItem',
     title: 'Elementos del gasto'
   },
+  EXPENSE_PRODUCT: {
+    name: 'expenseProduct',
+    apiName: 'expenseProduct',
+    title: 'Elementos del gasto'
+  },
   EXPENSE_PAYMENT: {
     name: 'expensePayment',
     apiName: 'expensePayment',
