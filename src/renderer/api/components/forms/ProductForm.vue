@@ -53,7 +53,7 @@
     </div>
     <div class="form-group ">
       <b-form-checkbox
-              v-if="isBag"
+              v-if="isBag || isOthers"
               :disabled="!userHasWritePrivileges"
               v-model="product.requiresGroupWeight">
         ¿Require peso por bulto?
@@ -61,21 +61,21 @@
     </div>
     <div class="form-group ">
       <mau-form-input-number
-              v-if="isBag && product.requiresGroupWeight"
+              v-if="(isBag || isOthers) && product.requiresGroupWeight"
               :label="PropertiesReference.CURRENT_GROUP_WEIGHT.title"
               :name="PropertiesReference.CURRENT_GROUP_WEIGHT.name"
               :initialValue="initialValues[PropertiesReference.CURRENT_GROUP_WEIGHT.name]"
               v-model="product.currentGroupWeight"
               :error="errors.has(PropertiesReference.CURRENT_GROUP_WEIGHT.name) ? errors.first(PropertiesReference.CURRENT_GROUP_WEIGHT.name) : ''"
               :disabled="!userHasWritePrivileges"
-              v-validate="'required|min_value:1'"
+              v-validate="'required'"
               :type="'float'"
       >
       </mau-form-input-number>
     </div>
     <div class="form-group ">
       <b-form-checkbox
-              v-if="isBag && product.requiresGroupWeight"
+              v-if="(isBag || isOthers) && product.requiresGroupWeight"
               :disabled="!userHasWritePrivileges"
               v-model="product.groupWeightStrict">
         ¿Require de validacion exacta?
@@ -99,9 +99,9 @@
       </div>
     </div>
     <div class="form-group form-row"
-      v-if="isBag || isRoll"
+      v-if="isBag || isRoll || isOthers"
     >
-      <div :class="isBag ? 'col-sm-6' : 'col-sm-12'">
+      <div :class="(isBag || isOthers) ? 'col-sm-6' : 'col-sm-12'">
         <mau-form-input-number
                 :label="PropertiesReference.WIDTH.title"
                 :name="PropertiesReference.WIDTH.name"
@@ -114,7 +114,7 @@
         >
         </mau-form-input-number>
       </div>
-      <div v-if="isBag" class="col-sm-6">
+      <div v-if="(isBag || isOthers)" class="col-sm-6">
         <mau-form-input-number
                 :label="PropertiesReference.LENGTH.title"
                 :name="PropertiesReference.LENGTH.name"
@@ -147,7 +147,7 @@
       </div>
     </div>
     <div class="form-group form-row"
-         v-if="isBag">
+         v-if="(isBag || isOthers)">
       <div class="col-sm-12">
         <mau-form-input-select-dynamic
                 :initialObject="initialValues[PropertiesReference.PACKING.name]"
@@ -214,6 +214,9 @@
       isPellet: function () {
         return this.product.productType[GlobalEntityIdentifier] === 3
       },
+      isOthers: function () {
+        return this.product.productType[GlobalEntityIdentifier] === 4
+      },
       userHasWritePrivileges: function () {
         return true
       },
@@ -268,14 +271,14 @@
         let directParams = {
           [PropertiesReference.CODE.name]: this.product.code,
           [PropertiesReference.DESCRIPTION.name]: this.product.description,
-          [PropertiesReference.WIDTH.name]: (this.isBag || this.isRoll) ? this.product.width : 0,
+          [PropertiesReference.WIDTH.name]: (this.isBag || this.isRoll || this.isOthers) ? this.product.width : 0,
           [PropertiesReference.CURRENT_KILO_PRICE.name]: this.product.currentKiloPrice,
           // one to many
           [PropertiesReference.MATERIAL.relationship_id_name]: this.product.material ? this.product.material[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
-          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing && (this.isBag) ? this.product.packing[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
+          [PropertiesReference.PACKING.relationship_id_name]: this.product.packing && (this.isBag || this.isOthers) ? this.product.packing[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null),
           [PropertiesReference.PRODUCT_TYPE.relationship_id_name]: this.product.productType ? this.product.productType[GlobalEntityIdentifier] : (this.isInitialObjectDefined ? 'null' : null)
         }
-        if (this.isBag) {
+        if (this.isBag || this.isOthers) {
           if (this.product.requiresGroupWeight) {
             directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = this.product.currentGroupWeight
             directParams[PropertiesReference.GROUP_WEIGHT_STRICT.name] = this.product.groupWeightStrict ? 1 : 0

@@ -21,7 +21,7 @@
                     <td class="mau-text-center">{{getProductDescription(currentStructuredObj)}}</td>
                     <td class="mau-text-center">
                         <mau-form-input-number
-                                v-if="getCurrentObjCalculationType(currentStructuredObj) === 0 && getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)"
+                                v-if="getCurrentObjCalculationType(currentStructuredObj) === 0 && getCurrentObjGroupWeight(currentStructuredObj)"
                                 :name="'_quantity_kilo' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialKilos(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
@@ -40,7 +40,7 @@
                         >
                         </mau-form-input-number>
                         <mau-form-input-number
-                                v-if="getCurrentObjCalculationType(currentStructuredObj) === 1 && getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)"
+                                v-if="getCurrentObjCalculationType(currentStructuredObj) === 1 && getCurrentObjGroupWeight(currentStructuredObj)"
                                 :name="'_quantity_group' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialGroups(currentStructuredObj)"
                                 v-model="currentStructuredObj._quantity"
@@ -103,7 +103,7 @@
                         </mau-form-input-number>
                     </td>
                     <td>
-                        <div v-if="getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)">
+                        <div v-if="getCurrentObjGroupWeight(currentStructuredObj)">
                             {{currentStructuredObj.kilos}}
                         </div>
                         <mau-form-input-number
@@ -124,11 +124,11 @@
                         {{getCurrentObjGroupWeight(currentStructuredObj)}}
                     </td>
                     <td class="mau-text-center">
-                        <div v-if="getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)">
+                        <div v-if="getCurrentObjGroupWeight(currentStructuredObj)">
                             {{currentStructuredObj.groups}}
                         </div>
                         <mau-form-input-number
-                                v-if="(!getCurrentObjGroupWeight(currentStructuredObj) && isProductBag(currentStructuredObj)) || isProductRoll(currentStructuredObj)"
+                                v-if="(!getCurrentObjGroupWeight(currentStructuredObj))"
                                 :name="'_manual_groups' + currentStructuredObj['product_id']"
                                 :initialValue="getCurrentObjInitialGroups(currentStructuredObj)"
                                 v-model="currentStructuredObj._manual_groups"
@@ -261,6 +261,10 @@
           let product = this.getProductById(structuredObject['product_id'])
           return product ? product[ProductPropertiesReference.PRODUCT_TYPE.relationship_id_name] === 2 : false
         },
+        isProductOthers: function (structuredObject) {
+          let product = this.getProductById(structuredObject['product_id'])
+          return product ? product[ProductPropertiesReference.PRODUCT_TYPE.relationship_id_name] === 4 : false
+        },
         getCurrentObjInitialKilos: function (currentStructuredObj) {
           let quantity = 0
           let initialSaleProduct = this.getInitialOrderProduct(currentStructuredObj['product_id'])
@@ -328,14 +332,14 @@
           return total
         },
         setCurrentObjCalculationProperties: function (currentStructuredObj) {
-          let quantity = this.getCurrentObjGroupWeight(currentStructuredObj) ? currentStructuredObj['_quantity'] : currentStructuredObj['_manual_kilos']
           let kiloPrice = (this.saleMode && currentStructuredObj['_kilo_price']) ? currentStructuredObj['_kilo_price'] : 0
           let productGroupWeight = this.getCurrentObjGroupWeight(currentStructuredObj)
           if (!currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] && productGroupWeight) {
             currentStructuredObj[OrderSaleProductPropertiesReference.GROUP_WEIGHT.name] = productGroupWeight
           }
           currentStructuredObj[OrderSaleProductPropertiesReference.KILO_PRICE.name] = kiloPrice
-          if (this.isProductBag(currentStructuredObj) || this.isProductRoll(currentStructuredObj)) {
+          if (this.getCurrentObjGroupWeight(currentStructuredObj)) {
+            let quantity = currentStructuredObj['_quantity']
             if (this.getCurrentObjCalculationType(currentStructuredObj) === 0) {
               currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = quantity % 1 === 0 ? quantity : quantity
               if (productGroupWeight) {
@@ -349,8 +353,10 @@
               }
             }
           } else {
-            currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = quantity
-            currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = 0
+            let manualKilos = currentStructuredObj['_manual_kilos']
+            let manualGroups = currentStructuredObj['_manual_groups']
+            currentStructuredObj[OrderSaleProductPropertiesReference.KILOS.name] = manualKilos
+            currentStructuredObj[OrderSaleProductPropertiesReference.GROUPS.name] = manualGroups
           }
           this.emitStructureChangeEvent()
         },

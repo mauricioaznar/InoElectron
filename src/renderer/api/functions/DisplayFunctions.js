@@ -107,7 +107,7 @@ export default {
       htmlString += '<tr>'
       htmlString += '<td class="mau-text-left">' + array[i].description + '</td>'
       htmlString += '<td class="mau-text-right">' + array[i].pivot.kilos + ' kg</td>'
-      if (!productTypeId || productTypeId === 1) {
+      if (!productTypeId || productTypeId === 1 || productTypeId === 4) {
         if (array[i].pivot.groups !== null) {
           htmlString += '<td class="mau-text-right">' + array[i].pivot.groups + (array[i].pivot.groups > 1 ? ' bultos' : ' bulto') + '</td>'
         } else {
@@ -117,6 +117,13 @@ export default {
       if (!productTypeId || productTypeId === 2) {
         if (array[i].pivot.groups !== null) {
           htmlString += '<td class="mau-text-right">' + array[i].pivot.groups + (array[i].pivot.groups > 1 ? ' rollos' : ' rollo') + '</td>'
+        } else {
+          htmlString += '<td></td>'
+        }
+      }
+      if (!productTypeId || productTypeId === 3) {
+        if (array[i].pivot.groups !== null) {
+          htmlString += '<td class="mau-text-right">' + array[i].pivot.groups + (array[i].pivot.groups > 1 ? ' grupos' : ' grupo') + '</td>'
         } else {
           htmlString += '<td></td>'
         }
