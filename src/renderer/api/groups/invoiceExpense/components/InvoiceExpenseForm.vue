@@ -661,7 +661,7 @@
         )
         let expenseCreditNotesRelayObjects = ManyToManyHelper.createRelayObject(expenseCreditNotesM2mFilteredObject, EntityTypes.EXPENSE_CREDIT_NOTE)
         relayObjects.push(expenseCreditNotesRelayObjects)
-        if (this.isProductPurchaseSelected() && this.isProductPurchaseValid()) {
+        if (this.isProductPurchaseSelected && this.isProductPurchaseValid()) {
           return
         }
         this.$validator.validateAll().then((result) => {
