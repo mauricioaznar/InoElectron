@@ -85,6 +85,11 @@ export default {
     name: 'expense_items',
     display: DisplayFunctions.getNameFromObject
   },
+  EXPENSE_CREDIT_NOTES: {
+    title: 'Notas de credito',
+    name: 'expense_credit_notes',
+    display: DisplayFunctions.getNameFromObject
+  },
   PRODUCTS: {
     title: 'Productos',
     name: 'products',

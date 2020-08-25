@@ -245,6 +245,11 @@ export default {
     apiName: 'expenseItem',
     title: 'Elementos del gasto'
   },
+  EXPENSE_CREDIT_NOTE: {
+    name: 'expenseCreditNote',
+    apiName: 'expenseCreditNote',
+    title: 'Notas de credito'
+  },
   EXPENSE_PRODUCT: {
     name: 'expenseProduct',
     apiName: 'expenseProduct',

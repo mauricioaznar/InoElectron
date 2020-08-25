@@ -381,8 +381,19 @@
                 </mau-form-input-select-dynamic>
           </div>
       </div>
+      <div class="form-group form-row">
+          <div class="col-sm-12">
+            <ExpenseCreditNotes
+                :initialValues="initialValues[ExpensePropertiesReference.EXPENSE_CREDIT_NOTES.name]"
+                v-model="expense.expenseCreditNotes"
+                @total="(value) => {setExpenseCreditNotesTotal(value)}"
+            >
+
+          </ExpenseCreditNotes>
+        </div>
+      </div>
       <div class="form-group">
-        <span v-show="isProductPurchaseSelected && expenseItemsTotal !== productsTotal" class="text-danger">
+        <span v-show="isProductPurchaseSelected && isProductPurchaseValid" class="text-danger">
             {{'Total de elementos de gasto no es igual al total de productos'}}
         </span>
       </div>
@@ -405,6 +416,7 @@
   import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
   import moment from 'moment'
   import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
+  import ExpenseCreditNotes from 'renderer/api/components/m2m/ExpenseCreditNotes'
   export default {
     name: 'ExpenseForm',
     data () {
@@ -432,7 +444,8 @@
           invoiceCode: '',
           invoiceProvisionDate: '',
           expenseItems: [],
-          products: []
+          products: [],
+          expenseCreditNotes: []
         },
         initialValues: {},
         initialTax: 0,
@@ -455,6 +468,7 @@
         productEndpointName: EntityTypes.PRODUCT.apiName,
         totals: 0,
         expenseItemsTotal: 0,
+        expenseCreditNotesTotal: 0,
         productsTotal: 0,
         isProductPurchaseSelected: false
       }
@@ -464,7 +478,8 @@
       ExpenseItems,
       ExpensePayments,
       OrderSaleProductTable,
-      ExpenseInvoiceComplementsTable
+      ExpenseInvoiceComplementsTable,
+      ExpenseCreditNotes
     },
     props: {
       initialObject: {
@@ -539,6 +554,9 @@
       isExpenseInvoicePaymentMethodPPD: function () {
         return this.expense && this.expense.expenseInvoiceType && this.expense.expenseInvoicePaymentForm[GlobalEntityIdentifier]
           ? this.expense.expenseInvoicePaymentMethod[GlobalEntityIdentifier] === 1 : false
+      },
+      isProductPurchaseValid: function () {
+        return this.isProductPurchaseSelected && Math.floor(this.expenseItemsTotal) !== Math.floor(this.productsTotal - this.expenseCreditNotesTotal)
       }
     },
     methods: {
@@ -564,6 +582,7 @@
         this.initialValues[ExpensePropertiesReference.EXPENSE_ITEMS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_ITEMS.name)
         this.initialValues[ExpensePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.PRODUCTS.name)
         this.initialValues[ExpensePropertiesReference.EXPENSE_PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_PRODUCTS.name)
+        this.initialValues[ExpensePropertiesReference.EXPENSE_CREDIT_NOTES.name] = DefaultValuesHelper.array(this.initialObject, ExpensePropertiesReference.EXPENSE_CREDIT_NOTES.name)
         if (moment(this.initialValues[ExpensePropertiesReference.INVOICE_PROVISION_DATE.name], 'YYYY-MM-DD').isValid()) {
           this.initialHasProvisionDate = 1
         }
@@ -635,7 +654,14 @@
         )
         let expenseProductsRelayObjects = ManyToManyHelper.createRelayObject(expenseProductsM2mFilteredObject, EntityTypes.EXPENSE_PRODUCT)
         relayObjects.push(expenseProductsRelayObjects)
-        if (this.isProductPurchaseSelected && this.expenseItemsTotal !== this.productsTotal) {
+        let expenseCreditNotesM2mFilteredObject = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
+          this.initialValues[ExpensePropertiesReference.EXPENSE_CREDIT_NOTES.name],
+          this.expense.expenseCreditNotes,
+          'id'
+        )
+        let expenseCreditNotesRelayObjects = ManyToManyHelper.createRelayObject(expenseCreditNotesM2mFilteredObject, EntityTypes.EXPENSE_CREDIT_NOTE)
+        relayObjects.push(expenseCreditNotesRelayObjects)
+        if (this.isProductPurchaseSelected() && this.isProductPurchaseValid()) {
           return
         }
         this.$validator.validateAll().then((result) => {
@@ -656,6 +682,9 @@
           this.initialTax = total - (total / 1.16)
           this.expenseItemsTotal = total
         }
+      },
+      setExpenseCreditNotesTotal: function (total) {
+        this.expenseCreditNotesTotal = total
       },
       handleProductsTotal: function (total) {
         this.productsTotal = total

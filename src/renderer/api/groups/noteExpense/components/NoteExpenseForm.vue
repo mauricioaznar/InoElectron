@@ -56,7 +56,10 @@
                </expense-items>
            </div>
        </div>
-       <div class="form-group" v-if="isProductPurchaseSelected">
+       <div
+               class="form-group"
+               v-if="isProductPurchaseSelected"
+       >
            <div class="products">
                 <mau-form-input-select-dynamic
                         :key="'OrderSaleProducts'"
@@ -88,27 +91,46 @@
                 </mau-form-input-select-dynamic>
           </div>
       </div>
+
       <div class="form-group">
-        <span v-show="isProductPurchaseSelected && expenseItemsTotal !== productsTotal" class="text-danger">
+        <span
+                v-show="isProductPurchaseSelected && expenseItemsTotal !== productsTotal"
+                class="text-danger"
+        >
             {{'Total de elementos de gasto no es igual al total de productos'}}
         </span>
       </div>
       <div class="container mb-2 text-right">
-          <b-button :disabled="buttonDisabled || !userHasWritePrivileges" @click="save" type="button" variant="primary">Guardar</b-button>
+          <b-button
+                  :disabled="buttonDisabled || !userHasWritePrivileges"
+                  @click="save"
+                  type="button"
+                  variant="primary"
+          >Guardar</b-button>
       </div>
     </div>
 </template>
 
 <script>
-    import ExpensePropertiesReference from 'renderer/api/propertiesReference/ExpensePropertiesReference'
-    import FormSubmitEventBus from 'renderer/api/functions/FormSubmitEventBus'
-    import DefaultValuesHelper from 'renderer/api/functions/DefaultValuesHelper'
-    import GlobalEntityIdentifier from 'renderer/api/functions/GlobalEntityIdentifier'
-    import MauFormInputSelectDynamic from 'renderer/api/components/inputs/MauFormInputSelectDynamic'
-    import ManyToManyHelper from 'renderer/api/functions/ManyToManyHelper'
-    import EntityTypes from 'renderer/api/EntityTypes'
-    import ExpenseItems from 'renderer/api/components/m2m/ExpenseItems'
-    import OrderSaleProductTable from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
+    import ExpensePropertiesReference
+      from 'renderer/api/propertiesReference/ExpensePropertiesReference'
+    import FormSubmitEventBus
+      from 'renderer/api/functions/FormSubmitEventBus'
+    import DefaultValuesHelper
+      from 'renderer/api/functions/DefaultValuesHelper'
+    import GlobalEntityIdentifier
+      from 'renderer/api/functions/GlobalEntityIdentifier'
+    import MauFormInputSelectDynamic
+      from 'renderer/api/components/inputs/MauFormInputSelectDynamic'
+    import ManyToManyHelper
+      from 'renderer/api/functions/ManyToManyHelper'
+    import EntityTypes
+      from 'renderer/api/EntityTypes'
+    import ExpenseItems
+      from 'renderer/api/components/m2m/ExpenseItems'
+    import OrderSaleProductTable
+      from 'renderer/api/components/m2m/OrderSaleProductTable.vue'
+
     export default {
       data () {
         return {
