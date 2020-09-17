@@ -36,6 +36,13 @@ let propertiesReference = {
     mask: Masks.regularNumber,
     defaultValue: MauInputDefaultValues.NUMBER
   },
+  CALIBRE: {
+    title: 'Calibre',
+    name: 'calibre',
+    display: DisplayFunctions.getValue,
+    mask: Masks.regularNumber,
+    defaultValue: MauInputDefaultValues.NUMBER
+  },
   LENGTH: {
     title: 'Largo',
     name: 'length',

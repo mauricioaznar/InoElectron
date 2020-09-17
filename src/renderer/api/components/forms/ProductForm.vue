@@ -128,6 +128,23 @@
         </mau-form-input-number>
       </div>
     </div>
+    <div class="form-group form-row"
+         v-if="isBag || isRoll"
+    >
+      <div class="col-sm-12">
+        <mau-form-input-number
+                :label="PropertiesReference.CALIBRE.title"
+                :name="PropertiesReference.CALIBRE.name"
+                v-model="product.calibre"
+                :type="'float'"
+                :initialValue="initialValues[PropertiesReference.CALIBRE.name]"
+                :error="errors.has(PropertiesReference.CALIBRE.name) ? errors.first(PropertiesReference.CALIBRE.name) : ''"
+                :disabled="!userHasWritePrivileges"
+                v-validate="'required|min_value:1'"
+        >
+        </mau-form-input-number>
+      </div>
+    </div>
     <div class="form-group form-row">
       <div class="col-sm-12">
         <mau-form-input-select-dynamic
@@ -186,6 +203,7 @@
           packing: {},
           productType: {},
           code: '',
+          calibre: '',
           description: '',
           currentKiloPrice: '',
           currentGroupWeight: '',
@@ -253,10 +271,12 @@
     methods: {
       getBootstrapValidationClass: ValidatorHelper.getBootstrapValidationClass,
       setInitialValues: function () {
+        console.log(PropertiesReference)
         this.initialValues[PropertiesReference.DESCRIPTION.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.DESCRIPTION.name)
         this.initialValues[PropertiesReference.CODE.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.CODE.name)
         this.initialValues[PropertiesReference.LENGTH.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.LENGTH.name)
         this.initialValues[PropertiesReference.WIDTH.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.WIDTH.name)
+        this.initialValues[PropertiesReference.CALIBRE.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.CALIBRE.name)
         this.initialValues[PropertiesReference.CURRENT_KILO_PRICE.name] = DefaultValuesHelper.simple(this.initialObject, PropertiesReference.CURRENT_KILO_PRICE.name)
         this.initialValues[PropertiesReference.MATERIAL.name] = DefaultValuesHelper.object(this.initialObject, PropertiesReference.MATERIAL.name)
         this.initialValues[PropertiesReference.PRODUCT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, PropertiesReference.PRODUCT_TYPE.name)
@@ -292,6 +312,11 @@
           directParams[PropertiesReference.CURRENT_GROUP_WEIGHT.name] = null
           directParams[PropertiesReference.LENGTH.name] = null
           directParams[PropertiesReference.PACKING.relationship_id_name] = (this.isInitialObjectDefined ? 'null' : null)
+        }
+        if (this.isBag || this.isRoll) {
+          directParams[PropertiesReference.CALIBRE.name] = this.product.calibre
+        } else {
+          directParams[PropertiesReference.CALIBRE.name] = 0
         }
         this.$validator.validateAll().then((result) => {
           if (result) {

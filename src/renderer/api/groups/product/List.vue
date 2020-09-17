@@ -72,6 +72,11 @@
             filterType: 'text'
           },
           {
+            name: PropertiesReference.CALIBRE.name,
+            title: PropertiesReference.CALIBRE.title,
+            filterType: 'text'
+          },
+          {
             name: PropertiesReference.LENGTH.name,
             title: PropertiesReference.LENGTH.title,
             filterType: 'text'
