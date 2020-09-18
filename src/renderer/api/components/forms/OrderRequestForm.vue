@@ -108,6 +108,7 @@
                             <order-sale-product-table
                                     :saleMode="true"
                                     :selectedProducts="requestOrder.products"
+                                    :requestedProducts="[]"
                                     v-model="requestOrder.requestProducts"
                                     :initialProducts="initialValues[OrderRequestPropertiesReference.PRODUCTS.name]"
                                     :userHasWritePrivileges="userHasWritePrivileges"

@@ -4,11 +4,19 @@
     <mau-entity-petitioner
             :id="id"
             :entityType="orderSaleEntityType"
-            @entityResult="entityResultHandler"
+            @entityResult="orderSaleHandler"
+    >
+    </mau-entity-petitioner>
+    <mau-entity-petitioner
+            :key="orderRequestId"
+            v-if="orderRequestId !== null"
+            :id="orderRequestId"
+            :entityType="orderRequestEntityType"
+            @entityResult="orderRequestHandler"
     >
     </mau-entity-petitioner>
     <mau-crud-edit
-      v-if="entity"
+      v-if="entity && orderRequest"
       :id="id"
       :relationshipIdName="hostRelationshipIdName"
       :entityType="orderSaleEntityType"
@@ -18,7 +26,7 @@
           :initialObject="entity"
           :saveFunction="params.saveFunction"
           :receiptMode="true"
-          :orderRequest="entity.order_request"
+          :orderRequest="orderRequest"
           :userHasWritePrivileges="true"
         >
         </order-sale-form>
@@ -38,8 +46,11 @@
     data () {
       return {
         orderSaleEntityType: EntityTypes.ORDER_SALE,
+        orderRequestEntityType: EntityTypes.ORDER_REQUEST,
+        orderRequestId: 0,
         hostRelationshipIdName: 'order_sale_id',
-        entity: null
+        entity: null,
+        orderRequest: null
       }
     },
     props: {
@@ -57,8 +68,20 @@
       callback: function () {
         this.$router.push({path: this.groupDefaultRouteObject(this.$route).path})
       },
-      entityResultHandler: function (entityObj) {
+      orderSaleHandler: function (entityObj) {
+        this.orderRequestId = entityObj.order_request_id
+        this.orderRequest = null
         this.entity = entityObj
+      },
+      orderRequestHandler: function (entityObj) {
+        let orderSales = [...entityObj.order_sales]
+          .filter(orderSale => {
+            return orderSale.id !== Number(this.id)
+          })
+        this.orderRequest = {
+          ...entityObj,
+          order_sales: orderSales
+        }
       }
     }
   }

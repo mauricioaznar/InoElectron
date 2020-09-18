@@ -276,7 +276,6 @@
       },
       getPersona: DisplayFunctions.getPersona,
       setInitialValues: function () {
-        console.log(this.orderRequest)
         this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.ORDER_CODE.name)
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.PRODUCTS.name)
         this.initialValues[OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name)
@@ -285,10 +284,35 @@
         this.initialValues[OrderRequestPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.orderRequest, OrderRequestPropertiesReference.CLIENT.name)
         this.initialValues[OrderSalePropertiesReference.RECEIPT_TYPE.name] = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.RECEIPT_TYPE.name)
         this.initialOrderSaleStatus = DefaultValuesHelper.object(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_STATUS.name)
-        this.requestedProducts = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]
+        this.requestedProducts = [...this.orderRequest.products]
+          .map(requestProduct => {
+            let kilosInSales = requestProduct.pivot.kilos
+            let groupsInSales = requestProduct.pivot.groups
+            this.orderRequest.order_sales.forEach(orderSale => {
+              orderSale.products.forEach(saleProduct => {
+                console.log(saleProduct)
+                if (requestProduct.id === saleProduct.id) {
+                  console.log('found')
+                  kilosInSales -= saleProduct.pivot.kilos
+                  groupsInSales -= saleProduct.pivot.groups
+                }
+              })
+            })
+            return {
+              ...requestProduct,
+              pivot: {
+                ...requestProduct.pivot,
+                kilos: kilosInSales,
+                groups: groupsInSales
+              }
+            }
+          })
+          .filter(requestProduct => {
+            return requestProduct.pivot.kilos > 0 && requestProduct.pivot.groups > 0
+          })
       },
       overrideInitialValuesWithOrderRequest: function () {
-        this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.orderRequest[OrderRequestPropertiesReference.PRODUCTS.name]
+        this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = this.requestedProducts
         this.initialValues[OrderSalePropertiesReference.CLIENT_CONTACT.name] = this.orderRequest[OrderRequestPropertiesReference.CLIENT_CONTACT.name]
         this.initialValues[OrderSalePropertiesReference.CLIENT.name] = this.orderRequest[OrderRequestPropertiesReference.CLIENT.name]
       },

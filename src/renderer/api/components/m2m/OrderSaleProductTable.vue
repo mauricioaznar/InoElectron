@@ -247,7 +247,7 @@
             .find(product => {
               return product.id === structuredObject['product_id']
             })
-          return requestedProduct ? (type === 'kilos' ? requestedProduct.pivot.kilos : requestedProduct.pivot.groups) : 0
+          return requestedProduct ? (type === 'kilos' ? requestedProduct.pivot.kilos : requestedProduct.pivot.groups) : 1000000
         },
         getProductCode: function (structuredObject) {
           return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CODE.name]
