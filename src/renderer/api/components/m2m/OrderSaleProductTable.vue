@@ -35,7 +35,8 @@
                                     kilo_to_group: {
                                         groupWeight: getCurrentObjGroupWeight(currentStructuredObj),
                                         isGroupWeightStrict: getProductGroupWeightStrict(currentStructuredObj)
-                                    }
+                                    },
+                                    max_value: getRequestedProductUnits(currentStructuredObj, 'kilos')
                                 }"
                         >
                         </mau-form-input-number>
@@ -50,7 +51,8 @@
                                 @input="setCurrentObjCalculationProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
                                 v-validate="{
-                                  required: true
+                                  required: true,
+                                  max_value: getRequestedProductUnits(currentStructuredObj, 'groups')
                                 }"
                         >
                         </mau-form-input-number>
@@ -84,7 +86,9 @@
                                 :hasClear="false"
                                 :multiselect="false"
                                 :name="'calculationType' + currentStructuredObj['product_id']"
-                                :v-validate="'required'"
+                                :v-validate="{
+                                  required: true
+                                }"
                                 :error="errors.has('calculationType' + currentStructuredObj['product_id']) ? errors.first('calculationType' + currentStructuredObj['product_id']) : ''"
                         >
                         </mau-form-input-select-static>
@@ -116,7 +120,10 @@
                                 :error="errors.has('_manual_kilos' + currentStructuredObj['product_id']) ? errors.first('_manual_kilos' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required'"
+                                :v-validate="{
+                                  required: true,
+                                  max_value: getRequestedProductUnits(currentStructuredObj, 'kilos')
+                                }"
                         >
                         </mau-form-input-number>
                     </td>
@@ -137,7 +144,10 @@
                                 :error="errors.has('_manual_groups' + currentStructuredObj['product_id']) ? errors.first('_manual_groups' + currentStructuredObj['product_id']) : ''"
                                 @input="setCurrentObjManualProperties(currentStructuredObj)"
                                 :disabled="!userHasWritePrivileges"
-                                v-validate="'required'"
+                                :v-validate="{
+                                  required: true,
+                                  max_value: getRequestedProductUnits(currentStructuredObj, 'groups')
+                                }"
                         >
                         </mau-form-input-number>
                     </td>
@@ -205,6 +215,10 @@
           type: Array,
           required: true
         },
+        requestedProducts: {
+          type: Array,
+          required: true
+        },
         initialProducts: {
           type: Array,
           default: function () {
@@ -227,6 +241,13 @@
       methods: {
         emitStructureChangeEvent: function () {
           this.$emit('input', this.currentStructuredObjects)
+        },
+        getRequestedProductUnits: function (structuredObject, type) {
+          let requestedProduct = this.requestedProducts
+            .find(product => {
+              return product.id === structuredObject['product_id']
+            })
+          return requestedProduct ? (type === 'kilos' ? requestedProduct.pivot.kilos : requestedProduct.pivot.groups) : 0
         },
         getProductCode: function (structuredObject) {
           return this.getProductById(structuredObject['product_id'])[ProductPropertiesReference.CODE.name]

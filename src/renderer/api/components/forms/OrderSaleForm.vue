@@ -106,7 +106,12 @@
                             :error="errors.first(OrderSalePropertiesReference.PRODUCTS.name)"
                             :multiselect="true"
                             :disabled="!userHasWritePrivileges"
-                            v-validate="'required'"
+                            v-validate="{
+                              required: true,
+                              in_array: {
+                                array: requestedProducts
+                              }
+                            }"
                     >
                         <template slot-scope="params">
                             <order-sale-product-table
@@ -271,6 +276,7 @@
       },
       getPersona: DisplayFunctions.getPersona,
       setInitialValues: function () {
+        console.log(this.orderRequest)
         this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.ORDER_CODE.name)
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.PRODUCTS.name)
         this.initialValues[OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name)

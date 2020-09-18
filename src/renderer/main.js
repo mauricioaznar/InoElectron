@@ -19,6 +19,7 @@ Vue.use(VueResource)
 Validator.extend('object_required', VeeValidateCustomRules.objectRequired)
 Validator.extend('remote_unique', VeeValidateCustomRules.remoteUnique, {immediate: false})
 Validator.extend('kilo_to_group', VeeValidateCustomRules.kiloToGroup)
+Validator.extend('in_array', VeeValidateCustomRules.inArray)
 Validator.extend('is_number_equal', VeeValidateCustomRules.isNumberEqual)
 Vue.use(VeeValidate, {
   fieldsBagName: 'formFields',

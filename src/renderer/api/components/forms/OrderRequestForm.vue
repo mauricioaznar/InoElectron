@@ -217,7 +217,6 @@
     },
     computed: {
       userHasWritePrivileges: function () {
-        console.log(this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name])
         let isOrderPending = this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name] ? this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name].id === 1 : false
         return this.isAdminUser || isOrderPending
       },

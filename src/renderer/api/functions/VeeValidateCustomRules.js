@@ -56,9 +56,34 @@ let isNumberEqual = {
   }
 }
 
+let inArray = {
+  validate: (value, params) => {
+    let isValid = true
+    let verifiedArray = params.array
+    let valuesArray = value
+    for (let i = 0; i < valuesArray.length; i++) {
+      let isValueInVerifiedArray = false
+      let valueElement = valuesArray[i]
+      for (let j = 0; j < verifiedArray.length; j++) {
+        let verifiedElement = verifiedArray[j]
+        if (valueElement.id === verifiedElement.id) {
+          isValueInVerifiedArray = true
+          break
+        }
+      }
+      if (!isValueInVerifiedArray) {
+        isValid = false
+        break
+      }
+    }
+    return isValid
+  }
+}
+
 export default {
   objectRequired: objectRequired,
   remoteUnique: remoteUnique,
   kiloToGroup: kiloToGroup,
-  isNumberEqual: isNumberEqual
+  isNumberEqual: isNumberEqual,
+  inArray: inArray
 }

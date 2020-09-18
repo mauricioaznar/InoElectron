@@ -142,7 +142,6 @@
             filterControl.value = savedFilterControl ? savedFilterControl.value : ''
           }
           if (filterControl.filterType === 'date') {
-            console.log(savedFilterControl)
             savedFilterControl = localStorageControls.find(localStorageControlObj => {
               return tableFieldObj.name === localStorageControlObj.name &&
                       tableFieldObj.filterType === localStorageControlObj.filterType
