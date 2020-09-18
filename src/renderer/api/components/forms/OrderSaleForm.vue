@@ -238,8 +238,7 @@
         'isAdminUser'
       ]),
       userHasWritePrivileges: function () {
-        let isOrderNotDelivered = !!this.initialOrderSaleStatus
-        return this.isAdminUser || isOrderNotDelivered
+        return this.isAdminUser || !this.initialObject
       },
       isInvoiceSelected: function () {
         let receiptId
