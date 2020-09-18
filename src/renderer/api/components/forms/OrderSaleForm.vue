@@ -132,6 +132,7 @@
                     :key="'Payments' + total"
                     :initialValues="initialValues[OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name]"
                     v-model="salesOrder.orderSalePayments"
+                    :userHasWritePrivileges="userHasWritePrivileges"
                     :total="total"
                 >
 
@@ -237,8 +238,8 @@
         'isAdminUser'
       ]),
       userHasWritePrivileges: function () {
-        let isOrderDelivered = this.initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name] ? this.initialValues[OrderSalePropertiesReference.ORDER_SALE_STATUS.name] === 3 : false
-        return this.isAdminUser || !(isOrderDelivered)
+        let isOrderNotDelivered = this.initialOrderSaleStatus ? this.initialOrderSaleStatus.id === 1 : false
+        return this.isAdminUser || isOrderNotDelivered
       },
       isInvoiceSelected: function () {
         let receiptId

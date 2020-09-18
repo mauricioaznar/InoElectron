@@ -32,6 +32,7 @@
                                 :initialValue="hasInitialValues ? (getInitialItem(item).date_paid ? getInitialItem(item).date_paid : '') : ''"
                                 :error="errors.has('datePaid' + index + 'a') ? errors.first('datePaid' + index + 'a') : ''"
                                 v-validate="'required'"
+                                :disabled="!userHasWritePrivileges"
                         >
                         </mau-form-input-date>
                     </td>
@@ -45,6 +46,7 @@
                                 :initialValue="hasInitialValues ? (getInitialItem(item).amount ? getInitialItem(item).amount : '') : total"
                                 :error="errors.has('Amount' + index) ? errors.first('Amount' + index) : ''"
                                 :type="'float'"
+                                :disabled="!userHasWritePrivileges"
                                 @input="refreshInput"
                                 v-validate="{
                                   required: true,
@@ -67,6 +69,7 @@
                                 v-model="item.order_sale_collection_status"
                                 @input="function x(result) { updateItemProperty(result, item, 'order_sale_collection_status_id') }"
                                 :error="errors.has('OrderSaleCollectionStatus' + index) ? errors.first('OrderSaleCollectionStatus' + index) : ''"
+                                :disabled="!userHasWritePrivileges"
                                 v-validate="{
                                   required: true
                                 }"
@@ -141,6 +144,12 @@
         total: {
           type: Number,
           required: true
+        },
+        userHasWritePrivileges: {
+          type: Boolean,
+          default: function () {
+            return true
+          }
         }
       },
       methods: {

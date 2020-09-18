@@ -217,7 +217,8 @@
     },
     computed: {
       userHasWritePrivileges: function () {
-        let isOrderPending = this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] ? this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.relationship_id_name] === 1 : true
+        console.log(this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name])
+        let isOrderPending = this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name] ? this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name].id === 1 : false
         return this.isAdminUser || isOrderPending
       },
       ...mapGetters([
@@ -233,8 +234,11 @@
       getPersona: DisplayFunctions.getPersona,
       setInitialValues: function () {
         this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.ORDER_CODE.name)
+        this.initialValues[OrderRequestPropertiesReference.ORDER_CODE.name] = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.ORDER_CODE.name)
         this.initialOrderRequestStatus = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name)
+        this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name] = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name)
         this.initialClientContact = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.CLIENT_CONTACT.name)
+        this.initialValues[OrderRequestPropertiesReference.CLIENT_CONTACT.name] = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.CLIENT_CONTACT.name)
         this.initialValues[OrderRequestPropertiesReference.CLIENT.name] = DefaultValuesHelper.object(this.initialObject, OrderRequestPropertiesReference.CLIENT.name)
         this.initialValues[OrderRequestPropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderRequestPropertiesReference.PRODUCTS.name)
         this.initialValues[OrderRequestPropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderRequestPropertiesReference.DATE.name)
