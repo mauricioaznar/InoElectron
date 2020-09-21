@@ -218,7 +218,9 @@
     },
     computed: {
       userHasWritePrivileges: function () {
-        let isOrderPending = this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name] ? this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name].id === 1 : false
+        console.log(this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name])
+        let isOrderPending = this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name] && this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name].id
+          ? this.initialValues[OrderRequestPropertiesReference.ORDER_REQUEST_STATUS.name].id === 1 : true
         return this.isAdminUser || isOrderPending
       },
       ...mapGetters([

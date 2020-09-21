@@ -45,7 +45,7 @@
       }
     },
     computed: {
-      ...mapGetters(['groupDefaultRouteObject'])
+      ...mapGetters(['groupDefaultRouteObject', 'isAdminUser'])
     },
     methods: {
       buttonClicked: function (button) {
@@ -68,10 +68,12 @@
               path: RouteObjectHelper.createPath(EntityTypes.ORDER_SALE, 'view') + '/' + id
             }
           ])
-          this.buttons = [{
-            name: 'Delete',
-            icon: 'fa fa-trash'
-          }]
+          if (this.isAdminUser) {
+            this.buttons = [{
+              name: 'Delete',
+              icon: 'fa fa-trash'
+            }]
+          }
         } else {
           this.actions = this.alwaysActions
           this.buttons = []
