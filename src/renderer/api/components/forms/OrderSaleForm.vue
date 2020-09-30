@@ -35,6 +35,20 @@
               >
               </mau-form-input-number>
           </div>
+          <div class="form-group" v-if="salesOrder.receiptType && salesOrder.receiptType.id === 2">
+              <mau-form-input-text
+                      :initialValue="initialValues[OrderSalePropertiesReference.INVOICE_CODE.name]"
+                      v-model="salesOrder.invoiceCode"
+                      :label="OrderSalePropertiesReference.INVOICE_CODE.title"
+                      :name="OrderSalePropertiesReference.INVOICE_CODE.name"
+                      :error="errors.has(OrderSalePropertiesReference.INVOICE_CODE.name) ? errors.first(OrderSalePropertiesReference.INVOICE_CODE.name) : ''"
+                      :disabled="!userHasWritePrivileges"
+                      v-validate="{
+                        required: true
+                       }"
+              >
+              </mau-form-input-text>
+          </div>
           <div class="form-group">
               <mau-form-input-date
                       :name="OrderSalePropertiesReference.DATE.name"
@@ -185,6 +199,7 @@
           client: {},
           orderSaleStatus: {},
           receiptType: {},
+          invoiceCode: '',
           orderSalePayments: []
         },
         total: 0,
@@ -277,6 +292,7 @@
       getPersona: DisplayFunctions.getPersona,
       setInitialValues: function () {
         this.initialOrderCode = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.ORDER_CODE.name)
+        this.initialValues[OrderSalePropertiesReference.INVOICE_CODE.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.INVOICE_CODE.name)
         this.initialValues[OrderSalePropertiesReference.PRODUCTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.PRODUCTS.name)
         this.initialValues[OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name] = DefaultValuesHelper.array(this.initialObject, OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name)
         this.initialValues[OrderSalePropertiesReference.DATE.name] = DefaultValuesHelper.simple(this.initialObject, OrderSalePropertiesReference.DATE.name)
@@ -325,6 +341,11 @@
         directParams[OrderSalePropertiesReference.ORDER_SALE_STATUS.relationship_id_name] = this.salesOrder.orderSaleStatus ? this.salesOrder.orderSaleStatus[GlobalEntityIdentifier] : null
         let initialOrderSaleProducts = ManyToManyHelper.createM2MStructuredObjects(this.initialValues[OrderSalePropertiesReference.PRODUCTS.name], 'product_id')
         let filteredOrderSaleProducts = ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(initialOrderSaleProducts, this.salesOrder.saleProducts, 'product_id')
+        if (directParams[OrderSalePropertiesReference.RECEIPT_TYPE.relationship_id_name] === 2) {
+          directParams[OrderSalePropertiesReference.INVOICE_CODE.name] = this.salesOrder.invoiceCode
+        } else {
+          directParams[OrderSalePropertiesReference.INVOICE_CODE.name] = 0
+        }
         let filteredOrderSalePayments =
           ManyToManyHelper.filterM2MStructuredObjectsByApiOperations(
             this.initialValues[OrderSalePropertiesReference.ORDER_SALE_PAYMENTS.name],

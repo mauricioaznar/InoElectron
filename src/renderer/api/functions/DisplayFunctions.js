@@ -26,6 +26,9 @@ export default {
   getPropertyFromObject: function (object, propertyName = 'name') {
     return object ? object[propertyName] : ''
   },
+  getValidInvoiceCode: function (invoiceCode) {
+    return invoiceCode !== 0 ? invoiceCode : invoiceCode
+  },
   getArrayLength: function (array) {
     return array ? array.length : ''
   },

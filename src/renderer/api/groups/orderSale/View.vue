@@ -29,6 +29,11 @@
             display: DisplayFunctions.getValue
           },
           {
+            title: OrderSalePropertiesReference.INVOICE_CODE.title,
+            name: OrderSalePropertiesReference.INVOICE_CODE.name,
+            display: DisplayFunctions.getValue
+          },
+          {
             title: OrderSalePropertiesReference.DATE.title,
             name: OrderSalePropertiesReference.DATE.name,
             display: DisplayFunctions.getDate
