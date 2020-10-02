@@ -3,8 +3,14 @@ import MauInputDefaultValues from 'renderer/api/components/inputs/MauInputDefaul
 
 let OrderSalePropertiesReference = {
   ORDER_CODE: {
-    title: 'Identificador de la orden',
+    title: '# Venta',
     name: 'order_code',
+    display: DisplayFunctions.getValue,
+    defaultValue: MauInputDefaultValues.TEXT
+  },
+  INVOICE_CODE: {
+    title: '# Factura',
+    name: 'invoice_code',
     display: DisplayFunctions.getValue,
     defaultValue: MauInputDefaultValues.TEXT
   },

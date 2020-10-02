@@ -31,6 +31,13 @@
             filterType: 'text'
           },
           {
+            name: OrderSalePropertiesReference.INVOICE_CODE.name,
+            title: OrderSalePropertiesReference.INVOICE_CODE.title,
+            sortField: OrderSalePropertiesReference.INVOICE_CODE.name,
+            callback: DisplayFunctions.getValidInvoiceCode,
+            filterType: 'text'
+          },
+          {
             name: OrderSalePropertiesReference.DATE.name,
             title: OrderSalePropertiesReference.DATE.title,
             sortField: OrderSalePropertiesReference.DATE.name,
