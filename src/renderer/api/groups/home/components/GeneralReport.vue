@@ -425,33 +425,39 @@
             })
             this.filteredProductionEvents = []
             result[1].forEach(productionEvent => {
-              this.filteredOrderProductions.forEach(orderProduction => {
-                orderProduction.production_products.forEach(productionProduct => {
-                  if (productionProduct.machine_id === productionEvent.machine_id) {
-                    let productionProductStartDateTime = moment(orderProduction.start_date_time, dateTimeFormat)
-                    let productionProductEndDateTime = moment(orderProduction.end_date_time, dateTimeFormat)
-                    let productionEventStartDateTime = moment(productionEvent.start_date_time, dateTimeFormat)
-                    let productionEventEndDateTime = moment(productionEvent.end_date_time, dateTimeFormat)
-                    if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]')) {
-                      let minutesInMaintenance = productionEventEndDateTime.diff(productionEventStartDateTime, 'minutes')
-                      productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
-                      console.log(productionProduct)
-                      productionProduct.production_events.push(productionEvent)
-                    } else if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isAfter(productionProductEndDateTime)) {
-                      let minutesInMaintenance = productionProductEndDateTime.diff(productionEventStartDateTime, 'minutes')
-                      productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
-                      console.log(productionProduct)
-                      productionProduct.production_events.push(productionEvent)
-                    } else if (productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventStartDateTime.isBefore(productionProductStartDateTime)) {
-                      let minutesInMaintenance = productionEventEndDateTime.diff(productionProductStartDateTime, 'minutes')
-                      productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
-                      console.log(productionProduct)
-                      productionProduct.production_events.push(productionEvent)
-                    }
-                  }
-                })
+              let hasOperationalError = false
+              productionEvent.production_event_types.forEach(productionEventType => {
+                hasOperationalError = hasOperationalError || productionEventType.id === 40 || productionEventType.id === 60
               })
-              this.filteredProductionEvents.push({...productionEvent})
+              if (!hasOperationalError) {
+                this.filteredOrderProductions.forEach(orderProduction => {
+                  orderProduction.production_products.forEach(productionProduct => {
+                    if (productionProduct.machine_id === productionEvent.machine_id) {
+                      let productionProductStartDateTime = moment(orderProduction.start_date_time, dateTimeFormat)
+                      let productionProductEndDateTime = moment(orderProduction.end_date_time, dateTimeFormat)
+                      let productionEventStartDateTime = moment(productionEvent.start_date_time, dateTimeFormat)
+                      let productionEventEndDateTime = moment(productionEvent.end_date_time, dateTimeFormat)
+                      if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]')) {
+                        let minutesInMaintenance = productionEventEndDateTime.diff(productionEventStartDateTime, 'minutes')
+                        productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
+                        console.log(productionProduct)
+                        productionProduct.production_events.push(productionEvent)
+                      } else if (productionEventStartDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventEndDateTime.isAfter(productionProductEndDateTime)) {
+                        let minutesInMaintenance = productionProductEndDateTime.diff(productionEventStartDateTime, 'minutes')
+                        productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
+                        console.log(productionProduct)
+                        productionProduct.production_events.push(productionEvent)
+                      } else if (productionEventEndDateTime.isBetween(productionProductStartDateTime, productionProductEndDateTime, '[]') && productionEventStartDateTime.isBefore(productionProductStartDateTime)) {
+                        let minutesInMaintenance = productionEventEndDateTime.diff(productionProductStartDateTime, 'minutes')
+                        productionProduct.minutes_in_maintenance = productionProduct.minutes_in_maintenance + minutesInMaintenance
+                        console.log(productionProduct)
+                        productionProduct.production_events.push(productionEvent)
+                      }
+                    }
+                  })
+                })
+                this.filteredProductionEvents.push({...productionEvent})
+              }
             })
           })
         },
