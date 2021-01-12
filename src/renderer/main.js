@@ -30,7 +30,7 @@ Vue.use(VeeValidate, {
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = true
 Vue.config.devtools = true
-Vue.http.options.root = (process.env.NODE_ENV === 'development') ? 'http://inoserver.test/api' : 'https://inoserver.grupoinopack.com/api'
+Vue.http.options.root = (process.env.NODE_ENV === 'development') ? 'http://inoserver.test/api' : 'https://inopack.mauaznar.com/api'
 sync(store, router)
 
 /* eslint-disable no-new */
